@@ -250,6 +250,26 @@ export default function AIChapter() {
           </p>
         </motion.div>
 
+        {/* field-proven strip — the proof moment, not a footnote */}
+        <motion.div
+          className="glass mt-14 rounded-3xl border-era-cyan/30 p-7 shadow-[0_0_60px_-20px_rgba(34,211,238,0.5)] md:mt-20 md:p-10"
+          initial={reduced ? undefined : { opacity: 0, y: 30 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-era-cyan/50 bg-era-cyan/10 px-3 py-1 font-mono text-[11px] font-medium uppercase tracking-[0.22em] text-era-cyan">
+            <span className="h-1.5 w-1.5 rounded-full bg-era-cyan" />
+            {t(ai.field.badge)}
+          </span>
+          <h3 className="mt-5 font-display text-xl font-semibold text-ink break-keep md:text-2xl">
+            {t(ai.field.title)}
+          </h3>
+          <p className="mt-4 max-w-4xl text-base leading-relaxed text-ink-dim break-keep">
+            {t(ai.field.body)}
+          </p>
+        </motion.div>
+
         {/* capability cards */}
         <motion.div
           className="mt-16 grid gap-5 md:mt-24 md:grid-cols-2"

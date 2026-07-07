@@ -85,10 +85,12 @@ export default function Career() {
             aria-hidden
             className="absolute bottom-3 left-[14px] top-3 w-0.5 -translate-x-1/2 rounded bg-white/10 md:left-[182px]"
           />
-          {/* Rail gradient (draws with scroll) */}
+          {/* Rail gradient (draws with scroll). Entries are newest-first, so the
+              rail runs cyan (newest/plan) → violet → amber (oldest/ops) top-to-bottom
+              to match the phase dots. */}
           <span
             aria-hidden
-            className="career-rail absolute bottom-3 left-[14px] top-3 w-0.5 origin-top -translate-x-1/2 rounded bg-gradient-to-b from-era-amber via-era-violet to-era-cyan md:left-[182px]"
+            className="career-rail absolute bottom-3 left-[14px] top-3 w-0.5 origin-top -translate-x-1/2 rounded bg-gradient-to-b from-era-cyan via-era-violet to-era-amber md:left-[182px]"
           />
 
           <ol>
@@ -115,6 +117,11 @@ export default function Career() {
                   <h3 className="break-keep text-xl font-semibold text-ink md:text-2xl">{t(entry.company)}</h3>
                   <p className="mt-1 break-keep text-ink-dim">{t(entry.role)}</p>
                   {entry.titles && <p className="mt-2 break-keep text-sm text-ink-mute">{t(entry.titles)}</p>}
+                  {entry.highlight && (
+                    <p className="mt-2 break-keep border-l-2 border-era-cyan/60 pl-3 text-sm leading-relaxed text-ink-dim">
+                      {t(entry.highlight)}
+                    </p>
+                  )}
                 </div>
               </li>
             ))}

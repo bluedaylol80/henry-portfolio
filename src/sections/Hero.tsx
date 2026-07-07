@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import SectionShell from '../components/SectionShell'
-import { useT } from '../lib/i18n'
+import { useLang, useT } from '../lib/i18n'
 import { hero } from '../content/profile'
 import { onReady } from '../lib/appState'
 import { prefersReducedMotion } from '../lib/quality'
@@ -13,11 +13,19 @@ const INTRO_TARGETS = ['.hero-eyebrow', '.hero-line', '.hero-sub', '.hero-name',
 
 export default function Hero() {
   const t = useT()
+  const { lang } = useLang()
   const rootRef = useRef<HTMLDivElement>(null)
   const parallaxRef = useRef<HTMLDivElement>(null)
 
   const [line1, line2] = t(hero.title).split('\n')
   const [quote1, quote2] = t(hero.quote).split('\n')
+
+  // Language-aware hero sizing: KO lines are short (4~2 glyphs) so they can run
+  // much bigger; EN lines are long ("The Evolution") so use a gentler curve.
+  const titleSize =
+    lang === 'ko'
+      ? 'text-[clamp(4.5rem,17vw,10rem)]'
+      : 'text-[clamp(2.75rem,11.5vw,8.5rem)]'
 
   const { contextSafe } = useGSAP(
     () => {
@@ -85,7 +93,7 @@ export default function Hero() {
           <div className="flex flex-1 flex-col justify-center">
             <p className="hero-eyebrow eyebrow">{t(hero.eyebrow)}</p>
 
-            <h1 className="mt-6 break-keep font-display text-[clamp(3.5rem,10vw,9rem)] font-bold leading-[0.95] tracking-tight md:mt-8">
+            <h1 className={`mt-6 break-keep font-display ${titleSize} font-bold leading-[0.95] tracking-tight md:mt-8`}>
               <span className="block overflow-hidden pb-[0.06em]">
                 <span className="hero-line block">{line1}</span>
               </span>
@@ -94,7 +102,7 @@ export default function Hero() {
               </span>
             </h1>
 
-            <p className="hero-sub mt-7 max-w-xl break-keep text-lg text-ink-dim md:mt-9 md:text-2xl">
+            <p className="hero-sub mt-7 max-w-xl break-keep text-xl text-ink-dim md:mt-9 md:text-2xl">
               {t(hero.subtitle)}
             </p>
 

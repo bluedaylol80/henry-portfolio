@@ -9,6 +9,16 @@ import type { Stat } from '../content/types'
 import { prefersReducedMotion } from '../lib/quality'
 import { DUR, EASE, fadeUp, staggerContainer } from '../lib/motion'
 
+/** Explicit bento span per item index (md+). Index 5 is a full-width banner. */
+const SPAN: Record<number, string> = {
+  0: 'md:col-span-4',
+  1: 'md:col-span-2',
+  2: 'md:col-span-2',
+  3: 'md:col-span-2',
+  4: 'md:col-span-2',
+  5: 'md:col-span-6',
+}
+
 /** Format one localized Stat at a given (in-progress) numeric value. */
 function formatStat(value: number, s: Stat): string {
   const decimals = s.decimals ?? 0
@@ -144,37 +154,66 @@ export default function Achievements() {
           whileInView={reduced ? undefined : 'show'}
           viewport={{ once: true, amount: 0.15 }}
         >
-          {work.items.map((item, i) => (
-            <motion.article
-              key={item.tag + i}
-              className={`group flex min-h-[210px] flex-col justify-between rounded-3xl border-white/10 bg-white/[0.04] p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.45)] md:min-h-[240px] md:p-9 ${
-                i === 0 ? 'md:col-span-4' : 'md:col-span-2'
-              } border`}
-              variants={reduced ? undefined : fadeUp}
-              whileHover={
-                reduced ? undefined : { y: -6, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }
-              }
-            >
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="text-lg font-semibold text-ink break-keep">{t(item.title)}</h3>
-                <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
-                  {item.tag}
-                </span>
-              </div>
+          {work.items.map((item, i) => {
+            const isBanner = i === 5
+            const statClass = `inline-block font-display font-bold leading-none tracking-tight tabular-nums text-[clamp(2.75rem,6vw,4.5rem)] ${
+              item.emphasis ? 'text-gradient-cyan' : 'text-ink'
+            }`
+            // Flagship card (index 0) gets a cyan emphasis gradient + accent border.
+            const surface =
+              i === 0
+                ? 'border-era-cyan/25 bg-gradient-to-br from-era-cyan/[0.10] via-white/[0.05] to-white/[0.03]'
+                : 'border-white/10 bg-white/[0.04]'
+            return (
+              <motion.article
+                key={item.tag + i}
+                className={`group rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.45)] md:p-9 ${SPAN[i]} ${
+                  isBanner
+                    ? 'flex flex-col gap-6 md:flex-row md:items-center md:justify-between'
+                    : 'flex min-h-[210px] flex-col justify-between md:min-h-[240px]'
+                }`}
+                variants={reduced ? undefined : fadeUp}
+                whileHover={
+                  reduced ? undefined : { y: -6, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }
+                }
+              >
+                {isBanner ? (
+                  <>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                        <h3 className="text-lg font-semibold text-ink break-keep md:text-xl">
+                          {t(item.title)}
+                        </h3>
+                        <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                          {item.tag}
+                        </span>
+                      </div>
+                      <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
+                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                    </div>
+                    <div className="shrink-0 md:pl-8 md:text-right">
+                      <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="text-lg font-semibold text-ink break-keep">{t(item.title)}</h3>
+                      <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                        {item.tag}
+                      </span>
+                    </div>
 
-              <div className="mt-8 md:mt-10">
-                <StatCounter
-                  statKo={item.stat.ko}
-                  statEn={item.stat.en}
-                  className={`inline-block font-display font-bold leading-none tracking-tight tabular-nums text-[clamp(2.75rem,6vw,4.5rem)] ${
-                    item.emphasis ? 'text-gradient-cyan' : 'text-ink'
-                  }`}
-                />
-                <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
-              </div>
-            </motion.article>
-          ))}
+                    <div className="mt-8 md:mt-10">
+                      <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
+                      <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
+                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                    </div>
+                  </>
+                )}
+              </motion.article>
+            )
+          })}
         </motion.div>
       </div>
     </SectionShell>

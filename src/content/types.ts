@@ -8,6 +8,8 @@ export interface CareerEntry {
   period: string
   phase: CareerPhase
   titles?: Bi
+  /** one-line achievement/summary shown under titles */
+  highlight?: Bi
 }
 
 /** One localized number for count-up display. */

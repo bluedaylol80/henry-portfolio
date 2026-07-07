@@ -11,7 +11,7 @@ import type { Bi } from '../lib/i18n'
 export const meta = {
   title: 'Henry Lim — 기획자의 진화 · The Evolution of a Planner',
   description:
-    '게임 사업기획 17년에서 AI 자동화 시스템 아키텍트로. 임현택(Henry Lim)의 3D 인터랙티브 포트폴리오.',
+    '게임 기획·사업 19년에서 AI 자동화 시스템 아키텍트로. 임현택(Henry Lim)의 3D 인터랙티브 포트폴리오.',
 }
 
 export const nav: NavItem[] = [
@@ -33,8 +33,8 @@ export const hero = {
     en: 'The Evolution\nof a Planner',
   } as Bi,
   subtitle: {
-    ko: '게임 사업기획 17년. 이제 AI를 도구 삼아 시스템을 직접 짓습니다.',
-    en: '17 years in game business planning. Now I build AI systems — hands-on.',
+    ko: '게임 기획·사업 19년. 이제 AI를 도구 삼아 시스템을 직접 짓습니다.',
+    en: '19 years in game planning & business. Now I build AI systems — hands-on.',
   } as Bi,
   name: { ko: '임현택 · Henry Lim', en: 'Henry Lim · 임현택' } as Bi,
   quote: {
@@ -51,8 +51,8 @@ export const about = {
     en: 'A business PM & planner who runs on IT and creativity',
   } as Bi,
   body: {
-    ko: '웹젠에서 시작해 NHN, 넥슨, 네오위즈까지 — 운영에서 FUN QA로, 사업에서 기획으로. 직군의 경계를 넘나들며 17년 동안 게임을 만들고 키웠습니다. 지금은 그 기획력으로 AI 에이전트 시스템을 설계하고, 자연어 지시만으로 실제 동작하는 서비스를 만듭니다.',
-    en: 'From Webzen to NHN, NEXON and NEOWIZ — from live ops to FUN QA, from business to planning. For 17 years I crossed role boundaries to build and grow games. Today that same planning craft goes into designing AI agent systems, shipping real working services from natural-language instructions alone.',
+    ko: '웹젠에서 시작해 NHN, 넥슨, 네오위즈, 달콤소프트까지 — 운영에서 FUN QA로, 사업에서 기획으로. 직군의 경계를 넘나들며 19년 동안 게임을 만들고 키웠습니다. 최근에는 K-pop IP 라이브 게임 6종의 기획팀을 이끌며 팀 루틴 업무의 60%를 AI로 자동화했고, 지금은 그 기획력으로 AI 에이전트 시스템을 설계하며 자연어 지시만으로 실제 동작하는 서비스를 만듭니다.',
+    en: 'From Webzen to NHN, NEXON, NEOWIZ and Dalcomsoft — from live ops to FUN QA, from business to planning. For 19 years I crossed role boundaries to build and grow games. Most recently I led the live planning team for six K-pop IP titles, automating 60% of the team’s routine work with AI. Today that same planning craft goes into designing AI agent systems and shipping real working services from natural-language instructions alone.',
   } as Bi,
   arc: [
     { ko: '운영', en: 'Live Ops' },
@@ -62,9 +62,9 @@ export const about = {
   ] as Bi[],
   arcNext: { ko: '+ AI', en: '+ AI' } as Bi,
   stats: [
-    { value: 17, suffix: '+', label: { ko: '연차', en: 'Years' } },
-    { value: 9, suffix: '', label: { ko: '회사', en: 'Companies' } },
-    { value: 12, suffix: '+', label: { ko: '라이브 타이틀', en: 'Live titles' } },
+    { value: 19, suffix: '', label: { ko: '연차', en: 'Years' } },
+    { value: 10, suffix: '', label: { ko: '회사', en: 'Companies' } },
+    { value: 18, suffix: '+', label: { ko: '라이브 타이틀', en: 'Live titles' } },
   ],
   attitude: {
     ko: '“항상 즐거운 제안은 환영합니다.”',
@@ -75,40 +75,60 @@ export const about = {
 export const career = {
   label: { ko: '02 · CAREER', en: '02 · CAREER' } as Bi,
   title: {
-    ko: '17년, 직군을 넘나든 여정',
-    en: '17 years across every role',
+    ko: '19년, 직군을 넘나든 여정',
+    en: '19 years across every role',
   } as Bi,
   subtitle: {
-    ko: '운영에서 시작해 QA, 사업, 기획까지 — 게임이 만들어지고 팔리는 모든 단계를 직접 통과했습니다.',
-    en: 'From live ops through QA, business and planning — I worked every stage of how a game is made and sold.',
+    ko: '운영에서 시작해 QA, 사업, 기획까지 — 게임이 만들어지고 팔리는 모든 단계를 직접 통과했습니다. 최신 경력부터 봅니다.',
+    en: 'From live ops through QA, business and planning — I worked every stage of how a game is made and sold. Newest first.',
   } as Bi,
+  /** 표시 순서 = 배열 순서 (최신 경력이 위) */
   entries: [
     {
-      company: { ko: '웹젠', en: 'Webzen' },
-      role: { ko: 'SUN 온라인 운영', en: 'Live Ops — SUN Online' },
-      period: '2006 — 2007',
-      phase: 'ops',
-      titles: { ko: 'SUN 온라인', en: 'SUN Online' },
+      company: { ko: '달콤소프트', en: 'Dalcomsoft' },
+      role: { ko: '사업본부 라이브기획팀장', en: 'Live Planning Team Lead' },
+      period: '2024 — 2026',
+      phase: 'plan',
+      titles: {
+        ko: 'SuperStar 시리즈 라이브 6종 (SM · JYP 등 K-pop IP)',
+        en: 'SuperStar series — 6 live titles (SM, JYP and more K-pop IPs)',
+      },
+      highlight: {
+        ko: '엔터사 IP 리듬게임 6종 라이브 총괄 · 10인 팀 리드 · 30+ AI 자동화 스킬로 팀 루틴 업무 60% 단축 · 대형 기능 설계 2건(꾸미기 이벤트 · 아티스트 모드)',
+        en: 'Ran live planning for 6 K-pop IP rhythm games · led a 10-person team · 30+ AI automation skills cut routine work by 60% · 2 major feature designs (Decoration Event · Artist Mode)',
+      },
     },
     {
-      company: { ko: 'NHN 한게임', en: 'NHN Hangame' },
-      role: { ko: '운영 / FUN QA 파트장', en: 'Ops / FUN QA Part Lead' },
-      period: '2008 — 2011',
-      phase: 'qa',
-      titles: { ko: 'Tera 외', en: 'Tera and more' },
-    },
-    {
-      company: { ko: '소프트닉스', en: 'Softnyx' },
-      role: { ko: '전략사업팀 사업PM', en: 'Business PM, Strategic Business Team' },
-      period: '2011 — 2015',
+      company: { ko: '원더피플 / 에이스톰', en: 'Wonder People / A-Storm' },
+      role: { ko: '사업파트장', en: 'Business Part Lead' },
+      period: '2022 — 2024',
       phase: 'biz',
+      titles: { ko: '슈퍼피플 · 나이트워커', en: 'Super People · Night Walker' },
     },
     {
-      company: { ko: '넷마블 블루', en: 'Netmarble Blue' },
-      role: { ko: 'KON 사업PM', en: 'Business PM — KON' },
-      period: '2015',
+      company: { ko: '네오위즈', en: 'NEOWIZ' },
+      role: { ko: '스노우볼 스튜디오 기획팀장', en: 'Planning Team Lead, Snowball Studio' },
+      period: '2021',
+      phase: 'plan',
+      titles: { ko: '마스터 오브 나이츠', en: 'Master of Knights' },
+      highlight: {
+        ko: '랭킹 · 시즌패스 · 우편 · 공지 · 프로필 등 시스템 기획서 8건 직접 작성 — 사업에서 기획으로의 전환을 완성한 시기',
+        en: 'Authored 8 system design specs hands-on (ranking, season pass, mail, notices, profile and more) — completing the pivot from business to planning',
+      },
+    },
+    {
+      company: { ko: '스카이피플', en: 'SkyPeople' },
+      role: { ko: '사업팀장', en: 'Business Team Lead' },
+      period: '2020 — 2021',
       phase: 'biz',
-      titles: { ko: 'KON', en: 'KON' },
+      titles: { ko: 'Five Stars', en: 'Five Stars' },
+    },
+    {
+      company: { ko: '넵튠', en: 'Neptune' },
+      role: { ko: '사업PM', en: 'Business PM' },
+      period: '2019 — 2020',
+      phase: 'biz',
+      titles: { ko: 'Shadow of Death', en: 'Shadow of Death' },
     },
     {
       company: { ko: '넥슨코리아', en: 'NEXON Korea' },
@@ -121,37 +141,36 @@ export const career = {
       },
     },
     {
-      company: { ko: '넵튠', en: 'Neptune' },
-      role: { ko: '사업PM', en: 'Business PM' },
-      period: '2019 — 2020',
+      company: { ko: '넷마블 블루', en: 'Netmarble Blue' },
+      role: { ko: 'KON 사업PM', en: 'Business PM — KON' },
+      period: '2015',
       phase: 'biz',
-      titles: { ko: 'Shadow of Death', en: 'Shadow of Death' },
+      titles: { ko: 'KON', en: 'KON' },
     },
     {
-      company: { ko: '스카이피플', en: 'SkyPeople' },
-      role: { ko: '사업팀장', en: 'Business Team Lead' },
-      period: '2020 — 2021',
+      company: { ko: '소프트닉스', en: 'Softnyx' },
+      role: { ko: '전략사업팀 사업PM', en: 'Business PM, Strategic Business Team' },
+      period: '2011 — 2015',
       phase: 'biz',
-      titles: { ko: 'Five Stars', en: 'Five Stars' },
     },
     {
-      company: { ko: '네오위즈', en: 'NEOWIZ' },
-      role: { ko: '기획팀장', en: 'Planning Team Lead' },
-      period: '2021',
-      phase: 'plan',
-      titles: { ko: '마스터 오브 나이츠', en: 'Master of Knights' },
+      company: { ko: 'NHN 한게임', en: 'NHN Hangame' },
+      role: { ko: '운영 / FUN QA 파트장', en: 'Ops / FUN QA Part Lead' },
+      period: '2008 — 2011',
+      phase: 'qa',
+      titles: { ko: 'Tera 외', en: 'Tera and more' },
     },
     {
-      company: { ko: '원더피플 / 에이스톰', en: 'Wonder People / A-Storm' },
-      role: { ko: '사업파트장', en: 'Business Part Lead' },
-      period: '2022 — 2024',
-      phase: 'biz',
-      titles: { ko: '슈퍼피플 · 나이트워커', en: 'Super People · Night Walker' },
+      company: { ko: '웹젠', en: 'Webzen' },
+      role: { ko: 'SUN 온라인 운영', en: 'Live Ops — SUN Online' },
+      period: '2006 — 2007',
+      phase: 'ops',
+      titles: { ko: 'SUN 온라인', en: 'SUN Online' },
     },
   ] as CareerEntry[],
   arcNote: {
-    ko: '운영 → FUN QA → 사업 → 기획, 그리고 다음 챕터로.',
-    en: 'Ops → FUN QA → Business → Planning — and on to the next chapter.',
+    ko: '2006년 운영에서 시작해 — 사업과 기획을 지나, 지금은 AI와 함께. 19년의 여정.',
+    en: 'Started in live ops in 2006 — through business and planning, now with AI. A 19-year journey.',
   } as Bi,
 }
 
@@ -166,6 +185,23 @@ export const work = {
     en: 'Where planning and business were proven in the market.',
   } as Bi,
   items: [
+    {
+      title: {
+        ko: 'SuperStar 시리즈 · 라이브 기획의 AI 전환',
+        en: 'SuperStar Series · AI-powered live planning',
+      },
+      tag: 'DALCOMSOFT',
+      stat: {
+        ko: { value: 60, suffix: '%' },
+        en: { value: 60, suffix: '%' },
+      },
+      label: { ko: '팀 루틴 업무 시간 단축', en: 'Routine team workload reduced' },
+      sub: {
+        ko: 'AI 자동화 스킬 30+ · K-pop IP 라이브 6종 · 10인 팀 리드',
+        en: '30+ AI automation skills · 6 live K-pop IP titles · 10-person team',
+      },
+      emphasis: true,
+    },
     {
       title: { ko: '린: 더 라이트브링어', en: 'Lyn: The Lightbringer' },
       tag: 'NEXON',
@@ -241,8 +277,8 @@ export const ai = {
     en: 'AI Automation Systems Architect',
   } as Bi,
   lede: {
-    ko: '17년간 갈고닦은 기획력을, 이제 AI를 도구 삼아 직접 시스템으로 구현합니다.',
-    en: 'Seventeen years of planning craft — now implemented directly as systems, with AI as the toolkit.',
+    ko: '19년간 갈고닦은 기획력을, 이제 AI를 도구 삼아 직접 시스템으로 구현합니다.',
+    en: 'Nineteen years of planning craft — now implemented directly as systems, with AI as the toolkit.',
   } as Bi,
   badge: { ko: '24/7 CLOUD', en: '24/7 CLOUD' } as Bi,
   diagram: {
@@ -252,6 +288,17 @@ export const ai = {
     caption: {
       ko: '3계층 에이전트가 클라우드에서 24시간 협업하는 개인 AI 자동화 시스템',
       en: 'A personal AI automation system — three agent tiers collaborating in the cloud, around the clock',
+    } as Bi,
+  },
+  field: {
+    badge: { ko: 'FIELD-PROVEN', en: 'FIELD-PROVEN' } as Bi,
+    title: {
+      ko: '현장 검증 — 달콤소프트 라이브기획팀',
+      en: 'Proven in the field — Dalcomsoft Live Planning',
+    } as Bi,
+    body: {
+      ko: 'K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌며 기획서 작성 · 스펙 검수 · 지표 분석 · 일정 관리를 AI 워크플로로 전환했습니다. 30개 이상의 자동화 스킬이 팀 루틴 업무를 60% 줄였고, 꾸미기 이벤트 · 아티스트 모드 같은 대형 기능 설계도 AI와 함께 완성했습니다. 개인 실험이 아니라, 실제 팀 운영에서 검증된 방식입니다.',
+      en: 'Leading a 10-person live planning team across six K-pop IP rhythm games, I rebuilt spec writing, verification, KPI analysis and scheduling as AI workflows. Over 30 automation skills cut routine workload by 60%, and major feature designs (Decoration Event, Artist Mode) shipped with AI in the loop. Not a personal experiment — proven in real team operations.',
     } as Bi,
   },
   cards: [
@@ -300,11 +347,15 @@ export const skills = {
   hardTitle: { ko: 'Hard Skills', en: 'Hard Skills' } as Bi,
   hard: [
     { name: { ko: '사업기획 · BM 설계', en: 'Business planning · BM design' } },
+    { name: { ko: '시스템 · 콘텐츠 기획', en: 'System & content design' } },
     { name: { ko: '데이터 지표 분석 · 시각화', en: 'Data analytics · visualization' } },
     { name: { ko: '글로벌 퍼블리싱', en: 'Global publishing' } },
     { name: { ko: '라이브 서비스 운영', en: 'Live service operations' } },
-    { name: { ko: 'UI/UX 기획', en: 'UI/UX planning' } },
     { name: { ko: '프로젝트 · 조직 관리', en: 'Project & org management' } },
+    {
+      name: { ko: '팀 운영 시스템의 AI 전환', en: 'AI transformation of team operations' },
+      isNew: true,
+    },
     {
       name: { ko: 'AI 오케스트레이션 · 바이브코딩', en: 'AI orchestration · vibe-coding' },
       isNew: true,
