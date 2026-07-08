@@ -10,6 +10,7 @@ import RoomExperience from '../room/RoomExperience'
 import FallbackGrid from '../room/FallbackGrid'
 import Legend from '../room/Legend'
 import Tooltip from '../room/Tooltip'
+import LabelTour from '../room/LabelTour'
 import RoomMenu from '../components/RoomMenu'
 
 /**
@@ -225,6 +226,9 @@ export default function RoomPage() {
           {t(coach)}
         </span>
       </div>
+
+      {/* First-visit tour chip (§16) — resolves text for the in-canvas driver */}
+      <LabelTour />
 
       {/* Tooltip (desktop hover) + Legend (always-visible menu) */}
       <Tooltip />

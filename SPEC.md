@@ -588,6 +588,103 @@ Symptom: each furniture's hitbox (invisible interaction proxy) is VISIBLE at res
 - Hitbox artifact gone (screenshot at rest shows no ghost boxes).
 - Full regression (/story shoot ×3 profiles, /career, redirects, reduced-motion) + build/typecheck 0 + og.png re-shot (identity strip now visible on '/').
 
+## 16. v9 — First-visit label tour (Codex 🔵 leftover: mobile discoverability) (2026-07-09)
+
+Goal: for ~5s after the room loads, sequentially "light up" each object with a tiny destination-label chip near it, so touch users (who have no hover) discover that the objects ARE the menu. Afterwards the existing tooltip/legend take over. One-shot per browser session.
+
+### 16.1 Behaviour
+- Runs on `/` 3D room only (full + lite tiers). Fallback grid already shows labels; reduced-motion never reaches 3D.
+- Gate: `sessionStorage['henry.roomTour'] === '1'` → skip entirely. The flag is set when the tour ENDS **or is CANCELLED** — never on plain unmount (StrictMode double-mount and SPA nav-away must not mark it done unless it actually ran to an end/cancel).
+- Timeline: start 900ms after mount; step through ALL 7 hotspots in `content/room.ts` array order (= legend order), 650ms per step (~5.4s total).
+- Each step: set `roomState.hoverId = id` (reuses the existing hover visuals — scale 1.04 + emissive boost via Hotspot) AND show ONE small DOM label chip near the object (16.3).
+- End of tour: clear `hoverId` (only if it still equals the tour's own id), publish `{id:null}`, set the session flag.
+- CANCEL immediately (hide chip, clear tour-owned hoverId, set flag) on ANY of: `window` pointerdown, `window` wheel, `window` keydown, or pointermove over `gl.domElement`. Rationale: desktop mouse movement fights the raycast-hover writes (InteractionManager writes hoverId at ~25Hz on move); any interaction means the user is already engaged. On touch nothing fires until the first tap, so the tour plays out — that is the target audience.
+
+### 16.2 Architecture (mirror the tooltip bus — NO React state in frame loops)
+- `roomState.ts`: add a tour bus — `TourLabelState = { id: string | null, x: number, y: number }`, `setTourLabel(s)` / `onTourLabel(cb)` (same subscriber pattern as the tooltip bus).
+- NEW `src/room/TourDriver.tsx` — INSIDE the Canvas (needs `camera` + `gl`); renders null. Owns: session-flag check, all timers (cleared on unmount), cancel listeners, per-step `roomState.hoverId` writes, and label projection: `v.copy(ANCHORS[id].target).project(camera)` → CSS px via the canvas rect, published with `setTourLabel`. Publish on each step change; a light per-frame refresh throttled to ~40ms is fine (tooltip precedent) but must bail when the id is null. MUST NOT touch i18n/React context (R3F renderer boundary — publish the id only, never text).
+- NEW `src/room/LabelTour.tsx` — DOM overlay mounted in RoomPage (NOT inside the canvas — §13.3 convention: DOM overlays live above the canvas). Subscribes via `onTourLabel`, resolves label text with `useT` from `hotspots`, renders ONE tiny chip: `fixed z-30 pointer-events-none` + `aria-hidden`, positioned `translate(-50%, -110%)` above the projected point, clamped ≥8px from viewport edges. Add `data-tour-label={id}` for the QA harness.
+- `RoomExperience.tsx`: mount `<TourDriver />` after `<InteractionManager />`.
+- `RoomPage.tsx`: mount `<LabelTour />` beside `<Tooltip />` (3D branch only).
+
+### 16.3 Visual
+- Chip: glass rounded-full `px-2.5 py-1 text-[11px] font-medium text-ink`, leading dot `h-1.5 w-1.5 rounded-full bg-era-cyan`. Text = `hotspot.label` (destination) ONLY — no hint (Codex: "아주 작은" labels).
+- Motion: soft ~200ms opacity + 4px rise per step. No pulse/bounce. Coach line / identity strip / intro badge keep their existing timings — the chip sits near objects mid-screen and must not join the bottom stack.
+
+### 16.4 QA
+- Fresh session: load `/` → chip appears ~1s, cycles 7 labels in legend order, gone ≤6.5s, `sessionStorage['henry.roomTour']==='1'`; `[data-tour-label]` present in DOM during the window (headless-checkable even on SwiftShader — it's DOM, not GL).
+- Cancel paths: pointerdown / wheel / keydown / mouse-move-over-canvas at any point → chip gone immediately, no stray hover glow, flag set.
+- Unmount mid-tour (SPA nav away): timers cleared, bus nulled, flag NOT set; StrictMode dev double-mount starts exactly one tour.
+- Same-session return to `/` → NO tour.
+- Existing interactions unchanged: raycast hover/tooltip, legend hover/click, drag orbit, wheel zoom, ESC reset, object-click dolly.
+- typecheck/lint/build 0 · /story shoot 3-profile regression 0/0.
+
+## 17. v10-A — Reference-grade room lighting + finite diorama shell (2026-07-09)
+
+Owner directive: "my-room-in-3d 본따서 룸 3D 퀄리티를 높여줘". Evidence: `shots-ref/reference-default.png` vs `shots-ref/ours-live-room.png` — the reference reads as a BRIGHT, colour-separated miniature where every object is legible; ours is an underexposed silhouette where only emissives read. Root causes (diagnosed, fix all four):
+
+### 17.1 Albedo lift (palette.ts — biggest lever)
+Dark albedo × ACES = crushed blacks no light can rescue. Lift the diorama's albedos ~40–60% in lightness, SAME hues (navy family stays — owner hates light/washed backgrounds; the page backdrop stays #0A1931):
+- `wall '#22314d' → '#3A4E74'` · `wallB '#16233d' → '#2A3A5C'` · `baseboard '#0C1830' → '#1B2A4A'`
+- wood: `woodDark '#5A3D26'→'#6E4C30'` · `woodMid '#6B4A2F'→'#8A6240'` · `woodLight '#8B6242'→'#B08050'` · `woodGrain '#4A301D'→'#5C3E26'`
+- `rugTone '#132844'→'#1E3A5F'` · `rugEdge '#1C3A63'→'#2C5488'`
+- `sofa '#20304E'→'#35507A'` · `sofaCushion '#28527A'→'#3E6FA3'` · `plantPot '#3A2A1E'→'#4E3A2A'` · `leaf '#2C4A3A'→'#3A6350'` · `leafLight '#3E6552'→'#4F8A6E'`
+- Object modules that hardcode PAL.base/elev/baseboard for furniture bodies may stay (they are accents) — but check each hotspot object reads at the new exposure; lift any body colour that still silhouettes.
+
+### 17.2 Baked-look light gradients (textures.ts)
+The reference's "expensive" feel is BAKED bounce light. Add procedural bakes:
+- `buildWallTexture(warm: boolean)`: per-wall canvas map (replace flat wall colours) — vertical gradient (top 25% darker toward ceiling → mid lit → slight floor-bounce warmth at the bottom), plus one soft radial light pool per wall (back wall: warm gold pool centred behind the desk zone + cool blue pool near the window end; left wall: warm pool behind the TV). Corner AO: darken the outermost 8% of the canvas on the edge that meets the other wall. Subtle paper-grain noise like buildRug. SRGB, built once, disposed in disposeRoomTextures.
+- `buildWood()`: after the plank pass, bake lighting INTO the floor — a large soft radial brighten (screen/overlay composite) centred room-middle (+30% at centre → 0 at edges), a warm gold pool under the desk area and a cool mint hint at the server corner. Then REDUCE the additive floor glow planes in RoomShell (deskWarm pool opacity 0.4 → 0.18, mint pool 0.2 → 0.1) — additive haze over dark wood was reading as fog, baked pools read as light.
+
+### 17.3 Finite diorama shell (RoomShell.tsx — silhouette)
+The reference is a crisp floating box; our 10×10 planes fade into fog as murk. Rebuild the shell FINITE:
+- Floor: `RoundedBox ~[5.2, 0.26, 5.2]` slab (radius 0.05), top face at y=0 (centre y=−0.13), wood-mapped top; sides in a dark plinth tone (`#0B1526`, roughness 0.9). The rug/pools/ContactShadows sit on top unchanged.
+- Walls: boxes with thickness — back wall `[5.2, 3.3, 0.14]` at z=−2.47, left wall `[0.14, 3.3, 5.2]` at x=−2.47 (so inner faces stay at −2.4 exactly — object positions must NOT move). Outer faces + top edges get a slightly LIGHTER lit tone via a thin rim strip (box `0.05` tall, colour `#4A6191`, roughness 0.6) along each wall's top — the "model kit" edge highlight.
+- Walls receive shadows; inner faces use the §17.2 wall maps (map on box is fine — the gradient reads on the inner face; outer faces covered by the rim/dark tone material via material array OR a second thin plane 0.001 inset on the inner face carrying the map — implementer's choice, no z-fighting).
+- Fog stays for the backdrop; the slab must end crisply BEFORE fog eats it (fog near 10 → 12 so the diorama is fully clear of it).
+
+### 17.4 Lighting & post (RoomShell + RoomExperience)
+- ambient 0.66 → 0.92 (same colour) · hemisphere 0.78 → 1.05, ground colour warmer `'#3a2c20'`
+- window directional 2.6 → 3.2 · desk spot 34 → 40 · camera-side warm fill 11 → 16 (distance 13 → 15)
+- `toneMappingExposure 1.28 → 1.40`
+- EffectComposer (full tier): keep SSAO (intensity 22 → 18 — brighter scene needs less) + Bloom (threshold 0.45 → 0.55 so lifted albedos don't bloom, intensity 0.35 stays) + ADD `<Vignette offset={0.28} darkness={0.42} />` from 'postprocessing'/@react-three/postprocessing — cinematic edge falloff like the reference.
+- Lite tier: no post — verify the albedo/light lift alone makes lite readable.
+
+### 17.5 QA (objective gate — headless-measurable)
+- Screenshot `/` at 1600×1000 after 10s: central 50%-crop average luminance MUST be in [46, 92] (0–255; live baseline measured DARK ~mid-teens). Measure via canvas in-page (drawImage the screenshot or sample the live canvas via `preserveDrawingBuffer`-free readback → use the screenshot-file route: load PNG into an <img> in a blank page and average a central crop).
+- Every hotspot object legible in the screenshot (no black-on-black silhouettes): manual check of the capture by the gate agent.
+- Object positions/hotspot hit proxies/camera anchors UNCHANGED (§14.2 composition locked; inner wall faces stay at ±2.4/−2.4).
+- 60fps budget respected: no new shadow-casting lights (still exactly 2), no new post passes beyond Vignette, texture builds stay ≤2048px canvases, draw-call count within ±10 of current.
+- typecheck/lint/build 0 · `/story` unaffected (its own canvas/PostFX untouched).
+
+## 18. v10-B — High-end DOM pass (Ethereal-Glass refinement, owner-safe) (2026-07-09)
+
+Owner directive: "싸구려 느낌 안 나게 고급스럽게" via the high-end-visual-design skill. Constraints that OVERRIDE the skill where they conflict: owner hates light backgrounds; information-delivery & stability > flash; existing brand tokens (navy/gold/cyan, Pretendard + Space Grotesk) are owner-approved — KEEP them. Chosen archetype: Ethereal Glass (site's existing DNA, executed properly). NO layout upheaval except the one bento noted below.
+
+### 18.1 New utilities (index.css + tailwind.config.js)
+- `.bezel` (outer shell): `rounded-[1.6rem] border border-white/[0.08] bg-white/[0.03] p-1.5` + very soft diffused shadow `shadow-[0_20px_60px_-20px_rgba(2,6,16,0.8)]`.
+- `.bezel-core` (inner): `rounded-[calc(1.6rem-0.375rem)] bg-elev/60 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)]` + hairline `ring-1 ring-white/[0.06]`.
+- tailwind `transitionTimingFunction: { lux: 'cubic-bezier(0.32,0.72,0,1)', out4: 'cubic-bezier(0.22,1,0.36,1)' }`; sweep remaining `ease-in-out`/default transitions in touched components to `ease-lux`.
+- `.noise-overlay` opacity 0.05 → 0.03; RoomPage (`/` 3D branch) must NOT render under it — hide the overlay on the room route (App-level route check) so grain never sits on the 3D scene (it read as sensor dirt on the dark render).
+- `.btn-island`: primary CTA pattern — `rounded-full` pill, nested trailing icon in its own `h-8 w-8 rounded-full bg-white/10 flex items-center justify-center` circle flush right, `active:scale-[0.98]`, icon `group-hover:translate-x-0.5 group-hover:-translate-y-px transition-transform ease-lux duration-500`.
+
+### 18.2 Component upgrades (visual only — copy/ids/routes untouched)
+- **Achievements (/story#work)**: cards → double-bezel (`.bezel` > `.bezel-core`); grid → asymmetric bento: the 60% flagship card `md:col-span-2` featured cell (it already has linkTo/footnote), remaining cards single cells; `grid-cols-1` stack on mobile with `gap-6`. Count-up + footnote + card-link behaviour unchanged.
+- **BriefPage**: stat chips + identity card → double-bezel; CTA row primary (커피챗) → `.btn-island`; secondary CTAs stay quiet pills.
+- **PhasePage/CareerHub**: the big quote block + phase cards → double-bezel; hover = existing lift + `ease-lux`, `active:scale-[0.98]`.
+- **Contact (/story#contact)**: primary CTA → `.btn-island`.
+- **Hero (/story)**: lede/paragraph readability over the particle field — wrap hero copy block in a subtle scrim (`bg-base/30 backdrop-blur-[2px] rounded-3xl px-6 py-5` or a radial gradient behind text; pick the least visible that fixes contrast).
+- **RoomMenu**: panel items get a staggered mask reveal on open (`translate-y-3 opacity-0 → 0/100`, 60ms stagger, ease-out4, guarded by reduced-motion); hamburger lines morph to an X (rotate ±45° + translate, 300ms ease-lux). Panel container → double-bezel.
+- **Room overlays (RoomPage)**: identity strip + legend chips + tooltip get the inner top-highlight (`shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)]`) — subtle machined feel, nothing moves.
+- Do NOT touch: LabelTour/TourDriver (v9), section copy, navigation structure, /story section order, fonts.
+
+### 18.3 QA
+- Reduced-motion: every new transition/stagger inert (global reduce rule already kills them — verify no opacity-0 orphans: elements must END visible).
+- Mobile 390px: bento collapses to 1-col, no horizontal overflow, tap targets ≥40px.
+- Contrast: hero lede ≥ 4.5:1 against its scrim; bezel cards keep text contrast (bg got lighter — check ink-dim on elev/60).
+- typecheck/lint/build 0 · shoot 3-profile /story + /brief + /career: console errors 0, overflow 0.
+- Before/after screenshots: story-work, brief, career at 1600×1000 saved to shots-v10/.
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

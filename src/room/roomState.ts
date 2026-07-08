@@ -83,3 +83,27 @@ export function onTooltip(cb: TooltipListener): () => void {
     tooltipSubs.delete(cb)
   }
 }
+
+/** First-visit tour bus (§16.2): the in-canvas TourDriver projects the current
+ *  step's anchor to CSS pixels and publishes `{ id, x, y }`; the DOM LabelTour
+ *  reads them via a subscribe callback and resolves the text with i18n. Same
+ *  subscriber shape as the tooltip bus — coords only, never text (the R3F
+ *  renderer boundary means the driver has no i18n context). `id: null` hides. */
+export interface TourLabelState {
+  id: string | null
+  x: number
+  y: number
+}
+type TourLabelListener = (s: TourLabelState) => void
+const tourLabelSubs = new Set<TourLabelListener>()
+
+export function setTourLabel(s: TourLabelState): void {
+  tourLabelSubs.forEach((l) => l(s))
+}
+
+export function onTourLabel(cb: TourLabelListener): () => void {
+  tourLabelSubs.add(cb)
+  return () => {
+    tourLabelSubs.delete(cb)
+  }
+}

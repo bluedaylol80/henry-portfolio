@@ -12,6 +12,7 @@ import Speaker from './objects/Speaker'
 import Frame from './objects/Frame'
 import RoomCamera, { type RoomCameraHandle } from './RoomCamera'
 import InteractionManager from './InteractionManager'
+import TourDriver from './TourDriver'
 import type { RoomAction } from '../content/room'
 
 /**
@@ -63,6 +64,7 @@ export default function RoomExperience({
 
       <RoomCamera reduced={reduced} handleRef={cameraHandle} />
       <InteractionManager cameraHandle={cameraHandle} onAction={onAction} />
+      <TourDriver />
 
       <RoomShell full={full} />
       <Desk />

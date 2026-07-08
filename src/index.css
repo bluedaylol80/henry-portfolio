@@ -193,6 +193,20 @@ html.lenis body {
   animation: bg-drift 60s ease-in-out infinite;
 }
 
+/* First-visit tour chip fade + 4px rise (§16.3). Global so the chip div holds
+ * ONLY its label text — an inline <style> child pollutes element.textContent
+ * (label + raw CSS) for QA/a11y reads. */
+@keyframes tourLabelIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -110%) translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -110%) translateY(-4px);
+  }
+}
+
 /* Skip link */
 .skip-link {
   position: fixed;
