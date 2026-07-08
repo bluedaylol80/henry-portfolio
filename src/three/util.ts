@@ -37,8 +37,8 @@ function hexToRgb(hex: string): [number, number, number] {
   ]
 }
 
-/** Era color story (§4): amber → coral → warm-violet → violet → cyan → sky. */
-export const COLOR_HEX = ['#FFB454', '#FF9A62', '#A78BFA', '#8B5CF6', '#22D3EE', '#38BDF8'] as const
+/** Era color story (§12 Smart Office): gold → gold → burnt-orange → cyan-blue → mint → cyan-blue. */
+export const COLOR_HEX = ['#F5B041', '#F39C12', '#E67E22', '#4FACFE', '#00F2FE', '#4FACFE'] as const
 export const COLOR_STOPS: [number, number, number][] = COLOR_HEX.map(hexToRgb)
 
 /** Sections whose scroll progress drives the particle phase (0..5). */

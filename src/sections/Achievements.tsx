@@ -167,7 +167,7 @@ export default function Achievements() {
             return (
               <motion.article
                 key={item.tag + i}
-                className={`group rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(139,92,246,0.45)] md:p-9 ${SPAN[i]} ${
+                className={`glass-shine group rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${SPAN[i]} ${
                   isBanner
                     ? 'flex flex-col gap-6 md:flex-row md:items-center md:justify-between'
                     : 'flex min-h-[210px] flex-col justify-between md:min-h-[240px]'

@@ -75,11 +75,11 @@ export default function Artifacts({ reduced }: { reduced: boolean }) {
         emissiveIntensity: 0.25,
       }),
       wireMat: new THREE.MeshStandardMaterial({
-        color: '#FFB454',
+        color: '#F5B041',
         wireframe: true,
         metalness: 0.2,
         roughness: 0.6,
-        emissive: '#FFB454',
+        emissive: '#F5B041',
         emissiveIntensity: 0.45,
       }),
       solid: makeInstances(SOLID_COUNT, rng),

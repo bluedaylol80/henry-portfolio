@@ -230,7 +230,7 @@ export default function Nav() {
                   {active && (
                     <span
                       aria-hidden
-                      className="absolute -bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(34,211,238,0.9)]"
+                      className="absolute -bottom-2 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(79,172,254,0.9)]"
                     />
                   )}
                 </a>
@@ -244,10 +244,20 @@ export default function Nav() {
             >
               <span
                 aria-hidden
-                className="inline-block h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(34,211,238,0.9)]"
+                className="inline-block h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(79,172,254,0.9)]"
               />
               {t(navLabel)}
             </Link>
+            {/* External résumé (Notion) — subtle era-sky tint on hover. */}
+            <a
+              href={contact.notion}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 text-sm text-ink-dim transition-colors duration-200 hover:text-era-sky"
+            >
+              {t(contact.notionNavLabel)}
+              <span aria-hidden className="text-xs">↗</span>
+            </a>
           </nav>
 
           {/* Right cluster */}
@@ -262,7 +272,7 @@ export default function Nav() {
             >
               <span
                 aria-hidden
-                className="h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(34,211,238,0.9)]"
+                className="h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(79,172,254,0.9)]"
               />
               {t(contact.navCta)}
             </a>
@@ -334,11 +344,23 @@ export default function Nav() {
                 >
                   <span
                     aria-hidden
-                    className="inline-block h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(34,211,238,0.9)]"
+                    className="inline-block h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(79,172,254,0.9)]"
                   />
                   {t(navLabel)}
                 </Link>
               </motion.div>
+              {/* External résumé (Notion) — subtle era-sky tint on hover. */}
+              <motion.a
+                variants={overlayItem}
+                href={contact.notion}
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-3 break-keep font-display text-4xl font-semibold text-ink transition-colors duration-200 hover:text-era-sky"
+              >
+                {t(contact.notionNavLabel)}
+                <span aria-hidden className="text-2xl">↗</span>
+              </motion.a>
               {/* Full-width primary CTA → coffee chat (Calendly). */}
               <motion.a
                 variants={overlayItem}
@@ -350,7 +372,7 @@ export default function Nav() {
               >
                 <span
                   aria-hidden
-                  className="h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(34,211,238,0.9)]"
+                  className="h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(79,172,254,0.9)]"
                 />
                 {t(contact.navCta)}
               </motion.a>

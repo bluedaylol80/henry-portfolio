@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
-import type { GalleryItem } from '../content/journey'
+import { sectionLabels, type GalleryItem } from '../content/journey'
 
 /**
  * 작업 화면 갤러리 (PhasePage 의 Stories 와 Carried 사이에 삽입).
@@ -101,7 +101,7 @@ export default function WorkGallery({
               e.stopPropagation()
               close()
             }}
-            aria-label="Close"
+            aria-label={t(sectionLabels.close)}
             className="absolute right-5 top-5 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/[0.04] text-ink transition-colors duration-200 hover:border-white/35 hover:text-white"
           >
             <svg

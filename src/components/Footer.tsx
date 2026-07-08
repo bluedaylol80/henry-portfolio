@@ -42,6 +42,15 @@ export default function Footer() {
             >
               Calendly
             </a>
+            <a
+              href={contact.notion}
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors duration-200 hover:text-ink"
+              aria-label={t(contact.notionLabel)}
+            >
+              Notion
+            </a>
           </div>
           <span className="text-ink-mute/70">
             {t(footer.credit)} · {t(footer.music)}

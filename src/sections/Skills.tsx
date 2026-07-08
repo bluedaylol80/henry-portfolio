@@ -70,7 +70,7 @@ export default function Skills() {
       {/* soft scrim: the AI-era network behind this section is dense — keep the rows readable */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_50%,rgba(6,7,12,0.78),rgba(6,7,12,0.25)_70%,transparent)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_80%_at_50%_50%,rgba(10,25,49,0.78),rgba(10,25,49,0.25)_70%,transparent)]"
       />
       <div ref={root} className="container-std relative">
         <p data-eyebrow className="eyebrow">

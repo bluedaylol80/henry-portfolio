@@ -4,19 +4,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#06070C',
-        elev: '#0B0D16',
+        base: '#0A1931',
+        elev: '#1A2B4C',
         ink: {
-          DEFAULT: '#F4F5F7',
-          dim: '#A3ABB8',
-          mute: '#5C6470',
+          DEFAULT: '#F8F9FA',
+          dim: '#AAB8D0',
+          mute: '#5F7195',
         },
         era: {
-          amber: '#FFB454',
-          coral: '#FF9A62',
-          violet: '#8B5CF6',
-          cyan: '#22D3EE',
-          sky: '#38BDF8',
+          amber: '#F5B041',
+          coral: '#F39C12',
+          violet: '#E67E22',
+          cyan: '#4FACFE',
+          sky: '#00F2FE',
         },
       },
       fontFamily: {

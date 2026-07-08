@@ -25,19 +25,19 @@ body::before {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(1200px 800px at 15% 0%, rgba(255, 180, 84, 0.07), transparent 60%),
-    radial-gradient(1000px 900px at 85% 40%, rgba(139, 92, 246, 0.08), transparent 60%),
-    radial-gradient(1100px 900px at 50% 100%, rgba(34, 211, 238, 0.06), transparent 60%),
-    #06070c;
+    radial-gradient(1200px 800px at 15% 0%, rgba(230, 126, 34, 0.07), transparent 60%),
+    radial-gradient(1000px 900px at 85% 40%, rgba(79, 172, 254, 0.08), transparent 60%),
+    radial-gradient(1100px 900px at 50% 100%, rgba(0, 242, 254, 0.06), transparent 60%),
+    #0a1931;
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.45);
-  color: #f4f5f7;
+  background: rgba(79, 172, 254, 0.45);
+  color: #f8f9fa;
 }
 
 *:focus-visible {
-  outline: 2px solid #22d3ee;
+  outline: 2px solid #00f2fe;
   outline-offset: 3px;
   border-radius: 2px;
 }
@@ -47,15 +47,15 @@ body::before {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #06070c;
+  background: #0a1931;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1d2230;
+  background: #24365c;
   border-radius: 8px;
-  border: 2px solid #06070c;
+  border: 2px solid #0a1931;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #2c3346;
+  background: #33497a;
 }
 
 /* Lenis recommended styles */
@@ -89,7 +89,7 @@ html.lenis body {
   }
 
   .text-gradient {
-    background: linear-gradient(100deg, #ffb454 0%, #8b5cf6 55%, #22d3ee 100%);
+    background: linear-gradient(100deg, #f5b041 0%, #e67e22 55%, #4facfe 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -97,7 +97,7 @@ html.lenis body {
   }
 
   .text-gradient-cyan {
-    background: linear-gradient(100deg, #8b5cf6 0%, #22d3ee 100%);
+    background: linear-gradient(100deg, #4facfe 0%, #00f2fe 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -108,12 +108,62 @@ html.lenis body {
     @apply rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md;
   }
 
+  /* Diagonal shine sweep on hover — GPU transform only, no JS.
+     Auto-neutralized by the global reduced-motion rule below. */
+  .glass-shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .glass-shine::after {
+    content: '';
+    position: absolute;
+    top: -60%;
+    left: -75%;
+    width: 45%;
+    height: 220%;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.14) 45%,
+      rgba(0, 242, 254, 0.1) 55%,
+      transparent 100%
+    );
+    transform: translateX(0) rotate(8deg);
+    opacity: 0;
+    transition:
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 0.4s ease;
+    will-change: transform, opacity;
+  }
+  .glass-shine:hover::after {
+    transform: translateX(360%) rotate(8deg);
+    opacity: 1;
+  }
+
+  /* AIChapter capability-card icon: hover glow pulse (scale + mint drop-shadow).
+     Driven by the parent card's `group` hover; frozen under reduced-motion. */
+  .ai-card-icon {
+    display: inline-flex;
+    transform-origin: left center;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.35s ease;
+    will-change: transform, filter;
+  }
+  .group:hover .ai-card-icon {
+    transform: scale(1.06);
+    filter: drop-shadow(0 0 10px rgba(0, 242, 254, 0.6));
+  }
+
   .glow-cyan {
-    box-shadow: 0 0 40px -8px rgba(34, 211, 238, 0.35);
+    box-shadow: 0 0 40px -8px rgba(0, 242, 254, 0.35);
   }
 
   .glow-violet {
-    box-shadow: 0 0 40px -8px rgba(139, 92, 246, 0.35);
+    box-shadow: 0 0 40px -8px rgba(230, 126, 34, 0.35);
   }
 
   .noise-overlay {
@@ -150,7 +200,7 @@ html.lenis body {
   left: 1rem;
   z-index: 100;
   padding: 0.6rem 1rem;
-  background: #0b0d16;
+  background: #1a2b4c;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.5rem;
   transition: top 0.2s;

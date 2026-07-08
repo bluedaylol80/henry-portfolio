@@ -56,7 +56,7 @@ export default function NetworkLines({ data }: { data: SceneData }) {
       uniforms: {
         uTime: { value: 0 },
         uOpacity: { value: 0 },
-        uColor: { value: new THREE.Vector3(0.1333, 0.8275, 0.9333) }, // era-cyan
+        uColor: { value: new THREE.Vector3(0.0, 0.949, 0.9961) }, // neon mint #00F2FE
       },
       vertexShader: VERT,
       fragmentShader: FRAG,

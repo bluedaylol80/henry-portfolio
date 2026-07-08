@@ -86,7 +86,7 @@ function DiagramChip({
   return (
     <div className={`absolute z-10 -translate-x-1/2 -translate-y-1/2 ${posClass}`}>
       <div
-        className={`glass flex items-center gap-2 rounded-2xl border-era-cyan/40 px-3.5 py-2.5 shadow-[0_0_28px_-12px_rgba(34,211,238,0.7)] sm:px-4 ${
+        className={`glass flex items-center gap-2 rounded-2xl border-era-cyan/40 px-3.5 py-2.5 shadow-[0_0_28px_-12px_rgba(79,172,254,0.7)] sm:px-4 ${
           primary ? 'glow-cyan' : ''
         }`}
       >
@@ -187,7 +187,7 @@ export default function AIChapter() {
           {/* radial cyan glow behind the diagram */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[110%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(34,211,238,0.18),transparent)] blur-2xl"
+            className="pointer-events-none absolute left-1/2 top-1/2 h-[110%] w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(79,172,254,0.18),transparent)] blur-2xl"
           />
 
           <div
@@ -208,7 +208,7 @@ export default function AIChapter() {
                   y1={l.y1}
                   x2={l.x2}
                   y2={l.y2}
-                  stroke="rgba(34,211,238,0.32)"
+                  stroke="rgba(79,172,254,0.32)"
                   strokeWidth={1}
                   strokeDasharray="3 4"
                   vectorEffect="non-scaling-stroke"
@@ -222,7 +222,7 @@ export default function AIChapter() {
                 <span
                   key={i}
                   data-dot
-                  className="pointer-events-none absolute h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_2px_rgba(34,211,238,0.85)]"
+                  className="pointer-events-none absolute h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_2px_rgba(79,172,254,0.85)]"
                 />
               ))}
 
@@ -252,7 +252,7 @@ export default function AIChapter() {
 
         {/* field-proven strip — the proof moment, not a footnote */}
         <motion.div
-          className="glass mt-14 rounded-3xl border-era-cyan/30 p-7 shadow-[0_0_60px_-20px_rgba(34,211,238,0.5)] md:mt-20 md:p-10"
+          className="glass mt-14 rounded-3xl border-era-cyan/30 p-7 shadow-[0_0_60px_-20px_rgba(79,172,254,0.5)] md:mt-20 md:p-10"
           initial={reduced ? undefined : { opacity: 0, y: 30 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.3 }}
@@ -281,13 +281,13 @@ export default function AIChapter() {
           {ai.cards.map((card) => (
             <motion.article
               key={card.icon}
-              className="glass rounded-2xl border-white/10 p-7 transition-[border-color,box-shadow] duration-300 hover:border-era-cyan/30 hover:shadow-[0_0_50px_-12px_rgba(34,211,238,0.4)]"
+              className="glass-shine group glass rounded-2xl border-white/10 p-7 transition-[border-color,box-shadow] duration-300 hover:border-era-cyan/30 hover:shadow-[0_0_50px_-12px_rgba(79,172,254,0.4)]"
               variants={reduced ? undefined : fadeUp}
               whileHover={
                 reduced ? undefined : { y: -6, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }
               }
             >
-              <div className="text-era-cyan">
+              <div className="ai-card-icon text-era-cyan">
                 <CardIcon name={card.icon} />
               </div>
               <h3 className="mt-5 text-lg font-semibold text-ink break-keep">{t(card.title)}</h3>

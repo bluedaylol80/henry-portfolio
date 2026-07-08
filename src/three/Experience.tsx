@@ -86,7 +86,7 @@ export default function Experience({ tier }: { tier: 'full' | 'lite' }) {
 
         <ambientLight intensity={0.5} />
         <directionalLight position={[2, 4, 5]} intensity={1.2} />
-        <pointLight position={[-3, 1.5, 4]} color="#22D3EE" intensity={25} distance={26} decay={2} />
+        <pointLight position={[-3, 1.5, 4]} color="#4FACFE" intensity={25} distance={26} decay={2} />
 
         <ParticleField data={data} />
         {full && <Artifacts reduced={reduced} />}

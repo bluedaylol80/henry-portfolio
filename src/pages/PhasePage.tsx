@@ -18,20 +18,20 @@ import { contact } from '../content/profile'
 
 // Phase color tokens → era hexes (mirrors tailwind.config `era.*`).
 const ERA_HEX: Record<PhaseColor, string> = {
-  amber: '#FFB454',
-  coral: '#FF9A62',
-  violet: '#8B5CF6',
-  cyan: '#22D3EE',
-  sky: '#38BDF8',
+  amber: '#F5B041',
+  coral: '#F39C12',
+  violet: '#E67E22',
+  cyan: '#4FACFE',
+  sky: '#00F2FE',
 }
 
 // A lighter companion stop per color, for tasteful inline gradient headings.
 const ERA_HEX_LIGHT: Record<PhaseColor, string> = {
-  amber: '#FFD9A0',
-  coral: '#FFC7A8',
-  violet: '#C4B5FD',
-  cyan: '#A5F3FC',
-  sky: '#BAE6FD',
+  amber: '#FCE3B8',
+  coral: '#FBD38D',
+  violet: '#F5C09A',
+  cyan: '#BBDFFF',
+  sky: '#B3FCFF',
 }
 
 function ArrowRight({ className = '' }: { className?: string }) {

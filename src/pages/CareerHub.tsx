@@ -12,11 +12,11 @@ import { contact } from '../content/profile'
 
 // Phase color tokens → era hexes (mirrors tailwind.config `era.*`).
 const ERA_HEX: Record<PhaseColor, string> = {
-  amber: '#FFB454',
-  coral: '#FF9A62',
-  violet: '#8B5CF6',
-  cyan: '#22D3EE',
-  sky: '#38BDF8',
+  amber: '#F5B041',
+  coral: '#F39C12',
+  violet: '#E67E22',
+  cyan: '#4FACFE',
+  sky: '#00F2FE',
 }
 
 /**
@@ -147,7 +147,7 @@ export default function CareerHub() {
             <span
               aria-hidden
               className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
-              style={{ background: 'linear-gradient(180deg,#8B5CF6,#22D3EE,#38BDF8)' }}
+              style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
             />
             <blockquote className="break-keep pl-4 font-display text-xl font-medium italic leading-relaxed text-ink md:pl-6 md:text-[1.7rem] md:leading-[1.45]">
               {t(hub.mission)}
@@ -165,7 +165,7 @@ export default function CareerHub() {
                 <Link
                   key={p.slug}
                   to={`/career/${p.slug}`}
-                  className="hub-strata group glass relative flex items-center gap-5 overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 md:gap-8 md:p-8"
+                  className="hub-strata glass-shine group glass relative flex items-center gap-5 overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 md:gap-8 md:p-8"
                   style={{ ['--phase' as string]: hex }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.boxShadow = `0 0 44px -10px ${hex}`
@@ -211,7 +211,7 @@ export default function CareerHub() {
             </h2>
             <div className="mt-10 grid gap-4 md:grid-cols-2 md:gap-5 lg:grid-cols-3">
               {hub.workstyle.map((w, i) => (
-                <div key={i} className="hub-work-card glass rounded-2xl p-6 md:p-7">
+                <div key={i} className="hub-work-card glass-shine glass rounded-2xl p-6 md:p-7">
                   <h3 className="break-keep text-base font-semibold text-ink md:text-lg">{t(w.title)}</h3>
                   <p className="mt-3 break-keep text-sm leading-relaxed text-ink-dim">{t(w.body)}</p>
                 </div>

@@ -132,6 +132,16 @@ export default function Contact() {
             {t(contact.instagramLabel)}
           </a>
 
+          <a
+            href={contact.notion}
+            target="_blank"
+            rel="noreferrer"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3.5 text-sm font-medium text-ink-dim transition-all duration-300 hover:-translate-y-0.5 hover:border-white/35 hover:text-ink md:text-base"
+          >
+            {t(contact.notionLabel)}
+            <ArrowUpRight />
+          </a>
+
           <button
             type="button"
             onClick={handleCopy}

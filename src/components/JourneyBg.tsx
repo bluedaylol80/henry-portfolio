@@ -8,11 +8,11 @@ import type { PhaseColor } from '../content/journey'
 
 // Phase color tokens → era hexes (from tailwind.config `era.*`).
 const ERA_HEX: Record<PhaseColor, string> = {
-  amber: '#FFB454',
-  coral: '#FF9A62',
-  violet: '#8B5CF6',
-  cyan: '#22D3EE',
-  sky: '#38BDF8',
+  amber: '#F5B041',
+  coral: '#F39C12',
+  violet: '#E67E22',
+  cyan: '#4FACFE',
+  sky: '#00F2FE',
 }
 
 function rgba(hex: string, alpha: number): string {
@@ -47,7 +47,7 @@ export default function JourneyBg({ color }: { color?: PhaseColor }) {
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(130% 120% at 50% 35%, transparent 55%, rgba(6,7,12,0.8) 100%)',
+            'radial-gradient(130% 120% at 50% 35%, transparent 55%, rgba(10,25,49,0.8) 100%)',
         }}
       />
     </div>

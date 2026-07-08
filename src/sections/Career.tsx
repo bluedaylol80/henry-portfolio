@@ -11,10 +11,10 @@ import { prefersReducedMotion } from '../lib/quality'
 import { EASE } from '../lib/motion'
 
 const PHASE_COLOR: Record<CareerPhase, string> = {
-  ops: '#FFB454',
-  qa: '#FF9A62',
-  biz: '#8B5CF6',
-  plan: '#22D3EE',
+  ops: '#F5B041',
+  qa: '#F39C12',
+  biz: '#E67E22',
+  plan: '#4FACFE',
 }
 
 /** Timeline phase → journey deep-dive slug (SPEC §10.4). */
@@ -151,8 +151,8 @@ export default function Career() {
                 <span
                   className="relative z-10 block h-4 w-4 rounded-full ring-4 ring-base"
                   style={{
-                    background: 'linear-gradient(135deg,#FFB454,#8B5CF6,#22D3EE)',
-                    boxShadow: '0 0 16px rgba(139,92,246,0.7)',
+                    background: 'linear-gradient(135deg,#F5B041,#E67E22,#4FACFE)',
+                    boxShadow: '0 0 16px rgba(230,126,34,0.7)',
                   }}
                 />
               </div>
