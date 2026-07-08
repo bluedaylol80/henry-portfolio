@@ -10,14 +10,19 @@ import type { Stat } from '../content/types'
 import { prefersReducedMotion } from '../lib/quality'
 import { DUR, EASE, fadeUp, staggerContainer } from '../lib/motion'
 
-/** Explicit bento span per item index (md+). Index 5 is a full-width banner. */
+/**
+ * Asymmetric bento (SPEC §18.2): a 3-column grid where the 60% flagship card
+ * (index 0 — the only card with linkTo/footnote emphasis) claims a wide
+ * `md:col-span-2` featured cell; every remaining card is a single cell. On
+ * mobile the whole grid collapses to a single column (`grid-cols-1`).
+ */
 const SPAN: Record<number, string> = {
-  0: 'md:col-span-4',
-  1: 'md:col-span-2',
-  2: 'md:col-span-2',
-  3: 'md:col-span-2',
-  4: 'md:col-span-2',
-  5: 'md:col-span-6',
+  0: 'md:col-span-2',
+  1: 'md:col-span-1',
+  2: 'md:col-span-1',
+  3: 'md:col-span-1',
+  4: 'md:col-span-1',
+  5: 'md:col-span-1',
 }
 
 /** Format one localized Stat at a given (in-progress) numeric value. */
@@ -150,22 +155,18 @@ export default function Achievements() {
         </div>
 
         <motion.div
-          className="mt-14 grid gap-4 md:mt-20 md:grid-cols-6 md:gap-5"
+          className="mt-14 grid grid-cols-1 gap-6 md:mt-20 md:grid-cols-3 md:gap-5"
           variants={reduced ? undefined : staggerContainer}
           initial={reduced ? undefined : 'hidden'}
           whileInView={reduced ? undefined : 'show'}
           viewport={{ once: true, amount: 0.15 }}
         >
           {work.items.map((item, i) => {
-            const isBanner = i === 5
+            // Flagship (index 0) is the wide featured cell.
+            const isFlagship = i === 0
             const statClass = `inline-block font-display font-bold leading-none tracking-tight tabular-nums text-[clamp(2.75rem,6vw,4.5rem)] ${
               item.emphasis ? 'text-gradient-cyan' : 'text-ink'
             }`
-            // Flagship card (index 0) gets a cyan emphasis gradient + accent border.
-            const surface =
-              i === 0
-                ? 'border-era-cyan/25 bg-gradient-to-br from-era-cyan/[0.10] via-white/[0.05] to-white/[0.03]'
-                : 'border-white/10 bg-white/[0.04]'
             // Cards with a linkTo become a full click target (SPEC §15.5-4):
             // keyboard-focusable role="link", Enter/Space navigates, cursor pointer.
             const to = item.linkTo
@@ -184,67 +185,50 @@ export default function Achievements() {
                 }
               : {}
             return (
+              // Double-bezel (§18.2): outer `.bezel` shell holds the hover lift +
+              // ambient shadow; the inner `.bezel-core` carries the fill, inset top
+              // highlight and concentric radius. The flagship core adds a cyan wash.
               <motion.article
                 key={item.tag + i}
                 {...linkProps}
-                className={`glass-shine group flex flex-col rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${SPAN[i]} ${
-                  isBanner ? '' : 'min-h-[210px] md:min-h-[240px]'
-                } ${to ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-era-cyan/50' : ''}`}
+                className={`bezel group flex ${SPAN[i]} ${
+                  to ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-era-cyan/50' : ''
+                }`}
                 variants={reduced ? undefined : fadeUp}
                 whileHover={
-                  reduced ? undefined : { y: -6, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }
+                  reduced ? undefined : { y: -6, transition: { duration: 0.5, ease: [0.32, 0.72, 0, 1] } }
                 }
               >
-                {/* Card body — flex-1 so the footnote (when present) pins to the bottom. */}
                 <div
-                  className={
-                    isBanner
-                      ? 'flex flex-1 flex-col gap-6 md:flex-row md:items-center md:justify-between'
-                      : 'flex flex-1 flex-col justify-between'
-                  }
+                  className={`bezel-core glass-shine flex w-full flex-col p-7 transition-[box-shadow,background-color] duration-500 ease-lux group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.14),0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${
+                    isFlagship ? 'bg-gradient-to-br from-era-cyan/[0.10] via-transparent to-transparent min-h-[240px]' : 'min-h-[210px] md:min-h-[240px]'
+                  }`}
                 >
-                  {isBanner ? (
-                    <>
-                      <div>
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                          <h3 className="text-lg font-semibold text-ink break-keep md:text-xl">
-                            {t(item.title)}
-                          </h3>
-                          <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
-                            {item.tag}
-                          </span>
-                        </div>
-                        <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                        <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
-                      </div>
-                      <div className="shrink-0 md:pl-8 md:text-right">
-                        <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="flex items-start justify-between gap-3">
-                        <h3 className="text-lg font-semibold text-ink break-keep">{t(item.title)}</h3>
-                        <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
-                          {item.tag}
-                        </span>
-                      </div>
+                  {/* Card body — flex-1 so the footnote (when present) pins to the bottom. */}
+                  <div className="flex flex-1 flex-col justify-between">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className={`font-semibold text-ink break-keep ${isFlagship ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+                        {t(item.title)}
+                      </h3>
+                      <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                        {item.tag}
+                      </span>
+                    </div>
 
-                      <div className="mt-8 md:mt-10">
-                        <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
-                        <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                        <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
-                      </div>
-                    </>
+                    <div className="mt-8 md:mt-10">
+                      <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
+                      <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
+                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                    </div>
+                  </div>
+
+                  {/* Role · proof footnote — small muted line at the card bottom. */}
+                  {item.footnote && (
+                    <p className="mt-3 border-t border-white/5 pt-2 text-[11px] leading-relaxed text-ink-mute break-keep">
+                      {t(item.footnote)}
+                    </p>
                   )}
                 </div>
-
-                {/* Role · proof footnote — small muted line at the card bottom. */}
-                {item.footnote && (
-                  <p className="mt-3 border-t border-white/5 pt-2 text-[11px] leading-relaxed text-ink-mute break-keep">
-                    {t(item.footnote)}
-                  </p>
-                )}
               </motion.article>
             )
           })}

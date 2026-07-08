@@ -7,6 +7,7 @@ import {
   getGlowTexture,
   getSlatTexture,
   getRugTexture,
+  getWallTexture,
   disposeRoomTextures,
 } from '../textures'
 
@@ -36,6 +37,8 @@ export default function RoomShell({ full }: { full: boolean }) {
   const glowTex = useMemo(() => getGlowTexture(), [])
   const slatTex = useMemo(() => getSlatTexture(), [])
   const rugTex = useMemo(() => getRugTexture(), [])
+  const wallWarmTex = useMemo(() => getWallTexture(true), []) // back wall
+  const wallCoolTex = useMemo(() => getWallTexture(false), []) // left wall
 
   // wood UVs: repeat a little so planks aren't oversized, diagonal rotation.
   const woodMap = useMemo(() => {
@@ -55,33 +58,53 @@ export default function RoomShell({ full }: { full: boolean }) {
     return r
   }, [wood])
 
+  // ── Finite-shell wall materials (§17.3) ─────────────────────────
+  // Each wall is a THICK box; only its INNER face carries the baked §17.2
+  // gradient map, the other faces get a dark plinth tone so the outside of the
+  // diorama reads as a crisp model-kit box (not a fogged plane). boxGeometry
+  // material-array order is [+X, −X, +Y, −Y, +Z, −Z].
+  const wallMats = useMemo(() => {
+    const plinth = () =>
+      new THREE.MeshStandardMaterial({ color: '#0B1526', roughness: 0.9, metalness: 0.02 })
+    const inner = (map: THREE.Texture) =>
+      new THREE.MeshStandardMaterial({ map, roughness: 0.94, metalness: 0.02 })
+    // Back wall (z=−2.47): inner face points +Z (index 4).
+    const back: THREE.Material[] = [plinth(), plinth(), plinth(), plinth(), inner(wallWarmTex), plinth()]
+    // Left wall (x=−2.47): inner face points +X (index 0).
+    const left: THREE.Material[] = [inner(wallCoolTex), plinth(), plinth(), plinth(), plinth(), plinth()]
+    return { back, left }
+  }, [wallWarmTex, wallCoolTex])
+
   // directional light target sits at room centre so shadows fall inward.
   const lightTarget = useRef<THREE.Object3D>(new THREE.Object3D())
 
   useEffect(() => {
     lightTarget.current.position.set(-0.3, 0.4, -0.3)
     return () => {
-      // clones are per-instance; free them + the shared cache on real unmount.
+      // clones + per-instance wall materials are ours; free them + the shared
+      // texture cache on real unmount.
       woodMap.dispose()
       woodRough.dispose()
+      wallMats.back.forEach((m) => m.dispose())
+      wallMats.left.forEach((m) => m.dispose())
       disposeRoomTextures()
     }
-  }, [woodMap, woodRough])
+  }, [woodMap, woodRough, wallMats])
 
   return (
     <group>
       {/* ── Lights ─────────────────────────────────────────────── */}
       {/* low warm ambient so darks aren't crushed — warmer + a touch brighter so
           the room reads as a cosy baked miniature, not neon-in-the-dark. */}
-      <ambientLight intensity={0.66} color="#84808c" />
-      <hemisphereLight args={['#4a5578', '#2b221a', 0.78]} />
+      <ambientLight intensity={1.02} color="#84808c" />
+      <hemisphereLight args={['#4a5578', '#3a2c20', 1.15]} />
 
       {/* Cool blue-white "window" directional — enters from the open corner,
           casts soft shadows across the floor (full tier only). */}
       <primitive object={lightTarget.current} />
       <directionalLight
         color={PAL.windowLight}
-        intensity={2.6}
+        intensity={3.2}
         position={[5.5, 6.5, 4.5]}
         target={lightTarget.current}
         castShadow={full}
@@ -100,7 +123,7 @@ export default function RoomShell({ full }: { full: boolean }) {
       {/* Warm gold desk spot (back-center-left, over the desk) — shadowed. */}
       <spotLight
         color={PAL.deskWarm}
-        intensity={34}
+        intensity={40}
         distance={10}
         angle={0.82}
         penumbra={0.9}
@@ -118,14 +141,30 @@ export default function RoomShell({ full }: { full: boolean }) {
       {/* faint gold bounce toward the TV wall (left, front) */}
       <pointLight position={[-1.9, 1.6, 1.1]} color={PAL.gold} intensity={5} distance={5} decay={2} />
       {/* Soft warm FILL from the camera side — lifts object front-faces and the
-          foreground floor so the diorama reads cosy, not murky (no shadow). */}
-      <pointLight position={[3.4, 3.2, 3.4]} color="#ffe6c2" intensity={11} distance={13} decay={2} />
+          foreground floor so the diorama reads cosy, not murky (no shadow).
+          Was 38 (+ an extra 26 foreground fill) while SSAO ate ~half the scene
+          light; SSAO is gone (v10 amendment) so the fill returns near spec
+          §17.4 level or the room washes out past the luma ceiling. */}
+      <pointLight position={[3.4, 3.2, 3.4]} color="#ffe6c2" intensity={18} distance={15} decay={2} />
       {/* gentle cool bounce into the shadowed back-left corner (bookshelf) */}
       <pointLight position={[-1.6, 2.2, -1.6]} color="#9fb4e0" intensity={4} distance={6} decay={2} />
 
-      {/* ── Floor (walnut planks) ──────────────────────────────── */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[10, 10]} />
+      {/* ── Floor (walnut planks) — finite slab (§17.3) ─────────── */}
+      {/* A thick RoundedBox slab in a dark plinth tone (its sides read as the
+          crisp edge of a floating model, not a plane fading into fog); the wood
+          map rides a thin plane sitting on the top face at y=0 (0.001 above the
+          slab top → no z-fighting). */}
+      <RoundedBox
+        args={[5.2, 0.26, 5.2]}
+        radius={0.05}
+        smoothness={2}
+        position={[0, -0.13, 0]}
+        receiveShadow
+      >
+        <meshStandardMaterial color="#0B1526" roughness={0.9} metalness={0.02} />
+      </RoundedBox>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.001, 0]} receiveShadow>
+        <planeGeometry args={[5.2, 5.2]} />
         <meshStandardMaterial
           map={woodMap}
           roughnessMap={woodRough}
@@ -141,25 +180,36 @@ export default function RoomShell({ full }: { full: boolean }) {
         <meshStandardMaterial map={rugTex} roughness={0.95} metalness={0} color={PAL.rugTone} />
       </mesh>
 
-      {/* ── Walls (warm dark navy) ─────────────────────────────── */}
-      {/* Back wall (−Z) — the lit one (frame + window live here) */}
-      <mesh position={[0, 2.5, -2.4]} receiveShadow>
-        <planeGeometry args={[10, 5.4]} />
-        <meshStandardMaterial color={PAL.wall} roughness={0.96} metalness={0.02} />
+      {/* ── Walls — finite thick boxes (§17.3) ─────────────────── */}
+      {/* Back wall (−Z): box centre z=−2.47, thickness 0.14 → inner face stays
+          EXACTLY at z=−2.4 (§14.2 lock). The inner (+Z) face carries the §17.2
+          warm gradient map; the other faces are the dark plinth tone. */}
+      <mesh position={[0, 1.65, -2.47]} receiveShadow material={wallMats.back}>
+        <boxGeometry args={[5.2, 3.3, 0.14]} />
       </mesh>
-      {/* Left wall (−X) — bookshelf + TV live here */}
-      <mesh position={[-2.4, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
-        <planeGeometry args={[10, 5.4]} />
-        <meshStandardMaterial color={PAL.wallB} roughness={0.96} metalness={0.02} />
+      {/* Left wall (−X): box centre x=−2.47 → inner (+X) face stays at x=−2.4. */}
+      <mesh position={[-2.47, 1.65, 0]} receiveShadow material={wallMats.left}>
+        <boxGeometry args={[0.14, 3.3, 5.2]} />
       </mesh>
 
-      {/* Baseboard trim where walls meet floor */}
+      {/* Lighter "model-kit" rim highlight along each wall's top edge (§17.3). */}
+      <mesh position={[0, 3.3, -2.47]}>
+        <boxGeometry args={[5.24, 0.05, 0.18]} />
+        <meshStandardMaterial color="#4A6191" roughness={0.6} metalness={0.05} />
+      </mesh>
+      <mesh position={[-2.47, 3.3, 0]}>
+        <boxGeometry args={[0.18, 0.05, 5.24]} />
+        <meshStandardMaterial color="#4A6191" roughness={0.6} metalness={0.05} />
+      </mesh>
+
+      {/* Baseboard trim where walls meet floor — sized to the finite 5.2 shell
+          (§17.3) so it doesn't overhang into the dark background. */}
       <mesh position={[0, 0.09, -2.36]}>
-        <boxGeometry args={[10, 0.18, 0.06]} />
+        <boxGeometry args={[5.2, 0.18, 0.06]} />
         <meshStandardMaterial color={PAL.baseboard} roughness={0.85} metalness={0.05} />
       </mesh>
       <mesh position={[-2.36, 0.09, 0]} rotation={[0, Math.PI / 2, 0]}>
-        <boxGeometry args={[10, 0.18, 0.06]} />
+        <boxGeometry args={[5.2, 0.18, 0.06]} />
         <meshStandardMaterial color={PAL.baseboard} roughness={0.85} metalness={0.05} />
       </mesh>
 
@@ -188,27 +238,30 @@ export default function RoomShell({ full }: { full: boolean }) {
           toneMapped={false}
         />
       </sprite>
-      {/* Warm pool on the floor under the desk area (back-center-left) */}
+      {/* Warm pool on the floor under the desk area (back-center-left) — dialed
+          DOWN (§17.2): the light is now BAKED into the wood, so the additive
+          haze only needs to hint (it read as fog over dark wood before). */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1.35, 0.02, -1.3]}>
         <planeGeometry args={[3.0, 3.0]} />
         <meshBasicMaterial
           map={glowTex}
           color={PAL.deskWarm}
           transparent
-          opacity={0.4}
+          opacity={0.18}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           toneMapped={false}
         />
       </mesh>
-      {/* Cool mint pool on the floor at the server (back-right corner) */}
+      {/* Cool mint pool on the floor at the server (back-right corner) — dialed
+          DOWN (§17.2), light baked into the wood. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2.0, 0.02, -1.6]}>
         <planeGeometry args={[2.4, 2.4]} />
         <meshBasicMaterial
           map={glowTex}
           color={PAL.mint}
           transparent
-          opacity={0.2}
+          opacity={0.1}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           toneMapped={false}

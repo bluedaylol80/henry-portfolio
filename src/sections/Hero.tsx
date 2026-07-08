@@ -101,7 +101,19 @@ export default function Hero() {
     <SectionShell id="hero" className="min-h-[100svh] overflow-hidden">
       <div ref={rootRef} className="relative min-h-[100svh]">
         <div ref={parallaxRef} className="container-std flex min-h-[100svh] flex-col pb-24 pt-32 md:pb-28">
-          <div className="flex flex-1 flex-col justify-center">
+          <div className="relative flex flex-1 flex-col justify-center">
+            {/* Readability scrim (§18.2): a soft radial pool of the page navy sits
+                BEHIND the copy so the lede/quote stay ≥4.5:1 over the brightest
+                particle clusters. Radial (not backdrop-blur) keeps it GPU-cheap on
+                the parallax/scroll block; it fades to nothing so no visible box. */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -inset-x-6 -inset-y-8 -z-10 md:-inset-x-10"
+              style={{
+                background:
+                  'radial-gradient(120% 90% at 22% 45%, rgba(10,25,49,0.62) 0%, rgba(10,25,49,0.38) 45%, transparent 78%)',
+              }}
+            />
             <p className="hero-eyebrow eyebrow">{t(hero.eyebrow)}</p>
 
             <h1 className={`mt-6 break-keep font-display ${titleSize} font-bold leading-[0.95] tracking-tight md:mt-8`}>

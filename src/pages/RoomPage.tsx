@@ -165,7 +165,7 @@ export default function RoomPage() {
           coachVisible ? 'opacity-100' : 'opacity-80'
         }`}
       >
-        <div className="glass rounded-2xl px-3.5 py-2.5 md:px-4 md:py-3">
+        <div className="glass rounded-2xl px-3.5 py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:px-4 md:py-3">
           <p className="font-display text-sm font-semibold leading-tight text-ink md:text-base">
             {identity.name}
           </p>
@@ -190,7 +190,7 @@ export default function RoomPage() {
       {showBadge && (
         <div className="fixed inset-x-0 bottom-36 z-30 flex justify-center px-6 md:bottom-40">
           <div
-            className={`glass flex items-center gap-1 rounded-full pl-4 pr-1.5 py-1 ${
+            className={`glass flex items-center gap-1 rounded-full pl-4 pr-1.5 py-1 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] ${
               reduced ? '' : 'animate-pulse'
             }`}
           >
@@ -222,7 +222,7 @@ export default function RoomPage() {
           coachVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <span className="glass rounded-full px-4 py-2 text-center text-xs text-ink-dim md:text-sm">
+        <span className="glass rounded-full px-4 py-2 text-center text-xs text-ink-dim shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:text-sm">
           {t(coach)}
         </span>
       </div>

@@ -72,29 +72,33 @@ function NavCard({
   return (
     <Link
       to={to}
-      className={`phase-nav group glass flex flex-1 items-center gap-4 rounded-2xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 md:p-6 ${
-        isNext ? 'flex-row-reverse text-right' : 'text-left'
-      }`}
+      className="phase-nav bezel group block flex-1 transition-transform duration-500 ease-lux hover:-translate-y-1 active:scale-[0.98]"
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = `0 0 40px -12px ${hex}`
+        e.currentTarget.style.boxShadow = `0 20px 60px -20px rgba(2,6,16,0.8), 0 0 40px -12px ${hex}`
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.boxShadow = ''
       }}
     >
-      <span style={{ color: hex }}>
-        <ArrowRight
-          className={`transition-transform duration-300 ease-out ${
-            isNext ? 'group-hover:translate-x-1' : '-scale-x-100 group-hover:-translate-x-1'
-          }`}
-        />
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">{label}</span>
-        <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">
-          <span className="font-display text-ink-mute">{num}</span> {name}
+      <div
+        className={`bezel-core flex items-center gap-4 p-5 md:p-6 ${
+          isNext ? 'flex-row-reverse text-right' : 'text-left'
+        }`}
+      >
+        <span style={{ color: hex }}>
+          <ArrowRight
+            className={`transition-transform duration-300 ease-out4 ${
+              isNext ? 'group-hover:translate-x-1' : '-scale-x-100 group-hover:-translate-x-1'
+            }`}
+          />
         </span>
-      </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">{label}</span>
+          <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">
+            <span className="font-display text-ink-mute">{num}</span> {name}
+          </span>
+        </span>
+      </div>
     </Link>
   )
 }
@@ -281,19 +285,17 @@ export default function PhasePage() {
             </h2>
             <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 md:gap-5">
               {phase.outputs.map((o, i) => (
-                <div
-                  key={i}
-                  className="glass rounded-2xl p-5 md:p-6"
-                  style={i === 0 ? { borderColor: `${hex}55` } : undefined}
-                >
-                  <div
-                    className="font-display text-[clamp(1.75rem,4.5vw,2.75rem)] font-bold leading-none"
-                    style={i === 0 ? { color: hex } : { color: '#F4F5F7' }}
-                  >
-                    {t(o.stat)}
+                <div key={i} className="bezel" style={i === 0 ? { borderColor: `${hex}55` } : undefined}>
+                  <div className="bezel-core p-5 md:p-6">
+                    <div
+                      className="font-display text-[clamp(1.75rem,4.5vw,2.75rem)] font-bold leading-none"
+                      style={i === 0 ? { color: hex } : { color: '#F4F5F7' }}
+                    >
+                      {t(o.stat)}
+                    </div>
+                    <div className="mt-3 break-keep text-sm font-medium leading-snug text-ink">{t(o.label)}</div>
+                    {o.sub && <div className="mt-1.5 break-keep text-xs leading-snug text-ink-mute">{t(o.sub)}</div>}
                   </div>
-                  <div className="mt-3 break-keep text-sm font-medium leading-snug text-ink">{t(o.label)}</div>
-                  {o.sub && <div className="mt-1.5 break-keep text-xs leading-snug text-ink-mute">{t(o.sub)}</div>}
                 </div>
               ))}
             </div>
@@ -306,18 +308,19 @@ export default function PhasePage() {
             </h2>
             <ol className="mt-10 space-y-5">
               {phase.stories.map((s, i) => (
-                <li
-                  key={i}
-                  className="glass rounded-2xl border-l-2 p-6 md:p-8"
-                  style={{ borderLeftColor: hex }}
-                >
-                  <div className="flex items-baseline gap-4">
-                    <span className="font-display text-sm tabular-nums text-ink-mute">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className="break-keep text-lg font-semibold text-ink md:text-xl">{t(s.title)}</h3>
+                <li key={i} className="bezel">
+                  <div
+                    className="bezel-core border-l-2 p-6 md:p-8"
+                    style={{ borderLeftColor: hex }}
+                  >
+                    <div className="flex items-baseline gap-4">
+                      <span className="font-display text-sm tabular-nums text-ink-mute">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <h3 className="break-keep text-lg font-semibold text-ink md:text-xl">{t(s.title)}</h3>
+                    </div>
+                    <p className="mt-3 break-keep leading-relaxed text-ink-dim md:pl-9">{t(s.body)}</p>
                   </div>
-                  <p className="mt-3 break-keep leading-relaxed text-ink-dim md:pl-9">{t(s.body)}</p>
                 </li>
               ))}
             </ol>
@@ -370,19 +373,21 @@ export default function PhasePage() {
               ) : (
                 <Link
                   to="/#contact"
-                  className="phase-nav group glass glow-cyan flex flex-1 flex-row-reverse items-center gap-4 rounded-2xl p-5 text-right transition-all duration-300 hover:-translate-y-1 hover:border-era-cyan/40 md:p-6"
+                  className="phase-nav bezel glow-cyan group block flex-1 transition-transform duration-500 ease-lux hover:-translate-y-1 hover:border-era-cyan/40 active:scale-[0.98]"
                 >
-                  <span className="text-era-cyan">
-                    <ArrowRight className="transition-transform duration-300 ease-out group-hover:translate-x-1" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">
-                      {t(sectionLabels.next)}
+                  <div className="bezel-core flex flex-row-reverse items-center gap-4 p-5 text-right md:p-6">
+                    <span className="text-era-cyan">
+                      <ArrowRight className="transition-transform duration-300 ease-out4 group-hover:translate-x-1" />
                     </span>
-                    <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">
-                      {t(contact.title)}
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">
+                        {t(sectionLabels.next)}
+                      </span>
+                      <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">
+                        {t(contact.title)}
+                      </span>
                     </span>
-                  </span>
+                  </div>
                 </Link>
               )}
             </div>

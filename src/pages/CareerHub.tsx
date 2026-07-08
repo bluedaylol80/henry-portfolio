@@ -45,7 +45,7 @@ function ArrowRight() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="h-5 w-5 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1"
+      className="h-5 w-5 shrink-0 transition-transform duration-300 ease-out4 group-hover:translate-x-1"
     >
       <path d="M5 12h14" />
       <path d="M13 6l6 6-6 6" />
@@ -142,19 +142,21 @@ export default function CareerHub() {
             </p>
           </header>
 
-          {/* Mission quote */}
-          <figure className="hub-mission glass relative mt-14 overflow-hidden rounded-2xl p-8 md:mt-20 md:p-11">
-            <span
-              aria-hidden
-              className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
-              style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
-            />
-            <blockquote className="break-keep pl-4 font-display text-xl font-medium italic leading-relaxed text-ink md:pl-6 md:text-[1.7rem] md:leading-[1.45]">
-              {t(hub.mission)}
-            </blockquote>
-            <figcaption className="mt-5 break-keep pl-4 text-sm text-ink-mute md:pl-6">
-              {t(hub.missionSource)}
-            </figcaption>
+          {/* Mission quote — double-bezel panel (§18.2) */}
+          <figure className="hub-mission bezel mt-14 md:mt-20">
+            <div className="bezel-core relative overflow-hidden p-8 md:p-11">
+              <span
+                aria-hidden
+                className="absolute inset-y-0 left-0 w-1"
+                style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
+              />
+              <blockquote className="break-keep pl-4 font-display text-xl font-medium italic leading-relaxed text-ink md:pl-6 md:text-[1.7rem] md:leading-[1.45]">
+                {t(hub.mission)}
+              </blockquote>
+              <figcaption className="mt-5 break-keep pl-4 text-sm text-ink-mute md:pl-6">
+                {t(hub.missionSource)}
+              </figcaption>
+            </div>
           </figure>
 
           {/* Layer stack — Phase 05 on top → 01 at bottom */}
@@ -165,10 +167,10 @@ export default function CareerHub() {
                 <Link
                   key={p.slug}
                   to={`/career/${p.slug}`}
-                  className="hub-strata glass-shine group glass relative flex items-center gap-5 overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:border-white/25 md:gap-8 md:p-8"
+                  className="hub-strata bezel group block transition-transform duration-500 ease-lux hover:-translate-y-1 active:scale-[0.98]"
                   style={{ ['--phase' as string]: hex }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = `0 0 44px -10px ${hex}`
+                    e.currentTarget.style.boxShadow = `0 20px 60px -20px rgba(2,6,16,0.8), 0 0 44px -10px ${hex}`
                     e.currentTarget.style.borderColor = `${hex}66`
                   }}
                   onMouseLeave={(e) => {
@@ -176,29 +178,31 @@ export default function CareerHub() {
                     e.currentTarget.style.borderColor = ''
                   }}
                 >
-                  {/* Left color bar */}
-                  <span
-                    aria-hidden
-                    className="absolute inset-y-0 left-0 w-1"
-                    style={{ background: hex, boxShadow: `0 0 20px ${hex}` }}
-                  />
-                  <span
-                    aria-hidden
-                    className="font-display text-2xl font-bold tabular-nums text-ink-mute transition-colors duration-300 md:text-3xl"
-                    style={{ minWidth: '2.5rem' }}
-                  >
-                    {p.num}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h2 className="break-keep text-xl font-bold text-ink md:text-2xl">{t(p.name)}</h2>
-                    <p className="mt-1 break-keep text-sm text-ink-dim md:text-base">{t(p.tagline)}</p>
-                    <p className="mt-2.5 break-keep font-display text-xs tabular-nums text-ink-mute md:text-sm">
-                      {p.period} · {t(p.companies)}
-                    </p>
+                  <div className="bezel-core glass-shine relative flex items-center gap-5 overflow-hidden p-6 md:gap-8 md:p-8">
+                    {/* Left color bar */}
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-0 left-0 w-1"
+                      style={{ background: hex, boxShadow: `0 0 20px ${hex}` }}
+                    />
+                    <span
+                      aria-hidden
+                      className="font-display text-2xl font-bold tabular-nums text-ink-mute transition-colors duration-300 md:text-3xl"
+                      style={{ minWidth: '2.5rem' }}
+                    >
+                      {p.num}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <h2 className="break-keep text-xl font-bold text-ink md:text-2xl">{t(p.name)}</h2>
+                      <p className="mt-1 break-keep text-sm text-ink-dim md:text-base">{t(p.tagline)}</p>
+                      <p className="mt-2.5 break-keep font-display text-xs tabular-nums text-ink-mute md:text-sm">
+                        {p.period} · {t(p.companies)}
+                      </p>
+                    </div>
+                    <span style={{ color: hex }}>
+                      <ArrowRight />
+                    </span>
                   </div>
-                  <span style={{ color: hex }}>
-                    <ArrowRight />
-                  </span>
                 </Link>
               )
             })}

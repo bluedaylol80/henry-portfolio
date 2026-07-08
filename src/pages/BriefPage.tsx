@@ -13,6 +13,25 @@ import { contact } from '../content/profile'
  * one <h1>, reveal animations are light and reduced-motion guarded.
  */
 
+/** Ultra-light diagonal arrow — the island CTA's nested trailing glyph. */
+function ArrowUpRight() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.7}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className="h-4 w-4"
+    >
+      <path d="M7 17 17 7" />
+      <path d="M8 7h9v9" />
+    </svg>
+  )
+}
+
 export default function BriefPage() {
   const t = useT()
   const { lang } = useLang()
@@ -59,26 +78,25 @@ export default function BriefPage() {
             {t(brief.lede)}
           </motion.p>
 
-          {/* Identity block — name + line + arc, glass panel */}
-          <motion.section
-            variants={item}
-            className="glass relative mt-12 overflow-hidden rounded-2xl p-7 md:mt-16 md:p-9"
-          >
-            <span
-              aria-hidden
-              className="absolute inset-y-0 left-0 w-1 rounded-l-2xl"
-              style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
-            />
-            <div className="pl-4 md:pl-5">
-              <p className="font-display text-xl font-semibold text-ink md:text-2xl">
-                {brief.identity.name}
-              </p>
-              <p className="mt-2 break-keep text-base text-ink-dim md:text-lg">
-                {t(brief.identity.line)}
-              </p>
-              <p className="mt-3 break-keep text-sm leading-relaxed text-ink-mute md:text-base">
-                {t(brief.identity.arc)}
-              </p>
+          {/* Identity block — name + line + arc, double-bezel panel (§18.2) */}
+          <motion.section variants={item} className="bezel mt-12 md:mt-16">
+            <div className="bezel-core relative overflow-hidden p-7 md:p-9">
+              <span
+                aria-hidden
+                className="absolute inset-y-0 left-0 w-1"
+                style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
+              />
+              <div className="pl-4 md:pl-5">
+                <p className="font-display text-xl font-semibold text-ink md:text-2xl">
+                  {brief.identity.name}
+                </p>
+                <p className="mt-2 break-keep text-base text-ink-dim md:text-lg">
+                  {t(brief.identity.line)}
+                </p>
+                <p className="mt-3 break-keep text-sm leading-relaxed text-ink-mute md:text-base">
+                  {t(brief.identity.arc)}
+                </p>
+              </div>
             </div>
           </motion.section>
 
@@ -88,14 +106,13 @@ export default function BriefPage() {
             className="mt-8 grid grid-cols-2 gap-3 md:mt-10 md:grid-cols-4 md:gap-4"
           >
             {brief.stats.map((s, i) => (
-              <li
-                key={i}
-                className="glass flex flex-col items-start gap-1 rounded-2xl p-4 md:p-5"
-              >
-                <span className="font-display text-2xl font-bold tabular-nums text-gradient-cyan md:text-3xl">
-                  {lang === 'ko' ? s.value : s.valueEn}
-                </span>
-                <span className="break-keep text-xs text-ink-mute md:text-sm">{t(s.label)}</span>
+              <li key={i} className="bezel">
+                <div className="bezel-core flex flex-col items-start gap-1 p-4 md:p-5">
+                  <span className="font-display text-2xl font-bold tabular-nums text-gradient-cyan md:text-3xl">
+                    {lang === 'ko' ? s.value : s.valueEn}
+                  </span>
+                  <span className="break-keep text-xs text-ink-mute md:text-sm">{t(s.label)}</span>
+                </div>
               </li>
             ))}
           </motion.ul>
@@ -153,19 +170,18 @@ export default function BriefPage() {
           >
             <p className="eyebrow">{t(brief.ctaTitle)}</p>
             <div className="mt-6 flex flex-wrap items-center gap-3 md:gap-4">
-              {/* Coffee chat — primary glow */}
+              {/* Coffee chat — primary island CTA (§18.2) */}
               <a
                 href={contact.calendly}
                 target="_blank"
                 rel="noreferrer"
                 data-cursor
-                className="glass glow-cyan inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold text-ink transition-colors duration-200 hover:border-era-cyan/40 md:text-base"
+                className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-base"
               >
-                <span
-                  aria-hidden
-                  className="h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(79,172,254,0.9)]"
-                />
                 {t(brief.ctas.coffee)}
+                <span aria-hidden className="btn-island-icon text-era-cyan">
+                  <ArrowUpRight />
+                </span>
               </a>
               {/* Email */}
               <a

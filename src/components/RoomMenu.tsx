@@ -84,6 +84,8 @@ export default function RoomMenu() {
     navigate(`/story#${id}`)
   }
 
+  // Staggered mask reveal (§18.2): items rise 12px (translate-y-3) into view,
+  // 60ms apart, on the out4 curve. Reduced motion collapses to instant/visible.
   const listVariants: Variants = {
     hidden: {},
     show: {
@@ -91,11 +93,11 @@ export default function RoomMenu() {
     },
   }
   const itemVariants: Variants = {
-    hidden: { y: reduce ? 0 : 20, opacity: 0 },
+    hidden: { y: reduce ? 0 : 12, opacity: reduce ? 1 : 0 },
     show: {
       y: 0,
       opacity: 1,
-      transition: { duration: reduce ? 0 : 0.45, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: reduce ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] },
     },
   }
 
@@ -111,12 +113,12 @@ export default function RoomMenu() {
         className="glass fixed right-4 top-4 z-40 flex h-12 w-12 flex-col items-center justify-center gap-1.5 rounded-full transition-colors duration-200 hover:border-white/25 md:right-8 md:top-8"
       >
         <span
-          className={`block h-px w-5 bg-ink transition-transform duration-300 ${
+          className={`block h-px w-5 bg-ink transition-transform duration-300 ease-lux ${
             open ? 'translate-y-[3.5px] rotate-45' : ''
           }`}
         />
         <span
-          className={`block h-px w-5 bg-ink transition-transform duration-300 ${
+          className={`block h-px w-5 bg-ink transition-transform duration-300 ease-lux ${
             open ? '-translate-y-[3.5px] -rotate-45' : ''
           }`}
         />
@@ -134,7 +136,9 @@ export default function RoomMenu() {
             role="dialog"
             aria-modal="true"
             aria-label={t(menu.title)}
-            className="fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-base/95 backdrop-blur-xl"
+            // Panel = the bezel "core" (§18.2): full-bleed navy glass with a hairline
+            // inner ring + inset top highlight so the panel edge reads machined.
+            className="fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-base/95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl"
           >
             {/* Header — title + close X */}
             <div className="container-std flex items-center justify-between pt-6 md:pt-10">

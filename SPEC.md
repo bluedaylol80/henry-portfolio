@@ -647,7 +647,7 @@ The reference is a crisp floating box; our 10×10 planes fade into fog as murk. 
 - ambient 0.66 → 0.92 (same colour) · hemisphere 0.78 → 1.05, ground colour warmer `'#3a2c20'`
 - window directional 2.6 → 3.2 · desk spot 34 → 40 · camera-side warm fill 11 → 16 (distance 13 → 15)
 - `toneMappingExposure 1.28 → 1.40`
-- EffectComposer (full tier): keep SSAO (intensity 22 → 18 — brighter scene needs less) + Bloom (threshold 0.45 → 0.55 so lifted albedos don't bloom, intensity 0.35 stays) + ADD `<Vignette offset={0.28} darkness={0.42} />` from 'postprocessing'/@react-three/postprocessing — cinematic edge falloff like the reference.
+- EffectComposer (full tier): **SSAO REMOVED (v10 amendment, A/B-proven)** — the unblurred SSAO pass dithers the dark walls with salt-and-pepper speckle (lite tier without the composer renders clean: `shots-v10/ab-full-crop.png` vs `ab-lite-crop.png`). Baked AO (§17.2) + ContactShadows cover its role; removal also eliminates the §15.6 phone-artifact suspect (enableNormalPass × glow sprites) and the most expensive GPU pass. Composer keeps: Bloom (threshold 0.45 → 0.55 so lifted albedos don't bloom, intensity 0.35 stays) + `<Vignette offset={0.3} darkness={0.3} />` — cinematic edge falloff like the reference.
 - Lite tier: no post — verify the albedo/light lift alone makes lite readable.
 
 ### 17.5 QA (objective gate — headless-measurable)

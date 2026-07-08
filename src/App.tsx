@@ -140,6 +140,17 @@ function ShellFooter() {
   return <Footer />
 }
 
+/**
+ * Film-grain overlay, hidden on the room root (`/`) per SPEC §18.1: grain over
+ * the dark 3D render read as sensor dirt. The room canvas owns its own texture,
+ * so the overlay renders on every other route only.
+ */
+function ShellNoise() {
+  const { pathname } = useLocation()
+  if (pathname === '/') return null
+  return <div className="noise-overlay" aria-hidden="true" />
+}
+
 /** Redirects unknown phase slugs back to the hub, else renders the phase page. */
 function PhaseRoute() {
   const { slug } = useParams<{ slug: string }>()
@@ -178,7 +189,7 @@ export default function App() {
         </a>
         <Preloader />
         <IntroVideo />
-        <div className="noise-overlay" aria-hidden="true" />
+        <ShellNoise />
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
         <RouteEffects />

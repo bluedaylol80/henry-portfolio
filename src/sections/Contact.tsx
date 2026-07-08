@@ -18,7 +18,7 @@ function ArrowUpRight() {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className="h-4 w-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+      className="h-4 w-4"
     >
       <path d="M7 17 17 7" />
       <path d="M8 7h9v9" />
@@ -105,7 +105,7 @@ export default function Contact() {
           {contact.email}
           <span
             aria-hidden="true"
-            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-era-cyan transition-transform duration-500 ease-out group-hover:scale-x-100"
+            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-era-cyan transition-transform duration-500 ease-lux group-hover:scale-x-100"
           />
         </a>
 
@@ -117,10 +117,12 @@ export default function Contact() {
             href={contact.calendly}
             target="_blank"
             rel="noreferrer"
-            className="glass glow-cyan group inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-era-cyan/40 md:text-base"
+            className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-base"
           >
             {t(contact.calendlyLabel)}
-            <ArrowUpRight />
+            <span aria-hidden className="btn-island-icon text-era-cyan">
+              <ArrowUpRight />
+            </span>
           </a>
 
           <a
