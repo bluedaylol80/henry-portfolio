@@ -9,7 +9,9 @@
 
 ## 🖊 콘텐츠 수정 방법 (비개발자용)
 
-**모든 문구·데이터는 단 한 파일에 있습니다: `src/content/profile.ts`**
+**문구·데이터는 두 파일에 있습니다:**
+- 메인 페이지 전체: `src/content/profile.ts`
+- 커리어 딥다이브(`/career` 지도 + 5단계 페이지): `src/content/journey.ts`
 
 - 모든 텍스트는 `{ ko: '한국어', en: 'English' }` 짝으로 되어 있습니다. 두 언어를 함께 고치세요.
 - 커리어 추가/수정: `career.entries` 배열 (회사, 역할, 기간, phase, 대표 타이틀).
@@ -43,8 +45,10 @@ npm run shoot      # 스크린샷 자가 점검 (dev 서버 켜둔 상태에서,
 
 ```
 src/
-  content/profile.ts   ← 모든 문구·데이터 (여기만 고치면 됨)
+  content/profile.ts   ← 메인 페이지 문구·데이터
+  content/journey.ts   ← 커리어 딥다이브(/career*) 문구·데이터
   content/types.ts     콘텐츠 타입 정의
+  pages/               Landing(메인) · CareerHub(/career) · PhasePage(/career/:slug)
   lib/                 공용: i18n(한/영), scroll(Lenis+ScrollTrigger+진행도), quality(품질 티어), appState, motion
   three/               3D 씬: 파티클 모프 시스템, 아티팩트, 네트워크 라인, 카메라 리그
   components/          크롬: 프리로더, 내비, 커스텀 커서, 푸터, 2D 폴백 배경, SectionShell
