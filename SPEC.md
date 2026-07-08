@@ -254,6 +254,53 @@ Common: each section starts with an eyebrow label (`.eyebrow`, e.g. `01 · ABOUT
 
 Stubs for all owned files already exist — replace them entirely. You may create additional private submodule files ONLY inside your owned directory scope (three/* subfiles for Scene agent; others keep to their listed files — small internal helpers may live inside the same file).
 
+## 9. v2 — Career Journey deep-dive pages (2026-07-08)
+
+Goal: main landing stays the compressed showcase; qualitative career narrative moves to
+deep-dive subpages. Narrative: **main = "이 사람 뭔가 다르다" / journey pages = "왜 다른지 납득된다"**.
+
+### Routing
+- `react-router-dom` v7 (installed). `BrowserRouter basename={import.meta.env.BASE_URL}`.
+- Routes: `/` → Landing (the existing section stack), `/career` → CareerHub, `/career/:slug` → PhasePage (slugs from `content/journey.ts` phases), `*` → redirect `/`.
+- SPA deep links on GitHub Pages: `postbuild` script copies `dist/index.html` → `dist/404.html`.
+- On route change: scroll to top instantly (respect Lenis — `getLenis()?.scrollTo(0,{immediate:true})` + `window.scrollTo(0,0)` fallback); set `document.title` (Landing: profile meta title; hub: `Career Journey — Henry Lim`; phase: `Phase {num} · {name en} — Henry Lim`).
+- Landing must support `/#section` arrival: after preloader ready, if `location.hash`, scroll to that section.
+- 3D `Experience` mounts ONLY on Landing. Journey pages use `JourneyBg` (below). Preloader stays at shell level (plays once). Nav + Footer render on all routes.
+
+### Content source
+`src/content/journey.ts` — `hub` (label/title/lede/mission/missionSource/workstyleTitle/workstyle[5]), `phases[5]` (slug/num/color/name/tagline/period/companies/roleLine/title/oneLiner/intro/did[]/problems[]/outputs[]/stories[]/carried), `sectionLabels`, `navLabel`. All `Bi` via `useT()`. Phase colors map to tokens: amber/coral/violet/cyan/sky → `era-*`.
+
+### Nav additions
+- Extra "Journey" link (`journey.navLabel`) after the anchor links, visually distinct (era-cyan text + small ↗ or dot) → routes to `/career`. Present in desktop row and mobile overlay.
+- On non-`/` routes, anchor links navigate to `/#id` (Landing handles the hash scroll). Wordmark → `/`.
+
+### JourneyBg (components/JourneyBg.tsx)
+- `<div className="fixed inset-0 z-0" aria-hidden>`: base bg + one large radial gradient tinted by the current phase color (hub: violet→cyan blend) at 8–12% opacity, very slow drift (reuse `.animate-bg-drift`), vignette. Premium even static (reduced motion freezes via global CSS).
+
+### CareerHub (`/career`)
+- `.section-pad .container-std`, eyebrow `hub.label`, h1 `hub.title` (text-gradient), lede.
+- **Mission quote block**: large italic quote (`hub.mission`) in a glass panel with gradient left border, source line (`hub.missionSource`) small under.
+- **Layer stack**: the 5 phases rendered as stacked strata cards, **Phase 05 on top → 01 at bottom** (geological metaphor; matches newest-first). Each card: left color bar (phase color), `num` (font-display, ink-mute), `name` (bold, large), `tagline`, `period` + `companies` (small mono), arrow → `Link` to `/career/{slug}`. Hover: lift + phase-color glow border. Staggered reveal.
+- **Workstyle section**: eyebrow-less sub-h2 `hub.workstyleTitle` + 5 glass cards (grid md:2 lg:3 — 5th spans or centers gracefully): title (font-semibold) + body (text-sm text-ink-dim).
+- Footer CTA row: back home link + contact link.
+
+### PhasePage (`/career/:slug`)
+Template (all sections use the shared reveal language; reduced-motion guarded):
+1. **Hero**: back link (`sectionLabels.backToMap` → `/career`), eyebrow `PHASE {num} · {name}`, h1 `title` (phase-color gradient text: use `text-gradient-cyan` for cyan/sky, or inline-styled gradient from phase color for amber/coral/violet — keep tasteful), lede `oneLiner`, meta strip: 3 glass chips (period / companies / roleLine).
+2. **Intro**: large paragraph (`text-lg md:text-xl text-ink-dim max-w-3xl leading-relaxed`).
+3. **Did** (`sectionLabels.did`): 2-col md checklist, phase-color small square/dash markers.
+4. **Problems** (`sectionLabels.problems`): numbered large statements (font-display index + text-lg), generous spacing — reads like design principles.
+5. **Outputs** (`sectionLabels.outputs`): stat cards grid (2 → 4 cols), glass, big `font-display` stat (phase-color or gradient on first), label + sub. No count-up needed (static, reveal only).
+6. **Stories** (`sectionLabels.stories`): vertical list of story cards — story index `01…`, title (font-semibold text-lg md:text-xl), body (text-ink-dim). Left border in phase color.
+7. **Carried** (`sectionLabels.carried`): closing block — the `carried` paragraph large + prev/next phase navigation: two cards (prev if exists / next if exists) with num+name+arrow; on the LAST phase, replace "next" with a CTA card linking `/#contact` ("다음 기획을 함께" — reuse profile.contact.title via useT).
+- Unknown slug → redirect `/career`.
+
+### QA additions for v2
+- Direct deep-link (`/henry-portfolio/career/planning`) works locally via `vite preview` (serves 404? — verify with dev server route nav at minimum; postbuild copy covers production).
+- Language toggle switches ALL journey copy on hub + phase pages.
+- Landing regression: sections/3D/nav anchors unaffected; `/#about` hash arrival scrolls correctly.
+- Mobile 390px: hub stack + phase template clean, no overflow.
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

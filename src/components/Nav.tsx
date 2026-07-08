@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { nav } from '../content/profile'
+import { navLabel } from '../content/journey'
 import { useLang, useT, type Bi } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
 import { isReady, onReady } from '../lib/appState'
@@ -46,6 +48,9 @@ function LangToggle() {
 export default function Nav() {
   const t = useT()
   const reduce = prefersReducedMotion()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+  const onLanding = pathname === '/'
   const [ready, setReadyState] = useState(isReady())
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -79,11 +84,16 @@ export default function Nav() {
     }
   }, [menuOpen])
 
+  // Anchor links: scroll in place on Landing; otherwise route to /#id and let
+  // Landing's hash handler perform the scroll.
   const handleNav = (e: React.MouseEvent, id: string) => {
     e.preventDefault()
     setMenuOpen(false)
-    scrollTo(id)
+    if (onLanding) scrollTo(id)
+    else navigate(`/#${id}`)
   }
+
+  const handleJourney = () => setMenuOpen(false)
 
   const navVariants: Variants = {
     hidden: { y: -80, opacity: 0 },
@@ -119,9 +129,9 @@ export default function Nav() {
       >
         <div className="container-std flex h-16 items-center justify-between md:h-20">
           {/* Wordmark */}
-          <a
-            href="#hero"
-            onClick={(e) => handleNav(e, 'hero')}
+          <Link
+            to="/"
+            onClick={() => setMenuOpen(false)}
             className="flex items-baseline gap-2"
             aria-label="Henry Lim"
           >
@@ -129,7 +139,7 @@ export default function Nav() {
             <span className="hidden text-sm font-medium tracking-wide text-ink-dim sm:inline">
               Henry Lim
             </span>
-          </a>
+          </Link>
 
           {/* Desktop links */}
           <nav className="hidden items-center gap-8 md:flex">
@@ -143,6 +153,18 @@ export default function Nav() {
                 {t(item.label)}
               </a>
             ))}
+            {/* Deep-dive route — visually distinct (era-cyan). */}
+            <Link
+              to="/career"
+              onClick={handleJourney}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-era-cyan transition-opacity duration-200 hover:opacity-80"
+            >
+              <span
+                aria-hidden
+                className="inline-block h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(34,211,238,0.9)]"
+              />
+              {t(navLabel)}
+            </Link>
           </nav>
 
           {/* Right cluster */}
@@ -202,6 +224,20 @@ export default function Nav() {
                   {t(item.label)}
                 </motion.a>
               ))}
+              {/* Deep-dive route — distinct era-cyan entry. */}
+              <motion.div variants={overlayItem}>
+                <Link
+                  to="/career"
+                  onClick={handleJourney}
+                  className="mt-2 flex items-center gap-4 break-keep font-display text-4xl font-semibold text-era-cyan transition-opacity duration-200 hover:opacity-80"
+                >
+                  <span
+                    aria-hidden
+                    className="inline-block h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(34,211,238,0.9)]"
+                  />
+                  {t(navLabel)}
+                </Link>
+              </motion.div>
             </motion.nav>
           </motion.div>
         )}

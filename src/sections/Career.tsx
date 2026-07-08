@@ -1,4 +1,5 @@
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -141,6 +142,30 @@ export default function Career() {
               <p className="text-gradient break-keep font-display text-lg font-semibold md:text-2xl">
                 {t(career.arcNote)}
               </p>
+            </li>
+
+            {/* Deep-dive CTA — routes to the career journey map. */}
+            <li className="career-row relative mt-14 grid grid-cols-[28px_1fr] gap-x-5 md:mt-16 md:grid-cols-[160px_44px_1fr] md:gap-x-6">
+              <div className="hidden md:block" />
+              <div className="hidden md:block" />
+              <div className="flex flex-col items-start gap-5 md:flex-row md:items-center md:justify-between">
+                <p className="max-w-md break-keep text-sm leading-relaxed text-ink-dim md:text-base">
+                  {t(career.deepDive)}
+                </p>
+                <Link
+                  to="/career"
+                  data-cursor
+                  className="glass glow-cyan group inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium text-ink transition-colors duration-300 hover:border-white/25 md:text-base"
+                >
+                  <span className="break-keep">{t(career.deepDiveCta)}</span>
+                  <span
+                    aria-hidden
+                    className="text-era-cyan transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </Link>
+              </div>
             </li>
           </ol>
         </div>

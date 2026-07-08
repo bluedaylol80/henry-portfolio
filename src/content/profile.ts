@@ -172,6 +172,11 @@ export const career = {
     ko: '2006년 운영에서 시작해 — 사업과 기획을 지나, 지금은 AI와 함께. 19년의 여정.',
     en: 'Started in live ops in 2006 — through business and planning, now with AI. A 19-year journey.',
   } as Bi,
+  deepDive: {
+    ko: '각 단계에서 무엇을 맡았고, 어떤 문제를 풀었는지 — 단계별 딥다이브가 있습니다.',
+    en: 'What I owned and what I solved at every stage — there’s a deep-dive for each.',
+  } as Bi,
+  deepDiveCta: { ko: '커리어 지도 열기', en: 'Open the career map' } as Bi,
 }
 
 export const work = {
