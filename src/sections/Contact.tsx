@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import SectionShell from '../components/SectionShell'
+import Whisper from '../components/Whisper'
 import { useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
 import { DUR, EASE, STAGGER } from '../lib/motion'
@@ -67,7 +68,8 @@ export default function Contact() {
           { autoAlpha: 0, y: 20, duration: DUR.s, stagger: STAGGER },
           '-=0.55',
         )
-        .from('[data-note]', { autoAlpha: 0, y: 16, duration: DUR.s }, '-=0.35')
+        .from('[data-whisper]', { autoAlpha: 0, y: 20, duration: DUR.m }, '-=0.35')
+        .from('[data-note]', { autoAlpha: 0, y: 16, duration: DUR.s }, '-=0.5')
     },
     { scope: root },
   )
@@ -139,6 +141,10 @@ export default function Contact() {
               {copied ? t(contact.copied) : t(contact.kakaoLabel)}
             </span>
           </button>
+        </div>
+
+        <div data-whisper className="mt-12 w-full md:mt-14">
+          <Whisper />
         </div>
 
         <p data-note className="mt-10 text-sm text-ink-mute">

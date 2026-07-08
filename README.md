@@ -66,5 +66,44 @@ scripts/shoot.mjs      스크린샷 QA 하니스
 | `lite` | 모바일/저사양 | 파티클 2,200, 포스트프로세싱 없음 |
 | `fallback` | `prefers-reduced-motion` 또는 WebGL 불가 | 3D 미탑재, 정적 그라디언트 배경, 모션 최소화 |
 
+## 🖼 작업 스크린샷 넣는 법
+
+커리어 딥다이브 페이지(`/career/:slug`)의 **작업 화면** 섹션은 스크린샷이 있을 때만 나타납니다.
+(비어 있으면 섹션 자체가 숨겨집니다.)
+
+1. 이미지를 `public/work/<slug>/` 폴더에 넣습니다.
+   - `<slug>` = 단계 슬러그: `ops` · `fun-qa` · `business-pm` · `planning` · `ai-system`
+   - 예: `public/work/planning/dashboard.png`
+2. `src/content/journey.ts` 에서 해당 단계의 `gallery` 배열에 항목을 추가합니다.
+
+   ```ts
+   gallery: [
+     { src: 'work/planning/dashboard.png', caption: { ko: '팀 업무현황판', en: 'Team dashboard' } },
+     { src: 'work/planning/notion.png',    caption: { ko: 'Notion 히스토리 체계', en: 'Notion history system' } },
+   ],
+   ```
+
+   - `src` 는 `public/` 기준 상대경로(맨 앞 `/` 없이). 화면에는 `BASE_URL` 이 자동으로 붙습니다.
+   - `caption` 은 `{ ko, en }` 짝. 갤러리 카드 캡션 + 라이트박스 캡션 + 이미지 대체텍스트로 쓰입니다.
+3. `main` 에 push → 자동 배포. 이미지를 클릭하면 라이트박스로 크게 볼 수 있습니다(배경 클릭 · ESC · X 로 닫힘).
+
+## 💬 Whisper 서버 켜는 법
+
+Contact 섹션의 **Whisper** 방명록은 서버가 설정되기 전까지 오프라인 상태(입력 비활성)로 표시됩니다.
+서버는 구글 시트 + Apps Script 로 무료로 켤 수 있습니다.
+
+1. 브라우저에서 [`sheets.new`](https://sheets.new) 로 새 스프레드시트를 만듭니다.
+2. 상단 메뉴 **확장 프로그램 → Apps Script** → 열린 편집기에 `scripts/whisper-backend.gs` 내용을 **전체 붙여넣기** 후 저장.
+3. **배포 → 새 배포 → 유형: 웹 앱**, 실행: **나**, 액세스 권한: **모든 사용자** → 배포. 최초 1회 권한 승인.
+4. 발급된 `.../exec` 로 끝나는 웹앱 URL 을 복사해, `src/lib/whisperClient.ts` 의 `WHISPER_URL` 에 붙여넣습니다.
+
+   ```ts
+   export const WHISPER_URL = 'https://script.google.com/macros/s/AKfy.../exec'
+   ```
+5. `main` 에 push → 자동 배포. 이제 방명록이 온라인 상태가 됩니다.
+
+- 규칙: 메시지 최대 30자, 한 방문자당 하나(localStorage + 서버 hash 중복 방지), 국기 이모지 선택, 가벼운 비속어 필터, 최신순 표시.
+- 백엔드가 시트를 최근 200행으로 자동 정리하고, 화면에는 최신 30개까지 칩으로 보여줍니다.
+
 ---
 Vibe-coded with AI · 2026

@@ -301,6 +301,176 @@ Template (all sections use the shared reveal language; reduced-motion guarded):
 - Landing regression: sections/3D/nav anchors unaffected; `/#about` hash arrival scrolls correctly.
 - Mobile 390px: hub stack + phase template clean, no overflow.
 
+## 10. v3 — Conversion & immersion round (2026-07-08)
+
+Directives from the owner (no-approval mandate): conversion-first structure (clear nav /
+3-second value / trust / next-action CTA), Bruno-Simon-grade playfulness WITHOUT game
+controls, stability & information delivery over novelty, and: **after the initial effect
+has played, push the background to the rear layer and darken it — fonts unchanged.**
+
+### 10.1 IntroVideo overlay (`components/IntroVideo.tsx`)
+- Asset: `public/intro.mp4` (2.4MB). Content block: `profile.intro`.
+- Fullscreen overlay `z-[55]` (under preloader). `<video>` autoplay muted playsInline, object-fit cover (letterbox bg-base). Controls: skip button (top-right, `intro.skip`), sound toggle (bottom-right, `intro.soundOn/Off` — unmutes video). ESC = skip. Scroll locked while open (lenis stop + body overflow).
+- Auto-show ONCE on first visit: after `onReady()` fires, if `localStorage['henry.introSeen'] !== '1'` AND tier !== 'fallback' AND !prefersReducedMotion() → open, set the flag when closed.
+- Manual open: subscribe `onIntroRequest` from `src/lib/introBus.ts`. Nav's '소개' link calls `openIntro()` instead of scrolling (all routes; on non-`/` routes navigate home first, then open).
+- End sequence per owner spec: on video `ended` (or skip) → overlay dims to black (bg opacity → 1, 0.6s) → whole overlay fades out (0.8s) revealing the page → if opened via nav, then smooth-scroll to `#about`.
+- `role="dialog" aria-modal aria-label={intro.ariaLabel}`.
+
+### 10.2 Background dim system (owner: "배경이 너무 밝다")
+- New fixed div `z-[5]` (above canvas z-0, below content z-10), `bg-base pointer-events-none`, opacity 0.
+- Landing: ScrollTrigger on the hero section — as hero progress passes ~0.55, tween scrim opacity → **0.45** (and back when scrolling up). The hero "첫 이펙트" stays bright; everything after is darkened. Rendered in `Landing.tsx`.
+- Journey pages: static scrim 0.35 (part of JourneyBg) + reduce JourneyBg gradient opacities (0.11→0.07, 0.08→0.05) and strengthen vignette (0.65→0.8).
+- Fonts/colors untouched. Reduced motion: scrim set instantly by scroll position (no tween).
+
+### 10.3 Nav upgrades (conversion + orientation)
+- **Scrollspy**: on Landing, highlight the active section's link (era-cyan text + small dot). IntersectionObserver over section ids; cleanup on unmount/route change.
+- **CTA pill**: right cluster (before lang toggle): glass pill `contact.navCta` ("커피챗") → `contact.calendly` `_blank rel=noreferrer`, subtle glow-cyan. Also in mobile overlay (bottom, full-width primary).
+- '소개' link now triggers the intro video (10.1). Other anchors unchanged.
+
+### 10.4 Career timeline → journey links
+- Each timeline entry gets a small trailing link `profile.career.moreLabel` ("자세히 →") routing to its phase page. phase→slug: ops→`ops`, qa→`fun-qa`, biz→`business-pm`, plan→`planning`. Visible affordance (era-cyan on hover), doesn't break row reveal/hover.
+
+### 10.5 WorkGallery (screenshot slots) (`components/WorkGallery.tsx`)
+- PhasePage block between Stories and Carried, labeled `sectionLabels.gallery` ("작업 화면").
+- Data: `phase.gallery?: GalleryItem[]` (src relative to BASE_URL, e.g. `work/planning/dashboard.png`; files live in `public/work/<slug>/`). **Renders nothing when empty** (all are empty today — the owner will drop screenshots in later; document the how-to in README).
+- Grid 2 → 3 cols, `figure` + lazy `img` (rounded-xl border-white/10) + caption. Click → lightbox (fixed z-50 overlay, image max-h-[90vh], caption below, close on click/ESC, scroll locked).
+
+### 10.6 Whisper guestbook (`components/Whisper.tsx` + `src/lib/whisperClient.ts`)
+- Rendered inside Contact section (below action buttons, above note). Copy: `profile.whisper`.
+- Rules (per reference): 30 chars max, one message per visitor (localStorage `henry.whispered` + server-side dedupe), country flag select (12 emoji flags incl. 🇰🇷🇺🇸🇯🇵🇨🇳), client-side profanity mini-filter, newest first, server keeps last N (backend's job).
+- `whisperClient.ts`: `const WHISPER_URL = ''` (owner fills in later). API: `GET {url}` → `{ messages: [{ f: '🇰🇷', m: 'text', t: 169... }] }`; `POST {url}` body `{ f, m }`. When `WHISPER_URL` is empty or fetch fails → panel shows `whisper.offline` state with disabled input (per reference: offline → feature disabled).
+- Provide `scripts/whisper-backend.gs` — a Google Apps Script template (doGet/doPost onto a Sheet, 30-char cap, per-IP-hash dedupe, keep last 100) + README section "Whisper 서버 켜는 법".
+
+### 10.7 Sound toggle (BGM)
+- Asset: `public/music/baguira.mp3` (5.9MB, Kounine, CC0 — credit `footer.music` appended to Footer credit line). Lazy: audio created only on first enable.
+- Nav right cluster: icon button (speaker, off by default, aria-label `soundOn/soundOff` reuse from `profile.intro`), toggles looped playback volume 0 → 0.3 fade (gsap or rAF). Never autoplays. Pause on `visibilitychange` hidden.
+- Implement as `components/SoundToggle.tsx`, rendered by Nav.
+
+### 10.8 `#debug` mode (nod to bruno-simon.com/#debug)
+- If `location.hash === '#debug'`: render a small fixed panel (bottom-left, z-50, mono text): FPS (rAF-counted), quality tier, `sceneState.phase` (landing only), scrim opacity, toggle buttons for scrim on/off. Dev/tuning aid; invisible otherwise. `components/DebugPanel.tsx`, mounted in App.
+
+### v3 QA additions
+- Intro: first-visit autoplay, skip works, end-dim sequence, nav '소개' reopen, no scroll bleed, localStorage flag set, reduced-motion/fallback never auto-opens.
+- Dim: hero stays bright until ~55% progress, then content sections show darkened bg (screenshot skills/career to confirm text pops), journey pages darker than before.
+- Gallery hidden when empty; whisper shows offline state cleanly (not broken-looking); sound toggle plays/stops; career '자세히' links navigate; scrollspy tracks; CTA pill visible desktop+mobile.
+
+## 11. v4 — The Room (objects-as-menu 3D navigator) (2026-07-08, design locked)
+
+Top reference: https://my-room-in-3d.vercel.app/ (repo brunosimon/my-room-in-3d, inspected).
+**How the reference works** (verified from repo): one `roomModel.glb` + three fully-baked
+texture sets (day/neutral/night) blended by a custom shader, with `lightMap.jpg` RGB
+channels masking individual glow zones (TV/desk/monitor) — zero real-time lights at 60fps.
+Life comes from tiny separate modules: swiveling chair top, coffee-steam shader, LED
+strips, and **video textures on the screens**. Camera = restricted drag-orbit (can't get
+lost). ⚠️ The repo has NO license file → assets are not reusable. We take the technique,
+not the assets: our room is built from scratch with R3F primitives in our own neon
+palette (baked-look via emissive accents + vertex-tinted darks, not Blender bakes).
+
+### Route & entry
+- `/room` route (Landing stays intact — stability first). Nav gets a distinct '룸' item
+  (`room.navLabel`); hero gets a secondary link under the subtitle ("방에서 둘러보기 →").
+- Fallback tier: render a simple menu grid page (same 7 destinations as cards) instead of 3D.
+  Lite tier: room without postfx, dpr ≤1.25.
+
+### The room (all custom geometry — src/room/**)
+Isometric corner diorama (2 walls + floor, dark `#0B0D16` matte), camera at ~(4.5, 3.5, 4.5)
+lookAt room center, **restricted drag-orbit** (azimuth ±0.35rad, polar clamp, no zoom,
+smooth damping) — drag only; NO keyboard/gamepad controls (owner directive).
+
+Objects = menu (7 hotspots, each a small module):
+| Object | Visual | Action |
+|---|---|---|
+| 데스크+듀얼 모니터 | emissive screens, one plays `intro.mp4` as a video texture (muted) | → 소개 영상 오버레이(openIntro) |
+| 아케이드 캐비닛 | joystick+buttons, marquee glow (era-amber) | → `/#work` (대표 성과) |
+| 책장 5권 | 5 book spines in the five phase colors | → `/career` |
+| 서버 랙 | 3 blinking LED nodes (GPT·Claude·Codex 계열색), cable glow | → `/#ai` |
+| 김 나는 커피잔 | steam = animated alpha shader plane (Bruno-style) | → `/#contact` (커피챗!) |
+| 스피커 | pulsing ring when BGM on | toggles BGM (same audio as SoundToggle) |
+| 벽 액자 | "기획자의 진화" wordmark, era gradient | → `/#about` |
+
+### Interaction & UX (information-delivery first — owner directive)
+- Hover (raycast): emissive boost + slight scale (1.04) + floating label chip (DOM tooltip
+  near cursor or drei Html): object name + destination (e.g. "커피 한 잔 → 커피챗").
+- Click: gsap camera dolly toward the object (0.7s, power2.inOut) → then perform action
+  (router navigate / overlay / toggle). ESC or empty-space click resets camera.
+- **Legend bar** (bottom, DOM, always visible): 7 chips mirroring the hotspots — hovering a
+  chip highlights its object, clicking triggers the same action. This guarantees menu
+  discoverability without exploration (owner: "메뉴가 어디 있는지 인지가 최우선").
+- First-visit coach line: "물건을 클릭해 보세요 · 드래그로 둘러보기" (fades after 5s).
+- Custom cursor grows on hotspots (`data-cursor` equivalent via body class).
+
+### Tech & perf budget
+- src/room/RoomExperience.tsx (Canvas, camera rig, raycast manager) + one module per object.
+- ≤ 60 meshes, no real-time shadows (drei ContactShadows once, or a static radial gradient
+  plane), materials: MeshStandardMaterial darks + emissive accents; Bloom only on full tier.
+- Video texture: reuse `/intro.mp4` (2.4MB, already shipped); `muted playsInline loop`.
+- Room content strings in `src/content/room.ts` (Bi, useT) — labels, legend, coach line.
+- document.title: `The Room — Henry Lim`. JourneyBg NOT used (room canvas owns the bg).
+
+### QA
+- Drag orbit clamped (cannot look outside the room); hotspot hover/click on desktop; legend
+  chips work on mobile (raycast hover unreliable on touch → legend is the primary mobile nav,
+  tap on objects still works); 0 console errors; 60fps-ish on full tier (frame budget check
+  via #debug FPS); fallback grid renders all 7 destinations; EN/KO labels; reduced-motion →
+  fallback grid (no auto camera motion).
+
+## 12. v5 — "Smart Office" rebrand (2026-07-08, owner tone & manner directive)
+
+Owner's T&M: **Professional yet Approachable** (정교한 데이터 시각화 × 웹툰 일러스트),
+**Modern Tech & Smart Office** (그리드 + 네온 + glassmorphism), **Dynamic & Inspiring**
+(호버/스크롤 시 반짝이는 모션). New palette (owner-provided):
+Primary Deep Corporate Blue `#1A2B4C`/`#0A1931` · Secondary Burnt Orange & Gold
+`#E67E22`/`#F39C12` · Accent Neon Mint & Cyan `#00F2FE`/`#4FACFE` · Neutral `#F8F9FA`.
+
+### 12.1 Token remap — VALUES change, token NAMES stay (zero refactor of class names)
+`tailwind.config.js`:
+| Token | Old | New |
+|---|---|---|
+| base | #06070C | **#0A1931** |
+| elev | #0B0D16 | **#1A2B4C** |
+| ink | #F4F5F7 | **#F8F9FA** |
+| ink-dim | #A3ABB8 | **#AAB8D0** |
+| ink-mute | #5C6470 | **#5F7195** |
+| era.amber | #FFB454 | **#F5B041** (light gold) |
+| era.coral | #FF9A62 | **#F39C12** (gold) |
+| era.violet | #8B5CF6 | **#E67E22** (burnt orange) |
+| era.cyan | #22D3EE | **#4FACFE** (cyan-blue) |
+| era.sky | #38BDF8 | **#00F2FE** (neon mint) |
+
+Career-arc story becomes: 게임 시대(골드→오렌지) → AI 시대(시안블루→네온민트).
+
+`index.css`: `.text-gradient` → `#F5B041 → #E67E22 → #4FACFE`; `.text-gradient-cyan` →
+`#4FACFE → #00F2FE`; `.glow-cyan` → rgba(0,242,254,.35); `.glow-violet` →
+rgba(230,126,34,.35); body::before radials → orange(#E67E22 .07)/blue(#4FACFE .08)/
+mint(#00F2FE .06) over `#0A1931`; selection rgba(79,172,254,.45); focus outline `#00F2FE`;
+scrollbar navy (#0A1931 track / #24365C thumb / #33497A hover); skip-link bg `#1A2B4C`.
+`index.html`: theme-color `#0A1931`.
+
+### 12.2 Hardcoded-hex sweep (MANDATORY grep — old hexes must reach 0 matches in src/ + public/favicon.svg)
+Grep `#FFB454|#FF9A62|#8B5CF6|#22D3EE|#38BDF8|#06070C|#0B0D16|#A78BFA|#C4B5FD|#A5F3FC|#BAE6FD|#FFD9A0|#FFC7A8` and remap:
+- `src/three/**`: 6 particle color stops → `['#F5B041','#F39C12','#E67E22','#4FACFE','#00F2FE','#4FACFE']`; cyan pointLight → `#4FACFE`; NetworkLines color → `#00F2FE`.
+- Local `ERA_HEX` maps in `JourneyBg.tsx`, `PhasePage.tsx`, `CareerHub.tsx` (+`ERA_HEX_LIGHT`: amber `#FCE3B8`, coral `#FBD38D`, violet `#F5C09A`, cyan `#BBDFFF`, sky `#B3FCFF`).
+- CareerHub mission-quote gradient bar → `linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)`.
+- `FallbackBg.tsx` rgba layers → new palette equivalents; any inline hexes in sections (About arc dots etc.).
+- `public/favicon.svg` gradient stops → `#F39C12 / #E67E22 / #00F2FE`; regenerate `og.png` after restyle.
+- IntroVideo/Preloader/lightbox backdrops using base color follow the token automatically if they use `bg-base` — convert any literal `#06070C` to the token.
+
+### 12.3 Webtoon character integration (Approachable axis)
+- Assets (shipped): `public/character.jpg` (16:9, 캐릭터+홀로그램 데이터 — 대표), `public/character-alt.jpg`.
+- About section, right column top (above the career-arc widget): character card — `rounded-3xl overflow-hidden` glass frame, `border-era-sky/30` + soft mint glow, `img src={BASE_URL+'character.jpg'}` w-full h-auto, thin caption strip (`임현택 · Henry` / same latin both langs — use profile.hero.name), joins the column's reveal. `alt` = profile.hero.name. Mobile: appears after body text, before arc.
+- README note: replace `public/character.jpg` anytime to swap the illustration.
+
+### 12.4 Motion garnish (Dynamic & Inspiring — cheap, CSS-first)
+- `.glass` cards: subtle diagonal shine sweep on hover (a ::after gradient bar translating across, CSS transition, GPU-only) — add as `.glass-shine` utility in index.css and apply to Achievements/AI/workstyle/strata cards.
+- AIChapter card icons: hover glow pulse (scale 1.06 + drop-shadow mint, CSS).
+- All garnish disabled by the global reduced-motion rule automatically (CSS-only).
+
+### 12.5 QA
+- Grep sweep = 0 old-palette matches in src/, public/favicon.svg.
+- Full screenshot sweep (desktop/mobile × KO/EN × landing/career-hub/phase/room-later): navy bg everywhere, gold/orange warmth on game-era, mint/blue accents on stats+CTA, character card renders in About.
+- Contrast: body text `#AAB8D0` on `#0A1931` ≥ 4.5:1 (it is ~7:1); stat gradients legible.
+- Regenerate og.png (1200×630) after restyle; favicon renders.
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

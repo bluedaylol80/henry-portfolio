@@ -30,8 +30,8 @@ export default function JourneyBg({ color }: { color?: PhaseColor }) {
   // One large radial tinted by the phase (top area) + a cooler anchor lower-right,
   // both at 8–12% opacity, layered over the base bg.
   const radialLayer =
-    `radial-gradient(1100px 820px at 22% 8%, ${rgba(primary, 0.11)}, transparent 62%),` +
-    `radial-gradient(1000px 900px at 82% 78%, ${rgba(secondary, 0.08)}, transparent 60%)`
+    `radial-gradient(1100px 820px at 22% 8%, ${rgba(primary, 0.07)}, transparent 62%),` +
+    `radial-gradient(1000px 900px at 82% 78%, ${rgba(secondary, 0.05)}, transparent 60%)`
 
   return (
     <div className="fixed inset-0 z-0 overflow-hidden bg-base" aria-hidden="true">
@@ -40,12 +40,14 @@ export default function JourneyBg({ color }: { color?: PhaseColor }) {
         className="animate-bg-drift absolute inset-[-10%]"
         style={{ background: radialLayer }}
       />
+      {/* Flat dim layer — pushes the gradients back so journey text pops (SPEC §10.2). */}
+      <div className="absolute inset-0 bg-base/35" />
       {/* Vignette — keeps content legible, adds depth */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'radial-gradient(130% 120% at 50% 35%, transparent 55%, rgba(6,7,12,0.65) 100%)',
+            'radial-gradient(130% 120% at 50% 35%, transparent 55%, rgba(6,7,12,0.8) 100%)',
         }}
       />
     </div>

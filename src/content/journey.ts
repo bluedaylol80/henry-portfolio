@@ -21,6 +21,16 @@ export interface PhaseOutput {
   sub?: Bi
 }
 
+/**
+ * 작업 화면 갤러리 항목. 이미지는 public/work/<slug>/ 아래에 두고
+ * src는 'work/<slug>/파일명' 형태로 적습니다. 항목이 없으면 섹션 자체가 숨겨집니다.
+ * 예: { src: 'work/planning/dashboard.png', caption: { ko: '팀 업무현황판', en: 'Team dashboard' } }
+ */
+export interface GalleryItem {
+  src: string
+  caption: Bi
+}
+
 export interface JourneyPhase {
   slug: string
   num: string
@@ -37,6 +47,7 @@ export interface JourneyPhase {
   problems: Bi[]
   outputs: PhaseOutput[]
   stories: PhaseStory[]
+  gallery?: GalleryItem[]
   carried: Bi
 }
 
@@ -46,11 +57,13 @@ export const sectionLabels = {
   problems: { ko: '반복해서 풀던 문제', en: 'Problems I kept solving' } as Bi,
   outputs: { ko: '숫자와 산출물', en: 'Numbers & artifacts' } as Bi,
   stories: { ko: '장면들', en: 'Moments' } as Bi,
+  gallery: { ko: '작업 화면', en: 'Work in view' } as Bi,
   carried: { ko: '다음 층으로', en: 'To the next layer' } as Bi,
   prev: { ko: '이전 단계', en: 'Previous' } as Bi,
   next: { ko: '다음 단계', en: 'Next' } as Bi,
   backToMap: { ko: '커리어 지도로', en: 'Back to the map' } as Bi,
   backToHome: { ko: '메인으로', en: 'Home' } as Bi,
+  close: { ko: '닫기', en: 'Close' } as Bi,
 }
 
 /** Nav에 추가되는 딥다이브 링크 라벨 */
@@ -174,6 +187,7 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
+    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
       ko: '라이브 서비스의 일일 운영 감각 — 다음 층에서는 “운영되는 게임의 품질”을 재미의 관점에서 평가하는 잣대로 확장됩니다.',
       en: 'The daily instinct for a running service — which the next layer would expand into a way of judging a live game’s quality through the lens of fun.',
@@ -241,6 +255,7 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
+    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
       ko: '“재미를 지표로 바꾸는 습관”은 사업 PM의 리텐션 · AU 분석으로 이어졌고 — 훗날 AI 산출물을 6개 축으로 채점하는 품질 게이트의 사상이 됩니다.',
       en: 'The habit of turning fun into metrics carried into retention and AU analysis as a business PM — and much later, into the six-axis quality gate that grades AI output.',
@@ -320,6 +335,7 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
+    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
       ko: '매출과 지표를 다루는 감각은 “BM을 설계하는 기획자”의 기반이 됐고, 다국가 · 다장르 운영 경험은 훗날 글로벌 4개 라인 동시 운영의 베이스가 됩니다.',
       en: 'Fluency with revenue and metrics became the base of a planner who designs BMs — and the multi-market, multi-genre experience later powered running four global lines at once.',
@@ -333,7 +349,7 @@ export const phases: JourneyPhase[] = [
     color: 'cyan',
     name: { ko: '기획', en: 'Planning' },
     tagline: { ko: '팀이 나 없이도 돌아가게', en: 'Teams that run without me' },
-    period: '2021 · 2024 — 2026',
+    period: '2021 · 2024.10 — 2026.05',
     companies: { ko: '네오위즈 · 달콤소프트', en: 'NEOWIZ · Dalcomsoft' },
     roleLine: {
       ko: '기획팀장 → 사업본부 라이브기획팀장',
@@ -348,25 +364,52 @@ export const phases: JourneyPhase[] = [
       en: 'A team lead who writes the specs himself — and designs the team to run without him.',
     },
     intro: {
-      ko: '네오위즈에서 랭킹 · 시즌패스 · 우편 · 공지 · 프로필 등 시스템 기획서 8건을 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌었습니다. 위임과 표준화, 히스토리 관리를 “시스템”으로 만드는 방식이 이 층에서 완성됩니다.',
-      en: 'At NEOWIZ, authoring eight system specs hands-on — ranking, season pass, mail, notices, profile and more — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across six K-pop IP rhythm games. This is the layer where delegation, standardization and history-keeping became systems.',
+      ko: '네오위즈에서 랭킹 · 시즌패스 · 우편 · 공지 · 프로필 등 시스템 기획서 8건을 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
+      en: 'At NEOWIZ, authoring eight system specs hands-on — ranking, season pass, mail, notices, profile and more — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across six K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
     },
     did: [
       { ko: '시스템 기획서 직접 작성 — 네오위즈 8건', en: 'Wrote system specs hands-on — 8 at NEOWIZ' },
-      { ko: 'K-pop IP 라이브 6종 총괄 (SM · JYP 등)', en: 'Ran 6 live K-pop IP titles (SM, JYP and more)' },
-      { ko: '10인 팀 리드 — 의도 설계된 3층 위임 구조', en: 'Led a 10-person team on a deliberately tiered delegation structure' },
-      { ko: '24/7 GM · 장애 1차 대응 지휘', en: '24/7 GM duty and first-responder command for live incidents' },
-      { ko: '인사 · 인프라 결재선 owner (인사 결정 31+건)', en: 'Owned HR & infra approval lines (31+ personnel decisions)' },
-      { ko: '글로벌 4개 라인 운영 조율 — 한국 · 중국 · 동남아 · 일본', en: 'Coordinated four global lines — KR · CN · SEA · JP' },
+      {
+        ko: '라이브 서비스 플랜 수립 — 이벤트 · 상품 기획을 분석→제안까지, 프로젝트별 담당자가 바로 논의할 수 있는 수준으로 (K-pop IP 6종)',
+        en: 'Built live service plans — event & product planning from analysis to proposal, ready for per-project owners to act on (6 K-pop IP titles)',
+      },
+      {
+        ko: '시스템 기획의 최초 기획 · 프로토타입 제작 → 개발팀과 구현 조율 — 미니게임 · 웹뷰 이벤트 (3.26.0 이후 마일스톤)',
+        en: 'First drafts & prototypes for system features, then implementation alignment with dev — minigames & webview events (the post-3.26.0 milestones)',
+      },
+      {
+        ko: '지표 분석 기반 신규 상품 기획 — 테마 2종 · RP팩 · 정규/상시 상품 개선',
+        en: 'Metric-driven new products — two themes, RP packs, improvements to regular & permanent offers',
+      },
+      {
+        ko: '협업의 시스템화 — 메일 중심 협업을 Notion 히스토리 체계로 전환 · 업무 프로세스 단일화 · 스토어 product ID 명세서 자동 반영(Google Apps Script)',
+        en: 'Systemized collaboration — email-only workflows moved into a Notion history system, unified processes, store product IDs auto-filled into specs (Google Apps Script)',
+      },
+      {
+        ko: 'HTML 업무현황판 구축 — 메일 · Slack · Notion의 히스토리를 한 화면에, 담당자 간 정보 전달을 빠르게',
+        en: 'Built an HTML team dashboard — mail, Slack and Notion history in one view, faster hand-offs between owners',
+      },
+      {
+        ko: '유저 설문 기반 2025 · 2026 서비스 방향성 제안 — 근거를 수집해 기획의 방향을 세움',
+        en: 'Proposed the 2025 & 2026 service directions from user surveys — grounding planning in evidence',
+      },
+      {
+        ko: '10인 팀 리드(3층 위임) · 24/7 GM · 장애 1차 대응 · 글로벌 4개 라인 조율',
+        en: 'Led the 10-person team (tiered delegation) · 24/7 GM · incident first response · four global lines',
+      },
     ],
     problems: [
+      {
+        ko: '기획을 “의견”이 아니라 담당자가 바로 움직일 수 있는 “제안”으로 만드는 것 — 분석으로 시작해 검증으로 끝내기',
+        en: 'Turning planning from opinion into proposals owners can act on — starting with analysis, ending with verification',
+      },
       {
         ko: '팀장이 병목이 되지 않는 위임 구조를 만드는 것',
         en: 'Building delegation so the team lead never becomes the bottleneck',
       },
       {
-        ko: '장애가 터졌을 때, 대응이 아니라 대응 “체계”를 남기는 것',
-        en: 'When incidents hit — leaving behind a response system, not just a response',
+        ko: '메일에 흩어지는 협업을, 히스토리가 쌓이는 시스템으로 바꾸는 것',
+        en: 'Replacing email-scattered collaboration with systems that accumulate history',
       },
       {
         ko: '퇴사 이후에도 팀이 돌아가는 인수인계',
@@ -421,6 +464,7 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
+    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
       ko: '사람에게 위임하던 구조 — 3층 위임, 표준 결재선, SSOT — 가 다음 층에서 그대로 AI에게 위임하는 구조로 치환됩니다.',
       en: 'The structures once used to delegate to people — tiered delegation, standard approval lines, an SSOT — get transplanted, one for one, into delegating to AI.',
@@ -539,6 +583,7 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
+    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
       ko: '이 층의 끝은 아직 없습니다. 다음 층은 지금 만들어지는 중입니다 — 이 사이트도 그 일부입니다.',
       en: 'This layer has no ceiling yet. The next one is being built right now — this site is part of it.',

@@ -4,6 +4,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import JourneyBg from '../components/JourneyBg'
+import WorkGallery from '../components/WorkGallery'
 import { useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
 import { EASE } from '../lib/motion'
@@ -321,6 +322,18 @@ export default function PhasePage() {
               ))}
             </ol>
           </section>
+
+          {/* 6.5 · Work gallery (only when screenshots exist for this phase) */}
+          {(phase.gallery?.length ?? 0) > 0 && (
+            <section className="ph-block mt-20 md:mt-28">
+              <h2 className="eyebrow" style={{ color: hex }}>
+                {t(sectionLabels.gallery)}
+              </h2>
+              <div className="mt-8">
+                <WorkGallery items={phase.gallery ?? []} label={t(sectionLabels.gallery)} />
+              </div>
+            </section>
+          )}
 
           {/* 7 · Carried + prev/next nav */}
           <section className="ph-block mt-24 border-t border-white/5 pt-14 md:mt-32">

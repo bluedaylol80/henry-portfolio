@@ -17,6 +17,14 @@ const PHASE_COLOR: Record<CareerPhase, string> = {
   plan: '#22D3EE',
 }
 
+/** Timeline phase → journey deep-dive slug (SPEC §10.4). */
+const PHASE_SLUG: Record<CareerPhase, string> = {
+  ops: 'ops',
+  qa: 'fun-qa',
+  biz: 'business-pm',
+  plan: 'planning',
+}
+
 export default function Career() {
   const t = useT()
   const rootRef = useRef<HTMLDivElement>(null)
@@ -123,6 +131,15 @@ export default function Career() {
                       {t(entry.highlight)}
                     </p>
                   )}
+                  {/* Deep-dive link → the entry's phase page (SPEC §10.4). */}
+                  <Link
+                    to={`/career/${PHASE_SLUG[entry.phase]}`}
+                    data-cursor
+                    className="mt-3 inline-flex items-center gap-1 text-xs text-ink-mute transition-colors duration-200 hover:text-era-cyan"
+                  >
+                    {t(career.moreLabel)}
+                    <span aria-hidden>→</span>
+                  </Link>
                 </div>
               </li>
             ))}

@@ -87,15 +87,15 @@ export const career = {
     {
       company: { ko: '달콤소프트', en: 'Dalcomsoft' },
       role: { ko: '사업본부 라이브기획팀장', en: 'Live Planning Team Lead' },
-      period: '2024 — 2026',
+      period: '2024.10 — 2026.05',
       phase: 'plan',
       titles: {
         ko: 'SuperStar 시리즈 라이브 6종 (SM · JYP 등 K-pop IP)',
         en: 'SuperStar series — 6 live titles (SM, JYP and more K-pop IPs)',
       },
       highlight: {
-        ko: '엔터사 IP 리듬게임 6종 라이브 총괄 · 10인 팀 리드 · 30+ AI 자동화 스킬로 팀 루틴 업무 60% 단축 · 대형 기능 설계 2건(꾸미기 이벤트 · 아티스트 모드)',
-        en: 'Ran live planning for 6 K-pop IP rhythm games · led a 10-person team · 30+ AI automation skills cut routine work by 60% · 2 major feature designs (Decoration Event · Artist Mode)',
+        ko: '엔터 IP 리듬게임 6종 라이브 총괄 · 10인 팀 리드 · 미니게임 · 웹뷰 이벤트 시스템 기획(프로토타입→구현 조율) · 지표 기반 신규 상품 설계 · Notion 협업체계 · 스토어 product ID 자동화 · 30+ AI 스킬로 루틴 업무 60% 단축',
+        en: 'Ran 6 live K-pop IP rhythm games · led a 10-person team · designed minigame & webview event systems (prototype → implementation) · metric-driven new products · Notion collaboration system · store product-ID automation · 30+ AI skills cut routine work by 60%',
       },
     },
     {
@@ -177,6 +177,34 @@ export const career = {
     en: 'What I owned and what I solved at every stage — there’s a deep-dive for each.',
   } as Bi,
   deepDiveCta: { ko: '커리어 지도 열기', en: 'Open the career map' } as Bi,
+  moreLabel: { ko: '자세히', en: 'More' } as Bi,
+}
+
+/** 최초 방문 인트로 영상 오버레이 */
+export const intro = {
+  videoSrc: 'intro.mp4', // public/ 기준 (BASE_URL 하위)
+  skip: { ko: '건너뛰기', en: 'Skip' } as Bi,
+  soundOn: { ko: '소리 켜기', en: 'Sound on' } as Bi,
+  soundOff: { ko: '소리 끄기', en: 'Sound off' } as Bi,
+  ariaLabel: { ko: '소개 영상', en: 'Intro video' } as Bi,
+}
+
+/** Whisper 방명록 (서버 미설정 시 오프라인 상태로 표시) */
+export const whisper = {
+  title: { ko: 'Whisper', en: 'Whisper' } as Bi,
+  lede: {
+    ko: '짧은 인사를 남겨주세요 — 최대 30자, 한 사람당 하나.',
+    en: 'Leave a short hello — 30 characters max, one per visitor.',
+  } as Bi,
+  placeholder: { ko: '반갑습니다 :)', en: 'Nice to meet you :)' } as Bi,
+  submit: { ko: '남기기', en: 'Leave it' } as Bi,
+  thanks: { ko: '남겨졌습니다 ✓', en: 'Left ✓' } as Bi,
+  already: { ko: '이미 하나 남기셨어요', en: 'You already left one' } as Bi,
+  offline: {
+    ko: 'Whisper 서버가 잠시 오프라인입니다 — 곧 열립니다.',
+    en: 'The whisper server is offline for now — opening soon.',
+  } as Bi,
+  countryLabel: { ko: '국가', en: 'Country' } as Bi,
 }
 
 export const work = {
@@ -302,8 +330,8 @@ export const ai = {
       en: 'Proven in the field — Dalcomsoft Live Planning',
     } as Bi,
     body: {
-      ko: 'K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌며 기획서 작성 · 스펙 검수 · 지표 분석 · 일정 관리를 AI 워크플로로 전환했습니다. 30개 이상의 자동화 스킬이 팀 루틴 업무를 60% 줄였고, 꾸미기 이벤트 · 아티스트 모드 같은 대형 기능 설계도 AI와 함께 완성했습니다. 개인 실험이 아니라, 실제 팀 운영에서 검증된 방식입니다.',
-      en: 'Leading a 10-person live planning team across six K-pop IP rhythm games, I rebuilt spec writing, verification, KPI analysis and scheduling as AI workflows. Over 30 automation skills cut routine workload by 60%, and major feature designs (Decoration Event, Artist Mode) shipped with AI in the loop. Not a personal experiment — proven in real team operations.',
+      ko: 'K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌며 팀의 일하는 방식 자체를 시스템으로 바꿨습니다. 부서 간 메일 협업을 Notion 히스토리 체계로 전환하고, 스토어 product ID가 명세서에 자동 반영되는 스크립트 자동화를 만들고, 메일 · Slack · Notion의 흐름을 한 화면에 모으는 업무현황판을 직접 구축했습니다. 여기에 30개 이상의 AI 자동화 스킬이 더해져 팀 루틴 업무가 60% 줄었습니다. 개인 실험이 아니라, 실제 팀 운영에서 검증된 방식입니다.',
+      en: 'Leading a 10-person live planning team across six K-pop IP rhythm games, I rebuilt how the team itself worked: email-only collaboration moved into a Notion history system, store product IDs flowed into specs automatically via scripting, and a live team dashboard pulled mail, Slack and Notion into one view. On top of that, 30+ AI automation skills cut routine workload by 60%. Not a personal experiment — proven in real team operations.',
     } as Bi,
   },
   cards: [
@@ -393,6 +421,11 @@ export const contact = {
   instagramLabel: { ko: '인스타그램', en: 'Instagram' } as Bi,
   calendly: 'https://calendly.com/bluedaylol80/coffe-chat',
   calendlyLabel: { ko: '커피챗 예약하기', en: 'Book a coffee chat' } as Bi,
+  navCta: { ko: '커피챗', en: 'Coffee chat' } as Bi,
+  /** 상세 이력이 담긴 Notion 페이지 — 반드시 Notion에서 "웹에 게시" 상태여야 방문자가 볼 수 있음 */
+  notion: 'https://app.notion.com/p/limhenry/71b99dcfd07f4493b019bfb4bac2acab',
+  notionNavLabel: { ko: '상세 이력', en: 'Résumé' } as Bi,
+  notionLabel: { ko: '상세 이력 보기 (Notion)', en: 'Full history (Notion)' } as Bi,
   note: {
     ko: '메일과 커피챗 제안에는 빠르게 답합니다.',
     en: 'I reply quickly to email and coffee-chat requests.',
@@ -404,5 +437,9 @@ export const footer = {
   credit: {
     ko: 'Vibe-coded with AI · React Three Fiber',
     en: 'Vibe-coded with AI · React Three Fiber',
+  } as Bi,
+  music: {
+    ko: 'Music — Kounine (CC0)',
+    en: 'Music — Kounine (CC0)',
   } as Bi,
 }

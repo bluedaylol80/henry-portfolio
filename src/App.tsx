@@ -10,6 +10,8 @@ import Preloader from './components/Preloader'
 import Nav from './components/Nav'
 import Cursor from './components/Cursor'
 import Footer from './components/Footer'
+import IntroVideo from './components/IntroVideo'
+import DebugPanel from './components/DebugPanel'
 import Landing from './pages/Landing'
 import CareerHub from './pages/CareerHub'
 import PhasePage from './pages/PhasePage'
@@ -88,8 +90,10 @@ export default function App() {
           Skip to content
         </a>
         <Preloader />
+        <IntroVideo />
         <div className="noise-overlay" aria-hidden="true" />
         <Cursor enabled={tier === 'full'} />
+        <DebugPanel />
         <RouteEffects />
         <Nav />
         <Routes>

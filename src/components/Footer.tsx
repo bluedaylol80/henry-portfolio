@@ -43,7 +43,9 @@ export default function Footer() {
               Calendly
             </a>
           </div>
-          <span className="text-ink-mute/70">{t(footer.credit)}</span>
+          <span className="text-ink-mute/70">
+            {t(footer.credit)} · {t(footer.music)}
+          </span>
         </div>
       </div>
     </footer>
