@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
 import { sceneState } from './sceneState'
@@ -98,30 +98,36 @@ export default function Artifacts({ reduced }: { reduced: boolean }) {
     }
   }, [solidGeo, wireGeo, solidMat, wireMat])
 
-  const writeMatrices = (mesh: THREE.InstancedMesh | null, data: Datum[], vis: number, dt: number) => {
-    if (!mesh) return
-    for (let i = 0; i < data.length; i++) {
-      const d = data[i]
-      if (!reduced) {
-        d.rx += d.sx * dt
-        d.ry += d.sy * dt
-        d.rz += d.sz * dt
+  // Stable across renders (deps: only the reduced-motion flag + the memoized
+  // Object3D). Memoizing lets the layout-effect list it honestly and still run
+  // just once, since `solid`/`wire`/`dummy` are all stable useMemo values.
+  const writeMatrices = useCallback(
+    (mesh: THREE.InstancedMesh | null, data: Datum[], vis: number, dt: number) => {
+      if (!mesh) return
+      for (let i = 0; i < data.length; i++) {
+        const d = data[i]
+        if (!reduced) {
+          d.rx += d.sx * dt
+          d.ry += d.sy * dt
+          d.rz += d.sz * dt
+        }
+        const fy = reduced ? 0 : Math.sin(sceneState.time * d.floatSpeed + d.floatPhase) * d.floatAmp
+        dummy.position.set(d.px, d.py + fy, d.pz)
+        dummy.rotation.set(d.rx, d.ry, d.rz)
+        dummy.scale.setScalar(d.scale * vis)
+        dummy.updateMatrix()
+        mesh.setMatrixAt(i, dummy.matrix)
       }
-      const fy = reduced ? 0 : Math.sin(sceneState.time * d.floatSpeed + d.floatPhase) * d.floatAmp
-      dummy.position.set(d.px, d.py + fy, d.pz)
-      dummy.rotation.set(d.rx, d.ry, d.rz)
-      dummy.scale.setScalar(d.scale * vis)
-      dummy.updateMatrix()
-      mesh.setMatrixAt(i, dummy.matrix)
-    }
-    mesh.instanceMatrix.needsUpdate = true
-  }
+      mesh.instanceMatrix.needsUpdate = true
+    },
+    [reduced, dummy],
+  )
 
   // Place instances before the first paint to avoid an identity-matrix flash.
   useLayoutEffect(() => {
     writeMatrices(solidRef.current, solid, 1, 0)
     writeMatrices(wireRef.current, wire, 1, 0)
-  }, [])
+  }, [writeMatrices, solid, wire])
 
   useFrame((_, delta) => {
     if (document.hidden || goneRef.current) return

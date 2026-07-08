@@ -11,7 +11,7 @@ import { PAL, PHASE_COLORS } from '../palette'
  */
 export default function Bookshelf() {
   return (
-    <Hotspot id="bookshelf">
+    <Hotspot id="bookshelf" hit={{ size: [0.5, 2.6, 1.78], position: [-2.06, 1.3, -1.15] }}>
       {/* Anchored to the left wall; the unit runs along Z beside the wall. */}
       <group position={[-2.06, 0, -1.15]}>
         {/* Side panels + back + top cap */}

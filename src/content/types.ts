@@ -27,6 +27,10 @@ export interface Achievement {
   label: Bi
   sub: Bi
   emphasis?: boolean // gradient number
+  /** 역할·근거 각주 — 큰 숫자의 신뢰 보강 */
+  footnote?: Bi
+  /** 카드 클릭 시 이동 (예: '/story#ai') */
+  linkTo?: string
 }
 
 export interface AICard {

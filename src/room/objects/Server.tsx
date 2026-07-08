@@ -29,7 +29,7 @@ export default function Server() {
   })
 
   return (
-    <Hotspot id="server">
+    <Hotspot id="server" hit={{ size: [0.78, 1.58, 0.72], position: [2.05, 0.75, -1.65] }}>
       <group position={[2.05, 0, -1.65]}>
         {/* Rack body (rounded brushed metal) */}
         <RoundedBox args={[0.7, 1.5, 0.6]} radius={0.03} smoothness={2} position={[0, 0.75, 0]} castShadow receiveShadow>

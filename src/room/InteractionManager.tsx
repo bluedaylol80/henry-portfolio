@@ -119,8 +119,16 @@ export default function InteractionManager({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gl, camera, scene])
 
-  // Shared activation: dolly to the object then run its action.
-  const activate = (id: string) => {
+  // Shared activation. 3D object clicks dolly to the anchor THEN act (0.7s);
+  // DOM menu (Legend/Header) clicks pass `immediate` to run the action right
+  // away with no dolly wait (§15.5-1). The immediate path still nudges the
+  // camera for continuity but never blocks the navigation on the tween.
+  const activate = (id: string, immediate = false) => {
+    if (immediate) {
+      cameraHandle.current?.focusOn(id)
+      onAction(id, resolveAction(id))
+      return
+    }
     cameraHandle.current?.focusOn(id)
     // perform the action after the dolly completes (0.7s per RoomCamera).
     const tid = window.setTimeout(() => {
@@ -132,7 +140,7 @@ export default function InteractionManager({
 
   // Legend-chip clicks route here too. Clear any pending timers on unmount.
   useEffect(() => {
-    const off = onActivate((id) => activate(id))
+    const off = onActivate((id, _action, immediate) => activate(id, immediate))
     return () => {
       off()
       timers.forEach((t) => window.clearTimeout(t))

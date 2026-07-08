@@ -160,6 +160,22 @@ export default function RoomMenu() {
               animate="show"
               className="container-std flex flex-1 flex-col justify-center gap-5 py-10"
             >
+              {/* 3분 요약 — the quick-review brief (first primary item) → /brief. */}
+              <motion.div variants={itemVariants}>
+                <Link
+                  to="/brief"
+                  onClick={close}
+                  className="group block break-keep"
+                >
+                  <span className="font-display text-4xl font-bold text-ink transition-colors duration-200 group-hover:text-era-cyan md:text-5xl">
+                    {t(menu.brief)}
+                  </span>
+                  <span className="mt-2 block max-w-md text-sm text-ink-dim md:text-base">
+                    {t(menu.briefHint)}
+                  </span>
+                </Link>
+              </motion.div>
+
               {/* The full story → /story */}
               <motion.div variants={itemVariants}>
                 <Link

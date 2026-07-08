@@ -118,7 +118,7 @@ export default function Hero() {
             </p>
 
             <Link
-              to="/room"
+              to="/"
               data-cursor
               className="hero-room mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-ink-dim transition-colors duration-200 hover:text-era-sky"
             >

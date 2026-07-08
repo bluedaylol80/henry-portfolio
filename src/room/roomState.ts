@@ -46,12 +46,14 @@ export const ANCHORS: Record<string, Anchor> = {
 }
 
 /** Small event bus so DOM overlays can command the 3D interaction manager
- *  (Legend click → same behaviour as clicking the object). */
-type ActivateListener = (id: string, action: RoomAction) => void
+ *  (Legend click → same behaviour as clicking the object). `immediate` runs the
+ *  action right away with NO dolly wait (DOM menu latency fix §15.5-1); 3D object
+ *  clicks omit it so they keep the dolly-then-act behaviour. */
+type ActivateListener = (id: string, action: RoomAction, immediate: boolean) => void
 const activateSubs = new Set<ActivateListener>()
 
-export function activateHotspot(id: string, action: RoomAction): void {
-  activateSubs.forEach((l) => l(id, action))
+export function activateHotspot(id: string, action: RoomAction, immediate = false): void {
+  activateSubs.forEach((l) => l(id, action, immediate))
 }
 
 export function onActivate(cb: ActivateListener): () => void {

@@ -34,7 +34,7 @@ export default function Legend() {
             onBlur={() => {
               if (roomState.hoverId === h.id) roomState.hoverId = null
             }}
-            onClick={() => activateHotspot(h.id, h.action)}
+            onClick={() => activateHotspot(h.id, h.action, true)}
             className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-ink-dim transition-colors duration-200 hover:bg-white/10 hover:text-ink md:text-sm"
           >
             <span className="text-ink">{t(h.label)}</span>

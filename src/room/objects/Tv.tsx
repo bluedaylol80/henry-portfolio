@@ -73,7 +73,7 @@ export default function Tv() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="tv">
+    <Hotspot id="tv" hit={{ size: [0.6, 1.5, 1.56], position: [-1.95, 0.72, 1.1] }}>
       {/* Anchored to the left wall (−X); rotated so the screen faces +X. */}
       <group position={[-2.0, 0, 1.1]} rotation={[0, Math.PI / 2, 0]}>
         {/* Gold halo behind the panel (reference-style glow) */}

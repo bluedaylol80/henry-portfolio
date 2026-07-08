@@ -229,7 +229,7 @@ export default function CareerHub() {
               {t(sectionLabels.backToHome)}
             </Link>
             <Link
-              to="/#contact"
+              to="/story#contact"
               className="glass glow-cyan group inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-era-cyan/40 md:text-base"
             >
               {t(contact.title)}

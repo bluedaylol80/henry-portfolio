@@ -234,6 +234,11 @@ export const work = {
         en: '30+ AI automation skills · 6 live K-pop IP titles · 10-person team',
       },
       emphasis: true,
+      footnote: {
+        ko: '담당: 라이브기획팀장(총괄) · 근거: 실제 팀 운영 실측, 인수인계 문서화',
+        en: 'Role: live planning team lead · Proof: measured in real team ops, documented in handover',
+      },
+      linkTo: '/story#ai',
     },
     {
       title: { ko: '린: 더 라이트브링어', en: 'Lyn: The Lightbringer' },
@@ -248,6 +253,10 @@ export const work = {
         en: '#3 top-grossing on KR App Store & Google Play',
       },
       emphasis: true,
+      footnote: {
+        ko: '담당: 사업PM (넥슨 모바일사업실) · 근거: 양대 마켓 공개 순위',
+        en: 'Role: business PM (NEXON mobile div.) · Proof: public store rankings',
+      },
     },
     {
       title: { ko: '카오스크로니클', en: 'Chaos Chronicle' },
@@ -262,6 +271,10 @@ export const work = {
         en: 'Featured by Apple & Google in North America',
       },
       emphasis: true,
+      footnote: {
+        ko: '담당: 사업PM · 근거: 북미 스토어 공개 피처드',
+        en: 'Role: business PM · Proof: public NA store featuring',
+      },
     },
     {
       title: { ko: 'Five Stars', en: 'Five Stars' },
@@ -275,6 +288,10 @@ export const work = {
         ko: '구글 매출 46위 · 사전예약 20만',
         en: '#46 grossing on Google Play · 200K pre-registrations',
       },
+      footnote: {
+        ko: '담당: 사업팀장 · 근거: 구글 플레이 공개 순위',
+        en: 'Role: business team lead · Proof: public Google Play ranking',
+      },
     },
     {
       title: { ko: '슈퍼피플 (중국)', en: 'Super People (China)' },
@@ -285,6 +302,10 @@ export const work = {
       },
       label: { ko: '신규 유저', en: 'New users' },
       sub: { ko: 'DAU 피크 7.1만', en: 'Peak DAU 71K' },
+      footnote: {
+        ko: '담당: 사업파트장 · 근거: 내부 지표 요약 (공개 가능 범위)',
+        en: 'Role: business part lead · Proof: internal metrics, shared to the public-safe extent',
+      },
     },
     {
       title: { ko: 'Shadow of Death', en: 'Shadow of Death' },
@@ -297,6 +318,10 @@ export const work = {
       sub: {
         ko: '라이브 운영 개선으로 평점 반등',
         en: 'Rating rebuilt through live-ops improvements',
+      },
+      footnote: {
+        ko: '담당: 사업PM · 근거: 구글 플레이 공개 평점',
+        en: 'Role: business PM · Proof: public Google Play rating',
       },
     },
   ] as Achievement[],

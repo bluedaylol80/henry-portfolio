@@ -38,7 +38,7 @@ export default function Speaker() {
   })
 
   return (
-    <Hotspot id="speaker">
+    <Hotspot id="speaker" hit={{ size: [0.5, 1.24, 0.5], position: [-1.95, 0.6, 1.95] }}>
       {/* Left wall (−X), front — rotated so the drivers/ring face +X. */}
       <group position={[-2.0, 0, 1.95]} rotation={[0, Math.PI / 2, 0]}>
         {/* Speaker box (rounded matte plastic) */}

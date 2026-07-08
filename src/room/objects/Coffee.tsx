@@ -80,7 +80,7 @@ export default function Coffee() {
   })
 
   return (
-    <Hotspot id="coffee">
+    <Hotspot id="coffee" hit={{ size: [0.42, 0.34, 0.42], position: [0.2, 0.55, -0.12] }}>
       {/* On the low coffee table top (table top ≈ y 0.44) in the room centre. */}
       <group position={[0.2, 0.44, -0.12]}>
         {/* Mug body (glazed ceramic) */}

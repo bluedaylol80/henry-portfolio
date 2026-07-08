@@ -4,20 +4,11 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { intro } from '../content/profile'
 import { useT } from '../lib/i18n'
-import { onReady } from '../lib/appState'
 import { getLenis } from '../lib/scroll'
-import { detectTier, prefersReducedMotion } from '../lib/quality'
+import { prefersReducedMotion } from '../lib/quality'
 import { onIntroRequest } from '../lib/introBus'
 
 const SEEN_KEY = 'henry.introSeen'
-
-function readSeen(): boolean {
-  try {
-    return localStorage.getItem(SEEN_KEY) === '1'
-  } catch {
-    return false
-  }
-}
 
 function markSeen() {
   try {
@@ -51,19 +42,21 @@ function SpeakerIcon({ muted }: { muted: boolean }) {
 }
 
 /**
- * Fullscreen intro-video overlay (SPEC §10.1). Auto-opens once on first visit
- * after the preloader is ready (skipped for the fallback tier / reduced motion),
- * and can be reopened on demand via the intro bus (Nav's '소개' link).
+ * Fullscreen intro-video overlay (SPEC §10.1, §15.2). Opens ONLY on demand via
+ * the intro bus — the RoomPage first-visit badge, the LegendHeader 컴퓨터 chip,
+ * the room desk hotspot, or the fallback grid card. The first-visit auto-open was
+ * removed in v8 (§15.2): the room now shows immediately with no video overlay.
  *
  * On close it runs the owner's end sequence — dim to black → fade the overlay
- * out — and, when opened via nav on the landing route, smooth-scrolls to #about.
+ * out — then navigates to any afterNavigate target the opener passed (e.g.
+ * '/story#about'), else smooth-scrolls to #about when opened via nav on /story.
  * The seen flag is always set on every close path, and scroll is locked while open.
  */
 export default function IntroVideo() {
   const t = useT()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
-  // True when the overlay was opened by the user (nav) vs. the first-visit auto-open.
+  // Surfaced when the browser rejects autoplay (a centered manual play button).
   const [needsPlayButton, setNeedsPlayButton] = useState(false)
   const [videoMuted, setVideoMuted] = useState(true)
 
@@ -77,7 +70,11 @@ export default function IntroVideo() {
   const afterNavigateRef = useRef<string | null>(null)
   const closingRef = useRef(false)
 
-  // ── Open triggers: first-visit auto-open + manual (intro bus) ──
+  // ── Open trigger: manual only (intro bus) ──
+  // §15.2: the first-visit AUTO-open is removed entirely. The intro now opens
+  // only on demand — the RoomPage badge, the LegendHeader 컴퓨터 chip, the room
+  // desk hotspot, or the fallback grid card — all via the intro bus below (each
+  // may pass an afterNavigate target). Every close path still sets henry.introSeen.
   useEffect(() => {
     // Manual open from anywhere (Nav / room). Always allowed, even after "seen".
     const off = onIntroRequest((opts) => {
@@ -85,23 +82,7 @@ export default function IntroVideo() {
       afterNavigateRef.current = opts?.afterNavigate ?? null
       setOpen(true)
     })
-
-    // First-visit auto-open, only once the preloader is done.
-    const offReady = onReady(() => {
-      if (readSeen()) return
-      if (detectTier() === 'fallback' || prefersReducedMotion()) {
-        markSeen() // never auto-open for these visitors; don't nag on return either
-        return
-      }
-      manualRef.current = false
-      afterNavigateRef.current = null
-      setOpen(true)
-    })
-
-    return () => {
-      off()
-      offReady()
-    }
+    return off
   }, [])
 
   // ── Scroll lock while open ──

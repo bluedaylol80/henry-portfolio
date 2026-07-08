@@ -60,7 +60,7 @@ export default function Frame() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="frame">
+    <Hotspot id="frame" hit={{ size: [1.82, 1.16, 0.16], position: [0.55, 2.15, -2.3] }}>
       {/* Back wall (−Z), right side — the reference's TV-wall position. */}
       <group position={[0.55, 2.15, -2.34]}>
         {/* broad warm gold wash on the wall behind the frame */}

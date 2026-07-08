@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import SectionShell from '../components/SectionShell'
@@ -97,6 +98,7 @@ function StatCounter({
 
 export default function Achievements() {
   const t = useT()
+  const navigate = useNavigate()
   const headRef = useRef<HTMLDivElement>(null)
   const reduced = prefersReducedMotion()
 
@@ -164,52 +166,84 @@ export default function Achievements() {
               i === 0
                 ? 'border-era-cyan/25 bg-gradient-to-br from-era-cyan/[0.10] via-white/[0.05] to-white/[0.03]'
                 : 'border-white/10 bg-white/[0.04]'
+            // Cards with a linkTo become a full click target (SPEC §15.5-4):
+            // keyboard-focusable role="link", Enter/Space navigates, cursor pointer.
+            const to = item.linkTo
+            const linkProps = to
+              ? {
+                  role: 'link' as const,
+                  tabIndex: 0,
+                  'data-cursor': true,
+                  onClick: () => navigate(to),
+                  onKeyDown: (e: React.KeyboardEvent) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault()
+                      navigate(to)
+                    }
+                  },
+                }
+              : {}
             return (
               <motion.article
                 key={item.tag + i}
-                className={`glass-shine group rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${SPAN[i]} ${
-                  isBanner
-                    ? 'flex flex-col gap-6 md:flex-row md:items-center md:justify-between'
-                    : 'flex min-h-[210px] flex-col justify-between md:min-h-[240px]'
-                }`}
+                {...linkProps}
+                className={`glass-shine group flex flex-col rounded-3xl border ${surface} p-7 backdrop-blur-md transition-[border-color,box-shadow] duration-300 hover:border-white/25 hover:shadow-[0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${SPAN[i]} ${
+                  isBanner ? '' : 'min-h-[210px] md:min-h-[240px]'
+                } ${to ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-era-cyan/50' : ''}`}
                 variants={reduced ? undefined : fadeUp}
                 whileHover={
                   reduced ? undefined : { y: -6, transition: { duration: 0.3, ease: [0.22, 1, 0.36, 1] } }
                 }
               >
-                {isBanner ? (
-                  <>
-                    <div>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                        <h3 className="text-lg font-semibold text-ink break-keep md:text-xl">
-                          {t(item.title)}
-                        </h3>
-                        <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                {/* Card body — flex-1 so the footnote (when present) pins to the bottom. */}
+                <div
+                  className={
+                    isBanner
+                      ? 'flex flex-1 flex-col gap-6 md:flex-row md:items-center md:justify-between'
+                      : 'flex flex-1 flex-col justify-between'
+                  }
+                >
+                  {isBanner ? (
+                    <>
+                      <div>
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                          <h3 className="text-lg font-semibold text-ink break-keep md:text-xl">
+                            {t(item.title)}
+                          </h3>
+                          <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                            {item.tag}
+                          </span>
+                        </div>
+                        <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
+                        <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                      </div>
+                      <div className="shrink-0 md:pl-8 md:text-right">
+                        <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-lg font-semibold text-ink break-keep">{t(item.title)}</h3>
+                        <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
                           {item.tag}
                         </span>
                       </div>
-                      <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
-                    </div>
-                    <div className="shrink-0 md:pl-8 md:text-right">
-                      <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-lg font-semibold text-ink break-keep">{t(item.title)}</h3>
-                      <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
-                        {item.tag}
-                      </span>
-                    </div>
 
-                    <div className="mt-8 md:mt-10">
-                      <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
-                      <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
-                    </div>
-                  </>
+                      <div className="mt-8 md:mt-10">
+                        <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
+                        <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
+                        <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Role · proof footnote — small muted line at the card bottom. */}
+                {item.footnote && (
+                  <p className="mt-3 border-t border-white/5 pt-2 text-[11px] leading-relaxed text-ink-mute break-keep">
+                    {t(item.footnote)}
+                  </p>
                 )}
               </motion.article>
             )

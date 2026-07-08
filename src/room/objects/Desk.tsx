@@ -70,7 +70,7 @@ export default function Desk() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="desk">
+    <Hotspot id="desk" hit={{ size: [2.1, 1.5, 1.0], position: [-1.35, 0.95, -1.6] }}>
       {/* Desk against the back wall (−Z), center-left. Monitor faces +Z. */}
       <group position={[-1.35, 0, -2.0]}>
         {/* Desk slab (rounded — warm plastic, edges show) */}

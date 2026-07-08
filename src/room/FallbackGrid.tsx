@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { useT } from '../lib/i18n'
-import { hotspots, fallback, type RoomAction } from '../content/room'
+import { hotspots, fallback, fallbackChrome, type RoomAction } from '../content/room'
 
 /**
  * Non-3D fallback (reduced-motion / fallback tier): a simple menu grid with the
@@ -17,7 +17,7 @@ export default function FallbackGrid({
   return (
     <div className="relative flex min-h-[100svh] flex-col justify-center px-6 pb-16 pt-28 md:px-10">
       <div className="mx-auto w-full max-w-[1100px]">
-        <p className="eyebrow">THE ROOM</p>
+        <p className="eyebrow">{t(fallbackChrome.heading)}</p>
         <h1 className="mt-4 break-keep font-display text-4xl font-bold text-ink md:text-6xl">
           {t(fallback.title)}
         </h1>
@@ -49,10 +49,10 @@ export default function FallbackGrid({
 
         <div className="mt-10">
           <Link
-            to="/"
-            className="text-sm text-ink-dim underline-offset-4 transition-colors duration-200 hover:text-ink hover:underline"
+            to="/story"
+            className="text-sm text-era-cyan underline-offset-4 transition-colors duration-200 hover:text-ink hover:underline"
           >
-            ← {t({ ko: '메인으로', en: 'Home' })}
+            {t(fallbackChrome.storyCta)}
           </Link>
         </div>
       </div>

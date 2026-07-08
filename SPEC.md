@@ -550,6 +550,44 @@ Rearrange the diorama to read like the reference:
 - LegendHeader on `/story`+`/career*`: all chips work, EN/KO flips, sound chip live state, hamburger present, mobile scrollable, no old Nav anywhere.
 - Full regression (`/story` shoot suite, career pages, back-compat redirects) green; build+typecheck 0; og re-shot if composition changed noticeably.
 
+## 15. v8 — Codex feedback round + owner fixes (2026-07-09)
+
+Owner-approved changes from the Codex feedback report (score 7.5/10) + two owner additions.
+
+### 15.1 Menu naming: destination-first (owner: "가구명 메뉴는 문제")
+`content/room.ts` hotspots ALREADY relabeled — label = destination (소개 영상/상세 이력/커리어 여정/AI 챕터/커피챗/배경 음악/대표 성과), hint = furniture. Legend, LegendHeader, Tooltip, FallbackGrid are content-driven and update automatically — VERIFY rendering still fits (chips got longer; mobile scroll must stay clean). Tooltip format stays `label → hint` (now reads "대표 성과 → 액자" — correct semantics).
+
+### 15.2 Intro policy — compromise (Codex 🔴1 × owner's original directive)
+- IntroVideo: REMOVE the first-visit auto-open entirely (keep all manual paths + afterNavigate).
+- RoomPage: if `localStorage['henry.introSeen'] !== '1'` show a pulsing glass badge `room.introBadge` ("▶ 소개 영상 보기") center-bottom above the coach line ~2.5s after mount; click → `openIntro({ afterNavigate: '/story#about' })`; badge hides once intro has been seen (any close sets the flag) or on dismiss ×. Reduced-motion/fallback: badge static, no pulse; on fallback grid the 소개 영상 card already covers it (badge optional there — skip).
+
+### 15.3 Identity strip (Codex 🔴2)
+- RoomPage bottom-left (above Legend on desktop; on mobile a compact one-liner above the legend): `room.identity` — name (font-display semibold) + line (text-ink-dim) + 3 quick links (대표 성과 → /story#work, 커리어 → /career, 연락 → /story#contact) as small underlined-on-hover links. Glass chip container, unobtrusive, fades in with the coach. aria: plain links.
+
+### 15.4 "3분 요약" page (owner-renamed recruiter brief)
+- NEW route `/brief` → `pages/BriefPage.tsx`; content from `src/content/brief.ts` (done). Layout: JourneyBg (violet/cyan hub variant is fine), LegendHeader shown, `.container-std` narrow (max-w-3xl): eyebrow label → h1 title → lede → identity block (name/line/arc) → 4-stat row (glass chips, value font-display) → workTitle + 4 bullets → aiTitle + 3 bullets → howTitle + one-liner quote style → CTA row (coffee=calendly primary glow, email=mailto, notion ↗, story → /story, career → /career). Typography-first, ~3-minute read, fully bilingual, one h1, reveal animations light and guarded. document.title '3분 요약 — Henry Lim' (RouteEffects).
+- RoomMenu: add "3분 요약" as the FIRST primary item (room.menu.brief + briefHint) → /brief.
+
+### 15.5 Codex 🟡 fixes
+1. **DOM menu latency**: Legend chips + LegendHeader chips act IMMEDIATELY (no 720ms dolly wait). 3D object clicks keep the dolly. Implement via an `immediate` flag on the activate path (InteractionManager/roomState bus) or by having Legend call the action directly.
+2. **IA leftovers**: Hero '방에서 둘러보기 →' Link → '/' (not /room); CareerHub contact CTA → '/story#contact' direct.
+3. **Fallback cleanup**: FallbackGrid — remove the self home-link on root; move 'THE ROOM' heading + labels to content (`room.fallbackChrome`); add a '전체 스토리 보기 →' CTA (fallbackChrome.storyCta → /story).
+4. **Achievements footnotes** (content DONE in profile.ts): render `item.footnote` as a small muted line at the card bottom (text-[11px] text-ink-mute border-t white/5 pt-2 mt-3); `item.linkTo` makes the WHOLE card a click target (cursor pointer, navigate; keep hover lift) — only the 60% card has it (→ /story#ai).
+5. **Perf/lint**: Hotspot.tsx — cache boost-target materials in a ref on mount instead of per-frame traverse. Fix the `src/three/Artifacts.tsx` hook-dep lint warning properly; silence the two i18n fast-refresh warnings with a scoped eslint-disable comment + reason (splitting the file is NOT worth it).
+
+### 15.6 Owner bug: hitbox visible BEFORE hover, disappears ON hover
+Symptom: each furniture's hitbox (invisible interaction proxy) is VISIBLE at rest and vanishes on mouse-over. Investigate src/room/Hotspot.tsx + object modules: likely an enlarged hit-proxy mesh rendering with a non-invisible material (or debug material), toggled by the hover path. Fix: hit proxies must be `material.transparent=true, opacity=0, depthWrite=false, colorWrite=false` (NOT `visible=false` — that skips raycast) OR use `raycast`-only meshes via `visible=true` + fully transparent. Verify at rest + hover + after ESC reset, desktop and mobile, no visual artifacts, raycast still hits.
+
+### 15.7 QA
+- Naming: legend/header/tooltip/fallback show destination-first labels KO+EN, mobile rows scroll clean.
+- First visit: room visible immediately (no auto video), badge appears + works, seen-flag hides it afterward.
+- Identity strip visible 1440+390, links work, doesn't collide with legend/coach.
+- /brief renders bilingual, all CTAs work, linked from RoomMenu top.
+- Legend/header chips navigate instantly; object clicks still dolly.
+- Achievements: footnotes on all 6 cards, 60% card navigates to /story#ai.
+- Hitbox artifact gone (screenshot at rest shows no ghost boxes).
+- Full regression (/story shoot ×3 profiles, /career, redirects, reduced-motion) + build/typecheck 0 + og.png re-shot (identity strip now visible on '/').
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).
