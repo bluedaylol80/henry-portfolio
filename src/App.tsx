@@ -15,6 +15,7 @@ import DebugPanel from './components/DebugPanel'
 import Landing from './pages/Landing'
 import CareerHub from './pages/CareerHub'
 import PhasePage from './pages/PhasePage'
+import RoomPage from './pages/RoomPage'
 
 /** Reset scroll position instantly, respecting Lenis when it is active. */
 function scrollToTop() {
@@ -26,7 +27,9 @@ function scrollToTop() {
 function useDocumentTitle(pathname: string) {
   useEffect(() => {
     let title = meta.title
-    if (pathname === '/career') {
+    if (pathname === '/room') {
+      title = 'The Room — Henry Lim'
+    } else if (pathname === '/career') {
       title = 'Career Journey — Henry Lim'
     } else if (pathname.startsWith('/career/')) {
       const slug = pathname.slice('/career/'.length)
@@ -69,6 +72,13 @@ function RouteEffects() {
   return null
 }
 
+/** Shell footer, hidden on the immersive single-viewport /room page. */
+function ShellFooter() {
+  const { pathname } = useLocation()
+  if (pathname === '/room') return null
+  return <Footer />
+}
+
 /** Redirects unknown phase slugs back to the hub, else renders the phase page. */
 function PhaseRoute() {
   const { slug } = useParams<{ slug: string }>()
@@ -100,9 +110,10 @@ export default function App() {
           <Route path="/" element={<Landing tier={tier} />} />
           <Route path="/career" element={<CareerHub />} />
           <Route path="/career/:slug" element={<PhaseRoute />} />
+          <Route path="/room" element={<RoomPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        <Footer />
+        <ShellFooter />
       </BrowserRouter>
     </LanguageProvider>
   )

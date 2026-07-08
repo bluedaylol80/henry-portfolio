@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion, type Variants } from 'framer-motion'
 import { contact, nav } from '../content/profile'
 import { navLabel } from '../content/journey'
+import { navLabel as roomNavLabel } from '../content/room'
 import { useLang, useT, type Bi } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
 import { isReady, onReady } from '../lib/appState'
@@ -236,6 +237,18 @@ export default function Nav() {
                 </a>
               )
             })}
+            {/* The Room — immersive navigator, era-sky accent (distinct from Journey). */}
+            <Link
+              to="/room"
+              onClick={handleJourney}
+              className="inline-flex items-center gap-1.5 text-sm font-medium text-era-sky transition-opacity duration-200 hover:opacity-80"
+            >
+              <span
+                aria-hidden
+                className="inline-block h-1.5 w-1.5 rounded-full bg-era-sky shadow-[0_0_8px_rgba(0,242,254,0.9)]"
+              />
+              {t(roomNavLabel)}
+            </Link>
             {/* Deep-dive route — visually distinct (era-cyan). */}
             <Link
               to="/career"
@@ -335,6 +348,20 @@ export default function Nav() {
                   {t(item.label)}
                 </motion.a>
               ))}
+              {/* The Room — immersive navigator, distinct era-sky entry. */}
+              <motion.div variants={overlayItem}>
+                <Link
+                  to="/room"
+                  onClick={handleJourney}
+                  className="mt-2 flex items-center gap-4 break-keep font-display text-4xl font-semibold text-era-sky transition-opacity duration-200 hover:opacity-80"
+                >
+                  <span
+                    aria-hidden
+                    className="inline-block h-2 w-2 rounded-full bg-era-sky shadow-[0_0_10px_rgba(0,242,254,0.9)]"
+                  />
+                  {t(roomNavLabel)}
+                </Link>
+              </motion.div>
               {/* Deep-dive route — distinct era-cyan entry. */}
               <motion.div variants={overlayItem}>
                 <Link

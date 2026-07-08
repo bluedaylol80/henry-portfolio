@@ -1,110 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useEffect, useState } from 'react'
 import { intro } from '../content/profile'
 import { useT } from '../lib/i18n'
-
-const TRACK_SRC = import.meta.env.BASE_URL + 'music/baguira.mp3'
-const TARGET_VOLUME = 0.3
-const FADE_DUR = 0.8
+import { isSoundOn, onSoundChange, toggleSound } from '../lib/sound'
 
 /**
  * Background-music toggle for the Nav right cluster (SPEC §10.7).
  *
- * Never autoplays: the looping <audio> element is created lazily on the first
- * enable. Enabling fades volume 0 → 0.3; disabling fades out then pauses.
- * Playback auto-pauses when the tab is hidden and resumes on return. Fully
- * self-contained (no props) so Nav can drop it in directly.
+ * Thin view over the shared BGM singleton (`src/lib/sound.ts`) so the Nav
+ * toggle and the room's speaker control the same audio. The singleton owns the
+ * lazily-created <audio> element, fade tweens, and tab-visibility handling; this
+ * component only mirrors on/off state and forwards clicks. Never autoplays.
  */
 export default function SoundToggle() {
   const t = useT()
-  const [on, setOn] = useState(false)
-  const audioRef = useRef<HTMLAudioElement | null>(null)
-  const fadeRef = useRef<gsap.core.Tween | null>(null)
-  // Tracks user intent so visibility changes only resume what the user enabled.
-  const wantOnRef = useRef(false)
+  const [on, setOn] = useState(isSoundOn)
 
-  function ensureAudio(): HTMLAudioElement {
-    if (!audioRef.current) {
-      const el = new Audio(TRACK_SRC)
-      el.loop = true
-      el.volume = 0
-      el.preload = 'auto'
-      audioRef.current = el
-    }
-    return audioRef.current
-  }
-
-  function fadeTo(target: number, onDone?: () => void) {
-    const el = audioRef.current
-    if (!el) return
-    fadeRef.current?.kill()
-    fadeRef.current = gsap.to(el, {
-      volume: target,
-      duration: FADE_DUR,
-      ease: 'power1.inOut',
-      onComplete: onDone,
-    })
-  }
-
-  function enable() {
-    const el = ensureAudio()
-    wantOnRef.current = true
-    setOn(true)
-    const p = el.play()
-    if (p && typeof p.then === 'function') {
-      p.then(() => fadeTo(TARGET_VOLUME)).catch(() => {
-        // Playback blocked (e.g. no prior gesture on this element) — revert state.
-        wantOnRef.current = false
-        setOn(false)
-      })
-    } else {
-      fadeTo(TARGET_VOLUME)
-    }
-  }
-
-  function disable() {
-    wantOnRef.current = false
-    setOn(false)
-    fadeTo(0, () => audioRef.current?.pause())
-  }
-
-  const toggle = () => (on ? disable() : enable())
-
-  // Pause when the tab is hidden; resume (if the user had it on) when visible.
-  useEffect(() => {
-    const onVisibility = () => {
-      const el = audioRef.current
-      if (!el) return
-      if (document.hidden) {
-        fadeRef.current?.kill()
-        el.pause()
-      } else if (wantOnRef.current) {
-        const p = el.play()
-        if (p && typeof p.then === 'function') p.catch(() => {})
-        fadeTo(TARGET_VOLUME)
-      }
-    }
-    document.addEventListener('visibilitychange', onVisibility)
-    return () => document.removeEventListener('visibilitychange', onVisibility)
-  }, [])
-
-  // Teardown on unmount.
-  useEffect(() => {
-    return () => {
-      fadeRef.current?.kill()
-      const el = audioRef.current
-      if (el) {
-        el.pause()
-        el.src = ''
-        audioRef.current = null
-      }
-    }
-  }, [])
+  // Mirror the shared state; the singleton emits on every change.
+  useEffect(() => onSoundChange(setOn), [])
 
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={toggleSound}
       aria-pressed={on}
       aria-label={t(on ? intro.soundOff : intro.soundOn)}
       className="flex h-10 w-10 items-center justify-center text-ink-dim transition-colors duration-200 hover:text-ink"

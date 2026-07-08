@@ -1,15 +1,25 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import SectionShell from '../components/SectionShell'
 import { useLang, useT } from '../lib/i18n'
 import { hero } from '../content/profile'
+import { heroLink } from '../content/room'
 import { onReady } from '../lib/appState'
 import { prefersReducedMotion } from '../lib/quality'
 import { EASE, DUR } from '../lib/motion'
 
-const INTRO_TARGETS = ['.hero-eyebrow', '.hero-line', '.hero-sub', '.hero-name', '.hero-quote', '.hero-cue']
+const INTRO_TARGETS = [
+  '.hero-eyebrow',
+  '.hero-line',
+  '.hero-sub',
+  '.hero-room',
+  '.hero-name',
+  '.hero-quote',
+  '.hero-cue',
+]
 
 export default function Hero() {
   const t = useT()
@@ -38,7 +48,7 @@ export default function Hero() {
       // Hidden initial states (set pre-paint; preloader also covers the flash).
       gsap.set('.hero-eyebrow', { autoAlpha: 0, y: 18 })
       gsap.set('.hero-line', { yPercent: 115 })
-      gsap.set(['.hero-sub', '.hero-name'], { autoAlpha: 0, y: 24 })
+      gsap.set(['.hero-sub', '.hero-room', '.hero-name'], { autoAlpha: 0, y: 24 })
       gsap.set(['.hero-quote', '.hero-cue'], { autoAlpha: 0, y: 18 })
 
       // Scroll-cue light beam travelling down the hairline.
@@ -79,7 +89,8 @@ export default function Hero() {
       tl.to('.hero-eyebrow', { autoAlpha: 1, y: 0, duration: DUR.m })
         .to('.hero-line', { yPercent: 0, duration: 1.05, stagger: 0.12, ease: EASE.expo }, '-=0.45')
         .to('.hero-sub', { autoAlpha: 1, y: 0, duration: DUR.m }, '-=0.7')
-        .to('.hero-name', { autoAlpha: 1, y: 0, duration: 0.8 }, '-=0.65')
+        .to('.hero-room', { autoAlpha: 1, y: 0, duration: DUR.m }, '-=0.55')
+        .to('.hero-name', { autoAlpha: 1, y: 0, duration: 0.8 }, '-=0.6')
         .to('.hero-quote', { autoAlpha: 1, y: 0, duration: 0.85 }, '-=0.5')
         .to('.hero-cue', { autoAlpha: 1, y: 0, duration: 0.85 }, '-=0.55')
     })
@@ -105,6 +116,14 @@ export default function Hero() {
             <p className="hero-sub mt-7 max-w-xl break-keep text-xl text-ink-dim md:mt-9 md:text-2xl">
               {t(hero.subtitle)}
             </p>
+
+            <Link
+              to="/room"
+              data-cursor
+              className="hero-room mt-5 inline-flex w-fit items-center gap-1.5 text-sm font-medium text-ink-dim transition-colors duration-200 hover:text-era-sky"
+            >
+              {t(heroLink)}
+            </Link>
 
             <div className="hero-name mt-8">
               <span className="glass inline-flex items-center gap-2.5 rounded-full px-4 py-2 text-sm text-ink-dim">
