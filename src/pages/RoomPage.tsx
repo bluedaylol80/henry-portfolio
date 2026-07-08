@@ -4,6 +4,7 @@ import { detectTier, prefersReducedMotion } from '../lib/quality'
 import { openIntro } from '../lib/introBus'
 import { toggleSound } from '../lib/sound'
 import { useT } from '../lib/i18n'
+import { contact } from '../content/profile'
 import { coach, type RoomAction } from '../content/room'
 import RoomExperience from '../room/RoomExperience'
 import FallbackGrid from '../room/FallbackGrid'
@@ -39,7 +40,8 @@ export default function RoomPage() {
     (_id: string, action: RoomAction) => {
       switch (action) {
         case 'intro':
-          openIntro()
+          // Play the intro film, then land on /story#about once it closes.
+          openIntro({ afterNavigate: '/story#about' })
           break
         case 'about':
           navigate('/story#about')
@@ -55,6 +57,10 @@ export default function RoomPage() {
           break
         case 'contact':
           navigate('/story#contact')
+          break
+        case 'notion':
+          // 상세 이력 — external Notion page in a new tab.
+          window.open(contact.notion, '_blank', 'noopener,noreferrer')
           break
         case 'sound':
           toggleSound()

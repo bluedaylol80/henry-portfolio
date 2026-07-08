@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { intro } from '../content/profile'
@@ -60,6 +61,7 @@ function SpeakerIcon({ muted }: { muted: boolean }) {
  */
 export default function IntroVideo() {
   const t = useT()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   // True when the overlay was opened by the user (nav) vs. the first-visit auto-open.
   const [needsPlayButton, setNeedsPlayButton] = useState(false)
@@ -69,13 +71,18 @@ export default function IntroVideo() {
   const dimRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const manualRef = useRef(false) // opened via nav → scroll to #about on close
+  // Path to navigate to after the overlay closes (e.g. '/story#about'), when the
+  // opener passed one (room desk / LegendHeader 컴퓨터 chip). Overrides the legacy
+  // in-place '#about' scroll below.
+  const afterNavigateRef = useRef<string | null>(null)
   const closingRef = useRef(false)
 
   // ── Open triggers: first-visit auto-open + manual (intro bus) ──
   useEffect(() => {
-    // Manual open from anywhere (Nav). Always allowed, even after "seen".
-    const off = onIntroRequest(() => {
+    // Manual open from anywhere (Nav / room). Always allowed, even after "seen".
+    const off = onIntroRequest((opts) => {
       manualRef.current = true
+      afterNavigateRef.current = opts?.afterNavigate ?? null
       setOpen(true)
     })
 
@@ -87,6 +94,7 @@ export default function IntroVideo() {
         return
       }
       manualRef.current = false
+      afterNavigateRef.current = null
       setOpen(true)
     })
 
@@ -161,6 +169,7 @@ export default function IntroVideo() {
     markSeen()
 
     const wasManual = manualRef.current
+    const afterNavigate = afterNavigateRef.current
     const root = rootRef.current
     const video = videoRef.current
 
@@ -174,11 +183,21 @@ export default function IntroVideo() {
         }
       }
       setOpen(false)
-      // Scroll to #about only for nav-opened intros, and only on the landing route.
-      // BrowserRouter uses BASE_URL as basename, so the landing path is BASE_URL itself.
+
+      // Priority: an explicit afterNavigate (room desk / LegendHeader 컴퓨터 chip).
+      // Navigation alone is enough — App's /story hash effect performs the scroll
+      // (it already handles the Lenis resize/start timing on SPA arrival). This
+      // works from ANY route and on ANY close path (ended / skip / ESC).
+      if (afterNavigate) {
+        navigate(afterNavigate)
+        return
+      }
+
+      // Legacy: scroll to #about only for nav-opened intros, and only on the
+      // story route (the former landing). BrowserRouter uses BASE_URL as basename.
       const strip = (s: string) => s.replace(/\/+$/, '')
-      const onLanding = strip(window.location.pathname) === strip(import.meta.env.BASE_URL || '/')
-      if (wasManual && onLanding) {
+      const onStory = strip(window.location.pathname) === strip((import.meta.env.BASE_URL || '/') + 'story')
+      if (wasManual && onStory) {
         // Defer to the next tick: setOpen(false) releases the scroll-lock effect,
         // which restarts Lenis. A stopped Lenis ignores scrollTo, so we must run
         // AFTER start() — plus force:true as a belt-and-suspenders. window.scrollTo

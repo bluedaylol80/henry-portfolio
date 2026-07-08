@@ -8,6 +8,7 @@ import { meta } from './content/profile'
 import { phases } from './content/journey'
 import Preloader from './components/Preloader'
 import Nav from './components/Nav'
+import LegendHeader from './components/LegendHeader'
 import Cursor from './components/Cursor'
 import Footer from './components/Footer'
 import IntroVideo from './components/IntroVideo'
@@ -145,14 +146,20 @@ function PhaseRoute() {
 }
 
 /**
- * The standard Nav renders on content pages only. On the room root (`/`) the
- * top-right RoomMenu (rendered by RoomPage) is the sole navigator (SPEC §13.2).
+ * Content-page header. Per SPEC §14.4, `/story` and `/career*` now render the
+ * LegendHeader (room-legend chips + wordmark + KO/EN + RoomMenu hamburger)
+ * INSTEAD of the standard <Nav/>; the room root (`/`) renders nothing here (its
+ * own top-right RoomMenu is the sole navigator). <Nav/> is kept in the repo but
+ * no longer mounted anywhere.
  */
 function ShellNav() {
   const { pathname } = useLocation()
   if (pathname === '/') return null
-  return <Nav />
+  return <LegendHeader />
 }
+
+// <Nav/> is retained for reference but intentionally unmounted (SPEC §14.4).
+void Nav
 
 export default function App() {
   const tier = useMemo<QualityTier>(() => detectTier(), [])

@@ -11,17 +11,22 @@ import {
 } from '../textures'
 
 /**
- * Corner diorama — the "baked-looking" warm miniature room (SPEC §13.3).
+ * Corner diorama — the "baked-looking" warm miniature room (SPEC §13.3), laid
+ * out to mimic the my-room-in-3d reference in our navy/gold/mint palette
+ * (SPEC §14.2):
+ *   left wall (−X):  tall bookshelf (back) · guitar prop · TV+console (front)
+ *   back wall (−Z):  desk+chair (center-left) · frame (center-right) · window
+ *                    slat light + plant (right)
+ *   centre:          sofa facing the frame wall (−Z) + low coffee table
+ *   corner (+X/−Z):  server rack beside the window
  *
- * We approximate the my-room-in-3d bake with real-time technique:
- *  - a cool blue-white directional "window light" entering from the open corner
- *    (soft PCF shadows on the full tier) with a venetian-slat gobo patch on the
- *    back wall,
+ * Real-time recipe approximating the bake:
+ *  - a cool blue-white directional "window light" from the open corner (soft PCF
+ *    shadows, full tier) with a venetian-slat gobo patch on the back-right wall,
  *  - a warm gold desk spot (shadowed) + a mint accent point at the server,
- *  - a procedural walnut plank floor (CanvasTexture map + roughnessMap, planks
- *    running diagonally) with a soft navy fabric rug under the centre,
- *  - big soft colour glows behind the arcade / under the desk lamp like the
- *    reference's TV glow, plus baseboard trim and NON-hotspot props for life.
+ *  - a procedural walnut plank floor + a soft navy fabric rug under the centre,
+ *  - big soft colour glows (gold behind the TV, a warm wash on the frame wall,
+ *    warm pool under the desk lamp) like the reference's TV glow.
  *
  * Lite tier: no shadow maps (renderer handles that), we keep ContactShadows.
  * Everything created here is disposed on unmount (textures + geometries).
@@ -92,7 +97,7 @@ export default function RoomShell({ full }: { full: boolean }) {
         shadow-radius={5}
       />
 
-      {/* Warm gold desk spot (left, over the desk) — shadowed. */}
+      {/* Warm gold desk spot (back-center-left, over the desk) — shadowed. */}
       <spotLight
         color={PAL.deskWarm}
         intensity={34}
@@ -100,22 +105,22 @@ export default function RoomShell({ full }: { full: boolean }) {
         angle={0.82}
         penumbra={0.9}
         decay={2}
-        position={[-1.3, 3.0, -0.2]}
-        target-position={[-1.0, 0.8, -1.3]}
+        position={[-1.5, 3.0, -1.2]}
+        target-position={[-1.35, 0.8, -1.9]}
         castShadow={full}
         shadow-mapSize-width={512}
         shadow-mapSize-height={512}
         shadow-bias={-0.0008}
       />
 
-      {/* Mint accent at the server (right) — no shadow. */}
-      <pointLight position={[2.1, 1.9, 0.7]} color={PAL.mint} intensity={9} distance={6} decay={2} />
-      {/* faint gold bounce toward the arcade */}
-      <pointLight position={[2.0, 1.6, -1.2]} color={PAL.gold} intensity={5} distance={5} decay={2} />
+      {/* Mint accent at the server (back-right corner) — no shadow. */}
+      <pointLight position={[2.0, 1.9, -1.5]} color={PAL.mint} intensity={9} distance={6} decay={2} />
+      {/* faint gold bounce toward the TV wall (left, front) */}
+      <pointLight position={[-1.9, 1.6, 1.1]} color={PAL.gold} intensity={5} distance={5} decay={2} />
       {/* Soft warm FILL from the camera side — lifts object front-faces and the
           foreground floor so the diorama reads cosy, not murky (no shadow). */}
       <pointLight position={[3.4, 3.2, 3.4]} color="#ffe6c2" intensity={11} distance={13} decay={2} />
-      {/* gentle cool bounce into the shadowed back-left corner (arcade shelves) */}
+      {/* gentle cool bounce into the shadowed back-left corner (bookshelf) */}
       <pointLight position={[-1.6, 2.2, -1.6]} color="#9fb4e0" intensity={4} distance={6} decay={2} />
 
       {/* ── Floor (walnut planks) ──────────────────────────────── */}
@@ -130,21 +135,19 @@ export default function RoomShell({ full }: { full: boolean }) {
         />
       </mesh>
 
-      {/* Soft navy fabric rug under the seating / desk zone (rounded corners
-          faked by a plane with a rounded texture alpha isn't needed — use a
-          slightly inset plane with fabric texture). */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-0.15, 0.012, -0.35]} receiveShadow>
-        <planeGeometry args={[3.4, 3.0]} />
+      {/* Soft navy fabric rug under the centre seating / coffee-table zone. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.2, 0.012, 0.15]} receiveShadow>
+        <planeGeometry args={[3.2, 2.8]} />
         <meshStandardMaterial map={rugTex} roughness={0.95} metalness={0} color={PAL.rugTone} />
       </mesh>
 
       {/* ── Walls (warm dark navy) ─────────────────────────────── */}
-      {/* Back wall (−Z) — the lit one */}
+      {/* Back wall (−Z) — the lit one (frame + window live here) */}
       <mesh position={[0, 2.5, -2.4]} receiveShadow>
         <planeGeometry args={[10, 5.4]} />
         <meshStandardMaterial color={PAL.wall} roughness={0.96} metalness={0.02} />
       </mesh>
-      {/* Left wall (−X) — in shadow, cooler */}
+      {/* Left wall (−X) — bookshelf + TV live here */}
       <mesh position={[-2.4, 2.5, 0]} rotation={[0, Math.PI / 2, 0]} receiveShadow>
         <planeGeometry args={[10, 5.4]} />
         <meshStandardMaterial color={PAL.wallB} roughness={0.96} metalness={0.02} />
@@ -160,16 +163,10 @@ export default function RoomShell({ full }: { full: boolean }) {
         <meshStandardMaterial color={PAL.baseboard} roughness={0.85} metalness={0.05} />
       </mesh>
 
-      {/* Thin emissive accent line above the baseboard (subtle neon nod) */}
-      <mesh position={[0, 0.2, -2.35]}>
-        <boxGeometry args={[10, 0.012, 0.01]} />
-        <meshStandardMaterial color={PAL.cyan} emissive={PAL.cyan} emissiveIntensity={0.5} toneMapped={false} />
-      </mesh>
-
       {/* ── Soft colour glows (like the reference's TV glow) ───── */}
-      {/* Cool window patch with venetian slats on the back wall */}
-      <mesh position={[1.35, 3.0, -2.37]}>
-        <planeGeometry args={[2.2, 2.6]} />
+      {/* Cool window patch with venetian slats on the back-RIGHT wall */}
+      <mesh position={[2.2, 3.0, -2.37]}>
+        <planeGeometry args={[1.9, 2.6]} />
         <meshBasicMaterial
           map={slatTex}
           transparent
@@ -179,21 +176,21 @@ export default function RoomShell({ full }: { full: boolean }) {
           toneMapped={false}
         />
       </mesh>
-      {/* Gold halo behind the arcade (additive radial) */}
-      <sprite position={[1.9, 1.7, -2.0]} scale={[3.2, 3.2, 1]}>
+      {/* Gold halo behind the TV on the LEFT wall (additive radial) */}
+      <sprite position={[-2.32, 1.5, 1.1]} scale={[3.0, 3.0, 1]}>
         <spriteMaterial
           map={glowTex}
           color={PAL.gold}
           transparent
-          opacity={0.42}
+          opacity={0.34}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
           toneMapped={false}
         />
       </sprite>
-      {/* Warm pool on the floor under the desk lamp area */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1.0, 0.02, -1.0]}>
-        <planeGeometry args={[3.2, 3.2]} />
+      {/* Warm pool on the floor under the desk area (back-center-left) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-1.35, 0.02, -1.3]}>
+        <planeGeometry args={[3.0, 3.0]} />
         <meshBasicMaterial
           map={glowTex}
           color={PAL.deskWarm}
@@ -204,8 +201,8 @@ export default function RoomShell({ full }: { full: boolean }) {
           toneMapped={false}
         />
       </mesh>
-      {/* Cool mint pool on the floor at the server */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2.0, 0.02, 0.6]}>
+      {/* Cool mint pool on the floor at the server (back-right corner) */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[2.0, 0.02, -1.6]}>
         <planeGeometry args={[2.4, 2.4]} />
         <meshBasicMaterial
           map={glowTex}
@@ -220,8 +217,10 @@ export default function RoomShell({ full }: { full: boolean }) {
 
       {/* ── NON-hotspot props (life, not menu) ─────────────────── */}
       <Plant />
+      <Guitar />
+      <Chair />
       <Sofa />
-      <WallShelf />
+      <CoffeeTable />
       <CableStrip />
 
       {/* Soft contact shadow (grounds objects even on lite where maps are off) */}
@@ -243,17 +242,15 @@ export default function RoomShell({ full }: { full: boolean }) {
  *  Non-hotspot props — small modules kept in-file (private).
  * ───────────────────────────────────────────────────────────── */
 
-/** Potted plant in the back corner — a pot + a cluster of leaf spheres. */
+/** Potted plant in the back-right corner beside the window. */
 function Plant() {
   const leaves: [number, number, number, number][] = [
-    [0, 0.55, 0, 0.24],
-    [0.16, 0.44, 0.05, 0.18],
-    [-0.15, 0.46, -0.04, 0.19],
-    [0.05, 0.68, -0.08, 0.17],
-    [-0.06, 0.62, 0.12, 0.16],
+    [0, 0.56, 0, 0.26],
+    [0.17, 0.45, 0.05, 0.2],
+    [-0.15, 0.47, -0.04, 0.2],
   ]
   return (
-    <group position={[-2.0, 0, -1.95]}>
+    <group position={[2.05, 0, -2.0]}>
       {/* pot */}
       <mesh position={[0, 0.16, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[0.17, 0.13, 0.32, 16]} />
@@ -279,67 +276,142 @@ function Plant() {
   )
 }
 
-/** Low floor sofa / cushion block in the open front-right corner. */
+/** Acoustic guitar leaning against the left wall beside the bookshelf. */
+function Guitar() {
+  return (
+    <group position={[-2.12, 0, 0.15]} rotation={[0, 0, 0.16]}>
+      {/* body (a flattened sphere → guitar-ish soundbox) */}
+      <mesh position={[0, 0.46, 0]} scale={[1, 1.35, 0.6]} castShadow receiveShadow>
+        <sphereGeometry args={[0.24, 18, 14]} />
+        <meshStandardMaterial color={PAL.woodLight} roughness={0.55} metalness={0.05} />
+      </mesh>
+      {/* neck */}
+      <mesh position={[0.02, 1.15, 0]} castShadow>
+        <boxGeometry args={[0.08, 0.7, 0.05]} />
+        <meshStandardMaterial color={PAL.woodDark} roughness={0.5} metalness={0.05} />
+      </mesh>
+      {/* headstock */}
+      <mesh position={[0.02, 1.52, 0]} castShadow>
+        <boxGeometry args={[0.1, 0.14, 0.04]} />
+        <meshStandardMaterial color="#1a120b" roughness={0.5} />
+      </mesh>
+    </group>
+  )
+}
+
+/** Gaming chair in front of the desk (NON-hotspot) — seat, backrest with a gold
+ *  accent stripe, star base + gas column. Mesh-lean for the ≤95 budget. */
+function Chair() {
+  return (
+    // angled slightly so it reads as pulled out from the desk
+    <group position={[-1.35, 0, -1.1]} rotation={[0, 0.35, 0]}>
+      {/* star base (5-point cylinder) */}
+      <mesh position={[0, 0.06, 0]} castShadow receiveShadow>
+        <cylinderGeometry args={[0.34, 0.36, 0.05, 5]} />
+        <meshStandardMaterial color={PAL.base} roughness={0.5} metalness={0.4} />
+      </mesh>
+      {/* gas column */}
+      <mesh position={[0, 0.3, 0]} castShadow>
+        <cylinderGeometry args={[0.045, 0.045, 0.42, 12]} />
+        <meshStandardMaterial color="#0a1526" roughness={0.4} metalness={0.5} />
+      </mesh>
+      {/* seat */}
+      <RoundedBox args={[0.56, 0.12, 0.52]} radius={0.05} smoothness={2} position={[0, 0.56, 0]} castShadow receiveShadow>
+        <meshStandardMaterial color={PAL.sofa} roughness={0.7} metalness={0.05} />
+      </RoundedBox>
+      {/* backrest (tilted back) with an integrated gold accent via emissive */}
+      <RoundedBox args={[0.54, 0.72, 0.12]} radius={0.06} smoothness={2} position={[0, 0.96, -0.26]} rotation={[0.16, 0, 0]} castShadow receiveShadow>
+        <meshStandardMaterial color={PAL.sofa} emissive={PAL.gold} emissiveIntensity={0.06} roughness={0.7} metalness={0.05} />
+      </RoundedBox>
+    </group>
+  )
+}
+
+/** Low floor sofa in the room centre, facing the frame wall (−Z). */
 function Sofa() {
   return (
-    <group position={[1.5, 0, 1.5]} rotation={[0, -Math.PI / 4, 0]}>
+    // backrest toward +Z so the seat faces the frame on the −Z wall
+    <group position={[0.2, 0, 1.15]} rotation={[0, Math.PI, 0]}>
       {/* seat base */}
-      <RoundedBox args={[1.5, 0.34, 0.8]} radius={0.08} smoothness={2} position={[0, 0.2, 0]} castShadow receiveShadow>
+      <RoundedBox args={[1.6, 0.34, 0.82]} radius={0.08} smoothness={2} position={[0, 0.2, 0]} castShadow receiveShadow>
         <meshStandardMaterial color={PAL.sofa} roughness={0.9} metalness={0} />
       </RoundedBox>
       {/* backrest */}
-      <RoundedBox args={[1.5, 0.5, 0.22]} radius={0.08} smoothness={2} position={[0, 0.5, -0.32]} castShadow receiveShadow>
+      <RoundedBox args={[1.6, 0.52, 0.22]} radius={0.08} smoothness={2} position={[0, 0.5, -0.32]} castShadow receiveShadow>
         <meshStandardMaterial color={PAL.sofa} roughness={0.9} metalness={0} />
       </RoundedBox>
       {/* two cushions */}
-      <RoundedBox args={[0.62, 0.16, 0.6]} radius={0.07} smoothness={2} position={[-0.38, 0.44, 0.02]} castShadow>
+      <RoundedBox args={[0.66, 0.16, 0.62]} radius={0.07} smoothness={2} position={[-0.38, 0.44, 0.04]} castShadow>
         <meshStandardMaterial color={PAL.sofaCushion} roughness={0.92} metalness={0} />
       </RoundedBox>
-      <RoundedBox args={[0.62, 0.16, 0.6]} radius={0.07} smoothness={2} position={[0.38, 0.44, 0.02]} castShadow>
+      <RoundedBox args={[0.66, 0.16, 0.62]} radius={0.07} smoothness={2} position={[0.38, 0.44, 0.04]} castShadow>
         <meshStandardMaterial color={PAL.sofaCushion} roughness={0.92} metalness={0} />
       </RoundedBox>
     </group>
   )
 }
 
-/** Small decorative wall shelf on the back wall with a few objects. */
-function WallShelf() {
+/** Low coffee table in the centre (mug + gamepad sit on top). */
+function CoffeeTable() {
   return (
-    <group position={[0.35, 2.55, -2.33]}>
-      {/* plank */}
-      <RoundedBox args={[1.0, 0.05, 0.24]} radius={0.02} smoothness={2} castShadow receiveShadow>
-        <meshStandardMaterial color={PAL.elev} roughness={0.7} metalness={0.15} />
+    <group position={[0.2, 0, -0.12]}>
+      {/* table top */}
+      <RoundedBox args={[1.2, 0.06, 0.7]} radius={0.03} smoothness={2} position={[0, 0.42, 0]} castShadow receiveShadow>
+        <meshStandardMaterial color={PAL.elev} roughness={0.4} metalness={0.2} />
       </RoundedBox>
-      {/* a small warm-glowing cube trinket */}
-      <mesh position={[0.02, 0.11, 0.03]} castShadow>
-        <boxGeometry args={[0.13, 0.13, 0.13]} />
-        <meshStandardMaterial
-          color={PAL.gold}
-          emissive={PAL.gold}
-          emissiveIntensity={0.25}
-          roughness={0.5}
-          toneMapped={false}
-        />
+      {/* thin warm accent edge */}
+      <mesh position={[0, 0.42, 0.355]}>
+        <boxGeometry args={[1.16, 0.015, 0.008]} />
+        <meshStandardMaterial color={PAL.gold} emissive={PAL.gold} emissiveIntensity={0.35} toneMapped={false} />
       </mesh>
-      {/* a little cyan orb */}
-      <mesh position={[0.33, 0.11, 0.02]} castShadow>
-        <sphereGeometry args={[0.07, 14, 12]} />
-        <meshStandardMaterial color={PAL.cyan} roughness={0.35} metalness={0.4} />
+      {/* 4 legs */}
+      {(
+        [
+          [-0.52, -0.29],
+          [0.52, -0.29],
+          [-0.52, 0.29],
+          [0.52, 0.29],
+        ] as [number, number][]
+      ).map(([x, z], i) => (
+        <mesh key={i} position={[x, 0.2, z]} castShadow>
+          <cylinderGeometry args={[0.025, 0.025, 0.4, 10]} />
+          <meshStandardMaterial color={PAL.base} roughness={0.4} metalness={0.5} />
+        </mesh>
+      ))}
+      {/* tiny gamepad prop on the table */}
+      <Gamepad />
+    </group>
+  )
+}
+
+/** A small gamepad sitting on the coffee table (non-interactive prop). */
+function Gamepad() {
+  return (
+    <group position={[-0.34, 0.47, 0.12]} rotation={[0, 0.5, 0]}>
+      {/* body (rounded, with two suggested grips via a wider footprint) */}
+      <RoundedBox args={[0.3, 0.06, 0.18]} radius={0.05} smoothness={3} castShadow>
+        <meshStandardMaterial color={PAL.baseboard} roughness={0.5} metalness={0.2} />
+      </RoundedBox>
+      {/* a glowing button cluster (single mesh) */}
+      <mesh position={[0.08, 0.04, -0.01]}>
+        <cylinderGeometry args={[0.02, 0.02, 0.012, 12]} />
+        <meshStandardMaterial color={PAL.mint} emissive={PAL.mint} emissiveIntensity={0.6} toneMapped={false} />
       </mesh>
     </group>
   )
 }
 
-/** A thin emissive cable strip snaking across the floor near the desk. */
+/** A thin emissive cable strip snaking across the floor from the desk toward
+ *  the server in the back-right corner. */
 function CableStrip() {
   const pts = useMemo(
     () =>
       new THREE.CatmullRomCurve3([
-        new THREE.Vector3(-1.6, 0.02, -0.9),
-        new THREE.Vector3(-0.9, 0.02, -0.3),
-        new THREE.Vector3(-0.2, 0.02, 0.2),
-        new THREE.Vector3(0.6, 0.02, 0.1),
-        new THREE.Vector3(1.4, 0.02, 0.5),
+        new THREE.Vector3(-1.3, 0.02, -1.6),
+        new THREE.Vector3(-0.6, 0.02, -1.4),
+        new THREE.Vector3(0.4, 0.02, -1.5),
+        new THREE.Vector3(1.3, 0.02, -1.6),
+        new THREE.Vector3(1.9, 0.02, -1.5),
       ]),
     [],
   )

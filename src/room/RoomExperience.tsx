@@ -4,7 +4,7 @@ import { Canvas } from '@react-three/fiber'
 import { EffectComposer, Bloom, SSAO } from '@react-three/postprocessing'
 import RoomShell from './objects/RoomShell'
 import Desk from './objects/Desk'
-import Arcade from './objects/Arcade'
+import Tv from './objects/Tv'
 import Bookshelf from './objects/Bookshelf'
 import Server from './objects/Server'
 import Coffee from './objects/Coffee'
@@ -20,11 +20,17 @@ import type { RoomAction } from '../content/room'
  * Renderer: ACES filmic tone mapping (exposure ~1.1) + soft PCF shadows on the
  * full tier (lite: shadows off, ContactShadows only). Navy fog. PostFX on full:
  * subtle SSAO (corner/contact darkening) + a low-intensity Bloom for the neon
- * accents. Camera starts at a high isometric (5.6, 4.6, 5.6) looking at
- * (0, 0.9, 0) with fov 38 so the whole diorama and the wood floor read clearly.
+ * accents. Camera starts at a high isometric (5.8, 4.7, 5.8) looking at
+ * (0, 0.9, 0) with fov 38 so the whole diorama and the wood floor read clearly;
+ * the mouse WHEEL zooms the orbit radius (RoomCamera §14.1).
  *
- * All seven hotspot objects keep their ids/anchors; the DOM overlays (Legend /
- * Tooltip / coach / back link) live in RoomPage above this canvas.
+ * v7 reference composition (§14.2): bookshelf + TV on the LEFT wall, desk +
+ * chair on the BACK wall (center-left), the frame on the BACK wall (right) with
+ * a window + plant beside it, a sofa facing the frame with a coffee table + mug
+ * hotspot in the CENTRE, and the server rack in the back-right corner. All seven
+ * hotspots (desk/tv/bookshelf/server/coffee/speaker/frame) keep content-driven
+ * ids; the DOM overlays (Legend / Tooltip / coach) live in RoomPage above this
+ * canvas.
  */
 export default function RoomExperience({
   tier,
@@ -45,7 +51,7 @@ export default function RoomExperience({
       dpr={dpr}
       frameloop="always"
       shadows={full ? 'soft' : false}
-      camera={{ fov: 38, position: [5.6, 4.6, 5.6], near: 0.1, far: 100 }}
+      camera={{ fov: 38, position: [5.8, 4.7, 5.8], near: 0.1, far: 100 }}
       gl={{ antialias: full, powerPreference: 'high-performance' }}
       onCreated={({ gl }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
@@ -60,7 +66,7 @@ export default function RoomExperience({
 
       <RoomShell full={full} />
       <Desk />
-      <Arcade />
+      <Tv />
       <Bookshelf />
       <Server />
       <Coffee />

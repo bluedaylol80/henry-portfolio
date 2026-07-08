@@ -28,17 +28,21 @@ export interface Anchor {
   camera: [number, number, number]
 }
 
-// Camera dolly positions are re-tuned to the v6 higher-isometric resting pose
-// (5.6, 4.6, 5.6 → 0, 0.9, 0). On focus the camera eases toward these, framing
-// each object with margin; on reset it returns to the resting orbit.
+// v7 reference composition (SPEC §14.2). Object world centres + a dolly pose
+// per hotspot that frames it with margin from the +x/+z viewer side. On focus
+// the camera eases toward `camera`; on reset it returns to the resting orbit.
+//   left wall (−X):  bookshelf (back) · tv+console (front) · speaker (front)
+//   right wall (−Z): desk+chair (left) · frame (centre-right) · window+plant (right)
+//   centre:          sofa facing −Z · coffee table + mug + gamepad
+//   corner (+X/−Z):  server rack near the window
 export const ANCHORS: Record<string, Anchor> = {
-  desk: { target: [-0.95, 1.2, -1.4], camera: [1.9, 2.5, 2.6] },
-  arcade: { target: [1.9, 1.05, -1.4], camera: [4.1, 2.3, 1.9] },
-  bookshelf: { target: [-2.0, 1.65, -0.4], camera: [1.6, 2.8, 3.0] },
-  server: { target: [2.0, 0.9, 0.6], camera: [3.9, 2.2, 3.0] },
-  coffee: { target: [-0.05, 1.0, -1.05], camera: [2.2, 2.2, 2.2] },
-  speaker: { target: [1.15, 0.75, -1.75], camera: [3.6, 2.4, 1.7] },
-  frame: { target: [-1.55, 2.2, -2.0], camera: [1.9, 3.2, 2.8] },
+  desk: { target: [-1.35, 1.32, -1.85], camera: [1.5, 2.7, 2.6] },
+  tv: { target: [-1.9, 1.18, 1.05], camera: [1.4, 2.4, 3.6] },
+  bookshelf: { target: [-1.95, 1.45, -1.15], camera: [1.4, 2.7, 2.6] },
+  server: { target: [2.05, 1.0, -1.65], camera: [4.0, 2.6, 1.9] },
+  coffee: { target: [0.2, 0.95, -0.15], camera: [2.5, 2.2, 2.6] },
+  speaker: { target: [-1.95, 0.7, 1.85], camera: [1.5, 2.2, 3.8] },
+  frame: { target: [0.55, 2.12, -2.05], camera: [3.0, 3.0, 2.6] },
 }
 
 /** Small event bus so DOM overlays can command the 3D interaction manager

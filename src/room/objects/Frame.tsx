@@ -7,10 +7,12 @@ import { getGlowTexture } from '../textures'
 import { useLang } from '../../lib/i18n'
 
 /**
- * 벽 액자 — the about hotspot (→ /#about). A wall frame showing the wordmark
- * "기획자의 진화" (or "The Evolution of a Planner" in EN) with a gold→mint
- * gradient feel, painted onto a canvas texture (reliable Hangul rendering vs.
- * drei Text's default latin font). Texture is disposed on unmount / lang change.
+ * 벽 액자 — the '대표 성과' hotspot (→ /story#work). A big wall frame on the BACK
+ * wall (−Z), right side (the reference's TV-wall position), that the centre sofa
+ * faces. It shows the wordmark "기획자의 진화" (or "The Evolution of a Planner")
+ * with a gold→mint gradient feel, painted onto a canvas texture (reliable
+ * Hangul rendering vs. drei Text's default latin font), and a warm gold glow
+ * wash on the wall behind it. Texture disposed on unmount / lang change.
  */
 const TEXT = {
   ko: ['기획자의', '진화'],
@@ -59,26 +61,39 @@ export default function Frame() {
 
   return (
     <Hotspot id="frame">
-      <group position={[-1.55, 2.2, -2.15]}>
-        {/* soft warm halo around the lit frame */}
-        <sprite position={[0, 0, -0.05]} scale={[2.4, 1.8, 1]}>
+      {/* Back wall (−Z), right side — the reference's TV-wall position. */}
+      <group position={[0.55, 2.15, -2.34]}>
+        {/* broad warm gold wash on the wall behind the frame */}
+        <sprite position={[0, -0.1, -0.03]} scale={[3.8, 3.0, 1]}>
           <spriteMaterial
             map={glowTex}
             color={PAL.gold}
             transparent
-            opacity={0.22}
+            opacity={0.3}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             toneMapped={false}
           />
         </sprite>
-        {/* Frame border (rounded) */}
-        <RoundedBox args={[1.5, 0.94, 0.05]} radius={0.02} smoothness={2} position={[0, 0, 0]} castShadow>
+        {/* soft warm halo tight around the lit frame */}
+        <sprite position={[0, 0, -0.05]} scale={[2.6, 2.0, 1]}>
+          <spriteMaterial
+            map={glowTex}
+            color={PAL.deskWarm}
+            transparent
+            opacity={0.24}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </sprite>
+        {/* Frame border (rounded) — larger, reads from across the room */}
+        <RoundedBox args={[1.78, 1.12, 0.06]} radius={0.025} smoothness={2} position={[0, 0, 0]} castShadow>
           <meshStandardMaterial color={PAL.elev} roughness={0.45} metalness={0.25} />
         </RoundedBox>
         {/* Canvas art */}
-        <mesh position={[0, 0, 0.03]}>
-          <planeGeometry args={[1.36, 0.82]} />
+        <mesh position={[0, 0, 0.035]}>
+          <planeGeometry args={[1.62, 0.98]} />
           <meshStandardMaterial
             map={texture}
             emissiveMap={texture}

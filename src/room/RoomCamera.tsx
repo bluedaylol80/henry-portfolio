@@ -5,28 +5,40 @@ import gsap from 'gsap'
 import { ANCHORS, roomState } from './roomState'
 
 /**
- * Restricted drag-orbit camera rig (owner directive: drag only, NO keyboard /
- * gamepad / zoom / pan). Pointer drag rotates azimuth within ±0.35rad and polar
- * within [0.95, 1.25]rad around the room centre, damped. Clicking a hotspot
- * (via focusOn) eases the camera toward that object's anchor with a gsap tween;
- * ESC / empty-space click eases back to the resting pose.
+ * Restricted drag-orbit camera rig. Pointer drag rotates azimuth within
+ * ±AZ_RANGE and polar within [POLAR_MIN, POLAR_MAX] around the room centre,
+ * damped. Clicking a hotspot (via focusOn) eases the camera toward that
+ * object's anchor with a gsap tween; ESC / empty-space click eases back to the
+ * resting pose.
+ *
+ * v7 (SPEC §14.1) — WHEEL ZOOM: the mouse wheel scales the orbit RADIUS via a
+ * `zoomFactor` clamped to [0.72, 1.45] of the base radius, damped-lerped toward
+ * its target so it feels smooth. `preventDefault` is set on the canvas wheel
+ * only (the `/` route has no page scroll). Zoom composes cleanly with the
+ * focus-on dolly (the focused camera pose is nudged along its view direction by
+ * the same factor) and `reset` eases the zoom back to 1.0. No keyboard.
  *
  * The rig exposes imperative focus/reset through a ref so the interaction
  * manager can drive it after a raycast hit.
  */
 
-// v6 baked-look composition: higher isometric so the wood floor is prominent
+// v7 reference composition: higher isometric so the wood floor is prominent
 // and the whole diorama is framed with margin (fits 390px width).
-const BASE_POS = new THREE.Vector3(5.6, 4.6, 5.6)
+const BASE_POS = new THREE.Vector3(5.8, 4.7, 5.8)
 const BASE_TARGET = new THREE.Vector3(0, 0.9, 0)
-const RADIUS = BASE_POS.distanceTo(BASE_TARGET) // ~8.74
+const RADIUS = BASE_POS.distanceTo(BASE_TARGET)
 
-// spherical bounds (drag orbit) — re-tuned to the new pose.
+// spherical bounds (drag orbit) — tuned to the new pose.
 const AZ_CENTER = Math.PI / 4 // 45° — looking into the corner
-const AZ_RANGE = 0.32
-const POLAR_MIN = 1.02
-const POLAR_MAX = 1.32
+const AZ_RANGE = 0.34
+const POLAR_MIN = 1.0
+const POLAR_MAX = 1.34
 const POLAR_CENTER = 1.13
+
+// wheel-zoom clamps (fraction of the base orbit radius).
+const ZOOM_MIN = 0.72
+const ZOOM_MAX = 1.45
+const ZOOM_SPEED = 0.0011 // per wheel deltaY unit
 
 export interface RoomCameraHandle {
   focusOn: (id: string) => void
@@ -50,6 +62,8 @@ export default function RoomCamera({
     azTarget: AZ_CENTER,
     polarTarget: POLAR_CENTER,
   })
+  // Wheel zoom: `zoom` damped toward `zoomTarget`; applied to the orbit radius.
+  const zoom = useRef({ value: 1, target: 1 })
   // When focused, gsap tweens these override vectors and we lerp toward them.
   const focus = useRef({
     active: false,
@@ -66,7 +80,7 @@ export default function RoomCamera({
     focus.current.target.copy(BASE_TARGET)
   }, [camera])
 
-  // Drag-orbit input (pointer + touch, no zoom/pan).
+  // Drag-orbit input (pointer + touch, no pan).
   useEffect(() => {
     const el = gl.domElement
     let dragging = false
@@ -110,6 +124,23 @@ export default function RoomCamera({
     }
   }, [gl])
 
+  // Wheel zoom on the canvas only (passive:false so we can preventDefault).
+  useEffect(() => {
+    const el = gl.domElement
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      const z = zoom.current
+      // wheel down (deltaY > 0) → zoom OUT (larger radius); up → zoom IN.
+      z.target = THREE.MathUtils.clamp(
+        z.target + e.deltaY * ZOOM_SPEED,
+        ZOOM_MIN,
+        ZOOM_MAX,
+      )
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [gl])
+
   // Imperative focus / reset (called by the interaction manager & Legend).
   useEffect(() => {
     const focusOn = (id: string) => {
@@ -143,6 +174,8 @@ export default function RoomCamera({
       roomState.focusId = null
       tweenRef.current?.kill()
       focus.current.active = false
+      // ease the wheel-zoom back to the resting radius as well.
+      zoom.current.target = 1
       // ease target back to BASE_TARGET; position handled by orbit lerp
       if (reduced) {
         focus.current.target.copy(BASE_TARGET)
@@ -169,28 +202,35 @@ export default function RoomCamera({
 
   const _pos = useRef(new THREE.Vector3()).current
   const _lookTarget = useRef(new THREE.Vector3()).current
+  const _focusPos = useRef(new THREE.Vector3()).current
 
   useFrame((_, delta) => {
     if (document.hidden) return
     const dt = Math.min(delta, 0.05)
     const o = orbit.current
+    const z = zoom.current
     const k = reduced ? 1 : Math.min(1, dt * 6)
 
-    // damp azimuth/polar toward their drag targets
+    // damp azimuth/polar/zoom toward their targets
     o.az += (o.azTarget - o.az) * k
     o.polar += (o.polarTarget - o.polar) * k
+    z.value += (z.target - z.value) * k
 
-    // orbit position around BASE_TARGET
+    // orbit position around BASE_TARGET (radius scaled by the wheel zoom)
+    const r = RADIUS * z.value
     const sinP = Math.sin(o.polar)
     _pos.set(
-      BASE_TARGET.x + RADIUS * sinP * Math.cos(o.az),
-      BASE_TARGET.y + RADIUS * Math.cos(o.polar),
-      BASE_TARGET.z + RADIUS * sinP * Math.sin(o.az),
+      BASE_TARGET.x + r * sinP * Math.cos(o.az),
+      BASE_TARGET.y + r * Math.cos(o.polar),
+      BASE_TARGET.z + r * sinP * Math.sin(o.az),
     )
 
     if (focus.current.active || roomState.focusId) {
-      // blend toward focused camera pose
-      camera.position.lerp(focus.current.pos, k)
+      // compose the wheel zoom with the focus dolly: nudge the focused camera
+      // pose along its view direction by (zoom − 1) of the eye→target distance.
+      _focusPos.copy(focus.current.pos)
+      _focusPos.sub(focus.current.target).multiplyScalar(z.value).add(focus.current.target)
+      camera.position.lerp(_focusPos, k)
       _lookTarget.copy(focus.current.target)
     } else {
       camera.position.lerp(_pos, k)

@@ -6,9 +6,9 @@ import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
 
 /**
- * 서버 랙 — the AI-chapter hotspot (→ /#ai). A dark rack with 3 LEDs blinking at
- * staggered rates (gold / cyan / mint) plus a thin emissive cable line running
- * to the desk side.
+ * 서버 랙 — the AI-chapter hotspot (→ /story#ai). A dark rack in the back-RIGHT
+ * corner (+X/−Z) beside the window, with 3 LEDs blinking at staggered rates
+ * (gold / cyan / mint) plus a thin emissive cable line running to the desk side.
  */
 const LED_COLORS = [PAL.goldDeep, PAL.cyan, PAL.mint] as const
 const LED_RATES = [1.7, 2.6, 3.4] as const
@@ -30,7 +30,7 @@ export default function Server() {
 
   return (
     <Hotspot id="server">
-      <group position={[2.0, 0, 0.6]}>
+      <group position={[2.05, 0, -1.65]}>
         {/* Rack body (rounded brushed metal) */}
         <RoundedBox args={[0.7, 1.5, 0.6]} radius={0.03} smoothness={2} position={[0, 0.75, 0]} castShadow receiveShadow>
           <meshStandardMaterial color="#0b1424" roughness={0.4} metalness={0.55} />
@@ -41,9 +41,9 @@ export default function Server() {
           <meshStandardMaterial color={PAL.base} roughness={0.35} metalness={0.6} />
         </mesh>
         {/* Rack unit slots (dark grooves) */}
-        {[0, 1, 2, 3].map((i) => (
-          <mesh key={i} position={[0, 0.32 + i * 0.3, 0.325]}>
-            <boxGeometry args={[0.5, 0.2, 0.015]} />
+        {[0, 1].map((i) => (
+          <mesh key={i} position={[0, 0.5 + i * 0.5, 0.325]}>
+            <boxGeometry args={[0.5, 0.34, 0.015]} />
             <meshStandardMaterial color="#050b16" roughness={0.5} metalness={0.3} />
           </mesh>
         ))}

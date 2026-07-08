@@ -514,6 +514,42 @@ Real-time recipe (we cannot Blender-bake; approximate it):
 - Visual: side-by-side eyeball vs the reference screenshot (soft shadows visible, wood floor, warm/cool light pools, AO in corners) — iterate until the room reads "따뜻하고 구워진" not "flat neon". Screenshot proof at 1440 + 390.
 - 0 console errors; build + typecheck 0; og.png regenerate from the ROOM hero view (it's the new entry).
 
+## 14. v7 — reference composition, wheel zoom, object remap, legend header (2026-07-08)
+
+Owner directives (proceed without approval):
+
+### 14.1 Wheel zoom (NEW feature — overrides the earlier no-zoom rule)
+- RoomCamera: mouse wheel zooms in/out — scale the orbit RADIUS, clamp [0.72, 1.45] of base, damped lerp (smooth), `preventDefault` on the canvas wheel only (page has no scroll on `/` anyway). Dolly-to-object and reset still work (zoom factor composes with anchors: apply zoom to the orbit radius, reset returns to 1.0). No keyboard. Touch pinch optional — skip unless trivial.
+
+### 14.2 Composition — mimic the my-room-in-3d screenshot layout (OUR palette)
+Rearrange the diorama to read like the reference:
+- **Left wall**: tall bookshelf (hotspot `bookshelf`, label now '책장') with books/boxes + a guitar prop leaning beside it; **TV (hotspot `tv`, replaces the arcade)** mounted/standing NEXT TO the bookshelf on the left side — flat screen + low media console, warm gold glow halo behind the screen (like the reference TV's red glow), screen shows subtle emissive content (scanlines/wordmark).
+- **Back wall (center-left)**: desk with monitor (intro.mp4 video texture) + laptop + warm lamp; **a chair in front of the desk** (prop, simple gaming-chair silhouette: seat, backrest, star base — NOT a hotspot).
+- **Back wall (right)**: window with cool blue slat light (existing gobo, repositioned) + plant prop.
+- **Right wall**: the big **액자/frame (hotspot `frame` → now 대표 성과)** where the reference's TV wall is, with a warm glow wash on that wall.
+- **Center**: sofa facing the frame/TV side + low coffee table; the **coffee mug hotspot sits ON the coffee table** (steam intact) + a tiny gamepad prop on the table.
+- **server** rack: right-back corner near the window; **speaker**: beside the TV/media console.
+- Keep ≤95 meshes, 60fps, all §13.3 material quality (shadows/SSAO/wood floor/rug).
+- Retune roomState ANCHORS + orbit clamps + legend order stays content-driven.
+
+### 14.3 Hotspot remap (content/room.ts ALREADY updated — follow it)
+- `desk` label '컴퓨터': action `intro` — click opens the intro overlay AND after it closes navigates to `/story#about`. Implemented via `openIntro({ afterNavigate: '/story#about' })` (introBus now passes options; IntroVideo must honor `afterNavigate` on ANY close path, using navigate()).
+- `tv` (id renamed from `arcade`): action `notion` → `window.open(contact.notion, '_blank', 'noopener,noreferrer')`.
+- `frame`: action `work` → `/story#work`. `bookshelf` label '책장'. Others unchanged.
+- RoomPage.runAction: add `notion` case; `intro` case passes afterNavigate.
+
+### 14.4 Legend header replaces Nav on content pages
+- NEW `components/LegendHeader.tsx`: fixed top bar (z-40, glass on scroll like old nav) rendered on `/story` and `/career*` INSTEAD of `<Nav/>` (App conditional): wordmark `H.` (Link `/`) + the SAME chips as the room legend (labels from room.hotspots, same actions: section chips scroll in place on `/story` / navigate `/story#id` elsewhere; 책장→`/career`; TV→notion external; 컴퓨터→intro(afterNavigate '/story#about'); 스피커→sound with live on/off state) + compact KO/EN toggle at the right. Chips horizontally scrollable on mobile (no overflow). Active-section highlight on `/story` (reuse observer pattern) for the section-mapped chips (frame/work, server/ai, coffee/contact).
+- `<Nav/>` no longer renders anywhere (kept in repo but unmounted) — the room keeps wordmark+RoomMenu hamburger; content pages get LegendHeader. RoomMenu hamburger ALSO renders on content pages (top-right, after the lang toggle) so the full menu (전체 스토리/여정/상세 이력/커피챗) stays reachable — readability first.
+- Footer unchanged on content pages.
+
+### 14.5 QA
+- Wheel zoom clamps both ways; dolly/reset unaffected; mobile unaffected.
+- Layout screenshot vs reference: bookshelf+TV left, desk+chair back, window right-back, frame right wall, sofa+table center. Premium, 60fps.
+- 컴퓨터 click → intro plays → close → lands `/story#about`(scrolled). TV → new tab Notion. 액자 → `/story#work`. 책장 → `/career`.
+- LegendHeader on `/story`+`/career*`: all chips work, EN/KO flips, sound chip live state, hamburger present, mobile scrollable, no old Nav anywhere.
+- Full regression (`/story` shoot suite, career pages, back-compat redirects) green; build+typecheck 0; og re-shot if composition changed noticeably.
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

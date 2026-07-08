@@ -5,9 +5,10 @@ import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
 
 /**
- * 커피 한 잔 — the contact hotspot (→ /#contact · 커피챗!). A mug on the desk with
- * a Bruno-style steam plane: a small alpha-noise shader drifting upward. The
- * ShaderMaterial is disposed on unmount.
+ * 커피 한 잔 — the contact hotspot (→ /story#contact · 커피챗!). A mug sitting ON
+ * the low coffee table in the centre of the room, with a Bruno-style steam
+ * plane: a small alpha-noise shader drifting upward. The ShaderMaterial is
+ * disposed on unmount.
  */
 const STEAM_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -80,7 +81,8 @@ export default function Coffee() {
 
   return (
     <Hotspot id="coffee">
-      <group position={[-0.05, 0.79, -1.05]}>
+      {/* On the low coffee table top (table top ≈ y 0.44) in the room centre. */}
+      <group position={[0.2, 0.44, -0.12]}>
         {/* Mug body (glazed ceramic) */}
         <mesh position={[0, 0.09, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.09, 0.075, 0.18, 24]} />

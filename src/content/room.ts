@@ -8,13 +8,14 @@ import type { Bi } from '../lib/i18n'
  */
 
 export type RoomAction =
-  | 'intro' // 소개 영상 오버레이
-  | 'about' // /#about
+  | 'intro' // 소개 영상 오버레이 → 닫히면 소개 섹션으로 이동
+  | 'about' // /story#about
   | 'career' // /career
-  | 'work' // /#work
-  | 'ai' // /#ai
-  | 'contact' // /#contact
+  | 'work' // /story#work
+  | 'ai' // /story#ai
+  | 'contact' // /story#contact
   | 'sound' // BGM 토글
+  | 'notion' // 상세 이력 (외부 새 탭)
 
 export interface RoomHotspot {
   id: string
@@ -50,19 +51,19 @@ export const hotspots: RoomHotspot[] = [
   {
     id: 'desk',
     action: 'intro',
-    label: { ko: '데스크', en: 'The desk' },
-    hint: { ko: '소개 영상', en: 'Intro film' },
+    label: { ko: '컴퓨터', en: 'Computer' },
+    hint: { ko: '소개 영상 → 소개', en: 'Intro film → About' },
   },
   {
-    id: 'arcade',
-    action: 'work',
-    label: { ko: '아케이드 캐비닛', en: 'Arcade cabinet' },
-    hint: { ko: '대표 성과', en: 'Selected work' },
+    id: 'tv',
+    action: 'notion',
+    label: { ko: 'TV', en: 'TV' },
+    hint: { ko: '상세 이력 (Notion)', en: 'Full history (Notion)' },
   },
   {
     id: 'bookshelf',
     action: 'career',
-    label: { ko: '책장 — 다섯 권', en: 'The five books' },
+    label: { ko: '책장', en: 'Bookshelf' },
     hint: { ko: '커리어 여정', en: 'Career journey' },
   },
   {
@@ -85,9 +86,9 @@ export const hotspots: RoomHotspot[] = [
   },
   {
     id: 'frame',
-    action: 'about',
+    action: 'work',
     label: { ko: '액자', en: 'The frame' },
-    hint: { ko: '소개', en: 'About' },
+    hint: { ko: '대표 성과', en: 'Selected work' },
   },
 ]
 

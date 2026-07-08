@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
 import { roomState, setTooltip, onActivate } from './roomState'
 import type { RoomCameraHandle } from './RoomCamera'
-import type { RoomAction } from '../content/room'
+import { hotspots, type RoomAction } from '../content/room'
 
 /**
  * Central pointer/raycast manager for the room:
@@ -144,16 +144,12 @@ export default function InteractionManager({
   return null
 }
 
-// map hotspot id → action (mirrors content/room hotspots).
-const ACTION_BY_ID: Record<string, RoomAction> = {
-  desk: 'intro',
-  arcade: 'work',
-  bookshelf: 'career',
-  server: 'ai',
-  coffee: 'contact',
-  speaker: 'sound',
-  frame: 'about',
-}
+// Resolve hotspot id → action straight from the content source of truth, so
+// the raycast path and the DOM Legend/FallbackGrid never drift (ids: desk/tv/
+// bookshelf/server/coffee/speaker/frame; the renamed 'tv' → 'notion').
+const ACTION_BY_ID: Record<string, RoomAction> = Object.fromEntries(
+  hotspots.map((h) => [h.id, h.action]),
+)
 function resolveAction(id: string): RoomAction {
   return ACTION_BY_ID[id] ?? 'about'
 }
