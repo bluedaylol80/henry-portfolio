@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
+import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
 
@@ -30,21 +31,20 @@ export default function Server() {
   return (
     <Hotspot id="server">
       <group position={[2.0, 0, 0.6]}>
-        {/* Rack body */}
-        <mesh position={[0, 0.75, 0]}>
-          <boxGeometry args={[0.7, 1.5, 0.6]} />
-          <meshStandardMaterial color="#0b1424" roughness={0.65} metalness={0.35} />
-        </mesh>
+        {/* Rack body (rounded brushed metal) */}
+        <RoundedBox args={[0.7, 1.5, 0.6]} radius={0.03} smoothness={2} position={[0, 0.75, 0]} castShadow receiveShadow>
+          <meshStandardMaterial color="#0b1424" roughness={0.4} metalness={0.55} />
+        </RoundedBox>
         {/* Front panel (slightly lighter) */}
-        <mesh position={[0, 0.75, 0.31]}>
+        <mesh position={[0, 0.75, 0.31]} castShadow>
           <boxGeometry args={[0.62, 1.42, 0.02]} />
-          <meshStandardMaterial color={PAL.base} roughness={0.5} metalness={0.4} />
+          <meshStandardMaterial color={PAL.base} roughness={0.35} metalness={0.6} />
         </mesh>
         {/* Rack unit slots (dark grooves) */}
-        {[0, 1, 2, 3, 4].map((i) => (
-          <mesh key={i} position={[0, 0.25 + i * 0.26, 0.325]}>
-            <boxGeometry args={[0.5, 0.18, 0.015]} />
-            <meshStandardMaterial color="#050b16" roughness={0.6} />
+        {[0, 1, 2, 3].map((i) => (
+          <mesh key={i} position={[0, 0.32 + i * 0.3, 0.325]}>
+            <boxGeometry args={[0.5, 0.2, 0.015]} />
+            <meshStandardMaterial color="#050b16" roughness={0.5} metalness={0.3} />
           </mesh>
         ))}
         {/* 3 blinking LEDs */}

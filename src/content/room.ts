@@ -25,6 +25,18 @@ export interface RoomHotspot {
 
 export const navLabel: Bi = { ko: '룸', en: 'Room' }
 
+/** 룸(첫 화면)의 우상단 햄버거 메뉴 */
+export const menu = {
+  open: { ko: '메뉴 열기', en: 'Open menu' } as Bi,
+  close: { ko: '메뉴 닫기', en: 'Close menu' } as Bi,
+  title: { ko: '메뉴', en: 'Menu' } as Bi,
+  storyLabel: { ko: '전체 스토리', en: 'The full story' } as Bi,
+  storyHint: {
+    ko: '한 페이지로 이어지는 소개 · 커리어 · 성과 · AI 챕터',
+    en: 'About, career, work and the AI chapter — one scrolling page',
+  } as Bi,
+}
+
 export const heroLink: Bi = { ko: '방에서 둘러보기 →', en: 'Explore the room →' }
 
 export const coach: Bi = {

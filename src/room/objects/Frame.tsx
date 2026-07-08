@@ -1,7 +1,9 @@
 import { useEffect, useMemo } from 'react'
 import * as THREE from 'three'
+import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
+import { getGlowTexture } from '../textures'
 import { useLang } from '../../lib/i18n'
 
 /**
@@ -53,15 +55,27 @@ export default function Frame() {
   }, [lang])
 
   useEffect(() => () => texture.dispose(), [texture])
+  const glowTex = getGlowTexture()
 
   return (
     <Hotspot id="frame">
       <group position={[-1.55, 2.2, -2.15]}>
-        {/* Frame border */}
-        <mesh position={[0, 0, 0]}>
-          <boxGeometry args={[1.5, 0.94, 0.05]} />
-          <meshStandardMaterial color={PAL.elev} roughness={0.5} metalness={0.3} />
-        </mesh>
+        {/* soft warm halo around the lit frame */}
+        <sprite position={[0, 0, -0.05]} scale={[2.4, 1.8, 1]}>
+          <spriteMaterial
+            map={glowTex}
+            color={PAL.gold}
+            transparent
+            opacity={0.22}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </sprite>
+        {/* Frame border (rounded) */}
+        <RoundedBox args={[1.5, 0.94, 0.05]} radius={0.02} smoothness={2} position={[0, 0, 0]} castShadow>
+          <meshStandardMaterial color={PAL.elev} roughness={0.45} metalness={0.25} />
+        </RoundedBox>
         {/* Canvas art */}
         <mesh position={[0, 0, 0.03]}>
           <planeGeometry args={[1.36, 0.82]} />

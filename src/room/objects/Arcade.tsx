@@ -1,8 +1,10 @@
 import { useMemo, useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
+import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
+import { getGlowTexture } from '../textures'
 
 /**
  * 아케이드 캐비닛 — the '대표 성과' hotspot (→ /#work). A cabinet box with a gold
@@ -61,17 +63,29 @@ export default function Arcade() {
     material.uniforms.uTime.value = state.clock.elapsedTime
   })
 
+  const glowTex = getGlowTexture()
+
   return (
     <Hotspot id="arcade">
       <group position={[1.9, 0, -1.4]}>
-        {/* Cabinet body */}
-        <mesh position={[0, 0.9, 0]}>
-          <boxGeometry args={[0.9, 1.8, 0.8]} />
-          <meshStandardMaterial color={PAL.elev} roughness={0.6} metalness={0.2} />
-        </mesh>
+        {/* gold halo behind the whole cabinet (reference-style glow) */}
+        <sprite position={[0, 1.5, -0.5]} scale={[2.6, 2.6, 1]}>
+          <spriteMaterial
+            map={glowTex}
+            color={PAL.gold}
+            transparent
+            opacity={0.32}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+            toneMapped={false}
+          />
+        </sprite>
+        {/* Cabinet body (rounded plastic) */}
+        <RoundedBox args={[0.9, 1.8, 0.8]} radius={0.05} smoothness={2} position={[0, 0.9, 0]} castShadow receiveShadow>
+          <meshStandardMaterial color={PAL.elev} roughness={0.45} metalness={0.15} />
+        </RoundedBox>
         {/* Marquee (gold emissive) */}
-        <mesh position={[0, 1.72, 0.31]}>
-          <boxGeometry args={[0.86, 0.26, 0.16]} />
+        <RoundedBox args={[0.86, 0.26, 0.16]} radius={0.03} smoothness={2} position={[0, 1.72, 0.31]} castShadow>
           <meshStandardMaterial
             color={PAL.gold}
             emissive={PAL.gold}
@@ -79,20 +93,20 @@ export default function Arcade() {
             toneMapped={false}
             userData={{ baseEmissive: 1.1 }}
           />
-        </mesh>
+        </RoundedBox>
         {/* Screen bezel */}
-        <mesh position={[0, 1.2, 0.36]} rotation={[-0.18, 0, 0]}>
+        <mesh position={[0, 1.2, 0.36]} rotation={[-0.18, 0, 0]} castShadow>
           <boxGeometry args={[0.72, 0.56, 0.06]} />
-          <meshStandardMaterial color="#050b18" roughness={0.4} metalness={0.3} />
+          <meshStandardMaterial color="#050b18" roughness={0.35} metalness={0.3} />
         </mesh>
         {/* Screen — scanline shader */}
         <mesh position={[0, 1.205, 0.395]} rotation={[-0.18, 0, 0]} material={material}>
           <planeGeometry args={[0.62, 0.46]} />
         </mesh>
         {/* Control deck */}
-        <mesh position={[0, 0.78, 0.42]} rotation={[-0.5, 0, 0]}>
+        <mesh position={[0, 0.78, 0.42]} rotation={[-0.5, 0, 0]} castShadow>
           <boxGeometry args={[0.86, 0.34, 0.06]} />
-          <meshStandardMaterial color={PAL.base} roughness={0.7} />
+          <meshStandardMaterial color={PAL.base} roughness={0.55} metalness={0.1} />
         </mesh>
         {/* Joystick base + stick + ball */}
         <mesh position={[-0.18, 0.82, 0.5]}>

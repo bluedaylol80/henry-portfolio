@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
+import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
 import { isSoundOn, onSoundChange } from '../../lib/sound'
@@ -38,11 +39,10 @@ export default function Speaker() {
   return (
     <Hotspot id="speaker">
       <group position={[1.15, 0, -1.75]}>
-        {/* Speaker box */}
-        <mesh position={[0, 0.6, 0]}>
-          <boxGeometry args={[0.42, 1.2, 0.42]} />
-          <meshStandardMaterial color={PAL.elev} roughness={0.7} metalness={0.2} />
-        </mesh>
+        {/* Speaker box (rounded matte plastic) */}
+        <RoundedBox args={[0.42, 1.2, 0.42]} radius={0.03} smoothness={2} position={[0, 0.6, 0]} castShadow receiveShadow>
+          <meshStandardMaterial color={PAL.elev} roughness={0.55} metalness={0.1} />
+        </RoundedBox>
         {/* Two cone circles (drivers) */}
         <mesh position={[0, 0.86, 0.22]} rotation={[Math.PI / 2, 0, 0]}>
           <cylinderGeometry args={[0.13, 0.13, 0.02, 24]} />

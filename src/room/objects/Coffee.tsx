@@ -81,10 +81,10 @@ export default function Coffee() {
   return (
     <Hotspot id="coffee">
       <group position={[-0.05, 0.79, -1.05]}>
-        {/* Mug body */}
-        <mesh position={[0, 0.09, 0]}>
+        {/* Mug body (glazed ceramic) */}
+        <mesh position={[0, 0.09, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.09, 0.075, 0.18, 24]} />
-          <meshStandardMaterial color={PAL.ink} roughness={0.4} metalness={0.1} />
+          <meshStandardMaterial color={PAL.ink} roughness={0.3} metalness={0.05} />
         </mesh>
         {/* Coffee surface */}
         <mesh position={[0, 0.175, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -97,9 +97,9 @@ export default function Coffee() {
           />
         </mesh>
         {/* Handle */}
-        <mesh position={[0.11, 0.09, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <mesh position={[0.11, 0.09, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
           <torusGeometry args={[0.05, 0.014, 10, 20, Math.PI * 1.1]} />
-          <meshStandardMaterial color={PAL.ink} roughness={0.4} />
+          <meshStandardMaterial color={PAL.ink} roughness={0.3} metalness={0.05} />
         </mesh>
         {/* Steam plane — faces camera-ish, drifts upward */}
         <mesh position={[0, 0.5, 0.01]} material={steamMat}>

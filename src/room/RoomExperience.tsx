@@ -1,6 +1,7 @@
 import { useRef } from 'react'
+import * as THREE from 'three'
 import { Canvas } from '@react-three/fiber'
-import { EffectComposer, Bloom } from '@react-three/postprocessing'
+import { EffectComposer, Bloom, SSAO } from '@react-three/postprocessing'
 import RoomShell from './objects/RoomShell'
 import Desk from './objects/Desk'
 import Arcade from './objects/Arcade'
@@ -14,11 +15,16 @@ import InteractionManager from './InteractionManager'
 import type { RoomAction } from '../content/room'
 
 /**
- * The room scene: a corner diorama with 7 hotspot objects (= the menu), a
- * restricted drag-orbit camera, and a central raycast interaction manager.
- * Bloom on the full tier only. Rendered by RoomPage inside a full-viewport
- * container; the DOM overlays (Legend / Tooltip / coach / back link) live in
- * RoomPage above this canvas.
+ * The room scene (SPEC §13.3) — a warm, soft, "baked-looking" corner diorama.
+ *
+ * Renderer: ACES filmic tone mapping (exposure ~1.1) + soft PCF shadows on the
+ * full tier (lite: shadows off, ContactShadows only). Navy fog. PostFX on full:
+ * subtle SSAO (corner/contact darkening) + a low-intensity Bloom for the neon
+ * accents. Camera starts at a high isometric (5.6, 4.6, 5.6) looking at
+ * (0, 0.9, 0) with fov 38 so the whole diorama and the wood floor read clearly.
+ *
+ * All seven hotspot objects keep their ids/anchors; the DOM overlays (Legend /
+ * Tooltip / coach / back link) live in RoomPage above this canvas.
  */
 export default function RoomExperience({
   tier,
@@ -38,11 +44,16 @@ export default function RoomExperience({
       className="absolute inset-0"
       dpr={dpr}
       frameloop="always"
-      camera={{ fov: 42, position: [4.8, 3.6, 4.8], near: 0.1, far: 100 }}
-      gl={{ antialias: !full ? false : true, powerPreference: 'high-performance' }}
+      shadows={full ? 'soft' : false}
+      camera={{ fov: 38, position: [5.6, 4.6, 5.6], near: 0.1, far: 100 }}
+      gl={{ antialias: full, powerPreference: 'high-performance' }}
+      onCreated={({ gl }) => {
+        gl.toneMapping = THREE.ACESFilmicToneMapping
+        gl.toneMappingExposure = 1.28
+      }}
     >
       <color attach="background" args={['#0A1931']} />
-      <fog attach="fog" args={['#0A1931', 9, 20]} />
+      <fog attach="fog" args={['#0A1931', 10, 24]} />
 
       <RoomCamera reduced={reduced} handleRef={cameraHandle} />
       <InteractionManager cameraHandle={cameraHandle} onAction={onAction} />
@@ -57,8 +68,21 @@ export default function RoomExperience({
       <Frame />
 
       {full && (
-        <EffectComposer multisampling={4}>
-          <Bloom mipmapBlur intensity={0.6} luminanceThreshold={0.35} luminanceSmoothing={0.85} />
+        <EffectComposer multisampling={4} enableNormalPass>
+          <SSAO
+            samples={16}
+            rings={4}
+            distanceThreshold={0.5}
+            distanceFalloff={0.1}
+            rangeThreshold={0.5}
+            rangeFalloff={0.1}
+            luminanceInfluence={0.6}
+            radius={0.28}
+            intensity={22}
+            bias={0.03}
+            color={new THREE.Color('#020610')}
+          />
+          <Bloom mipmapBlur intensity={0.35} luminanceThreshold={0.45} luminanceSmoothing={0.85} />
         </EffectComposer>
       )}
     </Canvas>

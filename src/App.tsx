@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { LanguageProvider } from './lib/i18n'
 import { detectTier, type QualityTier } from './lib/quality'
 import { getLenis, initSmoothScroll } from './lib/scroll'
@@ -23,12 +23,15 @@ function scrollToTop() {
   window.scrollTo(0, 0)
 }
 
-/** Resolves the document title for the current route per SPEC §9. */
+/** Section ids that used to live at `/#id` and now live on `/story#id`. */
+const STORY_SECTION_IDS = new Set(['hero', 'about', 'career', 'work', 'ai', 'skills', 'contact'])
+
+/** Resolves the document title for the current route per SPEC §13.1. */
 function useDocumentTitle(pathname: string) {
   useEffect(() => {
-    let title = meta.title
-    if (pathname === '/room') {
-      title = 'The Room — Henry Lim'
+    let title = meta.title // '/' — the room IS the site now.
+    if (pathname === '/story') {
+      title = 'Story — Henry Lim'
     } else if (pathname === '/career') {
       title = 'Career Journey — Henry Lim'
     } else if (pathname.startsWith('/career/')) {
@@ -41,41 +44,95 @@ function useDocumentTitle(pathname: string) {
 }
 
 /**
- * Drives route-change side effects:
+ * Drives route-change side effects (SPEC §13.1):
+ *  - back-compat: `/#section` (old shared links) → `/story#section` (replace)
  *  - scroll to top instantly on pathname change
  *  - keep document.title in sync
- *  - on Landing arrival with a `#section` hash, scroll there once ready
+ *  - on `/story` arrival with a `#section` hash, scroll there once ready
  */
 function RouteEffects() {
   const { pathname, hash } = useLocation()
+  const navigate = useNavigate()
   useDocumentTitle(pathname)
+
+  // Back-compat: a known section hash on the room root belongs to the story now.
+  useEffect(() => {
+    if (pathname !== '/' || !hash) return
+    const id = hash.replace(/^#/, '')
+    if (id && STORY_SECTION_IDS.has(id)) {
+      navigate('/story' + hash, { replace: true })
+    }
+  }, [pathname, hash, navigate])
 
   // Scroll to top on every path change (hash navigation handled separately).
   useEffect(() => {
     scrollToTop()
   }, [pathname])
 
-  // Landing hash arrival: after the preloader is ready, scroll to the section.
+  // Story hash arrival: after the preloader is ready, scroll to the section.
+  // On a fresh deep-link the preloader delays readiness until layout settles, so
+  // one scroll lands. On SPA navigation (e.g. from the room menu → /story#work)
+  // `onReady` fires synchronously while Landing is still mounting/measuring, so
+  // Lenis has a stale document height and the first scrollTo is a no-op. We poll
+  // a few frames until the target has a stable, non-zero offset before scrolling.
   useEffect(() => {
-    if (pathname !== '/' || !hash) return
+    if (pathname !== '/story' || !hash) return
     const id = hash.replace(/^#/, '')
     if (!id) return
-    return onReady(() => {
-      const el = document.getElementById(id)
-      if (!el) return
-      const lenis = getLenis()
-      if (lenis) lenis.scrollTo(el, { offset: 0, duration: 1.2 })
-      else el.scrollIntoView({ behavior: 'smooth' })
-    })
+
+    let raf = 0
+    let cancelled = false
+
+    const attemptScroll = () => {
+      let lastTop = -1
+      let stable = 0
+      let tries = 0
+      const tick = () => {
+        if (cancelled) return
+        const el = document.getElementById(id)
+        // Wait for the element and a settled layout (top unchanged across frames).
+        if (el) {
+          const top = Math.round(el.getBoundingClientRect().top + window.scrollY)
+          if (top === lastTop && top > 0) stable += 1
+          else stable = 0
+          lastTop = top
+          if (stable >= 2 || tries > 40) {
+            const lenis = getLenis()
+            if (lenis) {
+              // Arriving via SPA nav (e.g. room menu → /story#work), Lenis still
+              // has the room's tiny scroll limit (0). Without a fresh measure its
+              // scrollTo clamps to 0 and the section never comes into view. Force
+              // a resize (and start, in case the menu left it stopped) first.
+              lenis.start()
+              lenis.resize()
+              lenis.scrollTo(el, { offset: 0, duration: 1.2 })
+            } else {
+              el.scrollIntoView({ behavior: 'smooth' })
+            }
+            return
+          }
+        }
+        tries += 1
+        raf = requestAnimationFrame(tick)
+      }
+      raf = requestAnimationFrame(tick)
+    }
+
+    const unsub = onReady(attemptScroll)
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+      unsub()
+    }
   }, [pathname, hash])
 
   return null
 }
 
-/** Shell footer, hidden on the immersive single-viewport /room page. */
+/** Shell footer, hidden on the immersive single-viewport room root (`/`). */
 function ShellFooter() {
   const { pathname } = useLocation()
-  if (pathname === '/room') return null
+  if (pathname === '/') return null
   return <Footer />
 }
 
@@ -85,6 +142,16 @@ function PhaseRoute() {
   const known = phases.some((p) => p.slug === slug)
   if (!known) return <Navigate to="/career" replace />
   return <PhasePage />
+}
+
+/**
+ * The standard Nav renders on content pages only. On the room root (`/`) the
+ * top-right RoomMenu (rendered by RoomPage) is the sole navigator (SPEC §13.2).
+ */
+function ShellNav() {
+  const { pathname } = useLocation()
+  if (pathname === '/') return null
+  return <Nav />
 }
 
 export default function App() {
@@ -105,12 +172,14 @@ export default function App() {
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
         <RouteEffects />
-        <Nav />
+        <ShellNav />
         <Routes>
-          <Route path="/" element={<Landing tier={tier} />} />
+          <Route path="/" element={<RoomPage />} />
+          <Route path="/story" element={<Landing tier={tier} />} />
           <Route path="/career" element={<CareerHub />} />
           <Route path="/career/:slug" element={<PhaseRoute />} />
-          <Route path="/room" element={<RoomPage />} />
+          {/* Back-compat: the old /room entry now lives at the root. */}
+          <Route path="/room" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ShellFooter />

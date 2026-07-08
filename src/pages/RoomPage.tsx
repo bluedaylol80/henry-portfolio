@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { detectTier, prefersReducedMotion } from '../lib/quality'
 import { openIntro } from '../lib/introBus'
 import { toggleSound } from '../lib/sound'
 import { useT } from '../lib/i18n'
-import { coach, backLabel, type RoomAction } from '../content/room'
+import { coach, type RoomAction } from '../content/room'
 import RoomExperience from '../room/RoomExperience'
 import FallbackGrid from '../room/FallbackGrid'
 import Legend from '../room/Legend'
 import Tooltip from '../room/Tooltip'
+import RoomMenu from '../components/RoomMenu'
 
 /**
- * /room — full-viewport immersive 3D navigator (SPEC §11).
- * The room's objects ARE the menu. On the fallback tier (or reduced-motion) we
- * render a plain menu grid instead of the canvas. DOM overlays (back link,
- * coach line, Legend, Tooltip) sit above the scene. document.title is set here.
+ * `/` — full-viewport immersive 3D navigator and the site entry (SPEC §13.1).
+ * The room's objects ARE the menu; the top-right RoomMenu holds every other
+ * destination (there is no standard Nav or Footer here). On the fallback tier
+ * (or reduced-motion) a plain menu grid renders instead of the canvas. The room
+ * has no back-link (root is home). document.title is owned by RouteEffects.
  */
 export default function RoomPage() {
   const t = useT()
@@ -24,10 +26,6 @@ export default function RoomPage() {
   const use3D = tier !== 'fallback' && !reduced
 
   const [coachVisible, setCoachVisible] = useState(true)
-
-  useEffect(() => {
-    document.title = 'The Room — Henry Lim'
-  }, [])
 
   // Coach line fades out after 5s (CSS opacity transition; reduced-safe).
   useEffect(() => {
@@ -44,19 +42,19 @@ export default function RoomPage() {
           openIntro()
           break
         case 'about':
-          navigate('/#about')
+          navigate('/story#about')
           break
         case 'career':
           navigate('/career')
           break
         case 'work':
-          navigate('/#work')
+          navigate('/story#work')
           break
         case 'ai':
-          navigate('/#ai')
+          navigate('/story#ai')
           break
         case 'contact':
-          navigate('/#contact')
+          navigate('/story#contact')
           break
         case 'sound':
           toggleSound()
@@ -74,7 +72,16 @@ export default function RoomPage() {
   if (!use3D) {
     return (
       <main id="main" className="relative min-h-[100svh] overflow-hidden bg-base">
+        {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
+        <span
+          aria-hidden
+          className="text-gradient fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
+        >
+          H.
+        </span>
         <FallbackGrid onAction={onAction} />
+        {/* Top-right hamburger navigator (all other destinations). */}
+        <RoomMenu />
       </main>
     )
   }
@@ -88,13 +95,16 @@ export default function RoomPage() {
       {/* 3D scene */}
       <RoomExperience tier={tier} reduced={reduced} onAction={onAction} />
 
-      {/* Back link — top-left, below the nav */}
-      <Link
-        to="/"
-        className="glass fixed left-4 top-20 z-30 rounded-full px-4 py-2 text-sm text-ink-dim transition-colors duration-200 hover:text-ink md:left-8"
+      {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
+      <span
+        aria-hidden
+        className="text-gradient fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
       >
-        ← {t(backLabel)}
-      </Link>
+        H.
+      </span>
+
+      {/* Top-right hamburger navigator (all other destinations). */}
+      <RoomMenu />
 
       {/* Coach line — centre-bottom above the legend, fades after 5s */}
       <div

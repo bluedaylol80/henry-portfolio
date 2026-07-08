@@ -471,6 +471,49 @@ Grep `#FFB454|#FF9A62|#8B5CF6|#22D3EE|#38BDF8|#06070C|#0B0D16|#A78BFA|#C4B5FD|#A
 - Contrast: body text `#AAB8D0` on `#0A1931` ≥ 4.5:1 (it is ~7:1); stat gradients legible.
 - Regenerate og.png (1200×630) after restyle; favicon renders.
 
+## 13. v6 — Room-first restructure + baked-look material pass (2026-07-08)
+
+Owner directives: (1) the ROOM is the ENTRY — `/` shows the room; only the §11 object
+menus are exposed there; everything else lives behind a top-right hamburger (reference:
+folio-2019 panel style). (2) Match my-room-in-3d's **질감** as closely as real-time
+allows. (3) Perfect page structure & readability — this URL will be shared for review.
+
+### 13.1 IA / routing restructure
+- `/` → RoomPage (the entry). `/story` → the former Landing (unchanged content: hero → contact scroll). `/career`, `/career/:slug`, `*` unchanged.
+- **Back-compat**: in RouteEffects, if pathname is `/` (or basename root) AND `location.hash` is a known section id → `navigate('/story' + hash, { replace: true })`. Old shared links keep working.
+- Room object action targets change: about/work/ai/contact → `/story#<id>` (career → `/career`, intro/sound unchanged). Update RoomPage.runAction.
+- 3D budget guard: the particle Experience mounts only on `/story`; the room canvas only on `/`. Never both.
+- document.title: `/` = profile meta title (the room IS the site now); `/story` = `Story — Henry Lim`; others unchanged.
+- Intro video: unchanged behavior (auto-opens once on first visit over whatever route; desk object + '소개' menu reopen it).
+
+### 13.2 Chrome split
+- **Room chrome (on `/` only)**: wordmark `H.` top-left (Link `/story`? NO — wordmark → stays, opens hamburger? keep simple: wordmark is decorative-home, links to `/`), top-right **hamburger button** (glass round, `room.menu.open/close` aria) → full-screen/side overlay panel (folio-2019 vibe, glass navy, readable):
+  - `room.menu.title` header + close X
+  - Primary list (big type): 전체 스토리 (`room.menu.storyLabel` + `storyHint` → `/story`), then profile.nav items (소개/커리어/대표 성과/AI/스킬/연락처 → `/story#id`; the '커리어' item may go to `/career` — use journey for 여정: list 여정(`journey.navLabel` → `/career`) after the section items), 상세 이력 ↗ (`contact.notionNavLabel` → contact.notion), 커피챗 CTA (`contact.navCta` → calendly).
+  - Utility row: KO/EN toggle + sound toggle (reuse shared lib/sound).
+  - The standard `<Nav/>` does NOT render on `/`. Implement via conditional in App (like ShellFooter) + a new `components/RoomMenu.tsx`. Scroll lock while open; ESC closes; stagger reveal; reduced-motion instant.
+- **Content pages (`/story`, `/career*`)**: keep the existing full Nav exactly as-is (readability). Nav's '룸' link now points `/` (it may already—verify); Nav anchors on `/story` scroll in place (Nav's onLanding check must treat `/story` as the section page now — update pathname check), from `/career*` they navigate `/story#id`.
+- Footer: hidden on `/` (room) — already conditional; ensure it now keys on `/`.
+
+### 13.3 Material/quality pass on the room (질감 — get close to the baked reference)
+Real-time recipe (we cannot Blender-bake; approximate it):
+- **Tone mapping**: remove `flat`; use ACESFilmicToneMapping, `outputColorSpace` default, exposure ~1.1. Slightly raise fog density; navy fog.
+- **Shadows ON**: renderer `shadows`, ONE directional "window" light (cool blue-white, from the open side, castShadow, 1024 map, radius/soft via PCFSoft) + warm gold point/spot over the desk (castShadow 512) + mint accent (no shadow). Meshes cast/receive. Lite tier: shadows off, keep ContactShadows.
+- **AO**: `@react-three/postprocessing` SSAO (or N8AO if available in installed version — it is not; use SSAO) on FULL tier only, subtle (radius ~0.3, intensity tuned); plus keep Bloom (lower intensity 0.35).
+- **Floor**: procedural wood — CanvasTexture plank pattern (warm walnut tones #6B4A2F..#8B6242 with per-plank variation + seam lines), used as map + subtle roughnessMap; planks run diagonally like the reference. Add a soft **rug** (rounded plane, deep navy fabric tone) under the seating/desk zone.
+- **Walls**: slightly warmer dark navy with big soft **colored rim glows** like the reference (TV red glow → our arcade gold glow halo behind the cabinet; desk warm pool; window-shaped cool light patch on one wall with venetian-slat streaks like the reference's window light).
+- **Geometry richness**: RoundedBox everywhere edges show; add non-menu props for life (NOT hotspots): a plant (simple sphere-cluster leaves), floor cushion/sofa block, wall shelf, small rug, cable strip. Keep ≤85 meshes total.
+- **Materials**: MeshStandardMaterial with per-object roughness variation (wood 0.65, plastic 0.4, metal 0.3, fabric 0.9); emissives only where lights exist (screens/LEDs/marquee) with halo glow planes (additive sprite) behind them like the reference's TV.
+- **Camera/composition**: match the reference's higher isometric — start ~(5.6, 4.6, 5.6) lookAt (0, 0.9, 0), fov 38; floor prominently visible; the whole diorama framed with margin (fits 390px width too). Orbit clamps re-tuned to the new pose.
+- Keep 60fps on full tier (measure via #debug); lite: no SSAO/shadow maps.
+
+### 13.4 QA
+- `/` renders the room with ONLY: wordmark, hamburger, coach line, legend, tooltip, back-link removed (root has no back). Hamburger panel lists everything and works (KO/EN + sound inside).
+- Old links `/#about` etc. redirect to `/story#about` and scroll. `/story` scrollspy/nav/hash all work. Landing regression suite green on `/story`.
+- Object clicks land on `/story#...` sections. Deep-link `/story#work` fresh load scrolls.
+- Visual: side-by-side eyeball vs the reference screenshot (soft shadows visible, wood floor, warm/cool light pools, AO in corners) — iterate until the room reads "따뜻하고 구워진" not "flat neon". Screenshot proof at 1440 + 390.
+- 0 console errors; build + typecheck 0; og.png regenerate from the ROOM hero view (it's the new entry).
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

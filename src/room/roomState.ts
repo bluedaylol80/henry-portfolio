@@ -28,14 +28,17 @@ export interface Anchor {
   camera: [number, number, number]
 }
 
+// Camera dolly positions are re-tuned to the v6 higher-isometric resting pose
+// (5.6, 4.6, 5.6 → 0, 0.9, 0). On focus the camera eases toward these, framing
+// each object with margin; on reset it returns to the resting orbit.
 export const ANCHORS: Record<string, Anchor> = {
-  desk: { target: [-0.9, 1.15, -1.5], camera: [1.6, 1.9, 2.2] },
-  arcade: { target: [1.9, 0.9, -1.4], camera: [3.4, 1.7, 1.6] },
-  bookshelf: { target: [-2.0, 1.7, -0.4], camera: [1.2, 2.1, 2.6] },
-  server: { target: [2.0, 0.75, 0.6], camera: [3.2, 1.6, 2.6] },
-  coffee: { target: [-0.05, 0.92, -1.05], camera: [1.9, 1.7, 1.9] },
-  speaker: { target: [1.15, 0.62, -1.75], camera: [3.0, 1.8, 1.4] },
-  frame: { target: [-1.55, 2.2, -1.98], camera: [1.6, 2.6, 2.4] },
+  desk: { target: [-0.95, 1.2, -1.4], camera: [1.9, 2.5, 2.6] },
+  arcade: { target: [1.9, 1.05, -1.4], camera: [4.1, 2.3, 1.9] },
+  bookshelf: { target: [-2.0, 1.65, -0.4], camera: [1.6, 2.8, 3.0] },
+  server: { target: [2.0, 0.9, 0.6], camera: [3.9, 2.2, 3.0] },
+  coffee: { target: [-0.05, 1.0, -1.05], camera: [2.2, 2.2, 2.2] },
+  speaker: { target: [1.15, 0.75, -1.75], camera: [3.6, 2.4, 1.7] },
+  frame: { target: [-1.55, 2.2, -2.0], camera: [1.9, 3.2, 2.8] },
 }
 
 /** Small event bus so DOM overlays can command the 3D interaction manager

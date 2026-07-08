@@ -56,7 +56,9 @@ export default function Nav() {
   const reduce = prefersReducedMotion()
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const onLanding = pathname === '/'
+  // The former Landing now lives at /story; scrollspy + in-place anchor scroll
+  // are active there (SPEC §13.2). The room root (/) renders no standard Nav.
+  const onLanding = pathname === '/story'
   const [ready, setReadyState] = useState(isReady())
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -147,7 +149,7 @@ export default function Nav() {
     if (onLanding) {
       openIntro()
     } else {
-      navigate('/')
+      navigate('/story')
       window.setTimeout(() => openIntro(), 60)
     }
   }
@@ -162,7 +164,7 @@ export default function Nav() {
     }
     setMenuOpen(false)
     if (onLanding) scrollTo(id)
-    else navigate(`/#${id}`)
+    else navigate(`/story#${id}`)
   }
 
   const handleJourney = () => setMenuOpen(false)
@@ -237,9 +239,9 @@ export default function Nav() {
                 </a>
               )
             })}
-            {/* The Room — immersive navigator, era-sky accent (distinct from Journey). */}
+            {/* The Room — now the site entry (/); era-sky accent (distinct from Journey). */}
             <Link
-              to="/room"
+              to="/"
               onClick={handleJourney}
               className="inline-flex items-center gap-1.5 text-sm font-medium text-era-sky transition-opacity duration-200 hover:opacity-80"
             >
@@ -348,10 +350,10 @@ export default function Nav() {
                   {t(item.label)}
                 </motion.a>
               ))}
-              {/* The Room — immersive navigator, distinct era-sky entry. */}
+              {/* The Room — now the site entry (/); distinct era-sky entry. */}
               <motion.div variants={overlayItem}>
                 <Link
-                  to="/room"
+                  to="/"
                   onClick={handleJourney}
                   className="mt-2 flex items-center gap-4 break-keep font-display text-4xl font-semibold text-era-sky transition-opacity duration-200 hover:opacity-80"
                 >

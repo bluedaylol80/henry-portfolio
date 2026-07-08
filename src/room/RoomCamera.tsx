@@ -15,15 +15,18 @@ import { ANCHORS, roomState } from './roomState'
  * manager can drive it after a raycast hit.
  */
 
-const BASE_TARGET = new THREE.Vector3(0, 1, 0)
-const RADIUS = Math.hypot(4.8, 3.6 - 1, 4.8) // distance of base pos from target
+// v6 baked-look composition: higher isometric so the wood floor is prominent
+// and the whole diorama is framed with margin (fits 390px width).
+const BASE_POS = new THREE.Vector3(5.6, 4.6, 5.6)
+const BASE_TARGET = new THREE.Vector3(0, 0.9, 0)
+const RADIUS = BASE_POS.distanceTo(BASE_TARGET) // ~8.74
 
-// spherical bounds (drag orbit)
+// spherical bounds (drag orbit) — re-tuned to the new pose.
 const AZ_CENTER = Math.PI / 4 // 45° — looking into the corner
-const AZ_RANGE = 0.35
-const POLAR_MIN = 0.95
-const POLAR_MAX = 1.25
-const POLAR_CENTER = 1.02
+const AZ_RANGE = 0.32
+const POLAR_MIN = 1.02
+const POLAR_MAX = 1.32
+const POLAR_CENTER = 1.13
 
 export interface RoomCameraHandle {
   focusOn: (id: string) => void
@@ -50,14 +53,14 @@ export default function RoomCamera({
   // When focused, gsap tweens these override vectors and we lerp toward them.
   const focus = useRef({
     active: false,
-    pos: new THREE.Vector3(4.8, 3.6, 4.8),
+    pos: BASE_POS.clone(),
     target: BASE_TARGET.clone(),
   })
   const tweenRef = useRef<gsap.core.Tween | null>(null)
 
   // Initialise camera at resting pose.
   useEffect(() => {
-    camera.position.set(4.8, 3.6, 4.8)
+    camera.position.copy(BASE_POS)
     camera.lookAt(BASE_TARGET)
     focus.current.pos.copy(camera.position)
     focus.current.target.copy(BASE_TARGET)
