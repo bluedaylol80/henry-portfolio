@@ -70,9 +70,9 @@ export default function Desk() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="desk" hit={{ size: [2.1, 1.5, 1.0], position: [-1.35, 0.95, -1.6] }}>
-      {/* Desk against the back wall (−Z), center-left. Monitor faces +Z. */}
-      <group position={[-1.35, 0, -2.0]}>
+    <Hotspot id="desk" hit={{ size: [2.1, 1.5, 1.0], position: [-1.7, 0.95, -1.6] }}>
+      {/* Desk in the back-LEFT corner (−X/−Z junction), §19.2. Monitor faces +Z. */}
+      <group position={[-1.7, 0, -2.0]}>
         {/* Desk slab (rounded — warm plastic, edges show) */}
         <RoundedBox args={[2.0, 0.08, 0.9]} radius={0.02} smoothness={2} position={[0, 0.72, 0.35]} castShadow receiveShadow>
           <meshStandardMaterial color={PAL.elev} roughness={0.5} metalness={0.15} />
@@ -89,8 +89,9 @@ export default function Desk() {
 
         {/* Monitor — video texture, faces +Z */}
         <group position={[-0.2, 1.3, 0.12]}>
-          {/* soft glow halo behind the screen (like the reference TV glow) */}
-          <sprite position={[0, 0, -0.12]} scale={[1.9, 1.35, 1]}>
+          {/* soft glow halo behind the screen (like the reference TV glow).
+              noPick: decorative billboard, never a raycast target (§19.7). */}
+          <sprite position={[0, 0, -0.12]} scale={[1.9, 1.35, 1]} userData={{ noPick: true }}>
             <spriteMaterial
               map={glowTex}
               color={PAL.cyan}

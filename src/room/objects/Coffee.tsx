@@ -80,9 +80,9 @@ export default function Coffee() {
   })
 
   return (
-    <Hotspot id="coffee" hit={{ size: [0.42, 0.34, 0.42], position: [0.2, 0.55, -0.12] }}>
-      {/* On the low coffee table top (table top ≈ y 0.44) in the room centre. */}
-      <group position={[0.2, 0.44, -0.12]}>
+    <Hotspot id="coffee" hit={{ size: [0.42, 0.34, 0.42], position: [0.5, 0.55, -0.12] }}>
+      {/* On the low coffee table top (table top ≈ y 0.44), shifted right (§19.2). */}
+      <group position={[0.5, 0.44, -0.12]}>
         {/* Mug body (glazed ceramic) */}
         <mesh position={[0, 0.09, 0]} castShadow receiveShadow>
           <cylinderGeometry args={[0.09, 0.075, 0.18, 24]} />

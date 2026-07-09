@@ -13,6 +13,8 @@
     "shoot": "node scripts/shoot.mjs"
   },
   "dependencies": {
+    "@fontsource/nanum-pen-script": "^5.2.7",
+    "@fontsource/permanent-marker": "^5.2.7",
     "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.6.1",

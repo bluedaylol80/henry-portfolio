@@ -294,7 +294,7 @@ export default function PhasePage() {
                       {t(o.stat)}
                     </div>
                     <div className="mt-3 break-keep text-sm font-medium leading-snug text-ink">{t(o.label)}</div>
-                    {o.sub && <div className="mt-1.5 break-keep text-xs leading-snug text-ink-mute">{t(o.sub)}</div>}
+                    {o.sub && <div className="mt-1.5 break-keep text-xs leading-snug text-ink-dim">{t(o.sub)}</div>}
                   </div>
                 </div>
               ))}

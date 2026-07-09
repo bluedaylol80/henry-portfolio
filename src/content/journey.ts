@@ -364,11 +364,11 @@ export const phases: JourneyPhase[] = [
       en: 'A team lead who writes the specs himself — and designs the team to run without him.',
     },
     intro: {
-      ko: '네오위즈에서 랭킹 · 시즌패스 · 우편 · 공지 · 프로필 등 시스템 기획서 8건을 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
-      en: 'At NEOWIZ, authoring eight system specs hands-on — ranking, season pass, mail, notices, profile and more — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across six K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
+      ko: '네오위즈에서 신규 시스템 기획 10건과 기존 시스템 개편 10건, 그리고 밸런스 기획을 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
+      en: 'At NEOWIZ, authoring 10 new systems, reworking 10 existing ones and owning the balancing hands-on completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across six K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
     },
     did: [
-      { ko: '시스템 기획서 직접 작성 — 네오위즈 8건', en: 'Wrote system specs hands-on — 8 at NEOWIZ' },
+      { ko: '시스템 기획서 직접 작성 — 네오위즈 신규 10 · 개편 10 + 밸런스', en: 'Wrote system specs hands-on — 10 new · 10 reworked + balancing at NEOWIZ' },
       {
         ko: '라이브 서비스 플랜 수립 — 이벤트 · 상품 기획을 분석→제안까지, 프로젝트별 담당자가 바로 논의할 수 있는 수준으로 (K-pop IP 6종)',
         en: 'Built live service plans — event & product planning from analysis to proposal, ready for per-project owners to act on (6 K-pop IP titles)',
@@ -436,9 +436,9 @@ export const phases: JourneyPhase[] = [
         },
       },
       {
-        stat: { ko: '8건', en: '8' },
-        label: { ko: '시스템 기획서 직접 작성', en: 'System specs authored hands-on' },
-        sub: { ko: '네오위즈 — 랭킹 · 시즌패스 · 우편 · 공지 외', en: 'NEOWIZ — ranking, season pass, mail, notices…' },
+        stat: { ko: '20건', en: '20' },
+        label: { ko: '시스템 기획·개편', en: 'Systems designed & reworked' },
+        sub: { ko: '네오위즈 — 신규 10 · 개편 10 + 밸런스', en: 'NEOWIZ — 10 new · 10 reworked + balancing' },
       },
     ],
     stories: [

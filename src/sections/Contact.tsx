@@ -159,7 +159,7 @@ export default function Contact() {
           <Whisper />
         </div>
 
-        <p data-note className="mt-10 text-sm text-ink-mute">
+        <p data-note className="mt-10 text-sm text-ink-dim">
           {t(contact.note)}
         </p>
       </div>

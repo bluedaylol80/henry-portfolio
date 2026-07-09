@@ -48,8 +48,8 @@ export const brief = {
       en: 'Chaos Chronicle — ₩9.8B lifetime, featured by Apple & Google in NA',
     },
     {
-      ko: '네오위즈 — 시스템 기획서 8건 직접 작성 (랭킹 · 시즌패스 · 우편 · 공지 외)',
-      en: 'NEOWIZ — authored 8 system specs hands-on (ranking, season pass, mail, notices…)',
+      ko: '네오위즈 — 신규 시스템 기획 10건 · 기존 시스템 개편 10건 직접 작성 (+ 밸런스, 총 20건)',
+      en: 'NEOWIZ — authored 20 system specs hands-on (10 new · 10 reworked, plus balancing)',
     },
   ] as Bi[],
 

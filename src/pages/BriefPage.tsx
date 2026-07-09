@@ -93,7 +93,7 @@ export default function BriefPage() {
                 <p className="mt-2 break-keep text-base text-ink-dim md:text-lg">
                   {t(brief.identity.line)}
                 </p>
-                <p className="mt-3 break-keep text-sm leading-relaxed text-ink-mute md:text-base">
+                <p className="mt-3 break-keep text-sm leading-relaxed text-ink-dim md:text-[1rem]">
                   {t(brief.identity.arc)}
                 </p>
               </div>
@@ -111,7 +111,7 @@ export default function BriefPage() {
                   <span className="font-display text-2xl font-bold tabular-nums text-gradient-cyan md:text-3xl">
                     {lang === 'ko' ? s.value : s.valueEn}
                   </span>
-                  <span className="break-keep text-xs text-ink-mute md:text-sm">{t(s.label)}</span>
+                  <span className="break-keep text-xs text-ink-dim md:text-sm">{t(s.label)}</span>
                 </div>
               </li>
             ))}
@@ -176,7 +176,7 @@ export default function BriefPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor
-                className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-base"
+                className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-[1rem]"
               >
                 {t(brief.ctas.coffee)}
                 <span aria-hidden className="btn-island-icon text-era-cyan">
@@ -187,7 +187,7 @@ export default function BriefPage() {
               <a
                 href={`mailto:${contact.email}`}
                 data-cursor
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-ink-dim transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-base"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-[1rem]"
               >
                 {t(brief.ctas.email)}
               </a>
@@ -197,7 +197,7 @@ export default function BriefPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-ink-dim transition-colors duration-200 hover:border-white/35 hover:text-era-sky md:text-base"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-era-sky md:text-[1rem]"
               >
                 {t(brief.ctas.notion)}
                 <span aria-hidden>↗</span>
@@ -206,7 +206,7 @@ export default function BriefPage() {
               <Link
                 to="/story"
                 data-cursor
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-ink-dim transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-base"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-[1rem]"
               >
                 {t(brief.ctas.story)}
               </Link>
@@ -214,7 +214,7 @@ export default function BriefPage() {
               <Link
                 to="/career"
                 data-cursor
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-6 py-3 text-sm font-medium text-ink-dim transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-base"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-ink md:text-[1rem]"
               >
                 {t(brief.ctas.career)}
               </Link>

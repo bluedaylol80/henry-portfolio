@@ -125,7 +125,7 @@ export default function Career() {
                   </span>
                   <h3 className="break-keep text-xl font-semibold text-ink md:text-2xl">{t(entry.company)}</h3>
                   <p className="mt-1 break-keep text-ink-dim">{t(entry.role)}</p>
-                  {entry.titles && <p className="mt-2 break-keep text-sm text-ink-mute">{t(entry.titles)}</p>}
+                  {entry.titles && <p className="mt-2 break-keep text-sm text-ink-dim">{t(entry.titles)}</p>}
                   {entry.highlight && (
                     <p className="mt-2 break-keep border-l-2 border-era-cyan/60 pl-3 text-sm leading-relaxed text-ink-dim">
                       {t(entry.highlight)}

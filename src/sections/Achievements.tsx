@@ -218,7 +218,7 @@ export default function Achievements() {
                     <div className="mt-8 md:mt-10">
                       <StatCounter statKo={item.stat.ko} statEn={item.stat.en} className={statClass} />
                       <div className="mt-3 text-sm font-medium text-ink-dim break-keep">{t(item.label)}</div>
-                      <div className="mt-1 text-sm text-ink-mute break-keep">{t(item.sub)}</div>
+                      <div className="mt-1 text-sm text-ink-dim break-keep">{t(item.sub)}</div>
                     </div>
                   </div>
 

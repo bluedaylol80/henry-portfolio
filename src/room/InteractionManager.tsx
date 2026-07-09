@@ -40,6 +40,12 @@ export default function InteractionManager({
     raycaster.setFromCamera(ndc, camera)
     const hits = raycaster.intersectObjects(scene.children, true)
     for (const hit of hits) {
+      // Skip decorative geometry flagged noPick (e.g. glow sprites): they are
+      // NOT a hotspot's hit target and, sitting nearer the camera with large
+      // billboard quads, would otherwise shadow the object behind them and
+      // resolve the WRONG hotspot (bookshelf → frame, §19.2/§19.7). Ignoring the
+      // hit lets the raycast fall through to the real geometry underneath.
+      if (hit.object.userData?.noPick) continue
       // walk up to the nearest ancestor carrying userData.hotspotId
       let o: THREE.Object3D | null = hit.object
       while (o) {
@@ -119,21 +125,45 @@ export default function InteractionManager({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gl, camera, scene])
 
+  // Actions that do NOT leave the room must hand the camera back afterwards
+  // (§19.4) so a returning user finds the full wide view, never stuck dollied at
+  // the speaker/TV. `sound` toggles the BGM in place → ease back ~400ms after it
+  // fires (≈1.1s round trip incl. the 0.7s dolly). `notion` opens a new tab →
+  // reset immediately so the room is already wide when they come back. Route
+  // actions (intro/about/career/work/ai/contact) leave the page, so they never
+  // auto-return here. Applies to BOTH the dolly and the immediate path.
+  const autoReturn = (action: RoomAction) => {
+    if (action === 'notion') {
+      cameraHandle.current?.reset()
+      return
+    }
+    if (action === 'sound') {
+      const rid = window.setTimeout(() => {
+        timers.delete(rid)
+        cameraHandle.current?.reset()
+      }, 400)
+      timers.add(rid)
+    }
+  }
+
   // Shared activation. 3D object clicks dolly to the anchor THEN act (0.7s);
   // DOM menu (Legend/Header) clicks pass `immediate` to run the action right
   // away with no dolly wait (§15.5-1). The immediate path still nudges the
   // camera for continuity but never blocks the navigation on the tween.
   const activate = (id: string, immediate = false) => {
+    const action = resolveAction(id)
     if (immediate) {
       cameraHandle.current?.focusOn(id)
-      onAction(id, resolveAction(id))
+      onAction(id, action)
+      autoReturn(action)
       return
     }
     cameraHandle.current?.focusOn(id)
     // perform the action after the dolly completes (0.7s per RoomCamera).
     const tid = window.setTimeout(() => {
       timers.delete(tid)
-      onAction(id, resolveAction(id))
+      onAction(id, action)
+      autoReturn(action)
     }, 720)
     timers.add(tid)
   }

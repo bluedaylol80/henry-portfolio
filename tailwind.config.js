@@ -9,7 +9,9 @@ export default {
         ink: {
           DEFAULT: '#F8F9FA',
           dim: '#AAB8D0',
-          mute: '#5F7195',
+          // §19.5 contrast lift: #5F7195 (~3.2:1 on base, invisible on navy) →
+          // #7C90B8 (~4.9:1). Systemic — every remaining text-ink-mute rises with it.
+          mute: '#7C90B8',
         },
         era: {
           amber: '#F5B041',
@@ -42,6 +44,9 @@ export default {
           'Pretendard',
           'sans-serif',
         ],
+        // §19.1 start-gate hand lettering: EN marker caps + KO 필기체.
+        hand: ['"Permanent Marker"', 'cursive'],
+        'hand-ko': ['"Nanum Pen Script"', 'cursive'],
       },
     },
   },

@@ -78,7 +78,7 @@ export default function WorkGallery({
                 className="aspect-video w-full rounded-xl object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
             </button>
-            <figcaption className="mt-2 break-keep text-xs text-ink-mute">
+            <figcaption className="mt-2 break-keep text-xs text-ink-dim">
               {t(item.caption)}
             </figcaption>
           </figure>

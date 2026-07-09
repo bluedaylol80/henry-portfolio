@@ -112,8 +112,8 @@ export const career = {
       phase: 'plan',
       titles: { ko: '마스터 오브 나이츠', en: 'Master of Knights' },
       highlight: {
-        ko: '랭킹 · 시즌패스 · 우편 · 공지 · 프로필 등 시스템 기획서 8건 직접 작성 — 사업에서 기획으로의 전환을 완성한 시기',
-        en: 'Authored 8 system design specs hands-on (ranking, season pass, mail, notices, profile and more) — completing the pivot from business to planning',
+        ko: '신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획을 직접 작성 (공지 · 랭킹 · 길드 · 시즌패스 · 가챠 연출 외) — 사업에서 기획으로의 전환을 완성한 시기',
+        en: 'Authored 10 new systems, 10 reworks and balancing hands-on (notices, ranking, guilds, season pass, gacha staging and more) — completing the pivot from business to planning',
       },
     },
     {

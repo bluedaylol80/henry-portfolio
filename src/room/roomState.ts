@@ -17,6 +17,8 @@ export const roomState = {
   focusId: null as string | null,
   /** true once the pointer is a touch device (raycast hover unreliable). */
   touch: false,
+  /** true once the start overlay has been dismissed this session (§19.1). */
+  entered: false,
 }
 
 /** Camera anchor per hotspot: where the object lives + a dolly target for the
@@ -28,21 +30,21 @@ export interface Anchor {
   camera: [number, number, number]
 }
 
-// v7 reference composition (SPEC §14.2). Object world centres + a dolly pose
-// per hotspot that frames it with margin from the +x/+z viewer side. On focus
-// the camera eases toward `camera`; on reset it returns to the resting orbit.
-//   left wall (−X):  bookshelf (back) · tv+console (front) · speaker (front)
-//   right wall (−Z): desk+chair (left) · frame (centre-right) · window+plant (right)
-//   centre:          sofa facing −Z · coffee table + mug + gamepad
-//   corner (+X/−Z):  server rack near the window
+// v11 natural layout (SPEC §19.2) — matches owner-ref-myroom.png. Object world
+// centres + a dolly pose per hotspot that frames it with margin from the +x/+z
+// viewer side. On focus the camera eases toward `camera`; on reset it returns to
+// the resting orbit. §14.2 position locks are SUPERSEDED for the moved objects.
+//   back wall (−Z):  desk (corner, left) · window · TV+console (right) · server+plant (corner)
+//   left wall (−X):  bookshelf (mid, +guitar) · frame (front) · speaker (front)
+//   centre:          sofa facing −Z (the TV) · coffee table + mug + gamepad
 export const ANCHORS: Record<string, Anchor> = {
-  desk: { target: [-1.35, 1.32, -1.85], camera: [1.5, 2.7, 2.6] },
-  tv: { target: [-1.9, 1.18, 1.05], camera: [1.4, 2.4, 3.6] },
-  bookshelf: { target: [-1.95, 1.45, -1.15], camera: [1.4, 2.7, 2.6] },
+  desk: { target: [-1.7, 1.32, -1.9], camera: [1.2, 2.7, 2.6] },
+  tv: { target: [0.85, 1.6, -2.0], camera: [2.6, 2.7, 2.9] },
+  bookshelf: { target: [-1.95, 1.45, -0.45], camera: [1.5, 2.7, 2.9] },
   server: { target: [2.05, 1.0, -1.65], camera: [4.0, 2.6, 1.9] },
-  coffee: { target: [0.2, 0.95, -0.15], camera: [2.5, 2.2, 2.6] },
+  coffee: { target: [0.5, 0.95, -0.15], camera: [2.7, 2.2, 2.6] },
   speaker: { target: [-1.95, 0.7, 1.85], camera: [1.5, 2.2, 3.8] },
-  frame: { target: [0.55, 2.12, -2.05], camera: [3.0, 3.0, 2.6] },
+  frame: { target: [-2.0, 1.5, 1.05], camera: [1.6, 2.4, 3.6] },
 }
 
 /** Small event bus so DOM overlays can command the 3D interaction manager
@@ -105,5 +107,26 @@ export function onTourLabel(cb: TourLabelListener): () => void {
   tourLabelSubs.add(cb)
   return () => {
     tourLabelSubs.delete(cb)
+  }
+}
+
+/** Room entry gate (§19.1): the "CLICK TO MENU" start overlay (DOM, RoomStart)
+ *  calls `enterRoom()` on its dismiss click; in-canvas systems that must wait
+ *  for entry (TourDriver's label tour) subscribe via `onRoomEnter` or read
+ *  `roomState.entered`. When the overlay was already seen this session the
+ *  page sets `entered` true at mount and no event ever fires. */
+type RoomEnterListener = () => void
+const enterSubs = new Set<RoomEnterListener>()
+
+export function enterRoom(): void {
+  if (roomState.entered) return
+  roomState.entered = true
+  enterSubs.forEach((l) => l())
+}
+
+export function onRoomEnter(cb: RoomEnterListener): () => void {
+  enterSubs.add(cb)
+  return () => {
+    enterSubs.delete(cb)
   }
 }

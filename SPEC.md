@@ -685,6 +685,54 @@ Owner directive: "싸구려 느낌 안 나게 고급스럽게" via the high-end-
 - typecheck/lint/build 0 · shoot 3-profile /story + /brief + /career: console errors 0, overflow 0.
 - Before/after screenshots: story-work, brief, career at 1600×1000 saved to shots-v10/.
 
+## 19. v11 — Owner feedback round: start gate, natural layout, interaction & contrast (2026-07-09)
+
+Owner directives (verbatim intent, 2026-07-09): ① a bruno-simon-style handwritten "CLICK TO …" start gate; ② hover motion feels awkward — replace the sustained scale with a brief grow-then-shrink pulse; ③ after clicking the speaker you can't get the full room back; ④ TV and frame positions are swapped vs the reference — match `shots-ref/owner-ref-myroom.png` exactly; ⑤ low-contrast text (e.g. /brief arc line, bottom CTA buttons); ⑥ NEOWIZ system-planning content is wrong (not "8건"). Reference images: `shots-ref/owner-ref-myroom.png` (layout truth), `shots-ref/owner-ref-clicktostart.png` (start-gate look).
+
+### 19.1 Start gate overlay — "CLICK TO MENU" (owner ①)
+- NEW `src/components/RoomStart.tsx` (DOM, mounted in RoomPage's 3D branch only, z-40 above all room overlays). Full-viewport scrim (`bg-base/70`, a fixed element so backdrop-blur-[2px] is allowed) over the live canvas — the dimmed room teases through, like the reference's spotlight.
+- Content, centred: big handwritten headline `CLICK TO MENU` (font-hand, white, slight −2° rotate, gentle pulse — reduced-motion: static) + a hand-drawn curved SVG arrow pointing down toward the room + KO subline in 필기체: `이 방의 모든 사물이 메뉴입니다` (font-hand-ko). Whole overlay is one big button (`role="button"`, aria-label bilingual); click ANYWHERE → 600ms ease-lux fade → unmount.
+- Fonts: `@fontsource/permanent-marker` (EN marker caps ≈ the reference's hand lettering) + `@fontsource/nanum-pen-script` (KO 필기체). Import in main.tsx; tailwind `fontFamily: { hand: ['"Permanent Marker"','cursive'], 'hand-ko': ['"Nanum Pen Script"','cursive'] }`.
+- Gating: sessionStorage `henry.roomEntered`. Seen → no overlay, `roomState.entered=true` at mount. Unseen → overlay; on click set flag + `enterRoom()` (bus already in roomState.ts §19-prewired). SPA back-nav within the session never re-shows it. Fallback tier: NO overlay (grid is already a menu).
+- RoomPage: the bottom stack (identity strip / coach / intro badge / Legend) renders only AFTER entered (their timers start from entry, not mount) — the start screen stays minimal like the reference.
+- TourDriver: label tour begins its 900ms delay from `entered` (roomState.entered at mount, else `onRoomEnter`), NOT from mount. Attach the tour's cancel listeners only when the tour actually begins so the entry click itself can never cancel it.
+
+### 19.2 Layout naturalness pass — match the reference photo (owner ④ + "배치가 자연스럽지 않아")
+Truth = `shots-ref/owner-ref-myroom.png`: corner desk zone on the LEFT-wall/back-wall junction · back wall reads (left→right) desk corner → window → wall-mounted TV with warm backlight + low console → plant/server corner · sofa in the centre FACING the TV · frame art hangs on the LEFT wall (where our TV was) · bookshelf mid-left wall with the guitar leaning beside it. Changes (all coordinates are starting points — iterate against screenshots until the arrangement reads natural; §14.2 position locks are SUPERSEDED here for the listed objects):
+- **TV ↔ Frame swap (exact ask)**: TV module → back wall right (wall-mount at ≈ x 0.85, screen faces +Z, console below on the floor, warm burnt-orange halo `PAL.burnt` behind it like the reference's glow — move the old gold TV halo sprite here). Frame module → left wall at the TV's old spot (≈ z 1.05, faces +X). ANCHORS.tv / ANCHORS.frame get new targets + dolly poses (frame each object with margin, verify by screenshot).
+- Desk slides INTO the corner (x −1.35 → ≈ −1.7); chair tucks toward the desk, back to the viewer (rotation ≈ 0.1, less pulled-out). Desk-area floor pool + wall-texture warm pool follow the lamp (textures.ts pool centres track the new desk/TV/window spots — pools follow their light sources).
+- Window slat patch moves between desk and TV (x 2.2 → ≈ −0.3; narrow the patch if it crowds the TV). Cool wall-texture pool follows.
+- Bookshelf forward to mid-left wall (z −1.15 → ≈ −0.45); guitar leans between bookshelf and desk corner (z ≈ −1.35). ANCHORS.bookshelf updates.
+- Sofa + coffee table + rug shift right to face the TV axis (x 0.2 → ≈ 0.5); CableStrip start follows the desk (−1.3 → ≈ −1.65). Server + plant stay in the back-right corner (matches reference's plant-right).
+- Hit proxies ride inside each Hotspot group — they move automatically; VERIFY raycast hits on every moved object after the move.
+
+### 19.3 Hover pulse — no sustained scale (owner ②)
+- Hotspot.tsx: REMOVE the sustained active scale (1.04-while-hovered reads as furniture shifting). New behaviour: on the RISING edge of active (`hoverId===id || focusId===id`), play one ~420ms pulse — scale 1 → 1.07 → 1 with a smooth sin envelope in useFrame (time-based, no React state; re-arms only on a new rising edge). While active with no pulse running, scale stays exactly 1.
+- Emissive boost stays sustained while active (glow doesn't move geometry — it's the "lit" feedback, and the v9 label tour relies on it).
+
+### 19.4 Camera auto-return for in-room actions (owner ③)
+- InteractionManager: actions that do NOT leave the room must hand the camera back. `sound`: dolly → toggle → auto `cameraHandle.reset()` ~400ms after the action fires (total ≈1.1s round trip). `notion` (new tab): perform, then reset immediately — returning users find the full room. Route actions (intro/about/career/work/ai/contact) unchanged. Applies to both the dolly path and the Legend `immediate` path.
+
+### 19.5 Contrast pass (owner ⑤)
+- tailwind token `ink.mute` `#5F7195` → `#7C90B8` (≈4.9:1 on base — systemic lift; it was ~3.2:1, invisible on navy).
+- BriefPage: identity `arc` line (`운영 → FUN QA → …`) `text-ink-mute` → `text-ink-dim`; stat-chip labels likewise. Bottom CTA row: secondary pill labels `text-ink-dim` → `text-ink`, borders `border-white/15` → `border-white/25`.
+- Sweep `text-ink-mute` across pages/sections: any content-bearing copy (not decorative footnotes/eyebrows) → `text-ink-dim`. Re-verify the room Legend hint chips + LegendHeader with the new mute value.
+
+### 19.6 Content correction — NEOWIZ system planning (owner ⑥, owner text is authoritative)
+Replace every "시스템 기획(서) 8건" claim (brief.ts:51 · journey.ts intro/did/outputs · profile.ts:115) with the corrected record:
+- 신규 시스템 기획 10건 — 공지 · 랭킹 · 길드 · 우편 · 친구 · 도움말 · 서버 및 채널 · 팝업 · 시즌패스 · 월드맵
+- 기존 시스템 개편 10건 — 가챠 연출 · 로비 · 퀘스트/업적 · 장비/캐릭터 육성 · 프로필 · 탐험 · 채팅 · 상점
+- 밸런스 기획 — 알파/베타 재화 · 경험치 · 스테이지 · 육성
+journey.ts outputs stat: `8건` → `20건` (label 시스템 기획·개편, sub 신규 10 · 개편 10 + 밸런스). Craft natural EN pairs for every edit. Do NOT touch journey.ts:546 (`8건 S등급` — unrelated blind-grading stat). Keep each card's line-count similar (layout budget).
+
+### 19.7 QA
+- Fresh session `/`: overlay shows with the marker/pen fonts actually rendering (screenshot — no fallback sans), click → fade, bottom stack appears, label tour chip `[data-tour-label]` appears ≈0.9s AFTER the entry click (the click must not cancel the tour), sessionStorage `henry.roomEntered='1'`; same-session reload → no overlay, room immediate.
+- Layout screenshot vs `owner-ref-myroom.png`: desk corner / window then TV (warm backlight) on the back wall / plant+server right / sofa facing the TV / frame + speaker on the left wall / bookshelf mid-left with guitar. Every hotspot raycast-hits after the moves (programmatic click on each object's screen position triggers its action or dolly).
+- Speaker click → camera back at the resting wide view within ~2s (compare framing). Notion click → camera resets.
+- Hover pulse: code-reviewed envelope (no sustained scale) + a hover screenshot at +600ms shows scale back at 1.
+- Luma gate: central 50%-crop ∈ [46, 92] at 1600×1000/10s. typecheck/lint/build 0. /story /brief /career regression 0/0. Brief arc line computed colour = #AAB8D0; ink-mute computes #7C90B8.
+- og.png NOT in scope for the agents (reshot post-merge by the orchestrator).
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

@@ -239,6 +239,24 @@ html.lenis body {
   }
 }
 
+/* Start-gate headline breathe (§19.1) — gentle scale pulse around the −2° tilt
+ * baked into the element's inline transform, so the keyframes re-declare it. The
+ * component also drops this class under reduced motion; the global RM killswitch
+ * below is the belt-and-braces. */
+@keyframes room-start-pulse {
+  0%,
+  100% {
+    transform: rotate(-2deg) scale(1);
+  }
+  50% {
+    transform: rotate(-2deg) scale(1.045);
+  }
+}
+
+.animate-room-start {
+  animation: room-start-pulse 2.6s ease-in-out infinite;
+}
+
 /* Skip link */
 .skip-link {
   position: fixed;

@@ -8,13 +8,14 @@ import { getGlowTexture } from '../textures'
 
 /**
  * TV (hotspot `tv`, renamed from the old arcade) — the '상세 이력' hotspot
- * (→ Notion, external). A flat-panel screen standing on a low media console
- * against the LEFT wall (−X), its screen facing into the room (+X). A warm gold
+ * (→ Notion, external). A flat-panel screen wall-mounted on the BACK wall (−Z),
+ * right side (SPEC §19.2 — the reference's warm-backlit TV), its screen facing
+ * into the room (+Z), a low media console below on the floor. A warm burnt-orange
  * glow halo sits behind the panel like the reference TV's red glow, and the
  * screen shows subtle scrolling emissive scanlines + a wordmark bar (custom
  * ShaderMaterial, disposed on unmount).
  *
- * The whole group is rotated so the screen faces +X (toward the sofa side).
+ * The group is NOT rotated: the screen already faces +Z (toward the sofa).
  */
 const SCREEN_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -73,16 +74,17 @@ export default function Tv() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="tv" hit={{ size: [0.6, 1.5, 1.56], position: [-1.95, 0.72, 1.1] }}>
-      {/* Anchored to the left wall (−X); rotated so the screen faces +X. */}
-      <group position={[-2.0, 0, 1.1]} rotation={[0, Math.PI / 2, 0]}>
-        {/* Gold halo behind the panel (reference-style glow) */}
-        <sprite position={[0, 1.3, -0.35]} scale={[3.0, 2.2, 1]}>
+    <Hotspot id="tv" hit={{ size: [1.7, 2.2, 0.62], position: [0.85, 1.1, -2.0] }}>
+      {/* Wall-mounted on the back wall (−Z), right side; screen faces +Z. */}
+      <group position={[0.85, 0, -2.0]} rotation={[0, 0, 0]}>
+        {/* Warm burnt-orange halo behind the panel (reference-style TV glow).
+            noPick: decorative billboard, never a raycast target (§19.7). */}
+        <sprite position={[0, 1.62, -0.18]} scale={[3.2, 2.4, 1]} userData={{ noPick: true }}>
           <spriteMaterial
             map={glowTex}
-            color={PAL.gold}
+            color={PAL.burnt}
             transparent
-            opacity={0.4}
+            opacity={0.42}
             blending={THREE.AdditiveBlending}
             depthWrite={false}
             toneMapped={false}
@@ -117,27 +119,24 @@ export default function Tv() {
           <meshStandardMaterial color={PAL.base} roughness={0.7} metalness={0.1} />
         </mesh>
 
-        {/* Flat-panel body (thin, standing on the console) */}
+        {/* Flat-panel body (thin, wall-mounted high above the console) — a large
+            screen like the reference's TV. */}
         <RoundedBox
-          args={[1.36, 0.86, 0.06]}
+          args={[1.6, 0.98, 0.06]}
           radius={0.02}
           smoothness={2}
-          position={[0, 1.02, 0.02]}
+          position={[0, 1.62, 0.02]}
           castShadow
         >
           <meshStandardMaterial color="#050b18" roughness={0.32} metalness={0.35} />
         </RoundedBox>
         {/* Screen — scanline / wordmark shader */}
-        <mesh position={[0, 1.02, 0.056]} material={material}>
-          <planeGeometry args={[1.22, 0.72]} />
+        <mesh position={[0, 1.62, 0.056]} material={material}>
+          <planeGeometry args={[1.44, 0.84]} />
         </mesh>
-        {/* Stand neck + foot */}
-        <mesh position={[0, 0.6, 0]} castShadow>
-          <boxGeometry args={[0.1, 0.24, 0.06]} />
-          <meshStandardMaterial color={PAL.base} roughness={0.4} metalness={0.4} />
-        </mesh>
-        <mesh position={[0, 0.47, 0.02]} castShadow>
-          <boxGeometry args={[0.44, 0.03, 0.24]} />
+        {/* Slim wall-mount bracket behind the panel (no floor stand) */}
+        <mesh position={[0, 1.62, -0.04]}>
+          <boxGeometry args={[0.16, 0.34, 0.04]} />
           <meshStandardMaterial color={PAL.base} roughness={0.4} metalness={0.4} />
         </mesh>
       </group>

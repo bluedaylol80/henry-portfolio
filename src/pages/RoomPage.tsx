@@ -12,6 +12,8 @@ import Legend from '../room/Legend'
 import Tooltip from '../room/Tooltip'
 import LabelTour from '../room/LabelTour'
 import RoomMenu from '../components/RoomMenu'
+import RoomStart from '../components/RoomStart'
+import { roomState } from '../room/roomState'
 
 /**
  * `/` — full-viewport immersive 3D navigator and the site entry (SPEC §13.1).
@@ -27,14 +29,35 @@ export default function RoomPage() {
   const reduced = useMemo(() => prefersReducedMotion(), [])
   const use3D = tier !== 'fallback' && !reduced
 
+  // ── Start gate (§19.1) ───────────────────────────────────────────────
+  // Unseen this session → show the "CLICK TO MENU" overlay; the bottom stack
+  // (identity / badge / coach / Legend) waits until entry so the start screen
+  // stays minimal, and its timers count from entry rather than mount. Seen (or
+  // a same-session reload) → enter immediately with no overlay. On the fallback
+  // tier there is no overlay (the grid is already a menu), so `entered` is moot.
+  const seenGate = useCallback(() => {
+    try {
+      return sessionStorage.getItem('henry.roomEntered') === '1'
+    } catch {
+      return false
+    }
+  }, [])
+  const [entered, setEntered] = useState(() => !use3D || seenGate())
+  // When the gate was already seen we set the shared bus flag at mount (no event
+  // fires); an unseen gate flips it via enterRoom() inside RoomStart on click.
+  useEffect(() => {
+    if (entered) roomState.entered = true
+  }, [entered])
+  const onEnter = useCallback(() => setEntered(true), [])
+
   const [coachVisible, setCoachVisible] = useState(true)
 
-  // Coach line fades out after 5s (CSS opacity transition; reduced-safe).
+  // Coach line fades out 5s AFTER entry (CSS opacity transition; reduced-safe).
   useEffect(() => {
-    if (!use3D) return
+    if (!use3D || !entered) return
     const id = window.setTimeout(() => setCoachVisible(false), 5000)
     return () => window.clearTimeout(id)
-  }, [use3D])
+  }, [use3D, entered])
 
   // ── Intro badge (§15.2) ──────────────────────────────────────────────
   // Show a pulsing "▶ 소개 영상 보기" badge ~2.5s after mount, but ONLY while the
@@ -55,10 +78,10 @@ export default function RoomPage() {
   const [badgeReady, setBadgeReady] = useState(false)
 
   useEffect(() => {
-    if (!use3D) return
+    if (!use3D || !entered) return
     const id = window.setTimeout(() => setBadgeReady(true), 2500)
     return () => window.clearTimeout(id)
-  }, [use3D])
+  }, [use3D, entered])
 
   useEffect(() => {
     if (!use3D || badgeSeen) return
@@ -73,7 +96,7 @@ export default function RoomPage() {
     }
   }, [use3D, badgeSeen, readIntroSeen])
 
-  const showBadge = badgeReady && !badgeSeen && !badgeDismissed
+  const showBadge = entered && badgeReady && !badgeSeen && !badgeDismissed
   const openIntroFromBadge = useCallback(() => {
     setBadgeSeen(true) // closing the intro sets the flag; hide immediately either way
     openIntro({ afterNavigate: '/story#about' })
@@ -145,6 +168,10 @@ export default function RoomPage() {
       {/* 3D scene */}
       <RoomExperience tier={tier} reduced={reduced} onAction={onAction} />
 
+      {/* Start gate (§19.1) — "CLICK TO MENU" overlay above the live canvas,
+          only while the session flag is unseen. Its click runs enterRoom(). */}
+      {!entered && <RoomStart onEnter={onEnter} />}
+
       {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
       <span
         aria-hidden
@@ -156,35 +183,39 @@ export default function RoomPage() {
       {/* Top-right hamburger navigator (all other destinations). */}
       <RoomMenu />
 
-      {/* Identity strip (§15.3) — bottom-left, the HIGHEST of the bottom stack
-          (identity → badge → coach → legend) so nothing collides at 390px. On
-          mobile it's a compact corner card (narrow, links wrap tight); on desktop
-          it sits comfortably above the legend. Fades in with the coach. */}
-      <div
-        className={`fixed bottom-48 left-3 z-30 max-w-[68vw] transition-opacity duration-700 md:bottom-24 md:left-8 md:max-w-sm ${
-          coachVisible ? 'opacity-100' : 'opacity-80'
-        }`}
-      >
-        <div className="glass rounded-2xl px-3.5 py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:px-4 md:py-3">
-          <p className="font-display text-sm font-semibold leading-tight text-ink md:text-base">
-            {identity.name}
-          </p>
-          <p className="mt-0.5 break-keep text-[11px] leading-snug text-ink-dim md:text-xs">
-            {t(identity.line)}
-          </p>
-          <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
-            {identity.quick.map((q) => (
-              <Link
-                key={q.to}
-                to={q.to}
-                className="text-[11px] text-ink-dim underline-offset-2 transition-colors duration-200 hover:text-ink hover:underline md:text-xs"
-              >
-                {t(q.label)}
-              </Link>
-            ))}
+      {/* Bottom stack (§19.1) renders only AFTER entry — the start screen stays
+          minimal like the reference. Identity → badge → coach → Legend. */}
+      {entered && (
+        <>
+          {/* Identity strip (§15.3) — bottom-left, the HIGHEST of the bottom stack
+              (identity → badge → coach → legend) so nothing collides at 390px. On
+              mobile it's a compact corner card (narrow, links wrap tight); on
+              desktop it sits above the legend. Fades in with the coach. */}
+          <div
+            className={`fixed bottom-48 left-3 z-30 max-w-[68vw] transition-opacity duration-700 md:bottom-24 md:left-8 md:max-w-sm ${
+              coachVisible ? 'opacity-100' : 'opacity-80'
+            }`}
+          >
+            <div className="glass rounded-2xl px-3.5 py-2.5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:px-4 md:py-3">
+              <p className="font-display text-sm font-semibold leading-tight text-ink md:text-base">
+                {identity.name}
+              </p>
+              <p className="mt-0.5 break-keep text-[11px] leading-snug text-ink-dim md:text-xs">
+                {t(identity.line)}
+              </p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+                {identity.quick.map((q) => (
+                  <Link
+                    key={q.to}
+                    to={q.to}
+                    className="text-[11px] text-ink-dim underline-offset-2 transition-colors duration-200 hover:text-ink hover:underline md:text-xs"
+                  >
+                    {t(q.label)}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
 
       {/* Intro badge (§15.2) — centre-bottom above the coach, pulsing until seen. */}
       {showBadge && (
@@ -215,24 +246,28 @@ export default function RoomPage() {
         </div>
       )}
 
-      {/* Coach line — centre-bottom above the legend, fades after 5s */}
-      <div
-        aria-hidden
-        className={`pointer-events-none fixed inset-x-0 bottom-24 z-30 flex justify-center px-6 transition-opacity duration-700 md:bottom-28 ${
-          coachVisible ? 'opacity-100' : 'opacity-0'
-        }`}
-      >
-        <span className="glass rounded-full px-4 py-2 text-center text-xs text-ink-dim shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:text-sm">
-          {t(coach)}
-        </span>
-      </div>
+          {/* Coach line — centre-bottom above the legend, fades 5s after entry */}
+          <div
+            aria-hidden
+            className={`pointer-events-none fixed inset-x-0 bottom-24 z-30 flex justify-center px-6 transition-opacity duration-700 md:bottom-28 ${
+              coachVisible ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <span className="glass rounded-full px-4 py-2 text-center text-xs text-ink-dim shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] md:text-sm">
+              {t(coach)}
+            </span>
+          </div>
 
-      {/* First-visit tour chip (§16) — resolves text for the in-canvas driver */}
+          {/* Legend (always-visible menu) — part of the post-entry bottom stack */}
+          <Legend />
+        </>
+      )}
+
+      {/* First-visit tour chip (§16) + desktop hover Tooltip — mounted always;
+          both self-hide until the in-canvas tour/hover fires (the tour itself
+          waits for entry via TourDriver), so they never show on the start gate. */}
       <LabelTour />
-
-      {/* Tooltip (desktop hover) + Legend (always-visible menu) */}
       <Tooltip />
-      <Legend />
     </main>
   )
 }

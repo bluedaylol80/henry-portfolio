@@ -161,8 +161,9 @@ function buildWood(): { map: THREE.CanvasTexture; rough: THREE.CanvasTexture } {
   center.addColorStop(1, 'rgba(0,0,0,0)')
   ctx.fillStyle = center
   ctx.fillRect(0, 0, S, S)
-  // 2) warm gold pool under the desk zone (back-center-left → upper-left of UV)
-  const warm = ctx.createRadialGradient(S * 0.3, S * 0.28, 0, S * 0.3, S * 0.28, S * 0.36)
+  // 2) warm gold pool under the desk zone (back-LEFT corner → upper-left of UV;
+  //    nudged toward the corner as the desk slid in, §19.2)
+  const warm = ctx.createRadialGradient(S * 0.26, S * 0.24, 0, S * 0.26, S * 0.24, S * 0.36)
   warm.addColorStop(0, 'rgba(255,208,155,0.42)')
   warm.addColorStop(0.6, 'rgba(255,208,155,0.16)')
   warm.addColorStop(1, 'rgba(0,0,0,0)')
@@ -242,13 +243,16 @@ function buildWallTexture(warm: boolean): THREE.CanvasTexture {
     ctx.fillRect(0, 0, W, H)
   }
   if (warm) {
-    // back wall: warm gold pool behind the desk zone (left-of-centre) +
-    // cool blue pool near the window end (right side).
-    pool(W * 0.34, H * 0.48, W * 0.44, '255,210,160', 0.66)
-    pool(W * 0.8, H * 0.42, W * 0.36, '165,200,255', 0.5)
+    // back wall (§19.2, pools follow their sources left→right): warm gold pool at
+    // the desk corner, cool blue pool at the window, warm burnt pool at the TV.
+    pool(W * 0.18, H * 0.48, W * 0.4, '255,210,160', 0.64)
+    pool(W * 0.44, H * 0.42, W * 0.3, '165,200,255', 0.5)
+    pool(W * 0.68, H * 0.46, W * 0.4, '255,180,120', 0.6)
   } else {
-    // left wall: single warm pool behind the TV (lower-front of the wall).
-    pool(W * 0.62, H * 0.5, W * 0.46, '255,208,155', 0.62)
+    // left wall (§19.2): warm pool behind the frame (front, high-u end) + a
+    // cooler hint behind the bookshelf zone (mid).
+    pool(W * 0.72, H * 0.5, W * 0.44, '255,208,155', 0.6)
+    pool(W * 0.42, H * 0.52, W * 0.3, '170,200,255', 0.36)
   }
   ctx.globalCompositeOperation = 'source-over'
 

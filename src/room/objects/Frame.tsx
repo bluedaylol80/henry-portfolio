@@ -7,12 +7,13 @@ import { getGlowTexture } from '../textures'
 import { useLang } from '../../lib/i18n'
 
 /**
- * 벽 액자 — the '대표 성과' hotspot (→ /story#work). A big wall frame on the BACK
- * wall (−Z), right side (the reference's TV-wall position), that the centre sofa
- * faces. It shows the wordmark "기획자의 진화" (or "The Evolution of a Planner")
- * with a gold→mint gradient feel, painted onto a canvas texture (reliable
- * Hangul rendering vs. drei Text's default latin font), and a warm gold glow
- * wash on the wall behind it. Texture disposed on unmount / lang change.
+ * 벽 액자 — the '대표 성과' hotspot (→ /story#work). A big wall frame on the LEFT
+ * wall (−X), front (SPEC §19.2 — the reference's left-wall art, where the TV used
+ * to be), its face turned into the room (+X). It shows the wordmark "기획자의 진화"
+ * (or "The Evolution of a Planner") with a gold→mint gradient feel, painted onto
+ * a canvas texture (reliable Hangul rendering vs. drei Text's default latin
+ * font), and a warm gold glow wash on the wall behind it. Texture disposed on
+ * unmount / lang change. The group is rotated so the face points +X.
  */
 const TEXT = {
   ko: ['기획자의', '진화'],
@@ -60,11 +61,14 @@ export default function Frame() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="frame" hit={{ size: [1.82, 1.16, 0.16], position: [0.55, 2.15, -2.3] }}>
-      {/* Back wall (−Z), right side — the reference's TV-wall position. */}
-      <group position={[0.55, 2.15, -2.34]}>
-        {/* broad warm gold wash on the wall behind the frame */}
-        <sprite position={[0, -0.1, -0.03]} scale={[3.8, 3.0, 1]}>
+    <Hotspot id="frame" hit={{ size: [0.16, 1.16, 1.82], position: [-2.3, 1.5, 1.05] }}>
+      {/* Left wall (−X), front — the reference's art-wall position; faces +X. */}
+      <group position={[-2.34, 1.5, 1.05]} rotation={[0, Math.PI / 2, 0]}>
+        {/* broad warm gold wash on the wall behind the frame. noPick: this glow
+            billboard is decorative and sits nearer the camera than the bookshelf
+            behind it — without the flag its huge quad would shadow the bookshelf
+            raycast and steal its hover/click (§19.2/§19.7). */}
+        <sprite position={[0, -0.1, -0.03]} scale={[3.8, 3.0, 1]} userData={{ noPick: true }}>
           <spriteMaterial
             map={glowTex}
             color={PAL.gold}
@@ -75,8 +79,8 @@ export default function Frame() {
             toneMapped={false}
           />
         </sprite>
-        {/* soft warm halo tight around the lit frame */}
-        <sprite position={[0, 0, -0.05]} scale={[2.6, 2.0, 1]}>
+        {/* soft warm halo tight around the lit frame (decorative → noPick). */}
+        <sprite position={[0, 0, -0.05]} scale={[2.6, 2.0, 1]} userData={{ noPick: true }}>
           <spriteMaterial
             map={glowTex}
             color={PAL.deskWarm}

@@ -11,9 +11,9 @@ import { PAL, PHASE_COLORS } from '../palette'
  */
 export default function Bookshelf() {
   return (
-    <Hotspot id="bookshelf" hit={{ size: [0.5, 2.6, 1.78], position: [-2.06, 1.3, -1.15] }}>
-      {/* Anchored to the left wall; the unit runs along Z beside the wall. */}
-      <group position={[-2.06, 0, -1.15]}>
+    <Hotspot id="bookshelf" hit={{ size: [0.5, 2.6, 1.78], position: [-2.06, 1.3, -0.45] }}>
+      {/* Mid LEFT wall (§19.2), the unit runs along Z beside the wall. */}
+      <group position={[-2.06, 0, -0.45]}>
         {/* Side panels + back + top cap */}
         <RoundedBox args={[0.42, 2.5, 0.06]} radius={0.02} smoothness={2} position={[0, 1.25, -0.82]} castShadow receiveShadow>
           <meshStandardMaterial color={PAL.elev} roughness={0.62} metalness={0.12} />

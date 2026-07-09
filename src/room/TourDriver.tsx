@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import * as THREE from 'three'
 import { useThree } from '@react-three/fiber'
-import { ANCHORS, roomState, setTourLabel } from './roomState'
+import { ANCHORS, roomState, onRoomEnter, setTourLabel } from './roomState'
 import { hotspots } from '../content/room'
 
 /**
@@ -24,8 +24,15 @@ import { hotspots } from '../content/room'
  * never on a plain unmount, so StrictMode's dev double-mount and SPA nav-away do
  * not falsely mark it done.
  *
- * Timeline: start 900ms after mount; step through ALL 7 hotspots in content
- * order (= legend order), 650ms per step (~5.4s total).
+ * Entry gate (§19.1): the tour must not begin until the "CLICK TO MENU" start
+ * overlay is dismissed. It arms off `roomState.entered` (true at mount when the
+ * overlay was already seen this session) or the `onRoomEnter` bus, NOT off mount
+ * — so the 900ms delay counts from ENTRY. Crucially, the cancel listeners attach
+ * only when the tour ACTUALLY BEGINS (inside `begin()`), so the entry click that
+ * dismisses the overlay can never be the interaction that cancels the tour.
+ *
+ * Timeline: 900ms after entry, step through ALL 7 hotspots in content order
+ * (= legend order), 650ms per step (~5.4s total).
  *
  * Cancel on ANY interaction (§16.1): `window` pointerdown / wheel / keydown, or
  * pointermove over `gl.domElement` — because desktop mouse movement fights the
@@ -100,12 +107,20 @@ export default function TourDriver() {
       publish()
     }
 
-    // Detach every listener + timer + rAF. Idempotent.
+    // Unsubscribe from the entry bus if we're still waiting on it (no-op once
+    // the tour has begun / after it fired). Reassigned in `armForEntry`.
+    let offEnter: (() => void) | null = null
+
+    // Detach every listener + timer + rAF + the entry subscription. Idempotent.
+    // The cancel listeners are only ATTACHED once the tour begins (see `begin`),
+    // so removing them before that is a harmless no-op.
     const teardown = () => {
       for (const t of timers) window.clearTimeout(t)
       timers.clear()
       if (rafId) cancelAnimationFrame(rafId)
       rafId = 0
+      offEnter?.()
+      offEnter = null
       window.removeEventListener('pointerdown', cancel)
       window.removeEventListener('wheel', cancel)
       window.removeEventListener('keydown', cancel)
@@ -155,24 +170,45 @@ export default function TourDriver() {
       timers.add(t)
     }
 
-    // Kick off after the start delay, then start the per-frame refresh.
-    const start = window.setTimeout(() => {
-      timers.delete(start)
-      if (done) return
-      step(0)
-    }, START_DELAY)
-    timers.add(start)
-    rafId = requestAnimationFrame(loop)
+    // The tour proper: schedule the first chip, start the per-frame refresh, and
+    // — ONLY NOW — attach the cancel listeners. Because attachment happens after
+    // entry (never at mount), the entry click that dismissed the "CLICK TO MENU"
+    // overlay is already consumed and can never be the interaction that cancels
+    // the tour (§19.1). Runs at most once.
+    let begun = false
+    const begin = () => {
+      if (done || begun) return
+      begun = true
+      // The entry event has fired (or we were already entered) — stop listening.
+      offEnter?.()
+      offEnter = null
 
-    // Any interaction cancels immediately (see header rationale).
-    window.addEventListener('pointerdown', cancel)
-    window.addEventListener('wheel', cancel, { passive: true })
-    window.addEventListener('keydown', cancel)
-    el.addEventListener('pointermove', cancel, { passive: true })
+      const start = window.setTimeout(() => {
+        timers.delete(start)
+        if (done) return
+        step(0)
+      }, START_DELAY)
+      timers.add(start)
+      rafId = requestAnimationFrame(loop)
+
+      // Any interaction cancels immediately (see header rationale).
+      window.addEventListener('pointerdown', cancel)
+      window.addEventListener('wheel', cancel, { passive: true })
+      window.addEventListener('keydown', cancel)
+      el.addEventListener('pointermove', cancel, { passive: true })
+    }
+
+    // Arm on room entry (§19.1): begin now if the overlay was already dismissed
+    // this session (`roomState.entered` set at mount), else wait for the bus.
+    if (roomState.entered) {
+      begin()
+    } else {
+      offEnter = onRoomEnter(begin)
+    }
 
     // Plain unmount (StrictMode double-mount / SPA nav-away): clear timers +
-    // listeners + null the bus + clear the tour-owned hover, but DO NOT set the
-    // flag — the tour did not run to an end or a cancel.
+    // listeners + the entry subscription + null the bus + clear the tour-owned
+    // hover, but DO NOT set the flag — the tour did not run to an end or a cancel.
     return () => {
       if (done) return // already ended/cancelled — nothing more to undo
       teardown()

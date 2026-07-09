@@ -148,7 +148,7 @@ export default function Hero() {
             </div>
           </div>
 
-          <blockquote className="hero-quote mt-14 max-w-md border-l-2 border-era-amber pl-4 text-sm italic text-ink-mute md:text-base">
+          <blockquote className="hero-quote mt-14 max-w-md border-l-2 border-era-amber pl-4 text-sm italic text-ink-dim md:text-[1rem]">
             <span className="block break-keep">{quote1}</span>
             <span className="block break-keep">{quote2}</span>
           </blockquote>
