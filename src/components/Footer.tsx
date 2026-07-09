@@ -10,7 +10,7 @@ export default function Footer() {
 
   return (
     <footer className="relative z-10 border-t border-white/5">
-      <div className="container-std flex flex-col items-start gap-6 py-10 text-sm text-ink-mute sm:flex-row sm:items-center sm:justify-between">
+      <div className="container-std flex flex-col items-start gap-6 py-10 text-sm text-ink-dim sm:flex-row sm:items-center sm:justify-between">
         <p className="break-keep">
           © 2026 Henry Lim — <span className="text-ink-dim">{t(footer.tagline)}</span>
         </p>
@@ -52,7 +52,7 @@ export default function Footer() {
               Notion
             </a>
           </div>
-          <span className="text-ink-mute/70">
+          <span className="text-ink-dim/70">
             {t(footer.credit)} · {t(footer.music)}
           </span>
         </div>

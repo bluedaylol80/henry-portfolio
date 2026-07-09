@@ -83,7 +83,7 @@ export default function Contact() {
 
         <h2 className="mt-6 max-w-5xl font-display text-[clamp(2.75rem,8vw,6.5rem)] font-bold leading-[1.02]">
           <span className="block overflow-hidden pb-[0.14em]">
-            <span data-title-line className="text-gradient block break-keep">
+            <span data-title-line className="text-era-amber block break-keep">
               {t(contact.title)}
             </span>
           </span>

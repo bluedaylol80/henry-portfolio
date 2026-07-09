@@ -164,7 +164,7 @@ export default function AIChapter() {
             <span className="block overflow-hidden pb-[0.12em]">
               <span data-line className="block">
                 <span className="text-ink">{t(ai.titleA)}</span>
-                <span className="text-gradient-cyan">{t(ai.titleB)}</span>
+                <span className="text-era-cyan">{t(ai.titleB)}</span>
               </span>
             </span>
           </h2>
@@ -234,7 +234,7 @@ export default function AIChapter() {
             <DiagramChip posClass="left-1/2 top-[88%]" label={t(ai.diagram.verifier)} />
 
             {/* 24/7 CLOUD badge */}
-            <div className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-full border border-era-cyan/40 bg-base/60 px-3 py-1.5 backdrop-blur-md">
+            <div className="absolute right-3 top-3 z-20 flex items-center gap-2 rounded-full border border-era-cyan/40 bg-abyss/60 px-3 py-1.5 backdrop-blur-md">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-era-cyan opacity-70" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-era-cyan" />

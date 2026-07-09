@@ -53,7 +53,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'ko'}
         onClick={() => setLang('ko')}
-        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         KO
       </button>
@@ -61,7 +61,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
-        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         EN
       </button>
@@ -164,7 +164,7 @@ export default function LegendHeader() {
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
         scrolled
-          ? 'border-b border-white/5 bg-base/70 backdrop-blur-md'
+          ? 'border-b border-white/5 bg-abyss/70 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
@@ -175,7 +175,7 @@ export default function LegendHeader() {
           className="flex shrink-0 items-baseline gap-2"
           aria-label="Henry Lim"
         >
-          <span className="text-gradient font-display text-2xl font-bold leading-none">H.</span>
+          <span className="text-era-amber font-display text-2xl font-bold leading-none">H.</span>
         </Link>
 
         {/* Chips row — horizontally scrollable on mobile, no page overflow. */}

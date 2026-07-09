@@ -24,23 +24,40 @@ const SCREEN_VERT = /* glsl */ `
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
   }
 `
+// §20.2-5: the old shader filled the panel edge-to-edge with gold scanlines and
+// read as an orange heater grill. Redesign toward the reference: a MOSTLY DARK
+// deep-navy panel at low overall alpha with a slow, faint glow, plus ONE small
+// bright warm-burnt "wordmark" band (≤15% of the panel height) drifting slowly.
+// The burnt back-halo (sprite) carries the warmth; the screen itself stays quiet.
+// Kept self-contained (uniforms + this frag) so an owner-supplied screens/tv.png
+// can swap in later with minimal change.
 const SCREEN_FRAG = /* glsl */ `
   uniform float uTime;
-  uniform vec3 uColorA;
-  uniform vec3 uColorB;
+  uniform vec3 uBase;    // deep navy panel base
+  uniform vec3 uAccent;  // warm burnt accent for the one bright band
   varying vec2 vUv;
   void main() {
-    // slowly scrolling horizontal scanlines
-    float scroll = vUv.y * 26.0 - uTime * 1.1;
-    float lines = 0.5 + 0.5 * sin(scroll * 3.14159);
-    lines = pow(lines, 3.0);
-    // a bright horizontal "wordmark" band drifting up the panel
-    float band = smoothstep(0.06, 0.0, abs(fract(vUv.y - uTime * 0.06) - 0.5) - 0.04);
-    // gentle vertical column glow sweeping across
-    float sweep = 0.5 + 0.5 * sin(vUv.x * 3.4 + uTime * 0.7);
-    vec3 col = mix(uColorA, uColorB, sweep);
-    float a = 0.22 + lines * 0.62 + band * 0.5;
-    gl_FragColor = vec4(col * (0.55 + lines * 0.85 + band * 0.8), a);
+    // Very soft, slow radial-ish glow around the panel centre — barely there.
+    float glow = smoothstep(0.9, 0.15, distance(vUv, vec2(0.5, 0.52)));
+    float breathe = 0.5 + 0.5 * sin(uTime * 0.35);
+    // ONE thin bright wordmark band drifting slowly up the panel. Its Gaussian
+    // profile is ~0.09 UV tall total (< 15% of the panel) — a single element.
+    float bandY = fract(uTime * 0.035);          // slow upward drift
+    float d = abs(vUv.y - bandY);
+    float band = exp(-d * d / (2.0 * 0.018 * 0.018)); // narrow bright line
+    // subtle horizontal shimmer only within the band so it reads as content.
+    float shimmer = 0.75 + 0.25 * sin(vUv.x * 22.0 + uTime * 2.0);
+    band *= shimmer;
+
+    // Base panel: dark navy, faintly lifted by the soft glow (kept low).
+    vec3 col = uBase + uBase * glow * (0.35 + 0.15 * breathe);
+    // Add the warm band on top.
+    col += uAccent * band * 0.9;
+
+    // Overall low alpha so the dark panel doesn't read as a lit slab; the band
+    // pushes alpha up locally so the one bright element stays visible.
+    float a = 0.5 + glow * 0.12 + band * 0.45;
+    gl_FragColor = vec4(col, a);
   }
 `
 
@@ -51,8 +68,9 @@ export default function Tv() {
     const m = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColorA: { value: new THREE.Color(PAL.goldDeep) },
-        uColorB: { value: new THREE.Color(PAL.gold) },
+        // deep navy base (mostly-dark panel) + warm burnt accent for the one band
+        uBase: { value: new THREE.Color('#0a1424') },
+        uAccent: { value: new THREE.Color(PAL.burnt) },
       },
       vertexShader: SCREEN_VERT,
       fragmentShader: SCREEN_FRAG,

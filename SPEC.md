@@ -733,6 +733,32 @@ journey.ts outputs stat: `8건` → `20건` (label 시스템 기획·개편, sub
 - Luma gate: central 50%-crop ∈ [46, 92] at 1600×1000/10s. typecheck/lint/build 0. /story /brief /career regression 0/0. Brief arc line computed colour = #AAB8D0; ink-mute computes #7C90B8.
 - og.png NOT in scope for the agents (reshot post-merge by the orchestrator).
 
+## 20. v12 — Owner feedback: color-system root fix + room prop fidelity (2026-07-09)
+
+Owner directives: ① every page must use contrasted font colours — the offending colour should stop being used at all, and ALL gradient text goes; ② room prop fidelity — desk PC/laptop read broken, chair reads like a stool, a blue line shows left of the server rack, the plant sits inside the TV console. Evidence: owner's live screenshot `shots-ref/owner-ref-v11-live.png`.
+
+### 20.1 Color-system root fix (Track B)
+- **Rename the color token `base` → `abyss`** in tailwind.config.js. Root cause: a color named `base` makes Tailwind emit a COLOR `.text-base`/`.md:text-base` that collides with the SIZE utility of the same name — this is why the room identity name (`RoomPage.tsx:200 … text-ink md:text-base`) renders navy-on-navy on live. Renaming kills the entire bug class. Sweep every usage: `bg-base` (incl. `/NN` opacity forms), `border-base`, `from/via/to-base`, `text-base`-as-colour (none intended — verify each hit is size-intent and leave those as the SIZE class). index.css `@apply bg-base` in body updates too. `.text-base`/`md:text-base` SIZE usages stay untouched.
+- **Gradient text removal (owner: 그라데이션 표현 제거)**: replace every `.text-gradient` usage with solid `text-era-amber`, every `.text-gradient-cyan` with solid `text-era-cyan` (15 usages: RoomPage wordmark ×2, LegendHeader, Nav, Hero line2, Contact title, Career chapter titles, CareerHub hub-title, BriefPage h1 + stat values, PhasePage ph-title, AIChapter titleB, Achievements emphasis). Then DELETE both utilities from index.css so they cannot come back.
+- **ink-mute retirement from user-facing text (owner: 해당 폰트색 아예 쓰지 말자)**: sweep every `text-ink-mute` in rendered UI → `text-ink-dim` — includes the ROOM page (Legend hint chips, Tooltip arrow, RoomMenu labels, intro-badge ×), `.eyebrow` utility, Footer, CareerHub, PhasePage, About, Career, Achievements (tags + footnotes), Hero cue, Whisper, Skills, Preloader %, Nav/LegendHeader lang toggles, `placeholder:text-ink-mute`. EXCEPTION: DebugPanel (dev-only) may keep it. The `ink.mute` token itself stays defined (borders/decoration) but must not colour text.
+- **Contrast crawl (verification)**: on /, /story, /brief, /career, /career/planning collect every visible text node's computed color; FAIL if any computes to `#0A1931` (navy-on-navy class collision), `#5F7195` (old mute), or `#7C90B8` (retired mute) — and no element may have `background-clip: text` (gradient leftovers).
+
+### 20.2 Room prop fidelity (Track A — judge each against `owner-ref-v11-live.png` + `owner-ref-myroom.png`)
+1. **CableStrip: DELETE** (RoomShell) — the metallic floor tube catches the cool light and reads as a stray blue line left of the server rack. The reference has no floor cable. Remove component + usage.
+2. **Plant relocation** (RoomShell) — it currently sits at x=1.05 INSIDE the TV console's footprint (console spans x≈0.1–1.6): leaves poke through the console top. Move to the clear wall gap between the window and the TV console (≈ `[-0.35, 0, -2.02]`), verify zero intersection from the resting camera AND from a slightly-orbited view (owner's screenshot angle).
+3. **Chair fix** (RoomShell) — the backrest sits on local −Z (toward the desk) so it buries inside the desk slab and the chair reads as a stool. Flip the backrest to the viewer side (local +Z, tilt −0.16), raise it to gaming-chair proportions (height ≈0.8, top ≈y1.15), pull the chair slightly out (z −1.35 → ≈−1.25). From the resting camera you should see a proper chair BACK like the reference.
+4. **Desk gear** (Desk.tsx) — (a) monitor: the intro-video plane at `emissiveIntensity 0.9 + toneMapped:false` blows out to a white slab on bright frames — drop to ≈0.45 (userData.baseEmissive follows) and verify a bright video frame no longer reads as a blank white board; (b) laptop: it currently shows its BACK to the camera — re-orient (rotation ≈ +0.4~0.6) so the lid + mint dashboard face the viewer (+X/+Z side); keep the bars inside the lid bounds; (c) keep the lamp.
+5. **TV screen calm-down** (Tv.tsx) — the gold scanline shader fills the panel edge-to-edge and reads as an orange heater grill (owner screenshot). Redesign toward the reference: MOSTLY DARK panel (deep navy base, overall alpha low) with a subtle slow-moving glow and ONE small bright element (thin drifting wordmark band ≤15% of the panel), warm burnt accent only. The burnt back-halo carries the warmth — the screen itself stays quiet. (An owner-supplied `screens/tv.png` texture will replace this later — keep the shader self-contained for an easy swap.)
+6. **Window slat gobo height** (RoomShell) — the patch floats near the wall top; lower its centre to ≈y2.3 (reads as a mid-wall window like the reference), keep clear of the TV panel (TV top ≈y2.11 at x0.85; the patch sits at x≈−0.25 so only height needs care).
+7. Every change: iterate with 1600×1000 screenshots (resting view AND an orbited view like the owner's screenshot: drag right ~200px equivalent), luma gate [46,92] holds, all 7 hotspots still raycast-hit, typecheck/lint/build 0.
+
+### 20.3 QA
+- Room screenshot: no floor line artifact, plant clear of the console, chair reads as a chair, monitor shows the video without blowing out, laptop lid faces the viewer, TV mostly dark with a small bright element, slats mid-wall.
+- Identity strip name "임현택 · Henry Lim"/"Henry Lim" VISIBLE at md+ (the .text-base collision is dead by construction — no color named base exists).
+- Contrast crawl passes on all 5 routes (20.1). No `background-clip:text` anywhere.
+- Wordmark/titles show SOLID amber/cyan (no gradients) and read ≥4.5:1.
+- typecheck/lint/build 0 · /story shoot 3-profile 0/0 · luma [46,92].
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

@@ -69,7 +69,7 @@ export default function BriefPage() {
             variants={item}
             className="mt-5 break-keep font-display text-[clamp(2.5rem,7vw,5rem)] font-bold leading-[1.02]"
           >
-            <span className="text-gradient">{t(brief.title)}</span>
+            <span className="text-era-amber">{t(brief.title)}</span>
           </motion.h1>
           <motion.p
             variants={item}
@@ -108,7 +108,7 @@ export default function BriefPage() {
             {brief.stats.map((s, i) => (
               <li key={i} className="bezel">
                 <div className="bezel-core flex flex-col items-start gap-1 p-4 md:p-5">
-                  <span className="font-display text-2xl font-bold tabular-nums text-gradient-cyan md:text-3xl">
+                  <span className="font-display text-2xl font-bold tabular-nums text-era-cyan md:text-3xl">
                     {lang === 'ko' ? s.value : s.valueEn}
                   </span>
                   <span className="break-keep text-xs text-ink-dim md:text-sm">{t(s.label)}</span>

@@ -121,7 +121,7 @@ export default function Hero() {
                 <span className="hero-line block">{line1}</span>
               </span>
               <span className="block overflow-hidden pb-[0.06em]">
-                <span className="hero-line block text-gradient">{line2}</span>
+                <span className="hero-line block text-era-amber">{line2}</span>
               </span>
             </h1>
 
@@ -154,7 +154,7 @@ export default function Hero() {
           </blockquote>
         </div>
 
-        <div className="hero-cue pointer-events-none absolute inset-x-0 bottom-5 flex flex-col items-center gap-3 text-ink-mute">
+        <div className="hero-cue pointer-events-none absolute inset-x-0 bottom-5 flex flex-col items-center gap-3 text-ink-dim">
           <span className="font-display text-[0.6rem] uppercase tracking-[0.4em]">{t(hero.scrollCue)}</span>
           <span className="relative block h-12 w-px overflow-hidden bg-white/10">
             <span className="cue-travel absolute inset-x-0 top-0 block h-1/2 bg-gradient-to-b from-transparent via-era-amber to-transparent" />

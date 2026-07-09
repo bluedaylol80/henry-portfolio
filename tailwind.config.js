@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        base: '#0A1931',
+        abyss: '#0A1931',
         elev: '#1A2B4C',
         ink: {
           DEFAULT: '#F8F9FA',

@@ -105,15 +105,19 @@ export default function Desk() {
           <RoundedBox args={[1.06, 0.64, 0.04]} radius={0.02} smoothness={2} castShadow>
             <meshStandardMaterial color="#050b18" roughness={0.35} metalness={0.3} />
           </RoundedBox>
+          {/* §20.2-4a: emissiveIntensity was 0.9 with toneMapped:false, so a
+              bright video frame blew out to a white slab. Dropped to 0.45 (and
+              userData.baseEmissive follows, so Hotspot's hover boost scales from
+              the new base) — the video reads without becoming a blank white board. */}
           <mesh position={[0, 0, 0.025]}>
             <planeGeometry args={[0.98, 0.56]} />
             <meshStandardMaterial
               map={videoTexture}
               emissiveMap={videoTexture}
               emissive="#ffffff"
-              emissiveIntensity={0.9}
+              emissiveIntensity={0.45}
               toneMapped={false}
-              userData={{ baseEmissive: 0.9 }}
+              userData={{ baseEmissive: 0.45 }}
             />
           </mesh>
           {/* stand */}
@@ -127,8 +131,11 @@ export default function Desk() {
           </mesh>
         </group>
 
-        {/* Open laptop (right), emissive mint dashboard on the screen */}
-        <group position={[0.62, 0.79, 0.42]} rotation={[0, -0.5, 0]}>
+        {/* Open laptop (right), emissive mint dashboard on the screen. §20.2-4b:
+            the lid used to face −X (its BACK to the camera); rotated to +0.5 so
+            the lid + mint dashboard face the viewer (+X/+Z side). Bars stay inside
+            the lid bounds. */}
+        <group position={[0.62, 0.79, 0.42]} rotation={[0, 0.5, 0]}>
           {/* base / keyboard deck */}
           <RoundedBox args={[0.56, 0.03, 0.4]} radius={0.015} smoothness={2} castShadow>
             <meshStandardMaterial color={PAL.base} roughness={0.4} metalness={0.35} />

@@ -109,18 +109,18 @@ export default function Career() {
                 className="career-row relative grid grid-cols-[28px_1fr] gap-x-5 pb-11 last:pb-0 md:grid-cols-[160px_44px_1fr] md:gap-x-6 md:pb-14"
               >
                 <div className="hidden md:block md:pt-1 md:text-right">
-                  <span className="font-display text-sm tabular-nums text-ink-mute">{entry.period}</span>
+                  <span className="font-display text-sm tabular-nums text-ink-dim">{entry.period}</span>
                 </div>
 
                 <div className="relative flex justify-center">
                   <span
-                    className="relative z-10 mt-1.5 block h-3 w-3 rounded-full ring-4 ring-base"
+                    className="relative z-10 mt-1.5 block h-3 w-3 rounded-full ring-4 ring-abyss"
                     style={{ background: PHASE_COLOR[entry.phase], boxShadow: `0 0 12px ${PHASE_COLOR[entry.phase]}` }}
                   />
                 </div>
 
                 <div className="group -ml-4 rounded-2xl border border-white/0 px-4 py-3 transition-all duration-300 hover:border-white/10 hover:bg-white/[0.04] hover:backdrop-blur-md md:-ml-5 md:px-5 md:py-4 md:hover:translate-x-1">
-                  <span className="mb-1 block font-display text-xs tabular-nums text-ink-mute md:hidden">
+                  <span className="mb-1 block font-display text-xs tabular-nums text-ink-dim md:hidden">
                     {entry.period}
                   </span>
                   <h3 className="break-keep text-xl font-semibold text-ink md:text-2xl">{t(entry.company)}</h3>
@@ -135,7 +135,7 @@ export default function Career() {
                   <Link
                     to={`/career/${PHASE_SLUG[entry.phase]}`}
                     data-cursor
-                    className="mt-3 inline-flex items-center gap-1 text-xs text-ink-mute transition-colors duration-200 hover:text-era-cyan"
+                    className="mt-3 inline-flex items-center gap-1 text-xs text-ink-dim transition-colors duration-200 hover:text-era-cyan"
                   >
                     {t(career.moreLabel)}
                     <span aria-hidden>→</span>
@@ -149,14 +149,14 @@ export default function Career() {
               <div className="hidden md:block" />
               <div className="relative flex justify-center">
                 <span
-                  className="relative z-10 block h-4 w-4 rounded-full ring-4 ring-base"
+                  className="relative z-10 block h-4 w-4 rounded-full ring-4 ring-abyss"
                   style={{
                     background: 'linear-gradient(135deg,#F5B041,#E67E22,#4FACFE)',
                     boxShadow: '0 0 16px rgba(230,126,34,0.7)',
                   }}
                 />
               </div>
-              <p className="text-gradient break-keep font-display text-lg font-semibold md:text-2xl">
+              <p className="text-era-amber break-keep font-display text-lg font-semibold md:text-2xl">
                 {t(career.arcNote)}
               </p>
             </li>

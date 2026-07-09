@@ -29,7 +29,7 @@ export default function Tooltip() {
       style={{ left: state.x + nudgeX, top: state.y + nudgeY }}
     >
       <span className="font-medium">{t(spot.label)}</span>
-      <span className="mx-1.5 text-ink-mute">→</span>
+      <span className="mx-1.5 text-ink-dim">→</span>
       <span className="text-era-cyan">{t(spot.hint)}</span>
     </div>
   )

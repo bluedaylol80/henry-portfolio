@@ -35,7 +35,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'ko'}
         onClick={() => setLang('ko')}
-        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         KO
       </button>
@@ -43,7 +43,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
-        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         EN
       </button>
@@ -197,7 +197,7 @@ export default function Nav() {
         transition={{ duration: reduce ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
         className={`fixed inset-x-0 top-0 z-40 transition-colors duration-300 ${
           scrolled
-            ? 'border-b border-white/5 bg-base/70 backdrop-blur-md'
+            ? 'border-b border-white/5 bg-abyss/70 backdrop-blur-md'
             : 'border-b border-transparent bg-transparent'
         }`}
       >
@@ -209,7 +209,7 @@ export default function Nav() {
             className="flex items-baseline gap-2"
             aria-label="Henry Lim"
           >
-            <span className="text-gradient font-display text-2xl font-bold leading-none">H.</span>
+            <span className="text-era-amber font-display text-2xl font-bold leading-none">H.</span>
             <span className="hidden text-sm font-medium tracking-wide text-ink-dim sm:inline">
               Henry Lim
             </span>
@@ -327,7 +327,7 @@ export default function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: reduce ? 0 : 0.35 }}
-            className="fixed inset-0 z-30 flex flex-col justify-center bg-base/95 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-30 flex flex-col justify-center bg-abyss/95 backdrop-blur-xl md:hidden"
           >
             <motion.nav
               variants={overlayList}
@@ -344,7 +344,7 @@ export default function Nav() {
                   onClick={(e) => handleNav(e, item.id)}
                   className="flex items-baseline gap-4 break-keep font-display text-4xl font-semibold text-ink transition-colors duration-200 hover:text-era-cyan"
                 >
-                  <span className="text-sm font-normal text-ink-mute">
+                  <span className="text-sm font-normal text-ink-dim">
                     0{i + 1}
                   </span>
                   {t(item.label)}

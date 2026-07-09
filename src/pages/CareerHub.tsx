@@ -134,7 +134,7 @@ export default function CareerHub() {
             <p className="hub-eyebrow eyebrow">{t(hub.label)}</p>
             <h1 className="mt-6 break-keep font-display text-[clamp(2.5rem,7vw,5rem)] font-bold leading-[1.02]">
               <span className="block overflow-hidden pb-[0.1em]">
-                <span className="hub-title text-gradient block">{t(hub.title)}</span>
+                <span className="hub-title text-era-amber block">{t(hub.title)}</span>
               </span>
             </h1>
             <p className="hub-lede mt-8 break-keep text-lg leading-relaxed text-ink-dim md:text-xl">
@@ -153,7 +153,7 @@ export default function CareerHub() {
               <blockquote className="break-keep pl-4 font-display text-xl font-medium italic leading-relaxed text-ink md:pl-6 md:text-[1.7rem] md:leading-[1.45]">
                 {t(hub.mission)}
               </blockquote>
-              <figcaption className="mt-5 break-keep pl-4 text-sm text-ink-mute md:pl-6">
+              <figcaption className="mt-5 break-keep pl-4 text-sm text-ink-dim md:pl-6">
                 {t(hub.missionSource)}
               </figcaption>
             </div>
@@ -187,7 +187,7 @@ export default function CareerHub() {
                     />
                     <span
                       aria-hidden
-                      className="font-display text-2xl font-bold tabular-nums text-ink-mute transition-colors duration-300 md:text-3xl"
+                      className="font-display text-2xl font-bold tabular-nums text-ink-dim transition-colors duration-300 md:text-3xl"
                       style={{ minWidth: '2.5rem' }}
                     >
                       {p.num}
@@ -195,7 +195,7 @@ export default function CareerHub() {
                     <div className="min-w-0 flex-1">
                       <h2 className="break-keep text-xl font-bold text-ink md:text-2xl">{t(p.name)}</h2>
                       <p className="mt-1 break-keep text-sm text-ink-dim md:text-base">{t(p.tagline)}</p>
-                      <p className="mt-2.5 break-keep font-display text-xs tabular-nums text-ink-mute md:text-sm">
+                      <p className="mt-2.5 break-keep font-display text-xs tabular-nums text-ink-dim md:text-sm">
                         {p.period} · {t(p.companies)}
                       </p>
                     </div>

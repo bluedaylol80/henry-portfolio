@@ -219,8 +219,11 @@ export default function RoomShell({ full }: { full: boolean }) {
       {/* ── Soft colour glows (like the reference's TV glow) ───── */}
       {/* Cool window patch with venetian slats on the BACK wall, between the
           desk corner and the TV (§19.2 — a modest panel, narrowed + dimmed so it
-          reads as one window, not a wall of blinds crowding the TV). */}
-      <mesh position={[-0.25, 2.55, -2.37]}>
+          reads as one window, not a wall of blinds crowding the TV). §20.2-6:
+          lowered to centre ≈y2.3 so it reads as a mid-wall window (was floating
+          near the wall top); stays clear of the TV panel (TV top ≈y2.11 at x0.85,
+          this sits at x−0.25). */}
+      <mesh position={[-0.25, 2.3, -2.37]}>
         <planeGeometry args={[1.1, 1.7]} />
         <meshBasicMaterial
           map={slatTex}
@@ -281,7 +284,6 @@ export default function RoomShell({ full }: { full: boolean }) {
       <Chair />
       <Sofa />
       <CoffeeTable />
-      <CableStrip />
 
       {/* Soft contact shadow (grounds objects even on lite where maps are off) */}
       <ContactShadows
@@ -302,9 +304,11 @@ export default function RoomShell({ full }: { full: boolean }) {
  *  Non-hotspot props — small modules kept in-file (private).
  * ───────────────────────────────────────────────────────────── */
 
-/** Potted plant in the back-right corner, pulled left of the server toward the
- *  TV/window so the server rack no longer occludes it from the resting camera
- *  (§19.2 — the reference shows a prominent plant beside the TV, not a sliver). */
+/** Potted plant on the floor in the clear wall gap between the window and the TV
+ *  console (§20.2-2). It previously sat at x=1.05 INSIDE the console footprint
+ *  (console spans x≈0.1–1.6) so its leaves poked through the console top; moved
+ *  to x≈−0.35 (window↔TV gap) with zero mesh intersection from the resting AND
+ *  a slightly-orbited camera. */
 function Plant() {
   const leaves: [number, number, number, number][] = [
     [0, 0.56, 0, 0.26],
@@ -312,7 +316,7 @@ function Plant() {
     [-0.15, 0.47, -0.04, 0.2],
   ]
   return (
-    <group position={[1.05, 0, -1.88]}>
+    <group position={[-0.35, 0, -2.02]}>
       {/* pot */}
       <mesh position={[0, 0.16, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[0.17, 0.13, 0.32, 16]} />
@@ -367,9 +371,12 @@ function Guitar() {
  *  accent stripe, star base + gas column. Mesh-lean for the ≤95 budget. */
 function Chair() {
   return (
-    // tucked toward the desk in the corner, back to the viewer (§19.2 — less
-    // pulled-out than before so it reads as parked at the desk).
-    <group position={[-1.62, 0, -1.35]} rotation={[0, 0.1, 0]}>
+    // §20.2-3: the backrest used to sit on local −Z (toward the desk), burying it
+    // in the desk slab so the chair read as a stool. The backrest now faces the
+    // VIEWER (local +Z) with a −0.16 recline, raised to gaming-chair proportions
+    // (top ≈y1.2), and the whole chair is pulled slightly out (z −1.35 → −1.25) so
+    // the resting camera sees a proper tall chair BACK like the reference.
+    <group position={[-1.62, 0, -1.25]} rotation={[0, 0.1, 0]}>
       {/* star base (5-point cylinder) */}
       <mesh position={[0, 0.06, 0]} castShadow receiveShadow>
         <cylinderGeometry args={[0.34, 0.36, 0.05, 5]} />
@@ -384,8 +391,9 @@ function Chair() {
       <RoundedBox args={[0.56, 0.12, 0.52]} radius={0.05} smoothness={2} position={[0, 0.56, 0]} castShadow receiveShadow>
         <meshStandardMaterial color={PAL.sofa} roughness={0.7} metalness={0.05} />
       </RoundedBox>
-      {/* backrest (tilted back) with an integrated gold accent via emissive */}
-      <RoundedBox args={[0.54, 0.72, 0.12]} radius={0.06} smoothness={2} position={[0, 0.96, -0.26]} rotation={[0.16, 0, 0]} castShadow receiveShadow>
+      {/* backrest on the VIEWER side (+Z), tall + reclined, gold accent emissive.
+          height 0.8, centre y0.8 → top ≈y1.2; +Z 0.24 offset clears the seat. */}
+      <RoundedBox args={[0.54, 0.8, 0.12]} radius={0.06} smoothness={2} position={[0, 0.8, 0.24]} rotation={[-0.16, 0, 0]} castShadow receiveShadow>
         <meshStandardMaterial color={PAL.sofa} emissive={PAL.gold} emissiveIntensity={0.06} roughness={0.7} metalness={0.05} />
       </RoundedBox>
     </group>
@@ -467,25 +475,6 @@ function Gamepad() {
   )
 }
 
-/** A thin emissive cable strip snaking across the floor from the desk toward
- *  the server in the back-right corner. */
-function CableStrip() {
-  const pts = useMemo(
-    () =>
-      new THREE.CatmullRomCurve3([
-        new THREE.Vector3(-1.65, 0.02, -1.6),
-        new THREE.Vector3(-0.6, 0.02, -1.4),
-        new THREE.Vector3(0.4, 0.02, -1.5),
-        new THREE.Vector3(1.3, 0.02, -1.6),
-        new THREE.Vector3(1.9, 0.02, -1.5),
-      ]),
-    [],
-  )
-  const geom = useMemo(() => new THREE.TubeGeometry(pts, 40, 0.018, 6, false), [pts])
-  useEffect(() => () => geom.dispose(), [geom])
-  return (
-    <mesh geometry={geom} castShadow>
-      <meshStandardMaterial color="#0a1526" roughness={0.5} metalness={0.4} />
-    </mesh>
-  )
-}
+/* §20.2-1: the CableStrip floor tube was DELETED — its metal caught the cool
+ * window light and read as a stray blue line left of the server rack; the
+ * my-room-in-3d reference has no floor cable. Component + usage removed. */

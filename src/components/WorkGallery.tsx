@@ -91,7 +91,7 @@ export default function WorkGallery({
           aria-modal="true"
           aria-label={t(active.caption)}
           onClick={close}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-base/90 p-6 backdrop-blur-md transition-opacity duration-300 ease-out md:p-10"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-abyss/90 p-6 backdrop-blur-md transition-opacity duration-300 ease-out md:p-10"
           style={{ opacity: reduce || shown ? 1 : 0 }}
         >
           <button

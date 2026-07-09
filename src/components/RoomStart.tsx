@@ -58,7 +58,7 @@ export default function RoomStart({ onEnter }: { onEnter: () => void }) {
         ko: '방으로 들어가기 — 이 방의 모든 사물이 메뉴입니다',
         en: 'Enter the room — every object here is a menu',
       })}
-      className={`fixed inset-0 z-40 flex cursor-pointer flex-col items-center justify-center bg-base/70 px-6 backdrop-blur-[2px] transition-opacity duration-[600ms] ease-lux ${
+      className={`fixed inset-0 z-40 flex cursor-pointer flex-col items-center justify-center bg-abyss/70 px-6 backdrop-blur-[2px] transition-opacity duration-[600ms] ease-lux ${
         leaving ? 'pointer-events-none opacity-0' : 'opacity-100'
       }`}
     >

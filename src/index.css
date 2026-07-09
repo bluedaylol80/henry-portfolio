@@ -13,7 +13,7 @@ html {
 }
 
 body {
-  @apply bg-base text-ink font-sans antialiased;
+  @apply bg-abyss text-ink font-sans antialiased;
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
@@ -85,23 +85,7 @@ html.lenis body {
   }
 
   .eyebrow {
-    @apply font-display text-xs uppercase tracking-[0.35em] text-ink-mute md:text-sm;
-  }
-
-  .text-gradient {
-    background: linear-gradient(100deg, #f5b041 0%, #e67e22 55%, #4facfe 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-  }
-
-  .text-gradient-cyan {
-    background: linear-gradient(100deg, #4facfe 0%, #00f2fe 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
+    @apply font-display text-xs uppercase tracking-[0.35em] text-ink-dim md:text-sm;
   }
 
   .glass {

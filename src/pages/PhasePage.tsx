@@ -93,9 +93,9 @@ function NavCard({
           />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">{label}</span>
+          <span className="block text-xs uppercase tracking-[0.2em] text-ink-dim">{label}</span>
           <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">
-            <span className="font-display text-ink-mute">{num}</span> {name}
+            <span className="font-display text-ink-dim">{num}</span> {name}
           </span>
         </span>
       </div>
@@ -185,7 +185,7 @@ export default function PhasePage() {
           {/* 1 · Hero */}
           <Link
             to="/career"
-            className="ph-back group inline-flex items-center gap-2 text-sm text-ink-mute transition-colors duration-300 hover:text-ink"
+            className="ph-back group inline-flex items-center gap-2 text-sm text-ink-dim transition-colors duration-300 hover:text-ink"
           >
             <ArrowRight className="-scale-x-100 h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" />
             {t(sectionLabels.backToMap)}
@@ -198,7 +198,7 @@ export default function PhasePage() {
           <h1 className="mt-6 max-w-4xl break-keep font-display text-[clamp(2.25rem,6vw,4.5rem)] font-bold leading-[1.04]">
             <span className="block overflow-hidden pb-[0.1em]">
               {useGradientCyanClass ? (
-                <span className="ph-title text-gradient-cyan block">{t(phase.title)}</span>
+                <span className="ph-title text-era-cyan block">{t(phase.title)}</span>
               ) : (
                 <span
                   className="ph-title block"
@@ -314,7 +314,7 @@ export default function PhasePage() {
                     style={{ borderLeftColor: hex }}
                   >
                     <div className="flex items-baseline gap-4">
-                      <span className="font-display text-sm tabular-nums text-ink-mute">
+                      <span className="font-display text-sm tabular-nums text-ink-dim">
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <h3 className="break-keep text-lg font-semibold text-ink md:text-xl">{t(s.title)}</h3>
@@ -380,7 +380,7 @@ export default function PhasePage() {
                       <ArrowRight className="transition-transform duration-300 ease-out4 group-hover:translate-x-1" />
                     </span>
                     <span className="min-w-0 flex-1">
-                      <span className="block text-xs uppercase tracking-[0.2em] text-ink-mute">
+                      <span className="block text-xs uppercase tracking-[0.2em] text-ink-dim">
                         {t(sectionLabels.next)}
                       </span>
                       <span className="mt-1.5 block break-keep text-base font-semibold text-ink md:text-lg">

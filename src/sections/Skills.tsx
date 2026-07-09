@@ -106,7 +106,7 @@ export default function Skills() {
                   >
                     <span className="absolute inset-y-0 left-0 w-full -translate-x-full bg-gradient-to-r from-transparent via-era-cyan/[0.09] to-transparent transition-transform duration-[900ms] ease-out group-hover:translate-x-full" />
                   </span>
-                  <span className="relative w-8 shrink-0 font-display text-sm tabular-nums text-ink-mute transition-colors duration-300 group-hover:text-era-cyan md:text-base">
+                  <span className="relative w-8 shrink-0 font-display text-sm tabular-nums text-ink-dim transition-colors duration-300 group-hover:text-era-cyan md:text-base">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span className="relative break-keep text-xl font-medium text-ink transition-transform duration-300 ease-out group-hover:translate-x-2 md:text-2xl">

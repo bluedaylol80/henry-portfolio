@@ -244,7 +244,7 @@ export default function IntroVideo() {
       role="dialog"
       aria-modal="true"
       aria-label={t(intro.ariaLabel)}
-      className="fixed inset-0 z-[55] flex items-center justify-center bg-base"
+      className="fixed inset-0 z-[55] flex items-center justify-center bg-abyss"
     >
       <video
         ref={videoRef}

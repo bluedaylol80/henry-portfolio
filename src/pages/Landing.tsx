@@ -83,7 +83,7 @@ export default function Landing({ tier }: { tier: QualityTier }) {
         ref={scrimRef}
         data-scrim
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-[5] bg-base"
+        className="pointer-events-none fixed inset-0 z-[5] bg-abyss"
         style={{ opacity: 0 }}
       />
       <main id="main" className="relative z-10">

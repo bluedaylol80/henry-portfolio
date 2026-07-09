@@ -165,7 +165,7 @@ export default function Achievements() {
             // Flagship (index 0) is the wide featured cell.
             const isFlagship = i === 0
             const statClass = `inline-block font-display font-bold leading-none tracking-tight tabular-nums text-[clamp(2.75rem,6vw,4.5rem)] ${
-              item.emphasis ? 'text-gradient-cyan' : 'text-ink'
+              item.emphasis ? 'text-era-cyan' : 'text-ink'
             }`
             // Cards with a linkTo become a full click target (SPEC §15.5-4):
             // keyboard-focusable role="link", Enter/Space navigates, cursor pointer.
@@ -210,7 +210,7 @@ export default function Achievements() {
                       <h3 className={`font-semibold text-ink break-keep ${isFlagship ? 'text-xl md:text-2xl' : 'text-lg'}`}>
                         {t(item.title)}
                       </h3>
-                      <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-mute">
+                      <span className="mt-1 shrink-0 font-mono text-[11px] uppercase tracking-[0.18em] text-ink-dim">
                         {item.tag}
                       </span>
                     </div>
@@ -224,7 +224,7 @@ export default function Achievements() {
 
                   {/* Role · proof footnote — small muted line at the card bottom. */}
                   {item.footnote && (
-                    <p className="mt-3 border-t border-white/5 pt-2 text-[11px] leading-relaxed text-ink-mute break-keep">
+                    <p className="mt-3 border-t border-white/5 pt-2 text-[11px] leading-relaxed text-ink-dim break-keep">
                       {t(item.footnote)}
                     </p>
                   )}

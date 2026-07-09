@@ -38,7 +38,7 @@ export default function Legend() {
             className="shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium text-ink-dim transition-colors duration-200 hover:bg-white/10 hover:text-ink md:text-sm"
           >
             <span className="text-ink">{t(h.label)}</span>
-            <span className="ml-1.5 hidden text-ink-mute sm:inline">· {t(h.hint)}</span>
+            <span className="ml-1.5 hidden text-ink-dim sm:inline">· {t(h.hint)}</span>
           </button>
         ))}
       </div>

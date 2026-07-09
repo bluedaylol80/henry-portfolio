@@ -36,7 +36,7 @@ function LangRow() {
         type="button"
         aria-pressed={lang === 'ko'}
         onClick={() => setLang('ko')}
-        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         KO
       </button>
@@ -44,7 +44,7 @@ function LangRow() {
         type="button"
         aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
-        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-mute hover:text-ink'}`}
+        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
       >
         EN
       </button>
@@ -138,11 +138,11 @@ export default function RoomMenu() {
             aria-label={t(menu.title)}
             // Panel = the bezel "core" (§18.2): full-bleed navy glass with a hairline
             // inner ring + inset top highlight so the panel edge reads machined.
-            className="fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-base/95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl"
+            className="fixed inset-0 z-[45] flex flex-col overflow-y-auto bg-abyss/95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] ring-1 ring-inset ring-white/[0.06] backdrop-blur-xl"
           >
             {/* Header — title + close X */}
             <div className="container-std flex items-center justify-between pt-6 md:pt-10">
-              <span className="font-display text-sm uppercase tracking-[0.35em] text-ink-mute">
+              <span className="font-display text-sm uppercase tracking-[0.35em] text-ink-dim">
                 {t(menu.title)}
               </span>
               <button

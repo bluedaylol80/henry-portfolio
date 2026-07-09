@@ -34,14 +34,14 @@ export default function JourneyBg({ color }: { color?: PhaseColor }) {
     `radial-gradient(1000px 900px at 82% 78%, ${rgba(secondary, 0.05)}, transparent 60%)`
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-base" aria-hidden="true">
+    <div className="fixed inset-0 z-0 overflow-hidden bg-abyss" aria-hidden="true">
       {/* Drifting radial wash */}
       <div
         className="animate-bg-drift absolute inset-[-10%]"
         style={{ background: radialLayer }}
       />
       {/* Flat dim layer — pushes the gradients back so journey text pops (SPEC §10.2). */}
-      <div className="absolute inset-0 bg-base/35" />
+      <div className="absolute inset-0 bg-abyss/35" />
       {/* Vignette — keeps content legible, adds depth */}
       <div
         className="absolute inset-0"

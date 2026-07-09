@@ -144,11 +144,11 @@ export default function RoomPage() {
 
   if (!use3D) {
     return (
-      <main id="main" className="relative min-h-[100svh] overflow-hidden bg-base">
+      <main id="main" className="relative min-h-[100svh] overflow-hidden bg-abyss">
         {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
         <span
           aria-hidden
-          className="text-gradient fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
+          className="text-era-amber fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
         >
           H.
         </span>
@@ -162,7 +162,7 @@ export default function RoomPage() {
   return (
     <main
       id="main"
-      className="relative h-[100svh] overflow-hidden bg-base"
+      className="relative h-[100svh] overflow-hidden bg-abyss"
       style={{ touchAction: 'none' }}
     >
       {/* 3D scene */}
@@ -175,7 +175,7 @@ export default function RoomPage() {
       {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
       <span
         aria-hidden
-        className="text-gradient fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
+        className="text-era-amber fixed left-4 top-4 z-30 font-display text-2xl font-bold leading-none md:left-8 md:top-8"
       >
         H.
       </span>
@@ -236,7 +236,7 @@ export default function RoomPage() {
               type="button"
               onClick={() => setBadgeDismissed(true)}
               aria-label={t({ ko: '닫기', en: 'Dismiss' })}
-              className="ml-0.5 flex h-6 w-6 items-center justify-center rounded-full text-ink-mute transition-colors duration-200 hover:bg-white/10 hover:text-ink"
+              className="ml-0.5 flex h-6 w-6 items-center justify-center rounded-full text-ink-dim transition-colors duration-200 hover:bg-white/10 hover:text-ink"
             >
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />

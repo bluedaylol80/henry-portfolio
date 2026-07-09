@@ -137,7 +137,7 @@ export default function Preloader() {
   return (
     <div
       ref={rootRef}
-      className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-base"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-abyss"
       aria-hidden="true"
     >
       <div className="flex items-end font-display text-4xl font-bold tracking-[0.18em] text-ink md:text-6xl">
@@ -163,7 +163,7 @@ export default function Preloader() {
         </div>
         <div className="flex items-baseline font-display text-sm tabular-nums tracking-widest text-ink-dim">
           <span ref={counterRef}>0</span>
-          <span className="ml-0.5 text-ink-mute">%</span>
+          <span className="ml-0.5 text-ink-dim">%</span>
         </div>
       </div>
     </div>

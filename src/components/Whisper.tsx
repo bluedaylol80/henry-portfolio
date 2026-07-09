@@ -175,7 +175,7 @@ export default function Whisper() {
           {t(whisper.title)}
         </h3>
         {!offline && (
-          <span className="font-display text-xs tabular-nums text-ink-mute">
+          <span className="font-display text-xs tabular-nums text-ink-dim">
             {shown.length > 0 ? `${shown.length}` : ''}
           </span>
         )}
@@ -233,7 +233,7 @@ export default function Whisper() {
           disabled={disabled}
           placeholder={t(whisper.placeholder)}
           aria-label={t(whisper.title)}
-          className="h-11 min-w-0 flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 text-sm text-ink placeholder:text-ink-mute outline-none transition-colors duration-200 hover:border-white/30 focus-visible:border-era-cyan disabled:cursor-not-allowed disabled:opacity-50 md:text-base"
+          className="h-11 min-w-0 flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 text-sm text-ink placeholder:text-ink-dim outline-none transition-colors duration-200 hover:border-white/30 focus-visible:border-era-cyan disabled:cursor-not-allowed disabled:opacity-50 md:text-base"
         />
 
         <button
@@ -247,7 +247,7 @@ export default function Whisper() {
 
       {/* 상태 라인 */}
       <div className="mt-3 flex min-h-[1.25rem] items-center justify-between gap-3 text-xs">
-        <span aria-live="polite" className={error === 'failed' ? 'text-ink-mute' : 'text-era-cyan'}>
+        <span aria-live="polite" className={error === 'failed' ? 'text-ink-dim' : 'text-era-cyan'}>
           {error === 'failed'
             ? t(whisper.offline)
             : error === 'blocked'
@@ -257,10 +257,10 @@ export default function Whisper() {
                 : ''}
         </span>
         {!offline && !done && (
-          <span className="shrink-0 tabular-nums text-ink-mute">{remaining}</span>
+          <span className="shrink-0 tabular-nums text-ink-dim">{remaining}</span>
         )}
         {!offline && done && (
-          <span className="shrink-0 text-ink-mute">{t(whisper.already)}</span>
+          <span className="shrink-0 text-ink-dim">{t(whisper.already)}</span>
         )}
       </div>
     </div>

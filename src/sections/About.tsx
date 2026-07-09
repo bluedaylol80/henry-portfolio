@@ -177,7 +177,7 @@ export default function About() {
                         style={{ background: PHASE_COLORS[i], boxShadow: `0 0 12px ${PHASE_COLORS[i]}` }}
                       />
                       <div>
-                        <span className="block font-display text-[0.7rem] tracking-widest text-ink-mute">
+                        <span className="block font-display text-[0.7rem] tracking-widest text-ink-dim">
                           0{i + 1}
                         </span>
                         <span className="block text-lg font-medium text-ink">{t(step)}</span>
