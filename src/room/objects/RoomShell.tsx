@@ -359,10 +359,14 @@ function Plant() {
  *  Suspends locally (§23.1). */
 function Guitar() {
   return (
-    <group position={[-1.9, 0, -1.32]} rotation={[0, 0, 0.12]}>
-      {/* §23.6-calib: preRotX=0.05 / preRotZ=−0.02 true the guitar's small ~8°
-          baked lean so it hangs plumb BEFORE the group's deliberate 0.12-rad
-          lean toward the left wall (a posed lean, not a defect). */}
+    <group position={[-2.16, 0, 0.6]} rotation={[0, 0, 0.12]}>
+      {/* §23.7-yaw: the flush bookshelf now occupies the mid-left wall (footprint to
+          x−0.83, z∈[−1.5,0.6]), so the guitar is moved to the CLEAR left-wall
+          stretch just FORWARD of the bookshelf (z0.6, in the gap before the frame at
+          z1.05), near the wall (x−2.16). Keeps its intentional ≈0.12-rad Z-lean
+          toward the left wall (a posed lean, not a defect). preRotX=0.05 / preRotZ=−0.02 true
+          the small ~8° baked lean so it hangs plumb BEFORE that deliberate lean.
+          rotY=−0.6 angles the body toward the viewer. */}
       <Suspense fallback={null}>
         <GlbModel slug="guitar" height={1.0} rotY={-0.6} preRotX={0.05} preRotZ={-0.02} />
       </Suspense>
@@ -376,13 +380,16 @@ function Guitar() {
  *  the reference). Found visually. Suspends locally (§23.1). */
 function Chair() {
   return (
-    <group position={[-1.62, 0, -1.25]}>
-      {/* §23.6-calib: preRotX=0.05 / preRotZ=0.22 stand the chair plumb (measured
-          ~13° roll + 6° pitch; wheelbase levelled + back post vertical in the
-          silhouette). rotY=π/2 turns the seat/armrests to FACE the desk (behind
-          it at −Z), so the chair back reads toward the viewer. Found visually. */}
+    <group position={[-1.45, 0, -1.2]}>
+      {/* §23.7-yaw (2026-07-11): the old rotY=π/2 jammed the chair SIDEWAYS into the
+          desk. The chair's internal yaw is ~+45° off axis; rotY=0.78 turns the
+          seat to face the desk (world −Z) with the back toward the viewer, axis-
+          aligned (calibration render confirmed the seat opening faces −Z). A tiny
+          +0.12 life offset keeps it from looking robotically square. It sits at
+          z−1.2, IN FRONT of the desktop front edge (≈z−1.54) so it never clips the
+          desk. preRotX=0.05 / preRotZ=0.22 keep the plumb levelling. */}
       <Suspense fallback={null}>
-        <GlbModel slug="chair" height={1.25} rotY={Math.PI / 2} preRotX={0.05} preRotZ={0.22} />
+        <GlbModel slug="chair" height={1.25} rotY={0.78 + 0.12} preRotX={0.05} preRotZ={0.22} />
       </Suspense>
     </group>
   )
@@ -394,11 +401,14 @@ function Chair() {
 function Sofa() {
   return (
     <group position={[0.5, 0, 1.15]}>
-      {/* §23.6-calib: preRotZ=−0.19 levels the sofa's ~11° baked roll (all four
-          feet now sit on a level line; it read as floating/tilted before). The
-          GLB's seat opening faces −Z raw, so rotY=0 already faces the TV (−Z). */}
+      {/* §23.7-yaw (2026-07-11): the sofa read ~30–40° diagonal to the rug because
+          its GLB internal yaw is ~+18° off axis. rotY=0.32 snaps it axis-aligned
+          (measured snapToAxis 18°→1°, obbLongEdge 24°→6°), so its back edge is now
+          PARALLEL to the rug edge and the seat faces EXACTLY −Z (toward the TV) —
+          calibration render confirmed the back slab toward the viewer, seat toward
+          −Z. preRotZ=−0.19 keeps the ~11° roll levelling (feet on a level line). */}
       <Suspense fallback={null}>
-        <GlbModel slug="sofa" width={1.9} rotY={0} preRotZ={-0.19} />
+        <GlbModel slug="sofa" width={1.9} rotY={0.32} preRotZ={-0.19} />
       </Suspense>
     </group>
   )

@@ -36,23 +36,25 @@ export default function Server() {
   })
 
   return (
-    <Hotspot id="server" hit={{ size: [0.78, 1.58, 0.72], position: [2.05, 0.75, -1.65] }}>
-      <group position={[2.05, 0, -1.65]}>
-        {/* §23.3 + §23.6-calib: owner-image GLB server rack, height 1.6.
-            preRotX=0.30 levels the ~18° baked forward pitch (measured PCA −17.9°,
-            confirmed plumb in the side silhouette). The GLB's richer mesh/vent
-            face sits on its −Z side; rotY=−π/2+0.35 turns that face into the room
-            toward the +X/+Z viewer corner (§23.6). Suspends locally (§23.1). */}
+    <Hotspot id="server" hit={{ size: [1.34, 1.58, 0.82], position: [1.95, 0.75, -1.65] }}>
+      <group position={[1.95, 0, -1.65]}>
+        {/* §23.7-yaw (2026-07-11): owner-image GLB server rack, height 1.6.
+            preRotX=0.30 keeps the ~18° baked-pitch plumb correction. The GLB's rich
+            LED rack-unit face is on the +X side of the levelled pose; rotY=−2.618
+            snaps the rack axis-aligned AND turns that LED face to EXACTLY +Z (into
+            the room, toward the camera) — the calibration render confirmed the
+            blue-lit rack units face +Z. x1.95 keeps the aligned footprint (half-X
+            0.65) fully on the floor slab. Suspends locally (§23.1). */}
         <Suspense fallback={null}>
-          <GlbModel slug="server" height={1.6} rotY={-Math.PI / 2 + 0.35} preRotX={0.3} />
+          <GlbModel slug="server" height={1.6} rotY={-2.618} preRotX={0.3} />
         </Suspense>
-        {/* 3 ADDED emissive LED dots on the front (room-facing) face (§23.3 — the
-            dark room needs the LED read). Positioned visually just proud of the
-            face now that the rack faces the +X/+Z corner. Blink independently. No
+        {/* 3 ADDED emissive LED dots on the +Z-facing rack face (§23.3 — the dark
+            room needs the LED read). The aligned face front is at z≈+0.76; the dots
+            sit just proud of it, spread along X. Blink independently. No
             userData.baseEmissive → the hover-boost path leaves them alone. */}
         <group ref={ledsRef}>
           {LED_COLORS.map((c, i) => (
-            <mesh key={i} position={[0.31, 1.18, -0.1 + i * 0.06]}>
+            <mesh key={i} position={[-0.06 + i * 0.06, 1.18, 0.63]}>
               <sphereGeometry args={[0.02, 10, 10]} />
               <meshStandardMaterial color={c} emissive={c} emissiveIntensity={0.9} toneMapped={false} />
             </mesh>

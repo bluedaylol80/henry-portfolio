@@ -74,30 +74,33 @@ export default function Desk() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="desk" hit={{ size: [2.1, 1.5, 1.0], position: [-1.7, 0.95, -1.6] }}>
-      {/* Desk in the back-LEFT corner (§19.2). GLB rotated so its monitor faces
-          +Z (into the room). */}
-      <group position={[-1.7, 0, -2.0]}>
-        {/* §23.4 + §23.6-calib: owner-image GLB desk (width 2.0), monitor+lamp
-            baked in. preRotX=0.16 / preRotZ=−0.06 level the ~16° baked pitch +
-            slight roll so the desktop surface is horizontal (the monitor.png
-            plane + laptop below sit flat ON it). rotY=π+0.55 keeps the corner-desk
-            yaw so the screen faces the resting camera. Suspends locally (§21.1). */}
+    <Hotspot id="desk" hit={{ size: [2.2, 1.5, 1.2], position: [-1.5, 0.95, -1.75] }}>
+      {/* Desk FLUSH along the BACK wall (§23.7-yaw). Flushed by the DESKTOP BODY
+          back edge (z−0.42 of the footprint centre), so center_z = −2.4 + 0.42 +
+          0.02 = −1.96 rests the desktop back at the back-wall plane (+0.02 gap) and
+          the desktop extends FORWARD into the room (front edge ≈z−1.54), leaving
+          room for the chair at z≈−1.2. The baked monitor reclines back BEHIND the
+          wall plane (hidden by the opaque wall box). x−1.5 clears the left wall /
+          bookshelf and the window (x−0.25). */}
+      <group position={[-1.5, 0, -1.96]}>
+        {/* §23.7-yaw (2026-07-11): the desk was the only diagonal object (old
+            rotY=π+0.55). The TripoSR desk's internal yaw is ~−40° off axis; rotY=
+            2.443 snaps the desktop long-edge parallel to the back wall and the
+            monitor to face EXACTLY +Z (measured: snapToAxis −42°→−2°, obbLongEdge
+            −37°→+3°). preRotX=0.16 / preRotZ=−0.06 keep the plumb levelling so the
+            desktop is horizontal (the monitor.png plane + laptop sit flat ON it).
+            Suspends locally (§21.1). */}
         <Suspense fallback={null}>
-          <GlbModel slug="desk" width={2.0} rotY={Math.PI + 0.55} preRotX={0.16} preRotZ={-0.06} />
+          <GlbModel slug="desk" width={2.0} rotY={2.443} preRotX={0.16} preRotZ={-0.06} />
         </Suspense>
 
-        {/* Monitor overlay — position/tilt found visually against the yawed GLB.
-            §23.6-calib: the desk GLB is yawed rotY=π+0.55 to face the resting
-            camera, so the overlay keeps the SAME 0.55 about Y to stay coplanar in
-            azimuth. The baked screen reclines ~25° from vertical (measured in the
-            side silhouette after preRotX=0.16), so the overlay back-tilt is raised
-            0.12→0.34 to lie FLAT on the glass (was standing proud → the bottom
-            floated with an air gap). Position moved to the baked screen CENTRE in
-            desk-local space (−0.13, 1.52, 0.02) — triangulated with debug markers
-            against the yawed GLB (the old x=0 landed to the RIGHT of the screen).
-            Carries the cyan glow halo + dashboard plane. */}
-        <group position={[-0.13, 1.52, 0.02]} rotation={[0.34, 0.55, 0]}>
+        {/* Monitor overlay — re-anchored for §23.7-yaw (rotY=2.443, monitor faces
+            +Z). Screen-finder measured the GLB glass centre at desk-local ≈(0.05,
+            1.56, −0.20) reclined ~12° back, so the overlay sits just in FRONT of
+            the glass (z−0.08) with a +X-axis back-tilt (0.2) to lie FLAT on it. No
+            Y-rotation — the monitor is axis-aligned to +Z. Carries the cyan glow
+            halo + dashboard plane. */}
+        <group position={[0.05, 1.56, -0.08]} rotation={[0.2, 0, 0]}>
           {/* soft cyan glow halo behind the screen (kept from the procedural
               build; noPick decorative billboard, §19.7). */}
           <sprite position={[0, 0, -0.14]} scale={[1.5, 1.05, 1]} userData={{ noPick: true }}>
@@ -121,11 +124,12 @@ export default function Desk() {
         </group>
 
         {/* KEPT procedural laptop (§23.4) on the GLB desktop surface, beside the
-            monitor. Lid stands OPEN (recline ≈0.32 rad) and the unit yaws +0.55 to
-            face the resting camera like the desk. §23.6-calib: after preRotX=0.16
-            the desk surface top sits ≈y1.0 (marker-verified) — base raised 0.95→1.0
-            so the laptop rests ON the surface, no sink. */}
-        <group position={[0.5, 1.0, 0.34]} rotation={[0, 0.55, 0]}>
+            monitor. Lid stands OPEN (recline ≈0.32 rad) and the unit faces +Z like
+            the desk (§23.7-yaw — no more 0.55 azimuth). The desktop surface top
+            sits ≈y1.28 after the new normalisation (screen-finder measured), so the
+            base rests at 1.28 (no sink). Sits to the +X side of the monitor, near
+            the desk front edge. */}
+        <group position={[0.6, 1.28, 0.32]} rotation={[0, 0, 0]}>
           {/* base / keyboard deck */}
           <RoundedBox args={[0.56, 0.03, 0.4]} radius={0.015} smoothness={2} castShadow>
             <meshStandardMaterial color={PAL.base} roughness={0.4} metalness={0.35} />

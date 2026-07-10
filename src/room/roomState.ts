@@ -38,10 +38,10 @@ export interface Anchor {
 //   left wall (−X):  bookshelf (mid, +guitar) · frame (front) · speaker (front)
 //   centre:          sofa facing −Z (the TV) · coffee table + mug + gamepad
 export const ANCHORS: Record<string, Anchor> = {
-  desk: { target: [-1.7, 1.32, -1.9], camera: [1.2, 2.7, 2.6] },
+  desk: { target: [-1.5, 1.32, -1.7], camera: [1.2, 2.7, 2.6] },
   tv: { target: [0.85, 1.6, -2.0], camera: [2.6, 2.7, 2.9] },
-  bookshelf: { target: [-1.95, 1.45, -0.45], camera: [1.5, 2.7, 2.9] },
-  server: { target: [2.05, 1.0, -1.65], camera: [4.0, 2.6, 1.9] },
+  bookshelf: { target: [-1.6, 1.45, -0.45], camera: [1.5, 2.7, 2.9] },
+  server: { target: [1.95, 1.0, -1.65], camera: [4.0, 2.6, 1.9] },
   coffee: { target: [0.5, 0.95, -0.15], camera: [2.7, 2.2, 2.6] },
   speaker: { target: [-1.95, 0.7, 1.85], camera: [1.5, 2.2, 3.8] },
   frame: { target: [-2.0, 1.5, 1.05], camera: [1.6, 2.4, 3.6] },
