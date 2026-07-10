@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
+import { useLoader } from '@react-three/fiber'
 import { ContactShadows, RoundedBox } from '@react-three/drei'
 import { PAL } from '../palette'
 import {
   getWoodTextures,
   getGlowTexture,
   getSlatTexture,
-  getRugTexture,
   getWallTexture,
   disposeRoomTextures,
 } from '../textures'
@@ -37,7 +37,6 @@ export default function RoomShell({ full }: { full: boolean }) {
   const wood = useMemo(() => getWoodTextures(), [])
   const glowTex = useMemo(() => getGlowTexture(), [])
   const slatTex = useMemo(() => getSlatTexture(), [])
-  const rugTex = useMemo(() => getRugTexture(), [])
   const wallWarmTex = useMemo(() => getWallTexture(true), []) // back wall
   const wallCoolTex = useMemo(() => getWallTexture(false), []) // left wall
 
@@ -176,12 +175,13 @@ export default function RoomShell({ full }: { full: boolean }) {
         />
       </mesh>
 
-      {/* Soft navy fabric rug under the centre seating / coffee-table zone —
-          shifted right with the sofa/table to sit on the TV axis (§19.2). */}
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0.5, 0.012, 0.15]} receiveShadow>
-        <planeGeometry args={[3.2, 2.8]} />
-        <meshStandardMaterial map={rugTex} roughness={0.95} metalness={0} color={PAL.rugTone} />
-      </mesh>
+      {/* Owner-delivered rug (§21.6) under the centre seating / coffee-table
+          zone — a real fabric PNG (textures/rug.png) replaces the old procedural
+          navy rug. Suspends locally so a loading texture can't blank the canvas
+          (§21.1). userData.noPick so it can never shadow a hotspot raycast. */}
+      <Suspense fallback={null}>
+        <Rug />
+      </Suspense>
 
       {/* ── Walls — finite thick boxes (§17.3) ─────────────────── */}
       {/* Back wall (−Z): box centre z=−2.47, thickness 0.14 → inner face stays
@@ -303,6 +303,30 @@ export default function RoomShell({ full }: { full: boolean }) {
 /* ─────────────────────────────────────────────────────────────
  *  Non-hotspot props — small modules kept in-file (private).
  * ───────────────────────────────────────────────────────────── */
+
+/** Owner-delivered rug (§21.6) — a flat fabric plane under the sofa/coffee-table
+ *  zone. Plane 2.3(x) × 2.7(z), rotated flat (−π/2), centred [0.5, 0.006, 0.45]
+ *  so it spans the coffee table ([0.5,0,−0.12]) and the sofa front ([0.5,0,1.15]).
+ *  y=0.006 sits just above the wood floor top (y≈0.001) — no z-fighting shimmer
+ *  observed; polygonOffset only if a shot shows one (§21.6). No emissive.
+ *  userData.noPick so the flat quad never shadows a hotspot raycast (§21.6). */
+function Rug() {
+  // BASE_URL-prefixed for GitHub Pages (§21.1); never root-absolute.
+  const tex = useLoader(THREE.TextureLoader, import.meta.env.BASE_URL + 'textures/rug.png')
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 8
+  return (
+    <mesh
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0.5, 0.006, 0.45]}
+      receiveShadow
+      userData={{ noPick: true }}
+    >
+      <planeGeometry args={[2.3, 2.7]} />
+      <meshStandardMaterial map={tex} roughness={0.95} metalness={0} />
+    </mesh>
+  )
+}
 
 /** Potted plant on the floor in the clear wall gap between the window and the TV
  *  console (§20.2-2). It previously sat at x=1.05 INSIDE the console footprint

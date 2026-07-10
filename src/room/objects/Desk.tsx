@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { Suspense } from 'react'
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
+import { useLoader } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
@@ -8,65 +8,64 @@ import { getGlowTexture } from '../textures'
 
 /**
  * 데스크 ('컴퓨터') — the intro hotspot. A desk slab against the BACK wall (−Z),
- * center-left, holding a monitor that plays BASE_URL+'intro.mp4' as a muted
- * looping VideoTexture, an open laptop with an emissive mint dashboard, and a
- * warm desk lamp. A NON-hotspot gaming chair sits in front (in RoomShell).
- * Click → openIntro({ afterNavigate:'/story#about' }) (wired via action 'intro').
+ * center-left, holding a monitor and an open laptop (both now owner-delivered
+ * dashboard stills), plus a warm desk lamp. A NON-hotspot gaming chair sits in
+ * front (in RoomShell). Click → openIntro({ afterNavigate:'/story#about' })
+ * (wired via action 'intro').
+ *
+ * §21.3/§21.4 v13: the monitor's intro.mp4 VideoTexture pipeline and the
+ * animated laptop mint bars are RETIRED — the owner delivered static dashboard
+ * stills (`screens/monitor.png`, `screens/laptop.png`). Both are textured
+ * emissive planes (map + emissiveMap + emissive #ffffff + toneMapped:false + a
+ * matching userData.baseEmissive so Hotspot's hover-boost scales correctly).
+ * `intro.mp4` itself STAYS in public/ — the DOM IntroOverlay ('소개 영상')
+ * still uses it; only the in-scene VideoTexture (and its decode cost) is gone.
  */
+
+/** Monitor screen — owner still (screens/monitor.png), aspect 1.6 (1280×800).
+ *  Suspends on useLoader; wrapped locally in <Suspense> so it can't blank the
+ *  whole room canvas while loading (§21.1). */
+function MonitorScreen() {
+  const tex = useLoader(THREE.TextureLoader, import.meta.env.BASE_URL + 'screens/monitor.png')
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 8
+  return (
+    <mesh position={[0, 0, 0.025]}>
+      <planeGeometry args={[0.98, 0.6125]} />
+      <meshStandardMaterial
+        map={tex}
+        emissiveMap={tex}
+        emissive="#ffffff"
+        emissiveIntensity={0.45}
+        toneMapped={false}
+        userData={{ baseEmissive: 0.45 }}
+      />
+    </mesh>
+  )
+}
+
+/** Laptop lid screen — owner still (screens/laptop.png), aspect 1.6. Suspends
+ *  locally (§21.1). */
+function LaptopScreen() {
+  const tex = useLoader(THREE.TextureLoader, import.meta.env.BASE_URL + 'screens/laptop.png')
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 8
+  return (
+    <mesh position={[0, 0, 0.013]}>
+      <planeGeometry args={[0.5, 0.3125]} />
+      <meshStandardMaterial
+        map={tex}
+        emissiveMap={tex}
+        emissive="#ffffff"
+        emissiveIntensity={0.55}
+        toneMapped={false}
+        userData={{ baseEmissive: 0.55 }}
+      />
+    </mesh>
+  )
+}
+
 export default function Desk() {
-  const barsRef = useRef<THREE.Group>(null)
-
-  // Create the video + texture exactly once per fiber (survives StrictMode's
-  // mount→cleanup→mount without leaking a second element).
-  const [{ video, videoTexture }] = useState(() => {
-    const el = document.createElement('video')
-    el.src = import.meta.env.BASE_URL + 'intro.mp4'
-    el.crossOrigin = 'anonymous'
-    el.loop = true
-    el.muted = true
-    el.playsInline = true
-    el.preload = 'auto'
-    const tex = new THREE.VideoTexture(el)
-    tex.colorSpace = THREE.SRGBColorSpace
-    tex.minFilter = THREE.LinearFilter
-    tex.magFilter = THREE.LinearFilter
-    return { video: el, videoTexture: tex }
-  })
-
-  // Play while mounted; fully tear down only on a REAL unmount. StrictMode
-  // fires cleanup then immediately re-runs setup on the same fiber, so we defer
-  // disposal to a microtask and cancel it if setup runs again (remount).
-  const aliveRef = useRef(true)
-  useEffect(() => {
-    aliveRef.current = true
-    video.play().catch(() => {})
-    return () => {
-      video.pause()
-      aliveRef.current = false
-      queueMicrotask(() => {
-        if (aliveRef.current) return // remounted (StrictMode) — keep resources
-        videoTexture.dispose()
-        video.removeAttribute('src')
-        video.load()
-      })
-    }
-  }, [video, videoTexture])
-
-  // Gentle animated laptop dashboard bars (emissive intensity flicker).
-  useFrame((state) => {
-    if (document.hidden || !barsRef.current) return
-    const t = state.clock.elapsedTime
-    barsRef.current.children.forEach((child, i) => {
-      const mesh = child as THREE.Mesh
-      const mat = mesh.material as THREE.MeshStandardMaterial
-      const target = 0.6 + Math.abs(Math.sin(t * (0.7 + i * 0.18) + i)) * 0.9
-      mat.emissiveIntensity += (target - mat.emissiveIntensity) * 0.08
-      const h = 0.12 + Math.abs(Math.sin(t * (0.5 + i * 0.2) + i * 1.3)) * 0.16
-      mesh.scale.y = h / 0.2
-      mesh.position.y = (h / 0.2) * 0.1 - 0.1
-    })
-  })
-
   const glowTex = getGlowTexture()
 
   return (
@@ -87,7 +86,7 @@ export default function Desk() {
           <meshStandardMaterial color={PAL.base} roughness={0.8} metalness={0.05} />
         </mesh>
 
-        {/* Monitor — video texture, faces +Z */}
+        {/* Monitor — owner dashboard still, faces +Z */}
         <group position={[-0.2, 1.3, 0.12]}>
           {/* soft glow halo behind the screen (like the reference TV glow).
               noPick: decorative billboard, never a raycast target (§19.7). */}
@@ -102,24 +101,17 @@ export default function Desk() {
               toneMapped={false}
             />
           </sprite>
-          <RoundedBox args={[1.06, 0.64, 0.04]} radius={0.02} smoothness={2} castShadow>
+          {/* §21.3: bezel grew 1.06×0.64 → 1.06×0.70 to match the 1.6-aspect image. */}
+          <RoundedBox args={[1.06, 0.70, 0.04]} radius={0.02} smoothness={2} castShadow>
             <meshStandardMaterial color="#050b18" roughness={0.35} metalness={0.3} />
           </RoundedBox>
-          {/* §20.2-4a: emissiveIntensity was 0.9 with toneMapped:false, so a
-              bright video frame blew out to a white slab. Dropped to 0.45 (and
-              userData.baseEmissive follows, so Hotspot's hover boost scales from
-              the new base) — the video reads without becoming a blank white board. */}
-          <mesh position={[0, 0, 0.025]}>
-            <planeGeometry args={[0.98, 0.56]} />
-            <meshStandardMaterial
-              map={videoTexture}
-              emissiveMap={videoTexture}
-              emissive="#ffffff"
-              emissiveIntensity={0.45}
-              toneMapped={false}
-              userData={{ baseEmissive: 0.45 }}
-            />
-          </mesh>
+          {/* §21.3: static owner dashboard (screens/monitor.png) replaces the
+              intro.mp4 VideoTexture; emissiveIntensity 0.45 (§20.2-4a value
+              carries over) so it reads without becoming a blank white board.
+              Suspends locally (§21.1). */}
+          <Suspense fallback={null}>
+            <MonitorScreen />
+          </Suspense>
           {/* stand */}
           <mesh position={[0, -0.42, 0]} castShadow>
             <boxGeometry args={[0.12, 0.24, 0.06]} />
@@ -131,10 +123,9 @@ export default function Desk() {
           </mesh>
         </group>
 
-        {/* Open laptop (right), emissive mint dashboard on the screen. §20.2-4b:
-            the lid used to face −X (its BACK to the camera); rotated to +0.5 so
-            the lid + mint dashboard face the viewer (+X/+Z side). Bars stay inside
-            the lid bounds. */}
+        {/* Open laptop (right) — owner dashboard still on the lid. §20.2-4b: the
+            lid used to face −X (its BACK to the camera); rotated to +0.5 so the
+            lid + dashboard face the viewer (+X/+Z side). */}
         <group position={[0.62, 0.79, 0.42]} rotation={[0, 0.5, 0]}>
           {/* base / keyboard deck */}
           <RoundedBox args={[0.56, 0.03, 0.4]} radius={0.015} smoothness={2} castShadow>
@@ -145,25 +136,12 @@ export default function Desk() {
             <RoundedBox args={[0.56, 0.38, 0.02]} radius={0.012} smoothness={2} castShadow>
               <meshStandardMaterial color="#050b18" roughness={0.35} metalness={0.3} />
             </RoundedBox>
-            <mesh position={[0, 0, 0.013]}>
-              <planeGeometry args={[0.5, 0.32]} />
-              <meshStandardMaterial color="#06121f" roughness={0.5} />
-            </mesh>
-            {/* dashboard bars */}
-            <group ref={barsRef} position={[0, -0.01, 0.02]}>
-              {[0, 1].map((i) => (
-                <mesh key={i} position={[-0.09 + i * 0.18, 0, 0]}>
-                  <boxGeometry args={[0.11, 0.2, 0.008]} />
-                  <meshStandardMaterial
-                    color={i % 2 === 0 ? PAL.mint : PAL.cyan}
-                    emissive={i % 2 === 0 ? PAL.mint : PAL.cyan}
-                    emissiveIntensity={0.8}
-                    toneMapped={false}
-                    userData={{ baseEmissive: 0.8 }}
-                  />
-                </mesh>
-              ))}
-            </group>
+            {/* §21.4: static owner dashboard (screens/laptop.png) replaces the
+                animated mint bars + the flat inner plane. 0.5 × 0.3125 (aspect
+                1.6) sits inside the lid bounds; suspends locally (§21.1). */}
+            <Suspense fallback={null}>
+              <LaptopScreen />
+            </Suspense>
           </group>
         </group>
 

@@ -759,6 +759,56 @@ Owner directives: ① every page must use contrasted font colours — the offend
 - Wordmark/titles show SOLID amber/cyan (no gradients) and read ≥4.5:1.
 - typecheck/lint/build 0 · /story shoot 3-profile 0/0 · luma [46,92].
 
+## 21. v13 — Owner-delivered image asset wiring (2026-07-10)
+
+Owner produced the §20-proposed assets. All 6 are ALREADY in the repo (sizes verified):
+
+| file | px | goes to |
+| --- | --- | --- |
+| `public/screens/tv.png` | 1280×720 | TV panel (replaces the §20.2-5 shader) |
+| `public/screens/monitor.png` | 1280×800 | desk monitor (replaces the intro.mp4 VideoTexture) |
+| `public/screens/laptop.png` | 1280×800 | laptop lid (replaces the animated mint bars) |
+| `public/art/frame.png` | 850×1078 (portrait ≈0.79) | wall frame artwork (replaces the canvas wordmark) |
+| `public/textures/rug.png` | 1024×1024 | NEW rug mesh under sofa/coffee table |
+| `public/textures/books.png` | 2048×256 (8:1 strip) | bookshelf lower-shelf book row |
+
+### 21.1 Loading rules (all textures)
+- URL = `import.meta.env.BASE_URL + 'screens/tv.png'` etc. — NEVER a root-absolute path (Pages serves under `/henry-portfolio/`).
+- `useLoader(THREE.TextureLoader, url)` (R3F cache). `colorSpace = SRGBColorSpace`, `anisotropy = 8`. If the room tree has no `<Suspense>` boundary above these components, add `<Suspense fallback={null}>` where needed — a suspending object must NOT blank the whole canvas.
+- Screens are `map` + `emissiveMap` + `emissive #ffffff` + `toneMapped:false` + `userData.baseEmissive` mirroring the chosen `emissiveIntensity` (Hotspot hover-boost contract, §20.2-4a).
+
+### 21.2 Tv.tsx — texture swap (the §20.2-5 shader retires)
+- DELETE the ShaderMaterial + SCREEN_VERT/SCREEN_FRAG + its useFrame tick. Screen plane becomes `1.44 × 0.81` (16:9 to match 1280×720; was 0.84) with `screens/tv.png`, `emissiveIntensity 0.5`.
+- Keep: panel body, burnt back-halo sprite, console, bracket, hit proxy. The image is mostly dark (owner followed the spec) — verify the god-ray region doesn't blow out.
+
+### 21.3 Desk.tsx — monitor
+- DELETE the `<video>` element creation + play/teardown effect + VideoTexture (decode cost gone; a static owner dashboard replaces it). `intro.mp4` itself STAYS — the DOM IntroOverlay ('소개 영상' action) still uses it.
+- Image aspect is 1.6 (1280×800): bezel RoundedBox `1.06×0.64` → `1.06×0.70`, screen plane `0.98 × 0.6125`, `emissiveIntensity 0.45` (§20.2-4a value carries over).
+
+### 21.4 Desk.tsx — laptop
+- DELETE barsRef + the bars useFrame animation + the two bar meshes + the flat `#06121f` inner plane. Screen plane `0.5 × 0.3125` (aspect 1.6) with `screens/laptop.png`, `emissiveIntensity 0.55`. Keep lid/deck geometry and the +0.5 rotation (§20.2-4b).
+
+### 21.5 Frame.tsx — portrait artwork
+- DELETE the canvas wordmark texture + TEXT + the useLang dependency (artwork is language-agnostic).
+- Geometry goes PORTRAIT: border RoundedBox `[1.16, 1.42, 0.06]`, art plane `[1.02, 1.29]` (≈0.79 = 850/1078) at z `0.035`. Centre stays y 1.5 (top ≈2.21 < wall 2.4 — clear). `emissiveIntensity 0.42` — the poster title area is bright; verify "기획자의 진화" is legible but NOT blown out in the frame-focus shot.
+- Hit proxy → `size [0.16, 1.5, 1.2]` (portrait), same centre. Keep both glow sprites; retune scales to the portrait silhouette (≈`[3.2, 3.4]` wash / `[2.0, 2.4]` halo).
+
+### 21.6 RoomShell — NEW rug (reference has one under the sofa zone)
+- Plane `2.3(x) × 2.7(z)`, rotation `-π/2`, centred `[0.5, 0.006, 0.45]` — spans the coffee table ([0.5,0,-0.12]) and sofa front ([0.5,0,1.15]). `map = textures/rug.png`, roughness 0.95, metalness 0, `receiveShadow`, no emissive. `userData.noPick` so it can never shadow a hotspot raycast. Verify zero z-fighting with the wood floor (y offset; add polygonOffset only if a shot shows shimmer).
+- ⚠ The rug is dark navy in the frame centre → **re-measure the luma gate [46,92]** (was 77.02). If it dips below ~55, lift ambient by ≤0.06 — nothing else.
+
+### 21.7 Bookshelf.tsx — spine strip on the lower shelf
+- REPLACE the lower-shelf storage box with a books block: box `[0.24, 0.5, 1.4]` at `[0, 0.925, 0]` (sits on the y0.65 plank).
+- 6-material array — ONLY the +X (room-facing) face gets `textures/books.png`; the other 5 faces flat dark (`#16233E`-ish). The face is 1.4×0.5 (2.8:1) vs the 8:1 strip → use a horizontal window: `repeat.x ≈ 0.35`, `offset.x ≈ 0.3` so spines keep their true proportions. VERIFY IN THE SHOT that spines stand upright — if the box UV renders them sideways/mirrored, fix via texture rotation/offset, judged visually.
+- KEEP the 5 phase-colour chapter books on the upper shelf — they are semantic (career phases), not decoration.
+
+### 21.8 QA (v13 gate)
+- typecheck/lint/build 0 · console errors 0 on /.
+- Shots (1600×1000, overlay/tour bypassed): resting view + focus shots for tv/desk/frame/bookshelf + one orbited view. Judge: TV shows the PLANNER EVOLVED still calmly (no blowout), monitor+laptop show the dashboards (no white slab), frame shows the poster upright (portrait, not stretched), rug lies flat under the coffee table (no shimmer), spines upright on the lower shelf.
+- Luma gate [46,92] re-measured AFTER the rug lands.
+- All 7 hotspots still raycast-hit (§19.7 proxy contract untouched).
+- `public/og.png` reshoot REQUIRED (room look changed: rug + real screens).
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

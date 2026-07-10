@@ -1,6 +1,6 @@
-import { useMemo, useRef, useEffect } from 'react'
+import { Suspense } from 'react'
 import * as THREE from 'three'
-import { useFrame } from '@react-three/fiber'
+import { useLoader } from '@react-three/fiber'
 import { RoundedBox } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
@@ -11,84 +11,45 @@ import { getGlowTexture } from '../textures'
  * (→ Notion, external). A flat-panel screen wall-mounted on the BACK wall (−Z),
  * right side (SPEC §19.2 — the reference's warm-backlit TV), its screen facing
  * into the room (+Z), a low media console below on the floor. A warm burnt-orange
- * glow halo sits behind the panel like the reference TV's red glow, and the
- * screen shows subtle scrolling emissive scanlines + a wordmark bar (custom
- * ShaderMaterial, disposed on unmount).
+ * glow halo sits behind the panel like the reference TV's red glow.
+ *
+ * §21.2 v13: the §20.2-5 self-contained scanline ShaderMaterial retired — the
+ * owner delivered `screens/tv.png` (1280×720, mostly-dark PLANNER EVOLVED still).
+ * The screen is now a textured emissive plane (map + emissiveMap + emissive
+ * #ffffff + toneMapped:false, emissiveIntensity 0.5 with a matching
+ * userData.baseEmissive so Hotspot's hover-boost scales from the right base).
+ * The image is mostly dark, so the god-ray/wordmark region reads without
+ * blowing out. The burnt back-halo (sprite) still carries the warmth.
  *
  * The group is NOT rotated: the screen already faces +Z (toward the sofa).
  */
-const SCREEN_VERT = /* glsl */ `
-  varying vec2 vUv;
-  void main() {
-    vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`
-// §20.2-5: the old shader filled the panel edge-to-edge with gold scanlines and
-// read as an orange heater grill. Redesign toward the reference: a MOSTLY DARK
-// deep-navy panel at low overall alpha with a slow, faint glow, plus ONE small
-// bright warm-burnt "wordmark" band (≤15% of the panel height) drifting slowly.
-// The burnt back-halo (sprite) carries the warmth; the screen itself stays quiet.
-// Kept self-contained (uniforms + this frag) so an owner-supplied screens/tv.png
-// can swap in later with minimal change.
-const SCREEN_FRAG = /* glsl */ `
-  uniform float uTime;
-  uniform vec3 uBase;    // deep navy panel base
-  uniform vec3 uAccent;  // warm burnt accent for the one bright band
-  varying vec2 vUv;
-  void main() {
-    // Very soft, slow radial-ish glow around the panel centre — barely there.
-    float glow = smoothstep(0.9, 0.15, distance(vUv, vec2(0.5, 0.52)));
-    float breathe = 0.5 + 0.5 * sin(uTime * 0.35);
-    // ONE thin bright wordmark band drifting slowly up the panel. Its Gaussian
-    // profile is ~0.09 UV tall total (< 15% of the panel) — a single element.
-    float bandY = fract(uTime * 0.035);          // slow upward drift
-    float d = abs(vUv.y - bandY);
-    float band = exp(-d * d / (2.0 * 0.018 * 0.018)); // narrow bright line
-    // subtle horizontal shimmer only within the band so it reads as content.
-    float shimmer = 0.75 + 0.25 * sin(vUv.x * 22.0 + uTime * 2.0);
-    band *= shimmer;
 
-    // Base panel: dark navy, faintly lifted by the soft glow (kept low).
-    vec3 col = uBase + uBase * glow * (0.35 + 0.15 * breathe);
-    // Add the warm band on top.
-    col += uAccent * band * 0.9;
+/** The TV screen plane — suspends on useLoader; wrapped locally in <Suspense>
+ *  so a still-loading texture can't blank the whole room canvas (§21.1). */
+function TvScreen() {
+  // BASE_URL-prefixed so GitHub Pages (served under /henry-portfolio/) resolves
+  // the asset; never a root-absolute path (§21.1).
+  const tex = useLoader(THREE.TextureLoader, import.meta.env.BASE_URL + 'screens/tv.png')
+  tex.colorSpace = THREE.SRGBColorSpace
+  tex.anisotropy = 8
 
-    // Overall low alpha so the dark panel doesn't read as a lit slab; the band
-    // pushes alpha up locally so the one bright element stays visible.
-    float a = 0.5 + glow * 0.12 + band * 0.45;
-    gl_FragColor = vec4(col, a);
-  }
-`
+  // 1.44 × 0.81 = 16:9 to match the 1280×720 asset (was 1.44 × 0.84, §21.2).
+  return (
+    <mesh position={[0, 1.62, 0.056]}>
+      <planeGeometry args={[1.44, 0.81]} />
+      <meshStandardMaterial
+        map={tex}
+        emissiveMap={tex}
+        emissive="#ffffff"
+        emissiveIntensity={0.5}
+        toneMapped={false}
+        userData={{ baseEmissive: 0.5 }}
+      />
+    </mesh>
+  )
+}
 
 export default function Tv() {
-  const matRef = useRef<THREE.ShaderMaterial | null>(null)
-
-  const material = useMemo(() => {
-    const m = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        // deep navy base (mostly-dark panel) + warm burnt accent for the one band
-        uBase: { value: new THREE.Color('#0a1424') },
-        uAccent: { value: new THREE.Color(PAL.burnt) },
-      },
-      vertexShader: SCREEN_VERT,
-      fragmentShader: SCREEN_FRAG,
-      transparent: true,
-      depthWrite: false,
-      toneMapped: false,
-    })
-    matRef.current = m
-    return m
-  }, [])
-
-  useEffect(() => () => material.dispose(), [material])
-
-  useFrame((state) => {
-    if (document.hidden) return
-    material.uniforms.uTime.value = state.clock.elapsedTime
-  })
-
   const glowTex = getGlowTexture()
 
   return (
@@ -148,10 +109,11 @@ export default function Tv() {
         >
           <meshStandardMaterial color="#050b18" roughness={0.32} metalness={0.35} />
         </RoundedBox>
-        {/* Screen — scanline / wordmark shader */}
-        <mesh position={[0, 1.62, 0.056]} material={material}>
-          <planeGeometry args={[1.44, 0.84]} />
-        </mesh>
+        {/* Screen — owner PNG (screens/tv.png). Suspends locally so it never
+            blanks the canvas while the texture loads (§21.1). */}
+        <Suspense fallback={null}>
+          <TvScreen />
+        </Suspense>
         {/* Slim wall-mount bracket behind the panel (no floor stand) */}
         <mesh position={[0, 1.62, -0.04]}>
           <boxGeometry args={[0.16, 0.34, 0.04]} />
