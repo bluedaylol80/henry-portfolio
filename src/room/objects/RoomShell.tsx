@@ -343,8 +343,10 @@ function Rug() {
 function Plant() {
   return (
     <group position={[-0.35, 0, -2.02]}>
+      {/* §23.6-calib: preRotX=0.05 trues the pot's slight baked lean (the pot is
+          near-plumb raw; the −20° PCA reading is the leaves splaying back). */}
       <Suspense fallback={null}>
-        <GlbModel slug="plant" height={1.2} rotY={0} />
+        <GlbModel slug="plant" height={1.2} rotY={0} preRotX={0.05} />
       </Suspense>
     </group>
   )
@@ -358,8 +360,11 @@ function Plant() {
 function Guitar() {
   return (
     <group position={[-1.9, 0, -1.32]} rotation={[0, 0, 0.12]}>
+      {/* §23.6-calib: preRotX=0.05 / preRotZ=−0.02 true the guitar's small ~8°
+          baked lean so it hangs plumb BEFORE the group's deliberate 0.12-rad
+          lean toward the left wall (a posed lean, not a defect). */}
       <Suspense fallback={null}>
-        <GlbModel slug="guitar" height={1.0} rotY={-0.6} />
+        <GlbModel slug="guitar" height={1.0} rotY={-0.6} preRotX={0.05} preRotZ={-0.02} />
       </Suspense>
     </group>
   )
@@ -372,8 +377,12 @@ function Guitar() {
 function Chair() {
   return (
     <group position={[-1.62, 0, -1.25]}>
+      {/* §23.6-calib: preRotX=0.05 / preRotZ=0.22 stand the chair plumb (measured
+          ~13° roll + 6° pitch; wheelbase levelled + back post vertical in the
+          silhouette). rotY=π/2 turns the seat/armrests to FACE the desk (behind
+          it at −Z), so the chair back reads toward the viewer. Found visually. */}
       <Suspense fallback={null}>
-        <GlbModel slug="chair" height={1.25} rotY={Math.PI} />
+        <GlbModel slug="chair" height={1.25} rotY={Math.PI / 2} preRotX={0.05} preRotZ={0.22} />
       </Suspense>
     </group>
   )
@@ -385,8 +394,11 @@ function Chair() {
 function Sofa() {
   return (
     <group position={[0.5, 0, 1.15]}>
+      {/* §23.6-calib: preRotZ=−0.19 levels the sofa's ~11° baked roll (all four
+          feet now sit on a level line; it read as floating/tilted before). The
+          GLB's seat opening faces −Z raw, so rotY=0 already faces the TV (−Z). */}
       <Suspense fallback={null}>
-        <GlbModel slug="sofa" width={1.9} rotY={0} />
+        <GlbModel slug="sofa" width={1.9} rotY={0} preRotZ={-0.19} />
       </Suspense>
     </group>
   )

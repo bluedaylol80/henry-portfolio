@@ -1,26 +1,24 @@
-import { Suspense, useMemo, useRef, useEffect } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
 import Hotspot from '../Hotspot'
-import { GlbModel, modelUrl } from '../glb'
+import { PAL } from '../palette'
 
 /**
- * 커피 한 잔 — the contact hotspot (→ /story#contact · 커피챗!). §23.3 v15: the
- * procedural mug/handle/coffee-surface meshes are replaced by the owner-image
- * GLB `coffee` (mug + pad; target WIDTH kept modest so the mug reads at a sane
- * scale on the low coffee table — see note below). The Bruno-style steam plane
- * (a small alpha-noise shader drifting upward) is KEPT over the mug's approx
- * spot; the ShaderMaterial is disposed on unmount. The Hotspot id/hit-proxy/
- * ANCHOR are untouched.
+ * 커피 한 잔 — the contact hotspot (→ /story#contact · 커피챗!). A mug sitting ON
+ * the low coffee table in the centre of the room, with a Bruno-style steam
+ * plane (a small alpha-noise shader drifting upward). The ShaderMaterial is
+ * disposed on unmount. The Hotspot id/hit-proxy/ANCHOR are untouched.
  *
- * Scale deviation (§23.3 allowance): §23.3 lists width 1.1, but a 1.1-wide mug
- * would nearly span the 1.2-wide coffee-table top and dwarf the sofa. The GLB is
- * a mug-on-a-pad, so its natural footprint is small; width 0.44 lands the mug at
- * a believable size on the table (verified via crop). Deviation recorded in the
- * report.
+ * §23.6-calib DEVIATION (2026-07-11): the owner-image GLB `coffee.glb` was
+ * TripoSR-reconstructed with its mug HANDLE exploded into a large floating
+ * curved sheet (a "wing" jutting up beside the mug) — it reads as a broken/
+ * crumpled object, not a coffee mug, at any scale. No baked-lean correction can
+ * fix a wrong SHAPE, so per the SPEC §23.3 fallback rule the v15 GLB swap is
+ * REVERTED to this pre-v15 procedural mug (restored from git 9ef6101), which
+ * reads cleanly. The steam plane is kept over the mug. `useGLTF.preload('coffee')`
+ * is dropped since the GLB is no longer used.
  */
-useGLTF.preload(modelUrl('coffee'))
 
 const STEAM_VERT = /* glsl */ `
   varying vec2 vUv;
@@ -93,17 +91,30 @@ export default function Coffee() {
 
   return (
     <Hotspot id="coffee" hit={{ size: [0.42, 0.34, 0.42], position: [0.5, 0.55, -0.12] }}>
-      {/* On the low coffee-table top (table top ≈ y0.44), shifted right (§19.2). */}
+      {/* On the low coffee table top (table top ≈ y 0.44), shifted right (§19.2). */}
       <group position={[0.5, 0.44, -0.12]}>
-        {/* §23.3: owner-image GLB mug + pad. Suspends locally so the loading GLB
-            can't blank the canvas (§23.1). rotY orients the handle sideways. */}
-        <Suspense fallback={null}>
-          <GlbModel slug="coffee" width={0.44} rotY={0} />
-        </Suspense>
-        {/* Steam plane — kept, drifts upward over the mug's approx spot (§23.3).
-            The mug sits ≈0.18 tall after normalisation; the plane bottom starts a
-            touch above the rim. */}
-        <mesh position={[0, 0.52, 0.01]} material={steamMat}>
+        {/* Mug body (glazed ceramic) */}
+        <mesh position={[0, 0.09, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.09, 0.075, 0.18, 24]} />
+          <meshStandardMaterial color={PAL.ink} roughness={0.3} metalness={0.05} />
+        </mesh>
+        {/* Coffee surface */}
+        <mesh position={[0, 0.175, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+          <circleGeometry args={[0.082, 24]} />
+          <meshStandardMaterial
+            color="#2a1608"
+            emissive={PAL.burnt}
+            emissiveIntensity={0.15}
+            roughness={0.3}
+          />
+        </mesh>
+        {/* Handle */}
+        <mesh position={[0.11, 0.09, 0]} rotation={[0, 0, Math.PI / 2]} castShadow>
+          <torusGeometry args={[0.05, 0.014, 10, 20, Math.PI * 1.1]} />
+          <meshStandardMaterial color={PAL.ink} roughness={0.3} metalness={0.05} />
+        </mesh>
+        {/* Steam plane — faces camera-ish, drifts upward */}
+        <mesh position={[0, 0.5, 0.01]} material={steamMat}>
           <planeGeometry args={[0.32, 0.7]} />
         </mesh>
       </group>

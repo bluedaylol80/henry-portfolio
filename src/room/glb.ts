@@ -38,11 +38,43 @@ export interface NormalizeOpts {
   preRotX?: number
   /** Corrective Z pre-rotation (radians), same pre-normalisation timing. */
   preRotZ?: number
+  /** Corrective Y pre-rotation (radians), same pre-normalisation timing — lets a
+   *  GLB be re-yawed BEFORE the footprint-centre recentring, so an off-axis part
+   *  (e.g. a facing panel) squares up to world axes before `rotY` faces it into
+   *  the room (§23.6-calib). Found visually. */
+  preRotY?: number
 }
+
+/* ───────────────────────────────────────────────────────────────────────────
+ * §23.6 — systematic per-model baked-lean calibration (2026-07-11)
+ *
+ * The furniture GLBs were TripoSR-reconstructed from 3/4-view photos, so each
+ * inherits the PHOTO's camera pitch as a baked lean (the object is not plumb in
+ * its own rest frame). Phase-1 calibration (scripts/calib/): each GLB was loaded
+ * in three.js, its baked tilt measured by (a) PCA of the vertex covariance and
+ * (b) a least-squares plane fit to the bottom-slab (feet) vertices, then a
+ * candidate preRot was rendered through THIS exact normalisation path and the
+ * silhouette checked plumb against a ground/vertical reference grid. Values were
+ * finalised by the in-room Phase-3 checklist (plumb / grounded / facing).
+ *
+ *   slug       preRotX  preRotZ  preRotY   rotY(facing)     baked lean found
+ *   ────────── ───────  ───────  ───────   ───────────────  ─────────────────
+ *   bookshelf   +0.26     0         0       −π/2             ~15° fwd pitch (kept)
+ *   server      +0.30     0         0       −π/2+0.35        ~18° fwd pitch (side)
+ *   desk        +0.16    −0.06      0       π+0.55           ~16° pitch + slt roll
+ *   chair       +0.05    +0.22      0       +π/2             ~13° roll + 6° pitch
+ *   sofa         0       −0.19      0        0 (seat→−Z)     ~11° roll (feet unlevel)
+ *   plant       +0.05     0         0        0               pot ~plumb (leaves splay)
+ *   guitar      +0.05    −0.02      0       −0.6             ~8° (near plumb) +0.12 wall-lean
+ *   coffee       0         0        0        0               base ~level (mug malformed)
+ *   speaker     REVERTED to pre-v15 procedural — the GLB reads as a wooden
+ *               cabinet with a separate box on top (TripoSR malformed); no
+ *               rotation makes it read as a hi-fi speaker (§23.3 fallback).
+ * ─────────────────────────────────────────────────────────────────────────── */
 
 export function useNormalizedGltf(url: string, opts: NormalizeOpts): THREE.Group {
   const { scene } = useGLTF(url)
-  const { height, width, rotY = 0, preRotX = 0, preRotZ = 0 } = opts
+  const { height, width, rotY = 0, preRotX = 0, preRotZ = 0, preRotY = 0 } = opts
 
   return useMemo(() => {
     // Clone so we never mutate drei's shared cache (this GLB may be re-normalised
@@ -64,7 +96,7 @@ export function useNormalizedGltf(url: string, opts: NormalizeOpts): THREE.Group
     // FIRST, inside a wrapper `root`, so the Box3 below measures the LEVELLED
     // pose — the bottom then rests flush on the floor and verticals are plumb.
     const root = new THREE.Group()
-    cloned.rotation.set(preRotX, 0, preRotZ)
+    cloned.rotation.set(preRotX, preRotY, preRotZ)
     root.add(cloned)
 
     // Measure the raw model, then uniform-scale so the chosen dim hits target.
@@ -91,7 +123,7 @@ export function useNormalizedGltf(url: string, opts: NormalizeOpts): THREE.Group
     wrap.add(root)
     wrap.rotation.y = rotY
     return wrap
-  }, [scene, height, width, rotY, preRotX, preRotZ])
+  }, [scene, height, width, rotY, preRotX, preRotZ, preRotY])
 }
 
 /** BASE_URL-prefixed model URL for GitHub Pages (§23.1); never root-absolute. */
@@ -112,8 +144,9 @@ export function GlbModel({
   rotY,
   preRotX,
   preRotZ,
+  preRotY,
   ...rest
 }: NormalizeOpts & { slug: string } & Record<string, unknown>) {
-  const obj = useNormalizedGltf(modelUrl(slug), { height, width, rotY, preRotX, preRotZ })
+  const obj = useNormalizedGltf(modelUrl(slug), { height, width, rotY, preRotX, preRotZ, preRotY })
   return createElement('primitive', { object: obj, ...rest })
 }

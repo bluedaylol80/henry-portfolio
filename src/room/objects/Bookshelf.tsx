@@ -31,20 +31,20 @@ export default function Bookshelf() {
         </Suspense>
 
         {/* 5 KEPT chapter books, spines in phase colours (semantic career phases;
-            §23.4). They stand on ONE visible GLB shelf level (the top shelf, top
-            surface ≈y1.86 in this group's frame), proud at the room-facing front
-            (+X≈0.3) and spread along Z. Book spines face +X so the colours read
-            from the resting camera. x/y/z found visually against the GLB. */}
+            §23.4 / §23.6-calib). v16: the books previously stood in the TOP cavity
+            where they overlapped the GLB's own baked books + the top rail and read
+            as oversized floating blocks. They now sit INSIDE the clearly-EMPTY
+            second-from-top shelf cavity (floor ≈y1.16 in this group's frame after
+            the height-2.5 scale + preRotX levelling), SHORTER than the cavity so
+            they seat with headroom. Spines face +X (into the room) at the shelf's
+            front edge; spread along Z. x/y/z/scale found visually against the GLB
+            crop. */}
         {PHASE_COLORS.map((c, i) => {
-          const z = -0.42 + i * 0.2
-          const h = 0.34 - (i % 2) * 0.04
-          // v15fix: after the preRotX=0.26 levelling the top shelf surface sits
-          // ≈y1.76 in this group's frame — the books were floating (base 1.86),
-          // so they drop to sit ON the shelf with headroom to the shelf above. x
-          // pulled back to 0.24 to stay within the shelf's front edge.
+          const z = -0.12 + i * 0.14
+          const h = 0.22 - (i % 2) * 0.03
           return (
-            <mesh key={i} position={[0.24, 1.76 + h / 2, z]} castShadow>
-              <boxGeometry args={[0.13, h, 0.14]} />
+            <mesh key={i} position={[0.22, 1.2 + h / 2, z]} castShadow>
+              <boxGeometry args={[0.11, h, 0.1]} />
               <meshStandardMaterial
                 color={c}
                 emissive={c}
