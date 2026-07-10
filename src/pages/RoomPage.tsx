@@ -106,11 +106,10 @@ export default function RoomPage() {
   const runAction = useCallback(
     (_id: string, action: RoomAction) => {
       switch (action) {
-        case 'intro':
-          // Play the intro film, then land on /story#about once it closes.
-          openIntro({ afterNavigate: '/story#about' })
-          break
         case 'about':
+          // §22.1 v14: the desk hotspot now flows through here (plain About
+          // navigation). The intro film plays from the introBadge / the
+          // /story#about character card instead — never on the desk click.
           navigate('/story#about')
           break
         case 'career':

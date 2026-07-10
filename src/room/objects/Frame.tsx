@@ -28,10 +28,12 @@ function FrameArt() {
   const tex = useLoader(THREE.TextureLoader, import.meta.env.BASE_URL + 'art/frame.png')
   tex.colorSpace = THREE.SRGBColorSpace
   tex.anisotropy = 8
-  // Art plane 1.02 × 1.29 (≈0.79 = 850/1078) at z 0.035 (§21.5).
+  // Art plane 1.10 × 1.395 (≈0.789 = the image's true ratio) at z 0.035 — §22.3
+  // v14 enlarges it (was 1.02 × 1.29) so the dark border margin is thin (≈0.03 x
+  // / ≈0.0125 y) and the pale ring the owner flagged is gone.
   return (
     <mesh position={[0, 0, 0.035]}>
-      <planeGeometry args={[1.02, 1.29]} />
+      <planeGeometry args={[1.10, 1.395]} />
       <meshStandardMaterial
         map={tex}
         emissiveMap={tex}
@@ -82,9 +84,12 @@ export default function Frame() {
             toneMapped={false}
           />
         </sprite>
-        {/* Frame border (rounded) — PORTRAIT to match the 850×1078 poster (§21.5). */}
+        {/* Frame border (rounded) — PORTRAIT to match the 850×1078 poster (§21.5).
+            §22.3 v14: colour goes DARK (#141E33) — the artwork was designed with a
+            black frame, so the old PAL.elev + gold wash read as a white mat (owner
+            complaint). Kept the same [1.16, 1.42, 0.06] dimensions. */}
         <RoundedBox args={[1.16, 1.42, 0.06]} radius={0.025} smoothness={2} position={[0, 0, 0]} castShadow>
-          <meshStandardMaterial color={PAL.elev} roughness={0.45} metalness={0.25} />
+          <meshStandardMaterial color="#141E33" roughness={0.5} metalness={0.15} />
         </RoundedBox>
         {/* Owner poster (art/frame.png). Suspends locally so it never blanks the
             canvas while loading (§21.1). */}

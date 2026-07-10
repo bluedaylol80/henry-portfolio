@@ -6,6 +6,7 @@ import { useT, useLang } from '../lib/i18n'
 import { about, hero } from '../content/profile'
 import { prefersReducedMotion } from '../lib/quality'
 import { EASE } from '../lib/motion'
+import { openIntro } from '../lib/introBus'
 
 /** ops → qa → biz → plan accents for the career-arc widget. */
 const PHASE_COLORS = ['#F5B041', '#F39C12', '#E67E22', '#4FACFE']
@@ -150,18 +151,50 @@ export default function About() {
           {/* Right: webtoon character card + career-arc widget + stats */}
           <aside className="lg:col-span-5">
             <div className="lg:sticky lg:top-32">
-              {/* Webtoon character — Approachable axis (§12.3). Joins the column reveal. */}
-              <figure className="about-character glass glow-cyan mb-6 overflow-hidden rounded-3xl border border-era-sky/30 p-0">
-                <img
-                  src={import.meta.env.BASE_URL + 'character.jpg'}
-                  alt={t(hero.name)}
-                  width={1600}
-                  height={900}
-                  loading="lazy"
-                  className="block h-auto w-full"
-                />
+              {/* Webtoon character — Approachable axis (§12.3). Joins the column
+                  reveal. §22.2 v14: the image area is now a keyboard-accessible
+                  button that plays the intro film (openIntro()); a centred glass ▶
+                  chip + group-hover lift/brightness signal it, and the figcaption
+                  carries the hint. `.about-character` stays on the animated figure. */}
+              <figure className="about-character glass glow-cyan group mb-6 overflow-hidden rounded-3xl border border-era-sky/30 p-0">
+                <button
+                  type="button"
+                  onClick={() => openIntro()}
+                  aria-label={t(about.playIntro)}
+                  className="relative block w-full cursor-pointer overflow-hidden"
+                >
+                  <img
+                    src={import.meta.env.BASE_URL + 'character.jpg'}
+                    alt={t(hero.name)}
+                    width={1600}
+                    height={900}
+                    loading="lazy"
+                    className="block h-auto w-full transition duration-500 ease-lux group-hover:scale-[1.05] group-hover:brightness-110"
+                  />
+                  {/* Centred glass ▶ play chip (matches the .glass/.bezel idiom). */}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                  >
+                    <span className="glass flex h-14 w-14 items-center justify-center rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)] transition duration-300 ease-lux group-hover:scale-105 group-hover:border-white/25 md:h-16 md:w-16">
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="ml-0.5 text-ink"
+                        aria-hidden="true"
+                      >
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                  </span>
+                </button>
                 <figcaption className="border-t border-white/10 px-5 py-3 text-center font-display text-sm font-medium tracking-wide text-ink-dim">
                   {t(hero.name)}
+                  <span className="mt-1 block text-xs font-normal tracking-normal text-era-cyan">
+                    {t(about.playIntro)}
+                  </span>
                 </figcaption>
               </figure>
               <div className="glass rounded-2xl p-6 md:p-7">

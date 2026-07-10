@@ -130,7 +130,7 @@ export default function InteractionManager({
   // the speaker/TV. `sound` toggles the BGM in place → ease back ~400ms after it
   // fires (≈1.1s round trip incl. the 0.7s dolly). `notion` opens a new tab →
   // reset immediately so the room is already wide when they come back. Route
-  // actions (intro/about/career/work/ai/contact) leave the page, so they never
+  // actions (about/career/work/ai/contact) leave the page, so they never
   // auto-return here. Applies to BOTH the dolly and the immediate path.
   const autoReturn = (action: RoomAction) => {
     if (action === 'notion') {

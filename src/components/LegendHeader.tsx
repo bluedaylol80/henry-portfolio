@@ -4,7 +4,6 @@ import { contact } from '../content/profile'
 import { hotspots, type RoomAction } from '../content/room'
 import { useLang, useT } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
-import { openIntro } from '../lib/introBus'
 import { isSoundOn, onSoundChange, toggleSound } from '../lib/sound'
 import RoomMenu from './RoomMenu'
 
@@ -15,10 +14,10 @@ import RoomMenu from './RoomMenu'
  * It mirrors the room's bottom Legend: wordmark `H.` (→ `/`) plus one chip per
  * `room.hotspots` entry, in order, using the same glass-chip family. Each chip
  * runs the same family of actions as the room:
- *  - section chips (frame→work, server→ai, coffee→contact) scroll in place on
- *    `/story`, else navigate `/story#id`;
- *  - 책장 → `/career`; TV → external Notion; 컴퓨터 → intro (afterNavigate
- *    `/story#about`); 스피커 → BGM toggle with a live mint on/off dot.
+ *  - section chips (desk→about, frame→work, server→ai, coffee→contact) scroll in
+ *    place on `/story`, else navigate `/story#id`;
+ *  - 책장 → `/career`; TV → external Notion; 스피커 → BGM toggle with a live mint
+ *    on/off dot. (§22.1 v14: 컴퓨터 is now a plain About chip — no intro branch.)
  * On `/story` the three section-mapped chips get an active-section highlight via
  * an IntersectionObserver (cleaned up on unmount). The right cluster carries a
  * compact KO/EN toggle and the shared RoomMenu hamburger, so the full menu
@@ -145,9 +144,6 @@ export default function LegendHeader() {
       return
     }
     switch (action) {
-      case 'intro':
-        openIntro({ afterNavigate: '/story#about' })
-        break
       case 'career':
         navigate('/career')
         break

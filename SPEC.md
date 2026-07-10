@@ -809,6 +809,30 @@ Owner produced the §20-proposed assets. All 6 are ALREADY in the repo (sizes ve
 - All 7 hotspots still raycast-hit (§19.7 proxy contract untouched).
 - `public/og.png` reshoot REQUIRED (room look changed: rug + real screens).
 
+## 22. v14 — Intro flow rewire + frame fit (owner feedback 2026-07-10)
+
+Owner directives: ① the desk (PC) click must STOP auto-playing the intro video — it should go straight to `/story#about`; the video instead plays when the user clicks the right-side image (the webtoon character card) on `/story#about`. ② The wall frame still shows a pale border around the artwork ("하얀 부분") — enlarge the artwork so the visible border is thin and dark.
+
+### 22.1 Desk click → /story#about (no video overlay)
+- `content/room.ts` desk hotspot: `action: 'intro'` → `'about'`; label `{ko:'소개', en:'About'}`; hint `{ko:'컴퓨터 · 소개 섹션으로', en:'Computer · to About'}`.
+- REMOVE the `'intro'` member from `RoomAction` and every branch that special-cases it (RoomPage action handler, InteractionManager, Legend/LegendHeader/RoomMenu if any special-case exists). The desk now flows through the existing `'about'` navigation path everywhere (room object click, Legend chip, RoomMenu, LegendHeader chips on content pages).
+- KEEP: the room's first-visit `introBadge` ("▶ 소개 영상 보기") — it is an EXPLICIT video CTA, not auto-play; it keeps calling `openIntro({afterNavigate:'/story#about'})`. `IntroOverlay` + `introBus` + `intro.mp4` all stay. Legacy `Nav.tsx` is unused — leave it.
+
+### 22.2 /story#about character card plays the intro
+- `sections/About.tsx`: wrap the character `<figure>`'s image area in a real `<button type="button">` (keyboard-accessible) that calls `openIntro()` (no `afterNavigate` — we are already there; the overlay simply closes back).
+- Affordances: `cursor-pointer`; a centred glass ▶ play chip overlaid on the image (subtle, matches .bezel/glass idiom; `group-hover` lift ≤1.05 + brightness ≤110%; no new animation loops); figcaption gains a small `{ko:'▶ 클릭하면 소개 영상이 재생됩니다', en:'▶ Click to play the intro film'}` line. Copy lives in `content/profile.ts` (`about.playIntro: Bi`) — no hardcoded strings. `aria-label` = same copy.
+- The GSAP `.about-character` reveal must keep working (button wraps content INSIDE the figure, or the figure itself becomes the button — keep the `.about-character` class on the animated element).
+
+### 22.3 Frame fit (kill the pale ring)
+- Art plane `[1.02, 1.29]` → `[1.10, 1.395]` (aspect 0.789 = the image's true ratio; border margin ≈0.03 x / ≈0.0125 y). Border RoundedBox stays `[1.16, 1.42, 0.06]` but its colour goes DARK — `#141E33`, roughness 0.5, metalness 0.15 — the artwork itself was designed with a black frame, and the current `PAL.elev` + gold wash reads as a white mat (owner complaint). Emissive 0.42 / hit proxy / sprites unchanged.
+- Judge on a frame-focus shot: artwork fills the face, remaining border thin + dark, no pale ring.
+
+### 22.4 QA (v14 gate)
+- typecheck/lint/build 0 · console errors 0.
+- Headless behaviour checks: (a) click the desk object → route becomes `/story#about` AND no intro overlay/video appears; (b) on `/story#about`, click the character card → intro overlay opens (video element present), close works; (c) room introBadge still opens the overlay. (d) all 7 hotspots raycast-hit; desk tooltip shows the new '소개' label.
+- Shots: resting + frame-focus + `/story#about` viewport (play chip visible on the card).
+- Luma gate [46,92] re-measured (frame art slightly larger/brighter — expected negligible).
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

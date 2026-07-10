@@ -61,6 +61,12 @@ export const about = {
     { ko: '기획', en: 'Planning' },
   ] as Bi[],
   arcNext: { ko: '+ AI', en: '+ AI' } as Bi,
+  // §22.2 v14: hint + a11y label for the /story#about character card, which now
+  // acts as the intro-film play button (openIntro()).
+  playIntro: {
+    ko: '▶ 클릭하면 소개 영상이 재생됩니다',
+    en: '▶ Click to play the intro film',
+  } as Bi,
   stats: [
     { value: 19, suffix: '', label: { ko: '연차', en: 'Years' } },
     { value: 10, suffix: '', label: { ko: '회사', en: 'Companies' } },

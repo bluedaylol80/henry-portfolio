@@ -7,11 +7,12 @@ import { PAL } from '../palette'
 import { getGlowTexture } from '../textures'
 
 /**
- * 데스크 ('컴퓨터') — the intro hotspot. A desk slab against the BACK wall (−Z),
+ * 데스크 ('컴퓨터') — the '소개' hotspot. A desk slab against the BACK wall (−Z),
  * center-left, holding a monitor and an open laptop (both now owner-delivered
  * dashboard stills), plus a warm desk lamp. A NON-hotspot gaming chair sits in
- * front (in RoomShell). Click → openIntro({ afterNavigate:'/story#about' })
- * (wired via action 'intro').
+ * front (in RoomShell). §22.1 v14: the click now navigates to /story#about
+ * (wired via action 'about') — it no longer auto-plays the intro film. The intro
+ * plays instead from the /story#about character card and the room's introBadge.
  *
  * §21.3/§21.4 v13: the monitor's intro.mp4 VideoTexture pipeline and the
  * animated laptop mint bars are RETIRED — the owner delivered static dashboard

@@ -8,7 +8,6 @@ import type { Bi } from '../lib/i18n'
  */
 
 export type RoomAction =
-  | 'intro' // 소개 영상 오버레이 → 닫히면 소개 섹션으로 이동
   | 'about' // /story#about
   | 'career' // /career
   | 'work' // /story#work
@@ -65,9 +64,12 @@ export const backLabel: Bi = { ko: '메인으로', en: 'Home' }
 export const hotspots: RoomHotspot[] = [
   {
     id: 'desk',
-    action: 'intro',
-    label: { ko: '소개 영상', en: 'Intro film' },
-    hint: { ko: '컴퓨터 · 재생 후 소개로', en: 'Computer · plays, then About' },
+    // §22.1 v14: the desk no longer auto-plays the intro film — it flows through
+    // the plain 'about' navigation (→ /story#about); the intro plays instead from
+    // the /story#about character card and the room's first-visit introBadge.
+    action: 'about',
+    label: { ko: '소개', en: 'About' },
+    hint: { ko: '컴퓨터 · 소개 섹션으로', en: 'Computer · to About' },
   },
   {
     id: 'tv',
