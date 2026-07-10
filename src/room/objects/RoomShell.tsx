@@ -1,8 +1,9 @@
 import { Suspense, useEffect, useMemo, useRef } from 'react'
 import * as THREE from 'three'
 import { useLoader } from '@react-three/fiber'
-import { ContactShadows, RoundedBox } from '@react-three/drei'
+import { ContactShadows, RoundedBox, useGLTF } from '@react-three/drei'
 import { PAL } from '../palette'
+import { GlbModel, modelUrl } from '../glb'
 import {
   getWoodTextures,
   getGlowTexture,
@@ -10,6 +11,13 @@ import {
   getWallTexture,
   disposeRoomTextures,
 } from '../textures'
+
+// §23.1: preload the simple-swap furniture GLBs at module scope so the room's
+// ≈2MB furniture payload fetches in parallel (draco decoder auto via drei CDN).
+useGLTF.preload(modelUrl('chair'))
+useGLTF.preload(modelUrl('sofa'))
+useGLTF.preload(modelUrl('plant'))
+useGLTF.preload(modelUrl('guitar'))
 
 /**
  * Corner diorama — the "baked-looking" warm miniature room (SPEC §13.3), laid
@@ -328,123 +336,58 @@ function Rug() {
   )
 }
 
-/** Potted plant on the floor in the clear wall gap between the window and the TV
- *  console (§20.2-2). It previously sat at x=1.05 INSIDE the console footprint
- *  (console spans x≈0.1–1.6) so its leaves poked through the console top; moved
- *  to x≈−0.35 (window↔TV gap) with zero mesh intersection from the resting AND
- *  a slightly-orbited camera. */
+/** §23.2 — owner-image GLB potted plant on the floor in the clear wall gap
+ *  between the window and the TV console (§20.2-2 slot kept). height 1.2; rotY
+ *  found visually (a plant is near-symmetric so facing is cosmetic). Suspends
+ *  locally so a loading GLB can't blank the canvas (§23.1). */
 function Plant() {
-  const leaves: [number, number, number, number][] = [
-    [0, 0.56, 0, 0.26],
-    [0.17, 0.45, 0.05, 0.2],
-    [-0.15, 0.47, -0.04, 0.2],
-  ]
   return (
     <group position={[-0.35, 0, -2.02]}>
-      {/* pot */}
-      <mesh position={[0, 0.16, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.17, 0.13, 0.32, 16]} />
-        <meshStandardMaterial color={PAL.plantPot} roughness={0.8} metalness={0.05} />
-      </mesh>
-      {/* soil */}
-      <mesh position={[0, 0.31, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <circleGeometry args={[0.15, 16]} />
-        <meshStandardMaterial color="#241811" roughness={1} />
-      </mesh>
-      {/* leaves */}
-      {leaves.map(([x, y, z, r], i) => (
-        <mesh key={i} position={[x, y + 0.18, z]} castShadow>
-          <sphereGeometry args={[r, 12, 10]} />
-          <meshStandardMaterial
-            color={i % 2 === 0 ? PAL.leaf : PAL.leafLight}
-            roughness={0.85}
-            metalness={0}
-          />
-        </mesh>
-      ))}
+      <Suspense fallback={null}>
+        <GlbModel slug="plant" height={1.2} rotY={0} />
+      </Suspense>
     </group>
   )
 }
 
-/** Acoustic guitar leaning in the back-left corner between the bookshelf's rear
- *  end and the desk corner (§19.2, z≈−1.4) — pulled off the left wall so it reads
- *  in the gap rather than hiding flat against it or crowding the front. */
+/** §23.2 — owner-image GLB acoustic guitar leaning in the back-left corner
+ *  between the bookshelf's rear end and the desk corner (§19.2 slot kept). Target
+ *  height 1.0; the outer group carries the ≈0.12 rad Z-lean toward the left wall
+ *  (§23.2), rotY orients the body/neck toward the viewer (found visually).
+ *  Suspends locally (§23.1). */
 function Guitar() {
   return (
-    <group position={[-1.9, 0, -1.32]} rotation={[0, 0.6, 0.18]}>
-      {/* body (a flattened sphere → guitar-ish soundbox) */}
-      <mesh position={[0, 0.46, 0]} scale={[1, 1.35, 0.6]} castShadow receiveShadow>
-        <sphereGeometry args={[0.24, 18, 14]} />
-        <meshStandardMaterial color={PAL.woodLight} roughness={0.55} metalness={0.05} />
-      </mesh>
-      {/* neck */}
-      <mesh position={[0.02, 1.15, 0]} castShadow>
-        <boxGeometry args={[0.08, 0.7, 0.05]} />
-        <meshStandardMaterial color={PAL.woodDark} roughness={0.5} metalness={0.05} />
-      </mesh>
-      {/* headstock */}
-      <mesh position={[0.02, 1.52, 0]} castShadow>
-        <boxGeometry args={[0.1, 0.14, 0.04]} />
-        <meshStandardMaterial color="#1a120b" roughness={0.5} />
-      </mesh>
+    <group position={[-1.9, 0, -1.32]} rotation={[0, 0, 0.12]}>
+      <Suspense fallback={null}>
+        <GlbModel slug="guitar" height={1.0} rotY={-0.6} />
+      </Suspense>
     </group>
   )
 }
 
-/** Gaming chair in front of the desk (NON-hotspot) — seat, backrest with a gold
- *  accent stripe, star base + gas column. Mesh-lean for the ≤95 budget. */
+/** §23.2 — owner-image GLB gaming chair in front of the desk (NON-hotspot).
+ *  height 1.25; slot kept (desk front, z≈−1.25). rotY turns the seat/back to FACE
+ *  the desk (the desk is behind it at −Z, so the chair back faces the viewer like
+ *  the reference). Found visually. Suspends locally (§23.1). */
 function Chair() {
   return (
-    // §20.2-3: the backrest used to sit on local −Z (toward the desk), burying it
-    // in the desk slab so the chair read as a stool. The backrest now faces the
-    // VIEWER (local +Z) with a −0.16 recline, raised to gaming-chair proportions
-    // (top ≈y1.2), and the whole chair is pulled slightly out (z −1.35 → −1.25) so
-    // the resting camera sees a proper tall chair BACK like the reference.
-    <group position={[-1.62, 0, -1.25]} rotation={[0, 0.1, 0]}>
-      {/* star base (5-point cylinder) */}
-      <mesh position={[0, 0.06, 0]} castShadow receiveShadow>
-        <cylinderGeometry args={[0.34, 0.36, 0.05, 5]} />
-        <meshStandardMaterial color={PAL.base} roughness={0.5} metalness={0.4} />
-      </mesh>
-      {/* gas column */}
-      <mesh position={[0, 0.3, 0]} castShadow>
-        <cylinderGeometry args={[0.045, 0.045, 0.42, 12]} />
-        <meshStandardMaterial color="#0a1526" roughness={0.4} metalness={0.5} />
-      </mesh>
-      {/* seat */}
-      <RoundedBox args={[0.56, 0.12, 0.52]} radius={0.05} smoothness={2} position={[0, 0.56, 0]} castShadow receiveShadow>
-        <meshStandardMaterial color={PAL.sofa} roughness={0.7} metalness={0.05} />
-      </RoundedBox>
-      {/* backrest on the VIEWER side (+Z), tall + reclined, gold accent emissive.
-          height 0.8, centre y0.8 → top ≈y1.2; +Z 0.24 offset clears the seat. */}
-      <RoundedBox args={[0.54, 0.8, 0.12]} radius={0.06} smoothness={2} position={[0, 0.8, 0.24]} rotation={[-0.16, 0, 0]} castShadow receiveShadow>
-        <meshStandardMaterial color={PAL.sofa} emissive={PAL.gold} emissiveIntensity={0.06} roughness={0.7} metalness={0.05} />
-      </RoundedBox>
+    <group position={[-1.62, 0, -1.25]}>
+      <Suspense fallback={null}>
+        <GlbModel slug="chair" height={1.25} rotY={Math.PI} />
+      </Suspense>
     </group>
   )
 }
 
-/** Low floor sofa in the room centre, facing the TV on the back wall (−Z). */
+/** §23.2 — owner-image GLB low floor sofa in the room centre, facing the TV on
+ *  the back wall (−Z). width 1.9; slot [0.5,0,1.15] kept. rotY faces the seat
+ *  toward −Z (the TV). Found visually. Suspends locally (§23.1). */
 function Sofa() {
   return (
-    // backrest toward +Z so the seat faces the TV on the −Z wall; shifted right
-    // onto the TV axis (§19.2).
-    <group position={[0.5, 0, 1.15]} rotation={[0, Math.PI, 0]}>
-      {/* seat base */}
-      <RoundedBox args={[1.6, 0.34, 0.82]} radius={0.08} smoothness={2} position={[0, 0.2, 0]} castShadow receiveShadow>
-        <meshStandardMaterial color={PAL.sofa} roughness={0.9} metalness={0} />
-      </RoundedBox>
-      {/* backrest */}
-      <RoundedBox args={[1.6, 0.52, 0.22]} radius={0.08} smoothness={2} position={[0, 0.5, -0.32]} castShadow receiveShadow>
-        <meshStandardMaterial color={PAL.sofa} roughness={0.9} metalness={0} />
-      </RoundedBox>
-      {/* two cushions */}
-      <RoundedBox args={[0.66, 0.16, 0.62]} radius={0.07} smoothness={2} position={[-0.38, 0.44, 0.04]} castShadow>
-        <meshStandardMaterial color={PAL.sofaCushion} roughness={0.92} metalness={0} />
-      </RoundedBox>
-      <RoundedBox args={[0.66, 0.16, 0.62]} radius={0.07} smoothness={2} position={[0.38, 0.44, 0.04]} castShadow>
-        <meshStandardMaterial color={PAL.sofaCushion} roughness={0.92} metalness={0} />
-      </RoundedBox>
+    <group position={[0.5, 0, 1.15]}>
+      <Suspense fallback={null}>
+        <GlbModel slug="sofa" width={1.9} rotY={0} />
+      </Suspense>
     </group>
   )
 }

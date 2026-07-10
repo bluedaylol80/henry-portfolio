@@ -833,6 +833,45 @@ Owner directives: ① the desk (PC) click must STOP auto-playing the intro video
 - Shots: resting + frame-focus + `/story#about` viewport (play chip visible on the card).
 - Luma gate [46,92] re-measured (frame art slightly larger/brighter — expected negligible).
 
+## 23. v15 — Owner-image GLB furniture swap (2026-07-10)
+
+Owner produced 10 clean furniture images (single object, bright bg); they were converted to draco-compressed GLBs, already at `public/models/{desk,tv,bookshelf,server,coffee,speaker,chair,sofa,plant,guitar}.glb` (2.0MB total, vertex-coloured — no texture maps). `public/art/frame.png` was also re-cut (true artwork bounds, the grey mat strip on the right is gone) and its subtitle typo pixel-patched ("임팩트로") — 819×1044, aspect 0.785; the Frame art plane aspect (1.10/1.395=0.789) is within 0.5%, no geometry change needed.
+
+### 23.1 Loading contract
+- `useGLTF(import.meta.env.BASE_URL + 'models/<slug>.glb')` (drei; draco decoder auto via its default CDN path). Call `useGLTF.preload(...)` for all used models at module scope. Each GLB component wrapped in `<Suspense fallback={null}>` (v13 pattern).
+- **Normalisation helper** (new, `src/room/glb.ts`): every GLB has arbitrary scale/origin/orientation. `useNormalizedGltf(url, { height?|width?, rotY })`: clone scene (or use `<Clone>`), compute Box3, uniform-scale so the given dim hits target, recentre so bottom = y0 and footprint centre = origin, then apply `rotY`. Enable `castShadow/receiveShadow` on all meshes. Per-item `rotY` is found VISUALLY (screenshot iteration) — the converted models' facing is arbitrary.
+- Hover: Hotspot's scale pulse works on the group as-is; the emissive-boost path must NO-OP safely on materials without `userData.baseEmissive` (verify no console errors on hover).
+
+### 23.2 Simple swaps (RoomShell props — delete the procedural builds)
+| slug | target dim | position (keep current world slots) | notes |
+| --- | --- | --- | --- |
+| chair | height 1.25 | current chair slot (desk front, z≈−1.25) | face the desk |
+| sofa | width 1.9 | [0.5, 0, 1.15] | face −Z (TV) |
+| plant | height 1.2 | [-0.35, 0, -2.02] | window↔console gap (§20.2-2) |
+| guitar | height 1.0 | [-1.9, 0, -1.32] | lean ≈0.12 rad toward wall |
+
+### 23.3 Hotspot swaps (visual children replaced; Hotspot ids + hit proxies + ANCHORS unchanged)
+| slug | target dim | notes |
+| --- | --- | --- |
+| speaker | height 0.9 | keep any glow decoration that still reads |
+| coffee | width 1.1 | GLB includes mug+pad; keep the steam sprite over the mug's approx spot if it aligns, else drop it (note deviation) |
+| server | height 1.6 | ADD 2–3 tiny emissive dot meshes on the GLB front face (the dark room needs the LED read); position visually |
+
+### 23.4 Composite swaps (GLB body + functional overlays — the owner's v13 screens MUST survive)
+- **desk**: GLB (width 2.0) into the desk slot, its monitor facing +Z. Overlay the `screens/monitor.png` emissive plane onto the GLB monitor's screen quad (position/scale/tilt iterated via screenshots; plane sits ~0.01 in front). The GLB has NO laptop — keep the current procedural laptop (with `screens/laptop.png`) beside it on the GLB desktop surface (find the top-y visually). Delete the procedural desk slab/legs/monitor body/keyboard/lamp (GLB has its own lamp).
+- **tv**: GLB tv+console (console width ≈1.6) into the TV slot facing +Z. Overlay the `screens/tv.png` emissive plane onto the GLB TV screen. Keep the burnt back-halo sprite. Delete the procedural console/panel/bracket/accent meshes.
+- **bookshelf**: GLB (height 2.5) against the left wall, front facing +X. Books are baked into the GLB → DELETE the v13 books.png block. KEEP the 5 phase-colour chapter books (semantic): stand them on one clearly visible GLB shelf level (y found visually).
+- **Fallback rule (gate 5 구현노트)**: if a composite alignment cannot be made clean after honest iteration, KEEP that object's current procedural build, and report the deviation + reason. A half-aligned floating screen is WORSE than the current build.
+
+### 23.5 QA (v15 gate)
+- typecheck/lint/build 0 · console errors 0 (including while hovering every hotspot).
+- Shots: resting + orbit + focus/crops per swapped object. Judge each against its source image (silhouette reads, no floating/clipping, sits on the floor, sane scale vs room).
+- All 7 hotspots raycast-hit; tooltips correct; desk click still → /story#about (v14 behaviour).
+- Luma [46,92] re-measured (vertex-coloured GLBs are darker than the procedural builds; if <55, ambient +≤0.08 ONLY).
+- First-load payload increase ≈2MB + draco wasm — acceptable; `useGLTF.preload` for parallel fetch.
+- `public/og.png` reshoot after the room look settles.
+- Frame focus shot: patched subtitle reads "전략에서 임팩트로", no visible patch seam, right-edge grey strip GONE.
+
 ## 8. QA checklist (each agent self-checks before finishing)
 
 - `npx tsc --noEmit -p tsconfig.app.json` → zero errors **in your files** (ignore errors from others' stubs if any remain).

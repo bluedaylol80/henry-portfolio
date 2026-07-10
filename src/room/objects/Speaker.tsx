@@ -1,17 +1,26 @@
-import { useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { RoundedBox } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
+import { GlbModel, modelUrl } from '../glb'
 import { isSoundOn, onSoundChange } from '../../lib/sound'
 
 /**
- * 스피커 — toggles the shared BGM (action 'sound'). Stands beside the TV/media
- * console on the LEFT wall (−X), its drivers facing into the room (+X). A
- * speaker box with two cone circles; when the BGM is on (subscribed via
- * onSoundChange) an emissive mint ring pulses outward.
+ * 스피커 — toggles the shared BGM (action 'sound'). Stands on the LEFT-wall front
+ * (−X), its front facing into the room (+X). §23.3 v15: the procedural box +
+ * cone meshes are replaced by the owner-image GLB `speaker` (height 0.9). The
+ * pulsing mint ring glow decoration is KEPT (§23.3: "keep any glow decoration
+ * that still reads") — it sits just in front of the GLB's driver face and pulses
+ * when BGM is on. The Hotspot id/hit-proxy/ANCHOR are untouched.
+ *
+ * rotY was found visually so the driver/front reads toward the viewer (+X). The
+ * ring lives on the wrapper group (NOT inside the normalised GLB) so its animated
+ * scale/emissive stay independent of the model.
  */
+useGLTF.preload(modelUrl('speaker'))
+
 export default function Speaker() {
   const [soundOn, setSoundOn] = useState(isSoundOn())
   const ringRef = useRef<THREE.Mesh>(null)
@@ -39,28 +48,18 @@ export default function Speaker() {
 
   return (
     <Hotspot id="speaker" hit={{ size: [0.5, 1.24, 0.5], position: [-1.95, 0.6, 1.95] }}>
-      {/* Left wall (−X), front — rotated so the drivers/ring face +X. */}
+      {/* Left wall (−X), front — the group faces +X toward the room. */}
       <group position={[-2.0, 0, 1.95]} rotation={[0, Math.PI / 2, 0]}>
-        {/* Speaker box (rounded matte plastic) */}
-        <RoundedBox args={[0.42, 1.2, 0.42]} radius={0.03} smoothness={2} position={[0, 0.6, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color={PAL.elev} roughness={0.55} metalness={0.1} />
-        </RoundedBox>
-        {/* Woofer (main driver) — cone circle */}
-        <mesh position={[0, 0.72, 0.22]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.15, 0.15, 0.02, 24]} />
-          <meshStandardMaterial color="#050b16" roughness={0.5} metalness={0.3} />
-        </mesh>
-        <mesh position={[0, 0.72, 0.235]} rotation={[Math.PI / 2, 0, 0]}>
-          <coneGeometry args={[0.1, 0.07, 24]} />
-          <meshStandardMaterial color={PAL.base} roughness={0.5} />
-        </mesh>
-        {/* Tweeter — small circle above */}
-        <mesh position={[0, 1.0, 0.22]} rotation={[Math.PI / 2, 0, 0]}>
-          <cylinderGeometry args={[0.06, 0.06, 0.02, 20]} />
-          <meshStandardMaterial color="#050b16" roughness={0.5} metalness={0.3} />
-        </mesh>
-        {/* Pulsing mint ring around the woofer (visible only when sound on) */}
-        <mesh ref={ringRef} position={[0, 0.72, 0.27]} rotation={[0, 0, 0]}>
+        {/* §23.3: owner-image GLB speaker, height 0.9. Suspends locally so the
+            loading GLB can't blank the canvas (§23.1). rotY turns the driver face
+            toward +X (found visually). */}
+        <Suspense fallback={null}>
+          <GlbModel slug="speaker" height={0.9} rotY={-Math.PI / 2} />
+        </Suspense>
+        {/* Pulsing mint ring in front of the driver (visible only when BGM on).
+            Kept decoration (§23.3). y≈0.55 sits over the woofer height; +Z 0.24
+            floats just in front of the GLB face (local +Z == world +X). */}
+        <mesh ref={ringRef} position={[0, 0.55, 0.24]} rotation={[0, 0, 0]}>
           <ringGeometry args={[0.17, 0.2, 32]} />
           <meshStandardMaterial
             color={PAL.mint}

@@ -1,15 +1,22 @@
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import * as THREE from 'three'
 import { useFrame } from '@react-three/fiber'
-import { RoundedBox } from '@react-three/drei'
+import { useGLTF } from '@react-three/drei'
 import Hotspot from '../Hotspot'
 import { PAL } from '../palette'
+import { GlbModel, modelUrl } from '../glb'
 
 /**
- * 서버 랙 — the AI-chapter hotspot (→ /story#ai). A dark rack in the back-RIGHT
- * corner (+X/−Z) beside the window, with 3 LEDs blinking at staggered rates
- * (gold / cyan / mint) plus a thin emissive cable line running to the desk side.
+ * 서버 랙 — the AI-chapter hotspot (→ /story#ai). In the back-RIGHT corner
+ * (+X/−Z). §23.3 v15: the procedural rack body/panel/slots are replaced by the
+ * owner-image GLB `server` (height 1.6). Vertex-coloured GLBs read dark in the
+ * dim room, so per §23.3 we ADD 3 tiny emissive LED dots on the GLB's front
+ * (+Z-facing) face — they blink at staggered rates (gold / cyan / mint) so the
+ * rack still "lives". LED positions were found visually against the GLB front.
+ * The Hotspot id/hit-proxy/ANCHOR are untouched.
  */
+useGLTF.preload(modelUrl('server'))
+
 const LED_COLORS = [PAL.goldDeep, PAL.cyan, PAL.mint] as const
 const LED_RATES = [1.7, 2.6, 3.4] as const
 
@@ -31,47 +38,24 @@ export default function Server() {
   return (
     <Hotspot id="server" hit={{ size: [0.78, 1.58, 0.72], position: [2.05, 0.75, -1.65] }}>
       <group position={[2.05, 0, -1.65]}>
-        {/* Rack body (rounded brushed metal) */}
-        <RoundedBox args={[0.7, 1.5, 0.6]} radius={0.03} smoothness={2} position={[0, 0.75, 0]} castShadow receiveShadow>
-          <meshStandardMaterial color="#0b1424" roughness={0.4} metalness={0.55} />
-        </RoundedBox>
-        {/* Front panel (slightly lighter) */}
-        <mesh position={[0, 0.75, 0.31]} castShadow>
-          <boxGeometry args={[0.62, 1.42, 0.02]} />
-          <meshStandardMaterial color={PAL.base} roughness={0.35} metalness={0.6} />
-        </mesh>
-        {/* Rack unit slots (dark grooves) */}
-        {[0, 1].map((i) => (
-          <mesh key={i} position={[0, 0.5 + i * 0.5, 0.325]}>
-            <boxGeometry args={[0.5, 0.34, 0.015]} />
-            <meshStandardMaterial color="#050b16" roughness={0.5} metalness={0.3} />
-          </mesh>
-        ))}
-        {/* 3 blinking LEDs */}
+        {/* §23.3: owner-image GLB server rack, height 1.6. Suspends locally so a
+            loading GLB can't blank the canvas (§23.1). rotY faces the front (its
+            richer, panelled side) toward the viewer (+Z/+X) — found visually. */}
+        <Suspense fallback={null}>
+          <GlbModel slug="server" height={1.6} rotY={0} />
+        </Suspense>
+        {/* 3 ADDED emissive LED dots on the front face (§23.3 — the dark room
+            needs the LED read). Positioned visually just proud of the +Z face;
+            blink independently. No userData.baseEmissive → the hover-boost path
+            leaves them alone (they animate themselves). */}
         <group ref={ledsRef}>
           {LED_COLORS.map((c, i) => (
-            <mesh key={i} position={[-0.18 + i * 0.06, 1.28, 0.34]}>
-              <sphereGeometry args={[0.022, 10, 10]} />
-              <meshStandardMaterial
-                color={c}
-                emissive={c}
-                emissiveIntensity={0.9}
-                toneMapped={false}
-              />
+            <mesh key={i} position={[-0.12 + i * 0.06, 1.18, 0.31]}>
+              <sphereGeometry args={[0.02, 10, 10]} />
+              <meshStandardMaterial color={c} emissive={c} emissiveIntensity={0.9} toneMapped={false} />
             </mesh>
           ))}
         </group>
-        {/* Thin emissive cable line (toward desk) */}
-        <mesh position={[-0.55, 0.06, 0.2]} rotation={[0, 0, 0.08]}>
-          <boxGeometry args={[1.1, 0.012, 0.012]} />
-          <meshStandardMaterial
-            color={PAL.cyan}
-            emissive={PAL.cyan}
-            emissiveIntensity={0.7}
-            toneMapped={false}
-            userData={{ baseEmissive: 0.7 }}
-          />
-        </mesh>
       </group>
     </Hotspot>
   )

@@ -7,19 +7,19 @@ import { PAL } from '../palette'
 import { getGlowTexture } from '../textures'
 
 /**
- * TV (hotspot `tv`, renamed from the old arcade) — the '상세 이력' hotspot
- * (→ Notion, external). A flat-panel screen wall-mounted on the BACK wall (−Z),
- * right side (SPEC §19.2 — the reference's warm-backlit TV), its screen facing
- * into the room (+Z), a low media console below on the floor. A warm burnt-orange
- * glow halo sits behind the panel like the reference TV's red glow.
+ * TV (hotspot `tv`) — the '상세 이력' hotspot (→ Notion). A flat-panel screen on
+ * a low media console on the BACK wall (−Z), right side, screen facing +Z into
+ * the room. A warm burnt-orange glow halo sits behind the panel.
  *
- * §21.2 v13: the §20.2-5 self-contained scanline ShaderMaterial retired — the
- * owner delivered `screens/tv.png` (1280×720, mostly-dark PLANNER EVOLVED still).
- * The screen is now a textured emissive plane (map + emissiveMap + emissive
- * #ffffff + toneMapped:false, emissiveIntensity 0.5 with a matching
- * userData.baseEmissive so Hotspot's hover-boost scales from the right base).
- * The image is mostly dark, so the god-ray/wordmark region reads without
- * blowing out. The burnt back-halo (sprite) still carries the warmth.
+ * §23.4-fix v15fix (TV FALLBACK — sanctioned by §23.4 "Fallback rule"): the v15
+ * composite swap put the `tv` GLB into this slot and OVERLAID `screens/tv.png`
+ * onto the GLB screen quad. Review found the overlay unrecoverable from the
+ * resting view — the tv.png plane sat behind/offset from the GLB glass so the
+ * panel read BLACK ("PLANNER EVOLVED" absent), and the GLB console washed white
+ * under the warm light. Per §23.4 ("A half-aligned floating screen is WORSE than
+ * the current build") this object reverts to the pre-v15 PROCEDURAL TV, which
+ * renders tv.png cleanly on its own panel and grounds correctly. The GLB is no
+ * longer loaded for the TV. Deviation recorded in the report.
  *
  * The group is NOT rotated: the screen already faces +Z (toward the sofa).
  */
@@ -33,7 +33,7 @@ function TvScreen() {
   tex.colorSpace = THREE.SRGBColorSpace
   tex.anisotropy = 8
 
-  // 1.44 × 0.81 = 16:9 to match the 1280×720 asset (was 1.44 × 0.84, §21.2).
+  // 1.44 × 0.81 = 16:9 to match the 1280×720 asset.
   return (
     <mesh position={[0, 1.62, 0.056]}>
       <planeGeometry args={[1.44, 0.81]} />
