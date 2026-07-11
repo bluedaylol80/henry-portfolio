@@ -81,8 +81,8 @@ export const hub = {
     en: '“From kickoff to live service, I prefer the work of a project owner and manager — collaborating across departments to draw efficiency out of the widest possible scope, and growing by solving the issues that come with it.”',
   } as Bi,
   missionSource: {
-    ko: '— 본인 소개글에서. 다섯 번의 직무 전환을 관통한 한 문장.',
-    en: '— From his own introduction. One sentence behind all five role transitions.',
+    ko: '— 19년을 관통해온 업무 철학. 다섯 번의 직무 전환을 지나며 다듬어진 한 문장.',
+    en: '— A working philosophy running through 19 years, honed across five role transitions.',
   } as Bi,
   workstyleTitle: {
     ko: '커리어를 관통하는 일하는 방식',
@@ -144,8 +144,8 @@ export const phases: JourneyPhase[] = [
       en: 'The ground floor — learning, hands-on, what keeps a game alive.',
     },
     intro: {
-      ko: 'MMORPG SUN 온라인의 라이브 운영으로 커리어를 시작했습니다. 유저 이슈의 최전선에서 하루하루의 서비스를 지켰고 — 반복되는 업무를 기록하고 정리하는 습관, 그러니까 이 커리어 전체를 관통하게 될 히스토리 관리가 여기서 시작됐습니다.',
-      en: 'The career began with live operations on the MMORPG SUN Online. On the front line of player issues, keeping the service running day by day — and this is where the habit of recording and organizing recurring work began: the history-keeping that would run through the entire career.',
+      ko: 'MORPG SUN 온라인의 라이브 운영으로 커리어를 시작했습니다. 유저 이슈의 최전선에서 하루하루의 서비스를 지켰고 — 반복되는 업무를 기록하고 정리하는 습관, 그러니까 이 커리어 전체를 관통하게 될 히스토리 관리가 여기서 시작됐습니다.',
+      en: 'The career began with live operations on the MORPG SUN Online. On the front line of player issues, keeping the service running day by day — and this is where the habit of recording and organizing recurring work began: the history-keeping that would run through the entire career.',
     },
     did: [
       { ko: '라이브 서비스 일일 운영', en: 'Day-to-day live service operations' },
@@ -167,7 +167,7 @@ export const phases: JourneyPhase[] = [
       {
         stat: { ko: '1.5년', en: '1.5 yrs' },
         label: { ko: '라이브 운영', en: 'Live operations' },
-        sub: { ko: 'SUN 온라인 (MMORPG)', en: 'SUN Online (MMORPG)' },
+        sub: { ko: 'SUN 온라인 (MORPG)', en: 'SUN Online (MORPG)' },
       },
       {
         stat: { ko: '1층', en: 'Layer 1' },
@@ -202,10 +202,10 @@ export const phases: JourneyPhase[] = [
     name: { ko: 'FUN QA', en: 'FUN QA' },
     tagline: { ko: '재미를 검수하다', en: 'Testing for fun' },
     period: '2008 — 2011',
-    companies: { ko: 'NHN 한게임', en: 'NHN Hangame' },
+    companies: { ko: 'NHN Service (G-plus)', en: 'NHN Service (G-plus)' },
     roleLine: {
-      ko: '한게임운영실 파트장 — Tera · 아틀란티카 · R2 · 울프팀',
-      en: 'Part Lead, Hangame Ops — Tera · Atlantica · R2 · Wolfteam',
+      ko: '한게임운영실 파트장 — 라이브 운영 & FUN QA',
+      en: 'Part Lead, Hangame Ops — Live Ops & FUN QA',
     },
     title: { ko: 'FUN QA — 버그가 아니라 재미를 검수하다', en: 'FUN QA — testing for fun, not just for bugs' },
     oneLiner: {
@@ -213,14 +213,14 @@ export const phases: JourneyPhase[] = [
       en: 'Regular QA asks “is it broken?” — FUN QA asks “is it fun?”',
     },
     intro: {
-      ko: '주관적인 재미를 검수 가능한 기준으로 바꾸는 훈련. 3년 2개월 동안 Tera를 포함한 라이브 타이틀들에서 게임성과 플레이 경험을 평가하고, 파트장으로서 그 기준을 조직의 언어로 만들었습니다.',
-      en: 'The craft of turning subjective fun into testable criteria. For three years and two months — across live titles including Tera — evaluating gameplay and player experience, and as part lead, turning those judgments into a shared organizational language.',
+      ko: '주관적인 재미를 검수 가능한 기준으로 바꾸는 훈련. 3년 2개월 동안 한게임운영실 파트장으로 Tera · 아틀란티카 · R2 · 울프팀의 라이브 운영을 지키면서, FUN QA로는 Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트의 게임성과 플레이 경험을 평가하고 그 기준을 조직의 언어로 만들었습니다.',
+      en: 'The craft of turning subjective fun into testable criteria. For three years and two months as part lead in Hangame Ops — running live operations for Tera, Atlantica, R2 and Wolfteam, while as FUN QA evaluating gameplay and player experience on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict — and turning those judgments into a shared organizational language.',
     },
     did: [
+      { ko: '라이브 운영 — Tera(웹 운영) · 아틀란티카 · R2 · 울프팀', en: 'Live operations — Tera (web ops) · Atlantica · R2 · Wolfteam' },
+      { ko: 'FUN QA — Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트 게임성 분석 · 개선 방향 설계', en: 'FUN QA — gameplay analysis & improvement direction on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict' },
       { ko: '게임 재미(fun) 관점의 품질 평가 기준 수립', en: 'Building quality criteria from the “fun” perspective' },
-      { ko: '플레이 경험 평가와 개선 제안', en: 'Play-experience evaluation and improvement proposals' },
-      { ko: '파트장으로서 검수 파트 운영', en: 'Running the review part as its lead' },
-      { ko: '운영실 소속으로 라이브 이슈와 품질을 잇는 역할', en: 'Bridging live issues and quality from inside the ops division' },
+      { ko: '파트장으로서 운영 · 검수 파트 운영', en: 'Running the ops & review part as its lead' },
     ],
     problems: [
       {
@@ -235,12 +235,16 @@ export const phases: JourneyPhase[] = [
     outputs: [
       {
         stat: { ko: '3년 2개월', en: '3y 2m' },
-        label: { ko: 'FUN QA 파트장', en: 'FUN QA part lead' },
+        label: { ko: '한게임운영실 파트장', en: 'Part lead, Hangame Ops' },
+        sub: { ko: '라이브 운영 & FUN QA', en: 'Live ops & FUN QA' },
       },
       {
-        stat: { ko: '4종+', en: '4+' },
-        label: { ko: '담당 라이브 타이틀', en: 'Live titles covered' },
-        sub: { ko: 'Tera · 아틀란티카 · R2 · 울프팀', en: 'Tera · Atlantica · R2 · Wolfteam' },
+        stat: { ko: '7종', en: '7' },
+        label: { ko: '담당 타이틀 — 운영 4 · FUN QA 4', en: 'Titles — 4 in ops · 4 in FUN QA' },
+        sub: {
+          ko: '운영: Tera · 아틀란티카 · R2 · 울프팀 / FUN QA: Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트',
+          en: 'Ops: Tera · Atlantica · R2 · Wolfteam / FUN QA: Tera dev build · Dragon Ball Online · Twelve Sky 2 · Metro Conflict',
+        },
       },
     ],
     stories: [
@@ -250,8 +254,8 @@ export const phases: JourneyPhase[] = [
           en: 'The first role switch — inside one company',
         },
         body: {
-          ko: '사업 직무로의 전환은 회사를 옮기며 시작된 게 아니라 NHN 재직 중에 시작됐습니다. “전환은 점프가 아니라 인접 영역으로의 확장”이라는 커리어 문법이 여기서 만들어졌습니다.',
-          en: 'The move toward business didn’t start with a job change — it began while still at NHN. The career grammar of “transition as adjacent expansion, not a leap” was written here.',
+          ko: '직무 전환의 첫 경험은 NHN 안에서 일어났습니다 — 운영에서 FUN QA로. 사업으로의 전환은 소프트닉스 이직과 함께였지만, “전환은 점프가 아니라 인접 영역으로의 확장”이라는 커리어 문법은 여기서 만들어졌습니다.',
+          en: 'The first role switch happened inside NHN — from live ops into FUN QA. The move to business came later, with Softnyx; but the career grammar of “transition as adjacent expansion, not a leap” was written here.',
         },
       },
     ],
@@ -271,10 +275,10 @@ export const phases: JourneyPhase[] = [
     tagline: { ko: '지표가 의사결정이 되는 곳', en: 'Where metrics become decisions' },
     period: '2011 — 2024',
     companies: {
-      ko: '소프트닉스 · 넷마블 블루 · 넥슨 · 넵튠 · 스카이피플 · 원더피플',
-      en: 'Softnyx · Netmarble Blue · NEXON · Neptune · SkyPeople · Wonder People',
+      ko: '소프트닉스 · 넷마블 블루 · 넥슨 · 넵튠 레전드 · 스카이피플 · 원더피플',
+      en: 'Softnyx · Netmarble Blue · NEXON · Neptune Legend · SkyPeople · Wonder People',
     },
-    roleLine: { ko: '사업PM → 팀장 — 사업 프로젝트 12건', en: 'Business PM → Team Lead — 12 projects' },
+    roleLine: { ko: '사업 PM · 팀장 — 사업 프로젝트 13건', en: 'Business PM & Team Lead — 13 projects' },
     title: {
       ko: '사업 PM — 감각을 시장의 의사결정으로',
       en: 'Business PM — turning instinct into market decisions',
@@ -284,8 +288,8 @@ export const phases: JourneyPhase[] = [
       en: 'Thirteen years connecting ops and quality instincts to market decisions.',
     },
     intro: {
-      ko: '여섯 회사에서 열두 개의 사업 프로젝트를 맡았습니다. 지표 기반 의사결정, 런칭과 라이브의 사업 일정, 글로벌 퍼블리싱, BM과 업데이트 방향 — 개발 · 기획 · 마케팅 · 외부 파트너 사이의 조율이 일상이었습니다. 넥슨 모바일사업실에서의 4년 3개월이 커리어 최장 재직입니다.',
-      en: 'Twelve business projects across six companies. Metric-driven decisions, launch and live-ops business schedules, global publishing, BM and update direction — with daily coordination between dev, planning, marketing and external partners. Four years and three months at NEXON’s mobile business division remains the longest tenure of the career.',
+      ko: '여섯 회사에서 열세 개의 사업 프로젝트를 맡았습니다. 지표 기반 의사결정, 런칭과 라이브의 사업 일정, 글로벌 퍼블리싱, BM과 업데이트 방향 — 개발 · 기획 · 마케팅 · 외부 파트너 사이의 조율이 일상이었습니다. 넥슨 모바일사업실에서의 4년 3개월이 커리어 최장 재직입니다.',
+      en: 'Thirteen business projects across six companies. Metric-driven decisions, launch and live-ops business schedules, global publishing, BM and update direction — with daily coordination between dev, planning, marketing and external partners. Four years and three months at NEXON’s mobile business division remains the longest tenure of the career.',
     },
     did: [
       { ko: '지표 기반 사업 의사결정 (매출 · 리텐션 · AU)', en: 'Metric-driven business decisions (revenue · retention · AU)' },
@@ -311,7 +315,7 @@ export const phases: JourneyPhase[] = [
         sub: { ko: '한국 양대 마켓 매출 3위 · 넥슨', en: '#3 grossing on both KR stores · NEXON' },
       },
       {
-        stat: { ko: '12건', en: '12' },
+        stat: { ko: '13건', en: '13' },
         label: { ko: '사업 PM 프로젝트', en: 'Business PM projects' },
         sub: { ko: '6개 회사 · 13년', en: '6 companies · 13 years' },
       },
@@ -352,8 +356,8 @@ export const phases: JourneyPhase[] = [
     period: '2021 · 2024.10 — 2026.05',
     companies: { ko: '네오위즈 · 달콤소프트', en: 'NEOWIZ · Dalcomsoft' },
     roleLine: {
-      ko: '기획팀장 → 사업본부 라이브기획팀장',
-      en: 'Planning Team Lead → Live Planning Team Lead',
+      ko: '기획팀장 → 라이브기획팀장 (라이브 디렉터)',
+      en: 'Planning Team Lead → Live Planning Team Lead (Live Director)',
     },
     title: {
       ko: '기획 — 기획서를 쓰는 팀장, 시스템을 남기는 설계자',
@@ -364,14 +368,14 @@ export const phases: JourneyPhase[] = [
       en: 'A team lead who writes the specs himself — and designs the team to run without him.',
     },
     intro: {
-      ko: '네오위즈에서 신규 시스템 기획 10건과 기존 시스템 개편 10건, 그리고 밸런스 기획을 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 6종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
-      en: 'At NEOWIZ, authoring 10 new systems, reworking 10 existing ones and owning the balancing hands-on completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across six K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
+      ko: '네오위즈에서 신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획 10건, 총 30건의 기획서를 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 12종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
+      en: 'At NEOWIZ, authoring 30 specs hands-on — 10 new systems, 10 reworks and 10 balancing — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across twelve K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
     },
     did: [
-      { ko: '시스템 기획서 직접 작성 — 네오위즈 신규 10 · 개편 10 + 밸런스', en: 'Wrote system specs hands-on — 10 new · 10 reworked + balancing at NEOWIZ' },
+      { ko: '시스템 기획서 직접 작성 — 네오위즈 신규 10 · 개편 10 · 밸런스 10 (총 30건)', en: 'Wrote system specs hands-on — 10 new · 10 reworked · 10 balancing at NEOWIZ (30 in total)' },
       {
-        ko: '라이브 서비스 플랜 수립 — 이벤트 · 상품 기획을 분석→제안까지, 프로젝트별 담당자가 바로 논의할 수 있는 수준으로 (K-pop IP 6종)',
-        en: 'Built live service plans — event & product planning from analysis to proposal, ready for per-project owners to act on (6 K-pop IP titles)',
+        ko: '라이브 서비스 플랜 수립 — 이벤트 · 상품 기획을 분석→제안까지, 프로젝트별 담당자가 바로 논의할 수 있는 수준으로 (K-pop IP 12종)',
+        en: 'Built live service plans — event & product planning from analysis to proposal, ready for per-project owners to act on (12 K-pop IP titles)',
       },
       {
         ko: '시스템 기획의 최초 기획 · 프로토타입 제작 → 개발팀과 구현 조율 — 미니게임 · 웹뷰 이벤트 (3.26.0 이후 마일스톤)',
@@ -436,9 +440,9 @@ export const phases: JourneyPhase[] = [
         },
       },
       {
-        stat: { ko: '20건', en: '20' },
-        label: { ko: '시스템 기획·개편', en: 'Systems designed & reworked' },
-        sub: { ko: '네오위즈 — 신규 10 · 개편 10 + 밸런스', en: 'NEOWIZ — 10 new · 10 reworked + balancing' },
+        stat: { ko: '30건', en: '30' },
+        label: { ko: '시스템 기획·개편·밸런스', en: 'Systems designed, reworked & balanced' },
+        sub: { ko: '네오위즈 — 신규 10 · 개편 10 · 밸런스 10', en: 'NEOWIZ — 10 new · 10 reworked · 10 balancing' },
       },
     ],
     stories: [

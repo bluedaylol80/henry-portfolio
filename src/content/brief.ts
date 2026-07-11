@@ -36,8 +36,8 @@ export const brief = {
   workTitle: { ko: '숫자로 남은 것', en: 'What the numbers say' } as Bi,
   work: [
     {
-      ko: '달콤소프트 — K-pop IP 라이브 6종 기획팀장(10인), 30+ AI 스킬로 루틴 업무 60% 단축',
-      en: 'Dalcomsoft — led live planning (10 people) for 6 K-pop IP titles; 30+ AI skills cut routine work 60%',
+      ko: '달콤소프트 — K-pop IP 라이브 12종 기획팀장(10인), 30+ AI 스킬로 루틴 업무 60% 단축',
+      en: 'Dalcomsoft — led live planning (10 people) for 12 K-pop IP titles; 30+ AI skills cut routine work 60%',
     },
     {
       ko: '린: 더 라이트브링어 — 누적 183억, 한국 양대 마켓 매출 3위 (넥슨, 사업PM)',
@@ -48,8 +48,8 @@ export const brief = {
       en: 'Chaos Chronicle — ₩9.8B lifetime, featured by Apple & Google in NA',
     },
     {
-      ko: '네오위즈 — 신규 시스템 기획 10건 · 기존 시스템 개편 10건 직접 작성 (+ 밸런스, 총 20건)',
-      en: 'NEOWIZ — authored 20 system specs hands-on (10 new · 10 reworked, plus balancing)',
+      ko: '네오위즈 — 신규 10건 · 개편 10건 · 밸런스 10건, 총 30건의 기획서 직접 작성',
+      en: 'NEOWIZ — authored 30 system specs hands-on (10 new · 10 reworked · 10 balancing)',
     },
   ] as Bi[],
 
