@@ -342,7 +342,7 @@ function Rug() {
  *  locally so a loading GLB can't blank the canvas (§23.1). */
 function Plant() {
   return (
-    <group position={[-0.35, 0, -2.02]}>
+    <group position={[-0.27, 0, -2.02]}>
       {/* §23.6-calib: preRotX=0.05 trues the pot's slight baked lean (the pot is
           near-plumb raw; the −20° PCA reading is the leaves splaying back). */}
       <Suspense fallback={null}>
@@ -359,14 +359,15 @@ function Plant() {
  *  Suspends locally (§23.1). */
 function Guitar() {
   return (
-    <group position={[-2.16, 0, 0.6]} rotation={[0, 0, 0.12]}>
-      {/* §23.7-yaw: the flush bookshelf now occupies the mid-left wall (footprint to
-          x−0.83, z∈[−1.5,0.6]), so the guitar is moved to the CLEAR left-wall
-          stretch just FORWARD of the bookshelf (z0.6, in the gap before the frame at
-          z1.05), near the wall (x−2.16). Keeps its intentional ≈0.12-rad Z-lean
-          toward the left wall (a posed lean, not a defect). preRotX=0.05 / preRotZ=−0.02 true
-          the small ~8° baked lean so it hangs plumb BEFORE that deliberate lean.
-          rotY=−0.6 angles the body toward the viewer. */}
+    <group position={[-2.16, 0, 0.15]} rotation={[0, 0, 0.12]}>
+      {/* §23.8 remeasure: the flush bookshelf now spans z[−1.34,−0.19] on the left
+          wall, and at z0.6 the guitar's headstock crossed the frame's left edge
+          (frame z0.47+). z0.15 stands it in the clear stretch BETWEEN the
+          bookshelf and the frame, near the wall (x−2.16). Keeps its intentional
+          ≈0.12-rad Z-lean toward the left wall (a posed lean, not a defect).
+          preRotX=0.05 / preRotZ=−0.02 true the small ~8° baked lean so it hangs
+          plumb BEFORE that deliberate lean. rotY=−0.6 angles the body toward the
+          viewer. */}
       <Suspense fallback={null}>
         <GlbModel slug="guitar" height={1.0} rotY={-0.6} preRotX={0.05} preRotZ={-0.02} />
       </Suspense>

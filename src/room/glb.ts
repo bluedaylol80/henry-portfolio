@@ -122,8 +122,11 @@ export function useNormalizedGltf(url: string, opts: NormalizeOpts): THREE.Group
     const wrap = new THREE.Group()
     wrap.add(root)
     wrap.rotation.y = rotY
+    // Name carries the model slug (e.g. "glb:bookshelf") so layout tooling can
+    // find each furniture unit in the scene graph (harmless in prod).
+    wrap.name = 'glb:' + (url.split('/').pop() ?? url).replace(/\.glb$/, '')
     return wrap
-  }, [scene, height, width, rotY, preRotX, preRotZ, preRotY])
+  }, [scene, url, height, width, rotY, preRotX, preRotZ, preRotY])
 }
 
 /** BASE_URL-prefixed model URL for GitHub Pages (§23.1); never root-absolute. */

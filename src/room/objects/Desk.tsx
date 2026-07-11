@@ -74,15 +74,14 @@ export default function Desk() {
   const glowTex = getGlowTexture()
 
   return (
-    <Hotspot id="desk" hit={{ size: [2.2, 1.5, 1.2], position: [-1.5, 0.95, -1.75] }}>
-      {/* Desk FLUSH along the BACK wall (§23.7-yaw). Flushed by the DESKTOP BODY
-          back edge (z−0.42 of the footprint centre), so center_z = −2.4 + 0.42 +
-          0.02 = −1.96 rests the desktop back at the back-wall plane (+0.02 gap) and
-          the desktop extends FORWARD into the room (front edge ≈z−1.54), leaving
-          room for the chair at z≈−1.2. The baked monitor reclines back BEHIND the
-          wall plane (hidden by the opaque wall box). x−1.5 clears the left wall /
-          bookshelf and the window (x−0.25). */}
-      <group position={[-1.5, 0, -1.96]}>
+    <Hotspot id="desk" hit={{ size: [2.2, 1.5, 1.2], position: [-1.5, 0.95, -1.8] }}>
+      {/* Desk FLUSH along the BACK wall (§23.7-yaw, §23.8 remeasure): the dense
+          band's back face measured z−2.33 at group z−1.96, so z−2.01 rests it at
+          the back-wall plane (z−2.38, +0.02 gap); the desktop extends FORWARD into
+          the room, leaving room for the chair at z≈−1.2. The baked monitor
+          reclines back BEHIND the wall plane (hidden by the opaque wall box).
+          x−1.5 tucks the desk into the back-left corner (owner's v11 choice). */}
+      <group position={[-1.5, 0, -2.01]}>
         {/* §23.7-yaw (2026-07-11): the desk was the only diagonal object (old
             rotY=π+0.55). The TripoSR desk's internal yaw is ~−40° off axis; rotY=
             2.443 snaps the desktop long-edge parallel to the back wall and the

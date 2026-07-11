@@ -36,8 +36,12 @@ export default function Server() {
   })
 
   return (
-    <Hotspot id="server" hit={{ size: [1.34, 1.58, 0.82], position: [1.95, 0.75, -1.65] }}>
-      <group position={[1.95, 0, -1.65]}>
+    <Hotspot id="server" hit={{ size: [0.75, 1.58, 0.7], position: [1.95, 0.75, -2.1] }}>
+      {/* §23.8 remeasure (2026-07-12): the rack's dense band sat at z[−1.89,−1.38]
+          — floating 0.51m off the back wall. z−2.14 rests the dense back face at
+          the back-wall plane (z−2.38) so the rack hugs the back-right corner like
+          the reference. Hit proxy tightened to the measured dense unit. */}
+      <group position={[1.95, 0, -2.14]}>
         {/* §23.7-yaw (2026-07-11): owner-image GLB server rack, height 1.6.
             preRotX=0.30 keeps the ~18° baked-pitch plumb correction. The GLB's rich
             LED rack-unit face is on the +X side of the levelled pose; rotY=−2.618

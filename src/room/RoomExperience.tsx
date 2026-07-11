@@ -56,9 +56,11 @@ export default function RoomExperience({
       shadows={full ? 'soft' : false}
       camera={{ fov: 38, position: [5.8, 4.7, 5.8], near: 0.1, far: 100 }}
       gl={{ antialias: full, powerPreference: 'high-performance' }}
-      onCreated={({ gl }) => {
+      onCreated={({ gl, scene }) => {
         gl.toneMapping = THREE.ACESFilmicToneMapping
         gl.toneMappingExposure = 1.4
+        // dev-only hook for the layout measurement harness (scripts/measure-layout.mjs)
+        if (import.meta.env.DEV) (window as unknown as Record<string, unknown>).__scene = scene
       }}
     >
       <color attach="background" args={['#0A1931']} />
