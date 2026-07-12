@@ -13,7 +13,7 @@
  * loop's restart is noticeable. Output is ~4s shorter than the input.
  */
 import { execFileSync } from 'node:child_process'
-import { existsSync } from 'node:fs'
+import { existsSync, rmSync } from 'node:fs'
 
 const args = process.argv.slice(2)
 const input = args.find((a) => !a.startsWith('--'))
@@ -54,6 +54,9 @@ if (seamless) {
     '-b:a', '128k', '-ar', '44100', '-ac', '2', out,
   ])
 }
+
+// clean up the intermediate wav (can be tens of MB)
+rmSync(tmp, { force: true })
 
 // report duration/size
 const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', out]).toString().trim()
