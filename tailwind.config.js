@@ -28,6 +28,17 @@ export default {
         lux: 'cubic-bezier(0.32,0.72,0,1)',
         out4: 'cubic-bezier(0.22,1,0.36,1)',
       },
+      keyframes: {
+        // §24 image-nav pin: a soft opacity-only breathe so the hotspot dots read
+        // as interactive without moving (transform is left free for hover scale).
+        'pin-pulse': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.55' },
+        },
+      },
+      animation: {
+        'pulse-slow': 'pin-pulse 2.4s cubic-bezier(0.22,1,0.36,1) infinite',
+      },
       fontFamily: {
         sans: [
           '"Pretendard Variable"',

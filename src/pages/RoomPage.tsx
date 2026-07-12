@@ -6,11 +6,9 @@ import { toggleSound } from '../lib/sound'
 import { useT } from '../lib/i18n'
 import { contact } from '../content/profile'
 import { coach, identity, introBadge, type RoomAction } from '../content/room'
-import RoomExperience from '../room/RoomExperience'
+import RoomImageNav from '../room/RoomImageNav'
 import FallbackGrid from '../room/FallbackGrid'
 import Legend from '../room/Legend'
-import Tooltip from '../room/Tooltip'
-import LabelTour from '../room/LabelTour'
 import RoomMenu from '../components/RoomMenu'
 import RoomStart from '../components/RoomStart'
 import { roomState } from '../room/roomState'
@@ -27,7 +25,10 @@ export default function RoomPage() {
   const navigate = useNavigate()
   const tier = useMemo(() => detectTier(), [])
   const reduced = useMemo(() => prefersReducedMotion(), [])
-  const use3D = tier !== 'fallback' && !reduced
+  // §24: the room is now a static hero image, so it is reduced-motion-safe and no
+  // longer needs a capable GPU — show it unless the tier is the bare fallback.
+  // (reduced-motion still gets the image; only the pin pulse is suppressed.)
+  const useRoom = tier !== 'fallback'
 
   // ── Start gate (§19.1) ───────────────────────────────────────────────
   // Unseen this session → show the "CLICK TO MENU" overlay; the bottom stack
@@ -42,7 +43,7 @@ export default function RoomPage() {
       return false
     }
   }, [])
-  const [entered, setEntered] = useState(() => !use3D || seenGate())
+  const [entered, setEntered] = useState(() => !useRoom || seenGate())
   // When the gate was already seen we set the shared bus flag at mount (no event
   // fires); an unseen gate flips it via enterRoom() inside RoomStart on click.
   useEffect(() => {
@@ -54,10 +55,10 @@ export default function RoomPage() {
 
   // Coach line fades out 5s AFTER entry (CSS opacity transition; reduced-safe).
   useEffect(() => {
-    if (!use3D || !entered) return
+    if (!useRoom || !entered) return
     const id = window.setTimeout(() => setCoachVisible(false), 5000)
     return () => window.clearTimeout(id)
-  }, [use3D, entered])
+  }, [useRoom, entered])
 
   // ── Intro badge (§15.2) ──────────────────────────────────────────────
   // Show a pulsing "▶ 소개 영상 보기" badge ~2.5s after mount, but ONLY while the
@@ -78,13 +79,13 @@ export default function RoomPage() {
   const [badgeReady, setBadgeReady] = useState(false)
 
   useEffect(() => {
-    if (!use3D || !entered) return
+    if (!useRoom || !entered) return
     const id = window.setTimeout(() => setBadgeReady(true), 2500)
     return () => window.clearTimeout(id)
-  }, [use3D, entered])
+  }, [useRoom, entered])
 
   useEffect(() => {
-    if (!use3D || badgeSeen) return
+    if (!useRoom || badgeSeen) return
     const recheck = () => {
       if (readIntroSeen()) setBadgeSeen(true)
     }
@@ -94,7 +95,7 @@ export default function RoomPage() {
       window.removeEventListener('focus', recheck)
       document.removeEventListener('visibilitychange', recheck)
     }
-  }, [use3D, badgeSeen, readIntroSeen])
+  }, [useRoom, badgeSeen, readIntroSeen])
 
   const showBadge = entered && badgeReady && !badgeSeen && !badgeDismissed
   const openIntroFromBadge = useCallback(() => {
@@ -141,7 +142,7 @@ export default function RoomPage() {
   actionRef.current = runAction
   const onAction = useCallback((id: string, action: RoomAction) => actionRef.current(id, action), [])
 
-  if (!use3D) {
+  if (!useRoom) {
     return (
       <main id="main" className="relative min-h-[100svh] overflow-hidden bg-abyss">
         {/* Decorative wordmark — root is home, so it is a plain span (no link). */}
@@ -164,8 +165,8 @@ export default function RoomPage() {
       className="relative h-[100svh] overflow-hidden bg-abyss"
       style={{ touchAction: 'none' }}
     >
-      {/* 3D scene */}
-      <RoomExperience tier={tier} reduced={reduced} onAction={onAction} />
+      {/* §24: static hero image + hotspot pins (replaces the R3F/GLB scene) */}
+      <RoomImageNav onAction={onAction} reduced={reduced} />
 
       {/* Start gate (§19.1) — "CLICK TO MENU" overlay above the live canvas,
           only while the session flag is unseen. Its click runs enterRoom(). */}
@@ -261,12 +262,6 @@ export default function RoomPage() {
           <Legend />
         </>
       )}
-
-      {/* First-visit tour chip (§16) + desktop hover Tooltip — mounted always;
-          both self-hide until the in-canvas tour/hover fires (the tour itself
-          waits for entry via TourDriver), so they never show on the start gate. */}
-      <LabelTour />
-      <Tooltip />
     </main>
   )
 }

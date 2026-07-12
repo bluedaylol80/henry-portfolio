@@ -51,8 +51,8 @@ export const fallbackChrome = {
 export const heroLink: Bi = { ko: '방에서 둘러보기 →', en: 'Explore the room →' }
 
 export const coach: Bi = {
-  ko: '물건을 클릭해 보세요 · 드래그로 둘러보기',
-  en: 'Click the objects · drag to look around',
+  ko: '방 안의 사물을 눌러 이동하세요 · 아래 메뉴로도 이동할 수 있어요',
+  en: 'Tap an object to navigate · or use the menu below',
 }
 
 export const backLabel: Bi = { ko: '메인으로', en: 'Home' }
