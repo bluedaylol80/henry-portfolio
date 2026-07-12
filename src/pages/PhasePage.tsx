@@ -3,7 +3,6 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import JourneyBg from '../components/JourneyBg'
 import WorkGallery from '../components/WorkGallery'
 import { useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
@@ -179,7 +178,6 @@ export default function PhasePage() {
 
   return (
     <>
-      <JourneyBg color={phase.color} />
       <main id="main" className="relative z-10">
         <article ref={root} className="section-pad container-std">
           {/* 1 · Hero */}
@@ -373,10 +371,10 @@ export default function PhasePage() {
               ) : (
                 <Link
                   to="/#contact"
-                  className="phase-nav bezel glow-cyan group block flex-1 transition-transform duration-500 ease-lux hover:-translate-y-1 hover:border-era-cyan/40 active:scale-[0.98]"
+                  className="phase-nav bezel glow-amber group block flex-1 transition-transform duration-500 ease-lux hover:-translate-y-1 hover:border-era-amber/40 active:scale-[0.98]"
                 >
                   <div className="bezel-core flex flex-row-reverse items-center gap-4 p-5 text-right md:p-6">
-                    <span className="text-era-cyan">
+                    <span className="text-era-amber">
                       <ArrowRight className="transition-transform duration-300 ease-out4 group-hover:translate-x-1" />
                     </span>
                     <span className="min-w-0 flex-1">

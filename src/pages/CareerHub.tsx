@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import JourneyBg from '../components/JourneyBg'
 import { useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
 import { EASE } from '../lib/motion'
@@ -126,7 +125,6 @@ export default function CareerHub() {
 
   return (
     <>
-      <JourneyBg />
       <main id="main" className="relative z-10">
         <div ref={root} className="section-pad container-std">
           {/* Header */}
@@ -148,7 +146,7 @@ export default function CareerHub() {
               <span
                 aria-hidden
                 className="absolute inset-y-0 left-0 w-1"
-                style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
+                style={{ background: 'linear-gradient(180deg,#F5B041,#F39C12,#E67E22)' }}
               />
               <blockquote className="break-keep pl-4 font-display text-xl font-medium italic leading-relaxed text-ink md:pl-6 md:text-[1.7rem] md:leading-[1.45]">
                 {t(hub.mission)}
@@ -234,7 +232,7 @@ export default function CareerHub() {
             </Link>
             <Link
               to="/story#contact"
-              className="glass glow-cyan group inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-era-cyan/40 md:text-base"
+              className="glass glow-amber group inline-flex items-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-era-amber/40 md:text-base"
             >
               {t(contact.title)}
               <ArrowRight />

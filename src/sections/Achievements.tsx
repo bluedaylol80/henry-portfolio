@@ -165,7 +165,7 @@ export default function Achievements() {
             // Flagship (index 0) is the wide featured cell.
             const isFlagship = i === 0
             const statClass = `inline-block font-display font-bold leading-none tracking-tight tabular-nums text-[clamp(2.75rem,6vw,4.5rem)] ${
-              item.emphasis ? 'text-era-cyan' : 'text-ink'
+              item.emphasis ? 'text-era-amber' : 'text-ink'
             }`
             // Cards with a linkTo become a full click target (SPEC §15.5-4):
             // keyboard-focusable role="link", Enter/Space navigates, cursor pointer.
@@ -192,7 +192,7 @@ export default function Achievements() {
                 key={item.tag + i}
                 {...linkProps}
                 className={`bezel group flex ${SPAN[i]} ${
-                  to ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-era-cyan/50' : ''
+                  to ? 'cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-era-amber/50' : ''
                 }`}
                 variants={reduced ? undefined : fadeUp}
                 whileHover={
@@ -201,7 +201,7 @@ export default function Achievements() {
               >
                 <div
                   className={`bezel-core glass-shine flex w-full flex-col p-7 transition-[box-shadow,background-color] duration-500 ease-lux group-hover:shadow-[inset_0_1px_1px_rgba(255,255,255,0.14),0_0_50px_-12px_rgba(230,126,34,0.45)] md:p-9 ${
-                    isFlagship ? 'bg-gradient-to-br from-era-cyan/[0.10] via-transparent to-transparent min-h-[240px]' : 'min-h-[210px] md:min-h-[240px]'
+                    isFlagship ? 'bg-gradient-to-br from-era-amber/[0.10] via-transparent to-transparent min-h-[240px]' : 'min-h-[210px] md:min-h-[240px]'
                   }`}
                 >
                   {/* Card body — flex-1 so the footnote (when present) pins to the bottom. */}

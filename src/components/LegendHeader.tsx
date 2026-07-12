@@ -52,7 +52,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'ko'}
         onClick={() => setLang('ko')}
-        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
+        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-amber' : 'text-ink-dim hover:text-ink'}`}
       >
         KO
       </button>
@@ -60,7 +60,7 @@ function LangToggle() {
         type="button"
         aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
-        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
+        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-amber' : 'text-ink-dim hover:text-ink'}`}
       >
         EN
       </button>
@@ -193,20 +193,20 @@ export default function LegendHeader() {
                 aria-current={active ? 'true' : undefined}
                 aria-pressed={isSound ? soundOn : undefined}
                 className={`inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-medium transition-colors duration-200 hover:bg-white/10 hover:text-ink md:text-sm ${
-                  active ? 'bg-white/10 text-era-cyan' : 'text-ink-dim'
+                  active ? 'bg-white/10 text-era-amber' : 'text-ink-dim'
                 }`}
               >
                 {t(h.label)}
                 {isSound && soundOn && (
                   <span
                     aria-hidden
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-era-sky shadow-[0_0_8px_rgba(0,242,254,0.9)]"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-era-amber shadow-[0_0_8px_rgba(245,176,65,0.9)]"
                   />
                 )}
                 {active && (
                   <span
                     aria-hidden
-                    className="inline-block h-1.5 w-1.5 rounded-full bg-era-cyan shadow-[0_0_8px_rgba(79,172,254,0.9)]"
+                    className="inline-block h-1.5 w-1.5 rounded-full bg-era-amber shadow-[0_0_8px_rgba(245,176,65,0.9)]"
                   />
                 )}
               </button>

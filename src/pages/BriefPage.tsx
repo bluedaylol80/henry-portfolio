@@ -1,6 +1,5 @@
 import { motion, type Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import JourneyBg from '../components/JourneyBg'
 import { useLang, useT } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/quality'
 import { brief } from '../content/brief'
@@ -53,7 +52,6 @@ export default function BriefPage() {
 
   return (
     <>
-      <JourneyBg />
       <main id="main" className="relative z-10">
         <motion.article
           variants={container}
@@ -84,7 +82,7 @@ export default function BriefPage() {
               <span
                 aria-hidden
                 className="absolute inset-y-0 left-0 w-1"
-                style={{ background: 'linear-gradient(180deg,#E67E22,#4FACFE,#00F2FE)' }}
+                style={{ background: 'linear-gradient(180deg,#F5B041,#F39C12,#E67E22)' }}
               />
               <div className="pl-4 md:pl-5">
                 <p className="font-display text-xl font-semibold text-ink md:text-2xl">
@@ -108,7 +106,7 @@ export default function BriefPage() {
             {brief.stats.map((s, i) => (
               <li key={i} className="bezel">
                 <div className="bezel-core flex flex-col items-start gap-1 p-4 md:p-5">
-                  <span className="font-display text-2xl font-bold tabular-nums text-era-cyan md:text-3xl">
+                  <span className="font-display text-2xl font-bold tabular-nums text-era-amber md:text-3xl">
                     {lang === 'ko' ? s.value : s.valueEn}
                   </span>
                   <span className="break-keep text-xs text-ink-dim md:text-sm">{t(s.label)}</span>
@@ -158,7 +156,7 @@ export default function BriefPage() {
             <h2 className="break-keep font-display text-[clamp(1.4rem,3.5vw,2.25rem)] font-bold leading-[1.15]">
               {t(brief.howTitle)}
             </h2>
-            <blockquote className="mt-6 break-keep border-l-2 border-era-cyan pl-5 font-display text-xl font-medium italic leading-relaxed text-ink md:text-2xl">
+            <blockquote className="mt-6 break-keep border-l-2 border-era-amber pl-5 font-display text-xl font-medium italic leading-relaxed text-ink md:text-2xl">
               {t(brief.how)}
             </blockquote>
           </motion.section>
@@ -176,10 +174,10 @@ export default function BriefPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor
-                className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-[1rem]"
+                className="btn-island glass glow-amber group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-amber/40 md:text-[1rem]"
               >
                 {t(brief.ctas.coffee)}
-                <span aria-hidden className="btn-island-icon text-era-cyan">
+                <span aria-hidden className="btn-island-icon text-era-amber">
                   <ArrowUpRight />
                 </span>
               </a>
@@ -197,7 +195,7 @@ export default function BriefPage() {
                 target="_blank"
                 rel="noreferrer"
                 data-cursor
-                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-era-sky md:text-[1rem]"
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-6 py-3 text-sm font-medium text-ink transition-colors duration-200 hover:border-white/35 hover:text-era-amber md:text-[1rem]"
               >
                 {t(brief.ctas.notion)}
                 <span aria-hidden>↗</span>

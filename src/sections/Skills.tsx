@@ -9,10 +9,10 @@ import { skills } from '../content/profile'
 
 function NewBadge() {
   return (
-    <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full border border-era-cyan/40 bg-era-cyan/10 px-2.5 py-1 font-display text-[10px] font-semibold uppercase tracking-[0.22em] text-era-cyan">
+    <span className="ml-auto inline-flex shrink-0 items-center gap-1.5 rounded-full border border-era-amber/40 bg-era-amber/10 px-2.5 py-1 font-display text-[10px] font-semibold uppercase tracking-[0.22em] text-era-amber">
       <span className="relative flex h-1.5 w-1.5">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-era-cyan opacity-75" />
-        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-era-cyan" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-era-amber opacity-75" />
+        <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-era-amber" />
       </span>
       NEW
     </span>
@@ -104,9 +104,9 @@ export default function Skills() {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 overflow-hidden rounded-lg"
                   >
-                    <span className="absolute inset-y-0 left-0 w-full -translate-x-full bg-gradient-to-r from-transparent via-era-cyan/[0.09] to-transparent transition-transform duration-[900ms] ease-out group-hover:translate-x-full" />
+                    <span className="absolute inset-y-0 left-0 w-full -translate-x-full bg-gradient-to-r from-transparent via-era-amber/[0.09] to-transparent transition-transform duration-[900ms] ease-out group-hover:translate-x-full" />
                   </span>
-                  <span className="relative w-8 shrink-0 font-display text-sm tabular-nums text-ink-dim transition-colors duration-300 group-hover:text-era-cyan md:text-base">
+                  <span className="relative w-8 shrink-0 font-display text-sm tabular-nums text-ink-dim transition-colors duration-300 group-hover:text-era-amber md:text-base">
                     {String(i + 1).padStart(2, '0')}
                   </span>
                   <span className="relative break-keep text-xl font-medium text-ink transition-transform duration-300 ease-out group-hover:translate-x-2 md:text-2xl">

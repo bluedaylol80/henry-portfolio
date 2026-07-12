@@ -36,7 +36,7 @@ function LangRow() {
         type="button"
         aria-pressed={lang === 'ko'}
         onClick={() => setLang('ko')}
-        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
+        className={`${base} ${lang === 'ko' ? 'bg-white/10 text-era-amber' : 'text-ink-dim hover:text-ink'}`}
       >
         KO
       </button>
@@ -44,7 +44,7 @@ function LangRow() {
         type="button"
         aria-pressed={lang === 'en'}
         onClick={() => setLang('en')}
-        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-cyan' : 'text-ink-dim hover:text-ink'}`}
+        className={`${base} ${lang === 'en' ? 'bg-white/10 text-era-amber' : 'text-ink-dim hover:text-ink'}`}
       >
         EN
       </button>
@@ -171,7 +171,7 @@ export default function RoomMenu() {
                   onClick={close}
                   className="group block break-keep"
                 >
-                  <span className="font-display text-4xl font-bold text-ink transition-colors duration-200 group-hover:text-era-cyan md:text-5xl">
+                  <span className="font-display text-4xl font-bold text-ink transition-colors duration-200 group-hover:text-era-amber md:text-5xl">
                     {t(menu.brief)}
                   </span>
                   <span className="mt-2 block max-w-md text-sm text-ink-dim md:text-base">
@@ -187,7 +187,7 @@ export default function RoomMenu() {
                   onClick={close}
                   className="group block break-keep"
                 >
-                  <span className="font-display text-4xl font-bold text-ink transition-colors duration-200 group-hover:text-era-cyan md:text-5xl">
+                  <span className="font-display text-4xl font-bold text-ink transition-colors duration-200 group-hover:text-era-amber md:text-5xl">
                     {t(menu.storyLabel)}
                   </span>
                   <span className="mt-2 block max-w-md text-sm text-ink-dim md:text-base">
@@ -222,11 +222,11 @@ export default function RoomMenu() {
                   <Link
                     to="/career"
                     onClick={close}
-                    className="inline-flex items-center gap-2 break-keep font-display text-2xl font-semibold text-era-cyan transition-opacity duration-200 hover:opacity-80 md:text-3xl"
+                    className="inline-flex items-center gap-2 break-keep font-display text-2xl font-semibold text-era-amber transition-opacity duration-200 hover:opacity-80 md:text-3xl"
                   >
                     <span
                       aria-hidden
-                      className="inline-block h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(79,172,254,0.9)]"
+                      className="inline-block h-2 w-2 rounded-full bg-era-amber shadow-[0_0_10px_rgba(245,176,65,0.9)]"
                     />
                     {t(journeyNavLabel)}
                   </Link>
@@ -240,7 +240,7 @@ export default function RoomMenu() {
                 target="_blank"
                 rel="noreferrer"
                 onClick={close}
-                className="mt-4 inline-flex items-center gap-2 break-keep text-lg text-ink-dim transition-colors duration-200 hover:text-era-sky md:text-xl"
+                className="mt-4 inline-flex items-center gap-2 break-keep text-lg text-ink-dim transition-colors duration-200 hover:text-era-amber md:text-xl"
               >
                 {t(contact.notionNavLabel)}
                 <span aria-hidden className="text-base">↗</span>
@@ -254,11 +254,11 @@ export default function RoomMenu() {
                 rel="noreferrer"
                 onClick={close}
                 data-cursor
-                className="glass glow-cyan mt-6 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-base font-medium text-ink transition-colors duration-200 hover:border-white/25"
+                className="glass glow-amber mt-6 inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-base font-medium text-ink transition-colors duration-200 hover:border-white/25"
               >
                 <span
                   aria-hidden
-                  className="h-2 w-2 rounded-full bg-era-cyan shadow-[0_0_10px_rgba(79,172,254,0.9)]"
+                  className="h-2 w-2 rounded-full bg-era-amber shadow-[0_0_10px_rgba(245,176,65,0.9)]"
                 />
                 {t(contact.navCta)}
               </motion.a>

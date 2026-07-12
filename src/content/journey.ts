@@ -350,7 +350,7 @@ export const phases: JourneyPhase[] = [
   {
     slug: 'planning',
     num: '04',
-    color: 'cyan',
+    color: 'amber',
     name: { ko: '기획', en: 'Planning' },
     tagline: { ko: '팀이 나 없이도 돌아가게', en: 'Teams that run without me' },
     period: '2021 · 2024.10 — 2026.05',
@@ -499,8 +499,8 @@ export const phases: JourneyPhase[] = [
     },
     did: [
       {
-        ko: '1인 운영 AI OS 구축 — 규칙 25 · 스킬 47 · 에이전트 11',
-        en: 'Built a one-person AI OS — 25 rules · 47 skills · 11 agents',
+        ko: '1인 운영 AI OS 구축 — 에이전트 20 · 스킬 65 · 규칙 31',
+        en: 'Built a one-person AI OS — 20 agents · 65 skills · 31 rules',
       },
       {
         ko: '품질 게이트 — 6축 루브릭 + 블라인드 채점 + 자동 재시도',
@@ -537,7 +537,7 @@ export const phases: JourneyPhase[] = [
       {
         stat: { ko: '47', en: '47' },
         label: { ko: '자동화 스킬', en: 'Automation skills' },
-        sub: { ko: '규칙 25 · 에이전트 11 · MCP 4종', en: '25 rules · 11 agents · 4 MCP integrations' },
+        sub: { ko: '규칙 31 · 에이전트 20 · MCP 4종', en: '31 rules · 20 agents · 4 MCP integrations' },
       },
       {
         stat: { ko: '60%', en: '60%' },

@@ -100,12 +100,12 @@ export default function Contact() {
           data-email
           data-cursor="true"
           href={`mailto:${contact.email}`}
-          className="group relative mt-10 inline-block font-display text-xl font-medium text-ink transition-colors duration-300 hover:text-era-cyan md:mt-14 md:text-3xl"
+          className="group relative mt-10 inline-block font-display text-xl font-medium text-ink transition-colors duration-300 hover:text-era-amber md:mt-14 md:text-3xl"
         >
           {contact.email}
           <span
             aria-hidden="true"
-            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-era-cyan transition-transform duration-500 ease-lux group-hover:scale-x-100"
+            className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-era-amber transition-transform duration-500 ease-lux group-hover:scale-x-100"
           />
         </a>
 
@@ -117,10 +117,10 @@ export default function Contact() {
             href={contact.calendly}
             target="_blank"
             rel="noreferrer"
-            className="btn-island glass glow-cyan group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-cyan/40 md:text-base"
+            className="btn-island glass glow-amber group py-1.5 pl-6 pr-1.5 text-sm font-semibold text-ink hover:border-era-amber/40 md:text-base"
           >
             {t(contact.calendlyLabel)}
-            <span aria-hidden className="btn-island-icon text-era-cyan">
+            <span aria-hidden className="btn-island-icon text-era-amber">
               <ArrowUpRight />
             </span>
           </a>
@@ -149,7 +149,7 @@ export default function Contact() {
             onClick={handleCopy}
             className="inline-flex items-center rounded-full border border-white/15 px-6 py-3.5 text-sm font-medium text-ink-dim transition-all duration-300 hover:-translate-y-0.5 hover:border-white/35 hover:text-ink md:text-base"
           >
-            <span aria-live="polite" className={copied ? 'text-era-cyan' : undefined}>
+            <span aria-live="polite" className={copied ? 'text-era-amber' : undefined}>
               {copied ? t(contact.copied) : t(contact.kakaoLabel)}
             </span>
           </button>

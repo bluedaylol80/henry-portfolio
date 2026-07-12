@@ -467,8 +467,8 @@ export const contact = {
 export const footer = {
   tagline: { ko: '기획자의 진화', en: 'The Evolution of a Planner' } as Bi,
   credit: {
-    ko: 'Vibe-coded with AI · React Three Fiber',
-    en: 'Vibe-coded with AI · React Three Fiber',
+    ko: 'Vibe-coded with AI',
+    en: 'Vibe-coded with AI',
   } as Bi,
   music: {
     ko: 'Music — ‘Midnight Study’ · AI 작곡',

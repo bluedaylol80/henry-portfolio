@@ -9,7 +9,7 @@ import { EASE } from '../lib/motion'
 import { openIntro } from '../lib/introBus'
 
 /** ops → qa → biz → plan accents for the career-arc widget. */
-const PHASE_COLORS = ['#F5B041', '#F39C12', '#E67E22', '#4FACFE']
+const PHASE_COLORS = ['#F5B041', '#F39C12', '#E67E22', '#F5B041']
 
 /** Count-up mini stat: gsap object tween, triggers once, writes text imperatively. */
 function CountUpStat({ value, suffix = '' }: { value: number; suffix?: string }) {
@@ -156,7 +156,7 @@ export default function About() {
                   button that plays the intro film (openIntro()); a centred glass ▶
                   chip + group-hover lift/brightness signal it, and the figcaption
                   carries the hint. `.about-character` stays on the animated figure. */}
-              <figure className="about-character glass glow-cyan group mb-6 overflow-hidden rounded-3xl border border-era-sky/30 p-0">
+              <figure className="about-character glass glow-amber group mb-6 overflow-hidden rounded-3xl border border-era-amber/30 p-0">
                 <button
                   type="button"
                   onClick={() => openIntro()}
@@ -192,7 +192,7 @@ export default function About() {
                 </button>
                 <figcaption className="border-t border-white/10 px-5 py-3 text-center font-display text-sm font-medium tracking-wide text-ink-dim">
                   {t(hero.name)}
-                  <span className="mt-1 block text-xs font-normal tracking-normal text-era-cyan">
+                  <span className="mt-1 block text-xs font-normal tracking-normal text-era-amber">
                     {t(about.playIntro)}
                   </span>
                 </figcaption>
@@ -201,7 +201,7 @@ export default function About() {
                 <ol className="relative">
                   <span
                     aria-hidden
-                    className="about-arc-line absolute bottom-12 left-[7px] top-2 w-px origin-top -translate-x-1/2 bg-gradient-to-b from-era-amber via-era-violet to-era-cyan"
+                    className="about-arc-line absolute bottom-12 left-[7px] top-2 w-px origin-top -translate-x-1/2 bg-gradient-to-b from-era-amber via-era-coral to-era-amber"
                   />
                   {about.arc.map((step, i) => (
                     <li key={i} className="about-arc-item relative flex items-start gap-4 pb-7">
@@ -243,7 +243,7 @@ export default function About() {
                 ))}
               </div>
 
-              <p className="about-attitude mt-7 text-sm italic text-era-cyan">{t(about.attitude)}</p>
+              <p className="about-attitude mt-7 text-sm italic text-era-amber">{t(about.attitude)}</p>
             </div>
           </aside>
         </div>

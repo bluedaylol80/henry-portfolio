@@ -14,7 +14,7 @@ const PHASE_COLOR: Record<CareerPhase, string> = {
   ops: '#F5B041',
   qa: '#F39C12',
   biz: '#E67E22',
-  plan: '#4FACFE',
+  plan: '#F5B041',
 }
 
 /** Timeline phase → journey deep-dive slug (SPEC §10.4). */
@@ -99,7 +99,7 @@ export default function Career() {
               to match the phase dots. */}
           <span
             aria-hidden
-            className="career-rail absolute bottom-3 left-[14px] top-3 w-0.5 origin-top -translate-x-1/2 rounded bg-gradient-to-b from-era-cyan via-era-violet to-era-amber md:left-[182px]"
+            className="career-rail absolute bottom-3 left-[14px] top-3 w-0.5 origin-top -translate-x-1/2 rounded bg-gradient-to-b from-era-amber via-era-coral to-era-violet md:left-[182px]"
           />
 
           <ol>
@@ -127,7 +127,7 @@ export default function Career() {
                   <p className="mt-1 break-keep text-ink-dim">{t(entry.role)}</p>
                   {entry.titles && <p className="mt-2 break-keep text-sm text-ink-dim">{t(entry.titles)}</p>}
                   {entry.highlight && (
-                    <p className="mt-2 break-keep border-l-2 border-era-cyan/60 pl-3 text-sm leading-relaxed text-ink-dim">
+                    <p className="mt-2 break-keep border-l-2 border-era-amber/60 pl-3 text-sm leading-relaxed text-ink-dim">
                       {t(entry.highlight)}
                     </p>
                   )}
@@ -135,7 +135,7 @@ export default function Career() {
                   <Link
                     to={`/career/${PHASE_SLUG[entry.phase]}`}
                     data-cursor
-                    className="mt-3 inline-flex items-center gap-1 text-xs text-ink-dim transition-colors duration-200 hover:text-era-cyan"
+                    className="mt-3 inline-flex items-center gap-1 text-xs text-ink-dim transition-colors duration-200 hover:text-era-amber"
                   >
                     {t(career.moreLabel)}
                     <span aria-hidden>→</span>
@@ -151,7 +151,7 @@ export default function Career() {
                 <span
                   className="relative z-10 block h-4 w-4 rounded-full ring-4 ring-abyss"
                   style={{
-                    background: 'linear-gradient(135deg,#F5B041,#E67E22,#4FACFE)',
+                    background: 'linear-gradient(135deg,#F5B041,#E67E22,#F5B041)',
                     boxShadow: '0 0 16px rgba(230,126,34,0.7)',
                   }}
                 />
@@ -172,12 +172,12 @@ export default function Career() {
                 <Link
                   to="/career"
                   data-cursor
-                  className="glass glow-cyan group inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium text-ink transition-colors duration-300 hover:border-white/25 md:text-base"
+                  className="glass glow-amber group inline-flex shrink-0 items-center gap-3 rounded-full px-6 py-3.5 text-sm font-medium text-ink transition-colors duration-300 hover:border-white/25 md:text-base"
                 >
                   <span className="break-keep">{t(career.deepDiveCta)}</span>
                   <span
                     aria-hidden
-                    className="text-era-cyan transition-transform duration-300 group-hover:translate-x-1"
+                    className="text-era-amber transition-transform duration-300 group-hover:translate-x-1"
                   >
                     →
                   </span>

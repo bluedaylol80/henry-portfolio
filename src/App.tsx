@@ -11,6 +11,7 @@ import Nav from './components/Nav'
 import LegendHeader from './components/LegendHeader'
 import Cursor from './components/Cursor'
 import Footer from './components/Footer'
+import RoomBackdrop from './components/RoomBackdrop'
 import IntroVideo from './components/IntroVideo'
 import DebugPanel from './components/DebugPanel'
 import Landing from './pages/Landing'
@@ -141,9 +142,22 @@ function ShellFooter() {
 }
 
 /**
- * Film-grain overlay, hidden on the room root (`/`) per SPEC §18.1: grain over
- * the dark 3D render read as sensor dirt. The room canvas owns its own texture,
- * so the overlay renders on every other route only.
+ * Shared "sleeping room" backdrop, hidden on the room root (`/`). Detail routes
+ * (/story, /career, /brief, /career/:slug) all sit over the same dimmed diorama
+ * so the site reads as one continuous space; the room root owns its own hero
+ * image. Replaces the old per-page particle / JourneyBg backgrounds (2026-07-13).
+ */
+function ShellBackdrop() {
+  const { pathname } = useLocation()
+  if (pathname === '/') return null
+  return <RoomBackdrop />
+}
+
+/**
+ * Film-grain overlay, hidden on the room root (`/`). Over the static room
+ * backdrop on detail routes it reads as warm sensor grain that ties the pages to
+ * the lamp-lit diorama. The room root owns its own image texture, so the overlay
+ * renders on every other route only.
  */
 function ShellNoise() {
   const { pathname } = useLocation()
@@ -189,6 +203,7 @@ export default function App() {
         </a>
         <Preloader />
         <IntroVideo />
+        <ShellBackdrop />
         <ShellNoise />
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
@@ -196,7 +211,7 @@ export default function App() {
         <ShellNav />
         <Routes>
           <Route path="/" element={<RoomPage />} />
-          <Route path="/story" element={<Landing tier={tier} />} />
+          <Route path="/story" element={<Landing />} />
           <Route path="/brief" element={<BriefPage />} />
           <Route path="/career" element={<CareerHub />} />
           <Route path="/career/:slug" element={<PhaseRoute />} />
