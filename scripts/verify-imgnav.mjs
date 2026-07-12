@@ -36,12 +36,7 @@ async function fresh() {
   return page
 }
 
-// map hotspot id → aria-label prefix so we can find each button
-const page0 = await fresh()
-const buttons = await page0.$$eval('button[aria-label]', (els) =>
-  els.map((e, i) => ({ i, label: e.getAttribute('aria-label') })),
-)
-// pins have aria-label "<label> — <hint>"; identify by hint keywords
+// pins have aria-label "<label> — <hint>"; identify each by a hint keyword
 const idByKeyword = [
   ['desk', '컴퓨터'],
   ['tv', 'Notion'],
@@ -51,7 +46,6 @@ const idByKeyword = [
   ['speaker', '스피커'],
   ['frame', '액자'],
 ]
-await page0.close()
 
 const results = []
 for (const [id, kw] of idByKeyword) {

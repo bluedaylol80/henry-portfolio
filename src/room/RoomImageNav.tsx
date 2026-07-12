@@ -36,7 +36,9 @@ const PINS: Record<string, { x: number; y: number }> = {
   desk: { x: 0.372, y: 0.535 }, // desk + glowing monitor (→ 소개)
   tv: { x: 0.612, y: 0.458 }, // wall TV, right (→ 상세 이력)
   server: { x: 0.74, y: 0.52 }, // server rack tower, back-right (→ AI 챕터)
-  coffee: { x: 0.565, y: 0.63 }, // sofa + coffee mug, centre (→ 커피챗)
+  coffee: { x: 0.633, y: 0.685 }, // right side-table with the coffee mug (→ 커피챗;
+  // owner 2026-07-12: the coffee-chat spot is the sofa, but the PIN sits on the
+  // right round side table where the mug is, not on the sofa itself)
 }
 
 export default function RoomImageNav({
