@@ -471,7 +471,7 @@ export const footer = {
     en: 'Vibe-coded with AI · React Three Fiber',
   } as Bi,
   music: {
-    ko: 'Music — Kounine (CC0)',
-    en: 'Music — Kounine (CC0)',
+    ko: 'Music — ‘Midnight Study’ · AI 작곡',
+    en: 'Music — “Midnight Study” · AI-composed',
   } as Bi,
 }

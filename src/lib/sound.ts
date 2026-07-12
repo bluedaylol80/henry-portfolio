@@ -5,7 +5,7 @@ import gsap from 'gsap'
  * 절대 자동재생하지 않음(항상 사용자 제스처에서 enable).
  */
 
-const TRACK = import.meta.env.BASE_URL + 'music/baguira.mp3'
+const TRACK = import.meta.env.BASE_URL + 'music/jazz-room.mp3'
 const TARGET_VOLUME = 0.3
 const FADE = 0.8
 
