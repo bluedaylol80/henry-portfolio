@@ -91,9 +91,13 @@ export default function RoomStart({ onEnter }: { onEnter: () => void }) {
         <path d="M46 66 60 80 74 70" />
       </svg>
 
-      {/* KO 필기체 subline */}
-      <span className="mt-3 select-none font-hand-ko text-xl text-ink-dim md:text-2xl">
-        이 방의 모든 사물이 메뉴입니다
+      {/* KO 필기체 sublines — the explicit "touch the screen to enter" instruction
+          (owner 2026-07-12: revive it) + the room-as-menu concept underneath. */}
+      <span className="mt-3 select-none font-hand-ko text-2xl leading-tight text-ink md:text-3xl">
+        {t({ ko: '화면을 눌러 방으로 들어가기', en: 'Touch the screen to enter' })}
+      </span>
+      <span className="mt-1 select-none font-hand-ko text-lg text-ink-dim md:text-xl">
+        {t({ ko: '방 안의 모든 사물이 메뉴입니다', en: 'Every object in the room is a menu' })}
       </span>
     </button>
   )

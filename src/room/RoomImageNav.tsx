@@ -85,11 +85,14 @@ export default function RoomImageNav({
                   reduced ? '' : 'animate-pulse-slow'
                 }`}
               />
-              {/* label chip — revealed on hover/focus, above the pin */}
+              {/* label chip — revealed on hover/focus, above the pin. Uses the
+                  entry-gate handwriting font (font-hand-ko, Nanum Pen Script; renders
+                  both KO & Latin) per owner 2026-07-12; sized up a step since the
+                  hand font reads smaller than the sans at the same px. */}
               <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                <span className="glass block rounded-full px-3 py-1 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)]">
-                  <span className="block text-xs font-semibold leading-tight text-ink">{t(h.label)}</span>
-                  <span className="block text-[10px] leading-tight text-ink-dim">{t(h.hint)}</span>
+                <span className="glass block rounded-2xl px-3.5 py-1 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)]">
+                  <span className="block font-hand-ko text-lg leading-tight text-ink">{t(h.label)}</span>
+                  <span className="block font-hand-ko text-sm leading-none text-ink-dim">{t(h.hint)}</span>
                 </span>
               </span>
             </button>
