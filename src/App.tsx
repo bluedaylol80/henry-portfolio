@@ -1,20 +1,17 @@
 import { useEffect, useMemo } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { LanguageProvider } from './lib/i18n'
 import { detectTier, type QualityTier } from './lib/quality'
 import { getLenis, initSmoothScroll } from './lib/scroll'
-import { onReady } from './lib/appState'
 import { meta } from './content/profile'
 import { phases } from './content/journey'
 import Preloader from './components/Preloader'
-import Nav from './components/Nav'
-import LegendHeader from './components/LegendHeader'
+import Header from './components/Header'
 import Cursor from './components/Cursor'
 import Footer from './components/Footer'
 import RoomBackdrop from './components/RoomBackdrop'
-import IntroVideo from './components/IntroVideo'
 import DebugPanel from './components/DebugPanel'
-import Landing from './pages/Landing'
+import Home from './pages/Home'
 import CareerHub from './pages/CareerHub'
 import PhasePage from './pages/PhasePage'
 import RoomPage from './pages/RoomPage'
@@ -26,17 +23,14 @@ function scrollToTop() {
   window.scrollTo(0, 0)
 }
 
-/** Section ids that used to live at `/#id` and now live on `/story#id`. */
-const STORY_SECTION_IDS = new Set(['hero', 'about', 'career', 'work', 'ai', 'skills', 'contact'])
-
-/** Resolves the document title for the current route per SPEC §13.1. */
+/** Resolves the document title for the current route (v20 IA). */
 function useDocumentTitle(pathname: string) {
   useEffect(() => {
-    let title = meta.title // '/' — the room IS the site now.
-    if (pathname === '/story') {
-      title = 'Story — Henry Lim'
-    } else if (pathname === '/brief') {
+    let title = meta.title // '/' — the content-first front door.
+    if (pathname === '/brief') {
       title = '3분 요약 — Henry Lim'
+    } else if (pathname === '/room') {
+      title = 'The Room — Henry Lim'
     } else if (pathname === '/career') {
       title = 'Career Journey — Henry Lim'
     } else if (pathname.startsWith('/career/')) {
@@ -49,120 +43,24 @@ function useDocumentTitle(pathname: string) {
 }
 
 /**
- * Drives route-change side effects (SPEC §13.1):
- *  - back-compat: `/#section` (old shared links) → `/story#section` (replace)
- *  - scroll to top instantly on pathname change
- *  - keep document.title in sync
- *  - on `/story` arrival with a `#section` hash, scroll there once ready
+ * Route-change side effects (v20): keep document.title in sync and scroll to top
+ * on pathname change. In-page hash scrolling (/#work, /#contact) is owned by Home;
+ * the old `/#section → /story#section` back-compat redirect is retired (root now
+ * IS the long-form).
  */
 function RouteEffects() {
-  const { pathname, hash } = useLocation()
-  const navigate = useNavigate()
+  const { pathname } = useLocation()
   useDocumentTitle(pathname)
-
-  // Back-compat: a known section hash on the room root belongs to the story now.
-  useEffect(() => {
-    if (pathname !== '/' || !hash) return
-    const id = hash.replace(/^#/, '')
-    if (id && STORY_SECTION_IDS.has(id)) {
-      navigate('/story' + hash, { replace: true })
-    }
-  }, [pathname, hash, navigate])
-
-  // Scroll to top on every path change (hash navigation handled separately).
   useEffect(() => {
     scrollToTop()
   }, [pathname])
-
-  // Story hash arrival: after the preloader is ready, scroll to the section.
-  // On a fresh deep-link the preloader delays readiness until layout settles, so
-  // one scroll lands. On SPA navigation (e.g. from the room menu → /story#work)
-  // `onReady` fires synchronously while Landing is still mounting/measuring, so
-  // Lenis has a stale document height and the first scrollTo is a no-op. We poll
-  // a few frames until the target has a stable, non-zero offset before scrolling.
-  useEffect(() => {
-    if (pathname !== '/story' || !hash) return
-    const id = hash.replace(/^#/, '')
-    if (!id) return
-
-    let raf = 0
-    let cancelled = false
-
-    const attemptScroll = () => {
-      let lastTop = -1
-      let stable = 0
-      let tries = 0
-      const tick = () => {
-        if (cancelled) return
-        const el = document.getElementById(id)
-        // Wait for the element and a settled layout (top unchanged across frames).
-        if (el) {
-          const top = Math.round(el.getBoundingClientRect().top + window.scrollY)
-          if (top === lastTop && top > 0) stable += 1
-          else stable = 0
-          lastTop = top
-          if (stable >= 2 || tries > 40) {
-            const lenis = getLenis()
-            if (lenis) {
-              // Arriving via SPA nav (e.g. room menu → /story#work), Lenis still
-              // has the room's tiny scroll limit (0). Without a fresh measure its
-              // scrollTo clamps to 0 and the section never comes into view. Force
-              // a resize (and start, in case the menu left it stopped) first.
-              lenis.start()
-              lenis.resize()
-              lenis.scrollTo(el, { offset: 0, duration: 1.2 })
-            } else {
-              el.scrollIntoView({ behavior: 'smooth' })
-            }
-            return
-          }
-        }
-        tries += 1
-        raf = requestAnimationFrame(tick)
-      }
-      raf = requestAnimationFrame(tick)
-    }
-
-    const unsub = onReady(attemptScroll)
-    return () => {
-      cancelled = true
-      cancelAnimationFrame(raf)
-      unsub()
-    }
-  }, [pathname, hash])
-
   return null
 }
 
-/** Shell footer, hidden on the immersive single-viewport room root (`/`). */
-function ShellFooter() {
-  const { pathname } = useLocation()
-  if (pathname === '/') return null
-  return <Footer />
-}
-
-/**
- * Shared "sleeping room" backdrop, hidden on the room root (`/`). Detail routes
- * (/story, /career, /brief, /career/:slug) all sit over the same dimmed diorama
- * so the site reads as one continuous space; the room root owns its own hero
- * image. Replaces the old per-page particle / JourneyBg backgrounds (2026-07-13).
- */
-function ShellBackdrop() {
-  const { pathname } = useLocation()
-  if (pathname === '/') return null
-  return <RoomBackdrop />
-}
-
-/**
- * Film-grain overlay, hidden on the room root (`/`). Over the static room
- * backdrop on detail routes it reads as warm sensor grain that ties the pages to
- * the lamp-lit diorama. The room root owns its own image texture, so the overlay
- * renders on every other route only.
- */
-function ShellNoise() {
-  const { pathname } = useLocation()
-  if (pathname === '/') return null
-  return <div className="noise-overlay" aria-hidden="true" />
+/** `/story` (and any old deep link) now aliases the root, preserving the hash. */
+function StoryRedirect() {
+  const { hash } = useLocation()
+  return <Navigate to={`/${hash}`} replace />
 }
 
 /** Redirects unknown phase slugs back to the hub, else renders the phase page. */
@@ -173,21 +71,37 @@ function PhaseRoute() {
   return <PhasePage />
 }
 
-/**
- * Content-page header. Per SPEC §14.4, `/story` and `/career*` now render the
- * LegendHeader (room-legend chips + wordmark + KO/EN + RoomMenu hamburger)
- * INSTEAD of the standard <Nav/>; the room root (`/`) renders nothing here (its
- * own top-right RoomMenu is the sole navigator). <Nav/> is kept in the repo but
- * no longer mounted anywhere.
- */
-function ShellNav() {
+/** Single Header (LOCKED §4.2) on every route except the immersive room. */
+function ShellHeader() {
   const { pathname } = useLocation()
-  if (pathname === '/') return null
-  return <LegendHeader />
+  if (pathname === '/room') return null
+  return <Header />
 }
 
-// <Nav/> is retained for reference but intentionally unmounted (SPEC §14.4).
-void Nav
+/** Footer everywhere except the immersive room (which owns its own chrome). */
+function ShellFooter() {
+  const { pathname } = useLocation()
+  if (pathname === '/room') return null
+  return <Footer />
+}
+
+/**
+ * The shared room-diorama backdrop is retained only for the legacy detail pages
+ * (/career, /brief) that were composed against it. Home owns its own graded navy
+ * surfaces; the immersive /room owns its hero image. Both opt out here.
+ */
+function ShellBackdrop() {
+  const { pathname } = useLocation()
+  const legacy = pathname.startsWith('/career') || pathname === '/brief'
+  return legacy ? <RoomBackdrop /> : null
+}
+
+/** Film-grain overlay — everywhere except the immersive room. */
+function ShellNoise() {
+  const { pathname } = useLocation()
+  if (pathname === '/room') return null
+  return <div className="noise-overlay" aria-hidden="true" />
+}
 
 export default function App() {
   const tier = useMemo<QualityTier>(() => detectTier(), [])
@@ -202,21 +116,20 @@ export default function App() {
           Skip to content
         </a>
         <Preloader />
-        <IntroVideo />
         <ShellBackdrop />
         <ShellNoise />
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
         <RouteEffects />
-        <ShellNav />
+        <ShellHeader />
         <Routes>
-          <Route path="/" element={<RoomPage />} />
-          <Route path="/story" element={<Landing />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/room" element={<RoomPage />} />
           <Route path="/brief" element={<BriefPage />} />
           <Route path="/career" element={<CareerHub />} />
           <Route path="/career/:slug" element={<PhaseRoute />} />
-          {/* Back-compat: the old /room entry now lives at the root. */}
-          <Route path="/room" element={<Navigate to="/" replace />} />
+          {/* Back-compat: the old long-form root now lives at `/`. */}
+          <Route path="/story" element={<StoryRedirect />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ShellFooter />

@@ -464,6 +464,105 @@ export const contact = {
   } as Bi,
 }
 
+/**
+ * v20 front-door (`/`) composition copy (LOCKED §5.1). All strings are
+ * public-safe and sourced from the v20 content pack (🟢). Hero proof strip =
+ * checkable numbers only; the 20/65/31 system scale lives inside the diagram.
+ */
+type StatN = { value: number; prefix?: string; suffix?: string; decimals?: number }
+
+export const home = {
+  eyebrow: { ko: 'AI SYSTEMS ARCHITECT · 임현택 HENRY LIM', en: 'AI SYSTEMS ARCHITECT · HENRY LIM' } as Bi,
+  h1: {
+    ko: '게임을 19년 운영한 사람이,\n이제 그 일을 돌리는 AI 운영체제를 짓습니다.',
+    en: '19 years running live games —\nnow I build the AI operating systems that run the work.',
+  } as Bi,
+  sub: {
+    ko: '넥슨·네오위즈에서 라이브 게임을 기획하고 사업을 이끈 19년. 그 운영 문법을 그대로 AI 위에 옮겨, 자연어 지시만으로 도는 시스템을 만듭니다.',
+    en: 'Nineteen years planning live games and running the business at NEXON and NEOWIZ — that operating grammar, rebuilt on AI, into systems that run from natural-language intent.',
+  } as Bi,
+  now: {
+    ko: 'Now — AI 시스템 · 프로덕트 리더십 역할과 컨설팅 제안을 받고 있습니다.',
+    en: 'Now — open to AI-systems / product-leadership roles & consulting.',
+  } as Bi,
+  /** Checkable numbers only (LOCKED §4.3-2 / A3). amber count-up. */
+  proof: [
+    {
+      ko: { value: 19, suffix: '' },
+      en: { value: 19, suffix: '' },
+      label: { ko: '년, 라이브 게임 운영·사업', en: 'years in live games & business' },
+    },
+    {
+      ko: { value: 183, suffix: '억', prefix: '₩' },
+      en: { value: 18.3, decimals: 1, prefix: '₩', suffix: 'B' },
+      label: { ko: '린 누적 매출 · 양대 스토어 3위', en: 'Lyn lifetime · #3 on both KR stores' },
+    },
+    {
+      ko: { value: 60, suffix: '%' },
+      en: { value: 60, suffix: '%' },
+      label: { ko: 'AI로 줄인 팀 루틴 (실무 검증)', en: 'team routine cut with AI (field-proven)' },
+    },
+  ] as { ko: StatN; en: StatN; label: Bi }[],
+  proofReceipt: {
+    ko: '증거: 달콤소프트 실무에서 메일→Notion 히스토리 자동화 · 스토어 product ID 명세 자동 반영(GAS). 개인 실험 아님.',
+    en: 'Receipt: at Dalcomsoft — email→Notion history automation · store product-IDs auto-filled into specs (GAS). Not a personal experiment.',
+  } as Bi,
+  ctaPrimary: { ko: '연락하기', en: 'Get in touch' } as Bi,
+  ctaBrief: { ko: '3분 브리프 →', en: '3-minute brief →' } as Bi,
+
+  manifesto: {
+    eyebrow: { ko: '명제', en: 'THE PREMISE' } as Bi,
+    title: { ko: '이직의 나열이 아니라, 역할의 적층.', en: 'Layers, not jobs.' } as Bi,
+    body: {
+      ko: '운영·품질·사업·기획 — 앞 단계의 역량은 버려진 적 없이 다음 단계의 기반이 됐습니다. 도메인 깊이가 새로운 해자이고, 저는 19년치를 보유했습니다.',
+      en: 'Live ops, quality, business, planning — no layer was ever discarded; each became the base of the next. Domain depth is the new moat, and I hold nineteen years of it.',
+    } as Bi,
+    bridgeTitle: { ko: '19년 운영 문법 → AI', en: '19 years of operating grammar → AI' } as Bi,
+    bridge: [
+      { from: { ko: '라이브옵스', en: 'Live ops' }, to: { ko: 'always-on 운영 · 상주 에이전트 · 킬스위치', en: 'always-on ops · resident agents · kill-switch' } },
+      { from: { ko: 'FUN QA', en: 'FUN QA' }, to: { ko: 'eval 설계 · 6축 품질 게이트', en: 'eval design · 6-axis quality gate' } },
+      { from: { ko: '기획팀장', en: 'Planning lead' }, to: { ko: '에이전트 오케스트레이션 · 승인 게이트', en: 'agent orchestration · approval gates' } },
+      { from: { ko: '인수인계 SSOT', en: 'Handover SSOT' }, to: { ko: 'LLM 세컨드브레인', en: 'LLM second brain' } },
+    ] as { from: Bi; to: Bi }[],
+  },
+
+  aiTeaser: {
+    eyebrow: { ko: '플래그십', en: 'FLAGSHIP' } as Bi,
+    title: { ko: '개인 AI 자동화 운영체제', en: 'A personal AI automation OS' } as Bi,
+    body: {
+      ko: '오케스트레이터·실행자·검증자 3계층 에이전트가 24/7 클라우드에서 협업합니다. 만든 자와 검증자를 모델 계열 수준에서 분리하고, LLM을 거치지 않는 킬스위치로 폭주를 막습니다. 이 사이트도 그 시스템이 만든 산출물입니다.',
+      en: 'Orchestrator, executor and verifier agents collaborate 24/7 in the cloud. Maker and verifier are separated at the model-family level, and a kill-switch that bypasses the LLM keeps it from running away. This very site is an artifact of that system.',
+    } as Bi,
+    cta: { ko: 'AI 시스템 자세히 보기', en: 'See the AI system' } as Bi,
+  },
+
+  workIntro: {
+    eyebrow: { ko: '증명', en: 'PROVEN IN MARKET' } as Bi,
+    title: { ko: '숫자로 남은 장면들', en: 'Moments that left numbers' } as Bi,
+    sub: { ko: '기획과 사업이 시장에서 증명된 순간들 — 전부 공개된 순위·평점 기반입니다.', en: 'Where planning and business were proven — all on public rankings and ratings.' } as Bi,
+  },
+
+  foundationIntro: {
+    eyebrow: { ko: '적층', en: 'THE STACK' } as Bi,
+    title: { ko: '19년, 다섯 개의 층', en: '19 years, five layers' } as Bi,
+    cta: { ko: '커리어 딥다이브 열기', en: 'Open the career deep-dive' } as Bi,
+  },
+
+  workstyleIntro: {
+    eyebrow: { ko: '일하는 방식', en: 'HOW I WORK' } as Bi,
+    title: { ko: '사람에게든 AI에게든, 같은 원칙', en: 'Same principles — for people or for AI' } as Bi,
+  },
+
+  contactIntro: {
+    eyebrow: { ko: '연락', en: 'CONTACT' } as Bi,
+    title: { ko: '다음 기획을 함께', en: "Let's plan what's next" } as Bi,
+    body: {
+      ko: '채용 제안이든 컨설팅이든 — 메일과 커피챗엔 빠르게 답합니다. 항상 즐거운 제안은 환영합니다.',
+      en: 'Roles or consulting — I reply quickly to email and coffee-chat requests. Fun proposals are always welcome.',
+    } as Bi,
+  },
+}
+
 export const footer = {
   tagline: { ko: '기획자의 진화', en: 'The Evolution of a Planner' } as Bi,
   credit: {
