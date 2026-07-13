@@ -296,8 +296,8 @@ export const work = {
         en: '#46 grossing on Google Play · 200K pre-registrations',
       },
       footnote: {
-        ko: '담당: 사업팀장 · 근거: 구글 플레이 공개 순위',
-        en: 'Role: business team lead · Proof: public Google Play ranking',
+        ko: '담당: 사업본부 총괄 · 내부 지표: 신규 28만 · 런칭 3개월 평균 ARPPU 16.8만원 · PU 1.61%',
+        en: 'Role: head of business · internal: 280K new users · ARPPU ₩168K · PU 1.61% (3-month avg)',
       },
     },
     {
@@ -310,8 +310,8 @@ export const work = {
       label: { ko: '신규 유저', en: 'New users' },
       sub: { ko: 'DAU 피크 7.1만', en: 'Peak DAU 71K' },
       footnote: {
-        ko: '담당: 사업파트장 · 근거: 내부 지표 요약 (공개 가능 범위)',
-        en: 'Role: business part lead · Proof: internal metrics, shared to the public-safe extent',
+        ko: '담당: 사업파트장(스팀 런칭·중국 라이브) · 개발 지원 없이 커뮤니티 기획만으로 ~35일 팔로워 급증 — WeChat +660% · QQ +769% · Weibo +51%',
+        en: 'Role: business part lead (Steam launch · China live) · community planning alone — no dev support — drove ~35-day follower growth: WeChat +660% · QQ +769% · Weibo +51%',
       },
     },
     {
