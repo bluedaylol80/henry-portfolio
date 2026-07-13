@@ -86,7 +86,59 @@ html.lenis body {
   }
 
   .eyebrow {
-    @apply font-display text-xs uppercase tracking-[0.35em] text-ink-dim md:text-sm;
+    @apply font-mono text-xs uppercase tracking-[0.35em] text-ink-dim md:text-sm;
+  }
+
+  /* ── v20 type system (LOCKED §3.2) ──────────────────────
+     Display face is Fraunces (EN, optical sizing); KO is promoted to a
+     first-class Pretendard 900 system — never a weak serif fallback. Apply
+     `.u-display` to any display headline; the :lang(ko) rule re-homes KO. */
+  .u-display {
+    @apply font-display;
+    font-optical-sizing: auto;
+    letter-spacing: -0.015em;
+  }
+  :lang(ko) .u-display {
+    font-family: 'Pretendard Variable', Pretendard, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+  /* Oversized tabular proof numbers — the anti-slop "settings, not font-name"
+     moat (§3.4-2): mono + tabular figures so proof digits align and read as
+     instrumentation, not decoration. */
+  .u-fig {
+    @apply font-mono;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+
+  /* ── Single image-treatment recipe (LOCKED §3.4-8) ──────
+     Every product screenshot gets ONE grade — navy duotone tint + brass
+     hairline frame + micro-grain — so raw UI dumps never break the premium
+     feel. Wrap an <img> in `.img-treatment`. */
+  .img-treatment {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid rgba(198, 161, 91, 0.35);
+    box-shadow:
+      0 24px 60px -24px rgba(3, 8, 20, 0.9),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+  .img-treatment > img {
+    display: block;
+    width: 100%;
+    filter: saturate(0.85) contrast(1.03);
+  }
+  .img-treatment::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(10, 25, 49, 0.12), rgba(6, 14, 28, 0.35)),
+      radial-gradient(120% 80% at 50% 0%, transparent 55%, rgba(6, 14, 28, 0.4));
+    mix-blend-mode: multiply;
   }
 
   .glass {
