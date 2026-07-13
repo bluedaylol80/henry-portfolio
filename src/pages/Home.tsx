@@ -213,7 +213,7 @@ export default function Home() {
               </h2>
               <p className="mt-5 max-w-md break-keep text-base leading-relaxed text-ink-soft">{t(home.aiTeaser.body)}</p>
               <Link
-                to="/career/ai-system"
+                to="/work/ai-os"
                 className="mt-7 inline-flex items-center gap-2 rounded-full border border-amber/50 px-5 py-2.5 font-mono text-sm uppercase tracking-[0.1em] text-amber transition-colors hover:bg-amber/10"
               >
                 {t(home.aiTeaser.cta)}

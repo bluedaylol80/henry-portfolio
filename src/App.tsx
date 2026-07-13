@@ -15,6 +15,7 @@ import CareerHub from './pages/CareerHub'
 import PhasePage from './pages/PhasePage'
 import RoomPage from './pages/RoomPage'
 import BriefPage from './pages/BriefPage'
+import WorkAiOs from './pages/WorkAiOs'
 
 /** Reset scroll position instantly, respecting Lenis when it is active. */
 function scrollToTop() {
@@ -28,6 +29,8 @@ function useDocumentTitle(pathname: string) {
     let title = meta.title // '/' — the content-first front door.
     if (pathname === '/brief') {
       title = '3분 요약 — Henry Lim'
+    } else if (pathname === '/work/ai-os') {
+      title = 'AI-OS · Flagship Case — Henry Lim'
     } else if (pathname === '/room') {
       title = 'The Room — Henry Lim'
     } else if (pathname === '/career') {
@@ -113,6 +116,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/room" element={<RoomPage />} />
           <Route path="/brief" element={<BriefPage />} />
+          <Route path="/work/ai-os" element={<WorkAiOs />} />
           <Route path="/career" element={<CareerHub />} />
           <Route path="/career/:slug" element={<PhaseRoute />} />
           {/* Back-compat: the old long-form root now lives at `/`. */}

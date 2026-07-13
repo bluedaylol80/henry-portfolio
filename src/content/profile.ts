@@ -563,6 +563,92 @@ export const home = {
   },
 }
 
+/**
+ * /work/ai-os — the flagship AI-OS case (LOCKED §5.4), 5-act structure. 100% the
+ * owner's own IP (no employer assets). Copy sourced from the v20 content pack §2.1
+ * + journey ai-system (🟢). The title is a checkable result, not a vanity claim.
+ */
+export const workAiOs = {
+  eyebrow: { ko: 'FLAGSHIP CASE · AI OPERATING SYSTEM', en: 'FLAGSHIP CASE · AI OPERATING SYSTEM' } as Bi,
+  title: {
+    ko: '팀 루틴의 60%를 지운\n개인 AI 운영체제',
+    en: "The personal AI OS that\nerased 60% of a team's routine",
+  } as Bi,
+  lede: {
+    ko: '19년간 사람 조직을 돌리던 운영 문법 — 위임 · 결재선 · 인수인계 · 24/7 대응 — 을 AI 위에 1:1로 옮긴 결과물입니다. 회사 자산과 무관한 100% 본인 IP.',
+    en: 'The operating grammar that ran human orgs for 19 years — delegation, approval lines, handover, 24/7 duty — transplanted one-for-one onto AI. 100% own IP, independent of any employer.',
+  } as Bi,
+  acts: [
+    {
+      key: 'WALL',
+      label: { ko: '벽', en: 'THE WALL' } as Bi,
+      title: { ko: 'AI 자동화의 진짜 문제는 만드는 게 아니다', en: "The hard part of AI automation isn't building it" } as Bi,
+      body: {
+        ko: '만든 자가 자기 결과를 검증하면 편향이 남고, 자동화는 감시가 없으면 폭주하며, 지식은 대화창과 함께 휘발됩니다. 19년 라이브 운영자의 눈엔 이 셋 다 낯익은 함정이었습니다.',
+        en: 'When the maker verifies their own output, bias survives; unwatched automation runs away; knowledge evaporates with the chat window. To a 19-year live-ops veteran, all three were familiar traps.',
+      } as Bi,
+    },
+    {
+      key: 'BET',
+      label: { ko: '베팅', en: 'THE BET' } as Bi,
+      title: { ko: '사람을 돌리던 문법을 그대로 AI에 이식한다', en: 'Transplant the grammar that ran people — onto AI' } as Bi,
+      body: {
+        ko: '위임 → 서브에이전트, 결재선 → 승인 게이트, 인수인계 SSOT → 세컨드브레인, 24/7 GM → 상주 에이전트 + 킬스위치. 새 기술이 아니라 19년간 검증된 운영 원칙을 옮기는 베팅이었습니다.',
+        en: 'Delegation → sub-agents; approval lines → gates; the handover SSOT → a second brain; the 24/7 GM → resident agents with a kill switch. Not a bet on new tech, but on operating principles proven over 19 years.',
+      } as Bi,
+    },
+    {
+      key: 'BUILD',
+      label: { ko: '구축', en: 'THE BUILD' } as Bi,
+      title: { ko: '3계층 에이전트 + 품질 게이트 + 안전장치', en: 'Three tiers + a quality gate + a fail-safe' } as Bi,
+      body: {
+        ko: '오케스트레이터가 의도를 작업으로 쪼개 실행자(20 에이전트 · 65 스킬)에 위임하고, 다른 모델 계열의 검증자가 6축 루브릭으로 블라인드 채점합니다. 폭주는 LLM을 거치지 않는 결정론적 킬스위치로 막습니다.',
+        en: 'The orchestrator splits intent into tasks and delegates to executors (20 agents · 65 skills); a verifier from a different model family blind-grades on a 6-axis rubric. Runaway is stopped by a deterministic kill switch that bypasses the LLM entirely.',
+      } as Bi,
+    },
+    {
+      key: 'RESULT',
+      label: { ko: '결과', en: 'THE RESULT' } as Bi,
+      title: { ko: '실무에서 60% 단축, 그리고 재귀적 증거', en: '60% cut in the field — and recursive proof' } as Bi,
+      body: {
+        ko: '달콤소프트 라이브 기획팀(10인)의 루틴 업무가 60% 줄었습니다(실무 검증). 그리고 이 커리어 문서들 자체가 블라인드 채점·자동 재시도 루프를 통과한 산출물입니다 — 케이스 10건 평균 90.1점, 8건 S등급. 시스템이 돈다는 가장 재귀적인 증거.',
+        en: "Routine work on Dalcomsoft's 10-person live-planning team dropped 60% (field-proven). And these very career documents are output that passed the blind-grading + auto-retry loop — 10 cases, avg 90.1, 8 graded S. The most recursive possible proof it works.",
+      } as Bi,
+    },
+    {
+      key: 'LESSON',
+      label: { ko: '배움', en: 'THE LESSON' } as Bi,
+      title: { ko: '어려운 건 만드는 게 아니라 안 풀리게 만드는 것', en: "The hard part is making it fail closed" } as Bi,
+      body: {
+        ko: '"만든 자 ≠ 검증자"는 구호가 아니라 로그로 남았고(실행 AI의 딴짓을 다른 계열 검증관이 근거를 달아 반려), 킬스위치 실사격 드릴은 문서 리뷰가 못 잡는 오발 경로를 당일 봉쇄했습니다. 자동화의 진짜 난이도는 fail-closed에 있습니다.',
+        en: '"Maker ≠ verifier" became a log entry, not a slogan (a cross-family verifier rejected the executor\'s slack-off with evidence); a live-fire kill-switch drill sealed a misfire path that no document review would catch. The real difficulty of automation is failing closed.',
+      } as Bi,
+    },
+  ] as { key: string; label: Bi; title: Bi; body: Bi }[],
+  diagramCaption: {
+    ko: '실제로 돌아가는 시스템 — 클릭해 각 계층을 살펴보세요.',
+    en: 'The system, actually running — click a tier to inspect it.',
+  } as Bi,
+  field: {
+    badge: { ko: 'FIELD-PROVEN · 달콤소프트', en: 'FIELD-PROVEN · Dalcomsoft' } as Bi,
+    lede: {
+      ko: '개인 실험이 아닙니다. 실제 10인 팀 운영에서 검증됐고, 아티팩트 자체가 자격증입니다.',
+      en: 'Not a personal experiment. Proven running a real 10-person team — the artifact is the credential.',
+    } as Bi,
+    items: [
+      { ko: '부서 간 메일 협업 → Notion 히스토리 체계로 이관', en: 'Email-only collaboration → moved into a Notion history system' },
+      { ko: '스토어 product ID 명세서 자동 반영 (Google Apps Script)', en: 'Store product-IDs auto-filled into specs (Google Apps Script)' },
+      { ko: '메일 · Slack · Notion 흐름을 한 화면에 모은 업무현황판(HTML) 직접 구축', en: 'A live HTML dashboard pulling mail, Slack and Notion into one view' },
+      { ko: '30+ AI 자동화 스킬로 팀 루틴 업무 60% 단축', en: '30+ AI automation skills cut routine team work by 60%' },
+    ] as Bi[],
+  },
+  galleryNote: {
+    ko: '실제 시스템 대시보드 · 로그 캡처는 준비 중입니다.',
+    en: 'Live dashboard & log captures are on the way.',
+  } as Bi,
+  backCta: { ko: '19년 커리어 전체 보기', en: 'See the full 19-year career' } as Bi,
+}
+
 export const footer = {
   tagline: { ko: '기획자의 진화', en: 'The Evolution of a Planner' } as Bi,
   credit: {
