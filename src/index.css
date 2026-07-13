@@ -237,6 +237,13 @@ html.lenis body {
     box-shadow: 0 0 40px -8px rgba(245, 176, 65, 0.35);
   }
 
+  /* Architecture-diagram data conduit — one cobalt pulse travelling the dispatch
+     line (§5.4). Auto-frozen by the global reduced-motion kill below. */
+  .conduit-pulse {
+    top: -0.25rem;
+    animation: conduit-travel 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
   .noise-overlay {
     position: fixed;
     inset: 0;
@@ -294,6 +301,24 @@ html.lenis body {
 
 .animate-room-start {
   animation: room-start-pulse 2.6s ease-in-out infinite;
+}
+
+/* Architecture-diagram conduit pulse travel (see .conduit-pulse). */
+@keyframes conduit-travel {
+  0% {
+    top: -0.25rem;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    top: 2.25rem;
+    opacity: 0;
+  }
 }
 
 /* Skip link */
