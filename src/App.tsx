@@ -9,7 +9,6 @@ import Preloader from './components/Preloader'
 import Header from './components/Header'
 import Cursor from './components/Cursor'
 import Footer from './components/Footer'
-import RoomBackdrop from './components/RoomBackdrop'
 import DebugPanel from './components/DebugPanel'
 import Home from './pages/Home'
 import CareerHub from './pages/CareerHub'
@@ -85,17 +84,6 @@ function ShellFooter() {
   return <Footer />
 }
 
-/**
- * The shared room-diorama backdrop is retained only for the legacy detail pages
- * (/career, /brief) that were composed against it. Home owns its own graded navy
- * surfaces; the immersive /room owns its hero image. Both opt out here.
- */
-function ShellBackdrop() {
-  const { pathname } = useLocation()
-  const legacy = pathname.startsWith('/career') || pathname === '/brief'
-  return legacy ? <RoomBackdrop /> : null
-}
-
 /** Film-grain overlay — everywhere except the immersive room. */
 function ShellNoise() {
   const { pathname } = useLocation()
@@ -116,7 +104,6 @@ export default function App() {
           Skip to content
         </a>
         <Preloader />
-        <ShellBackdrop />
         <ShellNoise />
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
