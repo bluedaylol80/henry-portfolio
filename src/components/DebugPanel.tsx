@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { detectTier } from '../lib/quality'
-import { sceneState } from '../three/sceneState'
 
 /**
  * `#debug` tuning overlay (SPEC §10.8), a nod to bruno-simon.com/#debug.
@@ -21,7 +20,6 @@ export default function DebugPanel() {
 
   const fpsRef = useRef<HTMLSpanElement>(null)
   const tierRef = useRef<HTMLSpanElement>(null)
-  const phaseRef = useRef<HTMLSpanElement>(null)
   const scrimRef = useRef<HTMLSpanElement>(null)
 
   // Toggle on hashchange.
@@ -52,7 +50,6 @@ export default function DebugPanel() {
     const paint = () => {
       if (fpsRef.current) fpsRef.current.textContent = String(fps)
       if (tierRef.current) tierRef.current.textContent = detectTier()
-      if (phaseRef.current) phaseRef.current.textContent = sceneState.phase.toFixed(2)
       if (scrimRef.current) scrimRef.current.textContent = readScrim()
     }
 
@@ -97,10 +94,6 @@ export default function DebugPanel() {
         <dt className="text-ink-mute">tier</dt>
         <dd className="text-right text-ink">
           <span ref={tierRef}>—</span>
-        </dd>
-        <dt className="text-ink-mute">phase</dt>
-        <dd className="text-right text-ink">
-          <span ref={phaseRef}>0.00</span>
         </dd>
         <dt className="text-ink-mute">scrim</dt>
         <dd className="text-right text-ink">
