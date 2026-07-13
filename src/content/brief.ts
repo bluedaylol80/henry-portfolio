@@ -56,8 +56,8 @@ export const brief = {
   aiTitle: { ko: '지금 하는 것', en: 'What I do now' } as Bi,
   ai: [
     {
-      ko: '개인 AI OS — 규칙 25 · 스킬 47 · 에이전트 11, 산출물은 6축 루브릭 + 블라인드 채점(평균 90.1)',
-      en: 'A personal AI OS — 25 rules · 47 skills · 11 agents; output gated by a 6-axis rubric + blind grading (avg 90.1)',
+      ko: '개인 AI OS — 규칙 31 · 스킬 65 · 에이전트 20, 산출물은 6축 루브릭 + 블라인드 채점(평균 90.1)',
+      en: 'A personal AI OS — 31 rules · 65 skills · 20 agents; output gated by a 6-axis rubric + blind grading (avg 90.1)',
     },
     {
       ko: '3-AI 협업 버스 — GPT 발주 · Claude 실행 · Codex 검증, 모델 계열 수준에서 "만든 자 ≠ 검증자"',

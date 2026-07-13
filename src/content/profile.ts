@@ -93,7 +93,7 @@ export const career = {
     {
       company: { ko: '달콤소프트', en: 'Dalcomsoft' },
       role: { ko: '라이브기획팀장 (라이브 디렉터)', en: 'Live Planning Team Lead (Live Director)' },
-      period: '2024.10 — 2026.05',
+      period: '2024.10 — 2026.07',
       phase: 'plan',
       titles: {
         ko: 'SuperStar 시리즈 라이브 12종 (SM · JYP 등 K-pop IP)',

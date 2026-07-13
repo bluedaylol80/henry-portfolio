@@ -353,7 +353,7 @@ export const phases: JourneyPhase[] = [
     color: 'amber',
     name: { ko: '기획', en: 'Planning' },
     tagline: { ko: '팀이 나 없이도 돌아가게', en: 'Teams that run without me' },
-    period: '2021 · 2024.10 — 2026.05',
+    period: '2021 · 2024.10 — 2026.07',
     companies: { ko: '네오위즈 · 달콤소프트', en: 'NEOWIZ · Dalcomsoft' },
     roleLine: {
       ko: '기획팀장 → 라이브기획팀장 (라이브 디렉터)',
@@ -535,7 +535,7 @@ export const phases: JourneyPhase[] = [
     ],
     outputs: [
       {
-        stat: { ko: '47', en: '47' },
+        stat: { ko: '65', en: '65' },
         label: { ko: '자동화 스킬', en: 'Automation skills' },
         sub: { ko: '규칙 31 · 에이전트 20 · MCP 4종', en: '31 rules · 20 agents · 4 MCP integrations' },
       },
