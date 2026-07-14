@@ -475,12 +475,12 @@ type StatN = { value: number; prefix?: string; suffix?: string; decimals?: numbe
 export const home = {
   eyebrow: { ko: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택', en: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택' } as Bi,
   h1: {
-    ko: '게임을 19년 운영한 사람이,\n이제 그 일을 돌리는 AI 운영체제를 짓습니다.',
-    en: '19 years running live games —\nnow I build the AI operating systems that run the work.',
+    ko: '라이브 게임 운영·사업·서비스 19년,\n이제 그 일을 돌리는 AI 운영체제를 짓습니다.',
+    en: '19 years in live-game ops, business & service —\nnow I build the AI operating systems that run the work.',
   } as Bi,
   sub: {
-    ko: '넥슨·네오위즈에서 라이브 게임을 기획하고 사업을 이끈 19년. 그 운영 문법을 그대로 AI 위에 옮겨, 자연어 지시만으로 도는 시스템을 만듭니다.',
-    en: 'Nineteen years planning live games and running the business at NEXON and NEOWIZ — that operating grammar, rebuilt on AI, into systems that run from natural-language intent.',
+    ko: '넥슨·네오위즈에서 라이브 게임의 운영·사업·서비스를 이끈 19년. 그 운영 문법을 그대로 AI 위에 옮겨, 자연어 지시만으로 도는 시스템을 만듭니다.',
+    en: 'Nineteen years of live-game operations, business and service at NEXON and NEOWIZ — that operating grammar, rebuilt on AI, into systems that run from natural-language intent.',
   } as Bi,
   now: {
     ko: 'Now — AI 시스템 · 프로덕트 리더십 역할과 컨설팅 제안을 받고 있습니다.',
@@ -491,7 +491,7 @@ export const home = {
     {
       ko: { value: 19, suffix: '' },
       en: { value: 19, suffix: '' },
-      label: { ko: '년, 라이브 게임 운영·사업', en: 'years in live games & business' },
+      label: { ko: '년, 라이브 게임 운영·사업·서비스', en: 'years — live-game ops, business & service' },
     },
     {
       ko: { value: 183, suffix: '억', prefix: '₩' },
@@ -545,7 +545,7 @@ export const home = {
 
   foundationIntro: {
     eyebrow: { ko: '적층', en: 'THE STACK' } as Bi,
-    title: { ko: '19년, 다섯 개의 층', en: '19 years, five layers' } as Bi,
+    title: { ko: '19년, 네 개의 층', en: '19 years, four layers' } as Bi,
     cta: { ko: '커리어 딥다이브 열기', en: 'Open the career deep-dive' } as Bi,
   },
 

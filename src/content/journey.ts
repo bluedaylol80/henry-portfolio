@@ -76,18 +76,18 @@ export const navLabel: Bi = { ko: '여정', en: 'Journey' }
 
 export const hub = {
   label: { ko: 'CAREER JOURNEY', en: 'CAREER JOURNEY' } as Bi,
-  title: { ko: '19년, 다섯 개의 층', en: '19 Years, Five Layers' } as Bi,
+  title: { ko: '19년, 네 개의 층', en: '19 Years, Four Layers' } as Bi,
   lede: {
-    ko: '이직의 나열이 아니라 역할의 적층입니다. 운영에서 시작해 품질·사업·기획을 지나 AI 시스템까지 — 앞 단계의 역량은 버려진 적 없이, 언제나 다음 단계의 기반이 됐습니다.',
-    en: 'Not a list of job changes — an accumulation of layers. From live ops through quality, business and planning to AI systems: no capability was ever discarded; each became the foundation of the next.',
+    ko: '이직의 나열이 아니라 역할의 적층입니다. 운영에서 시작해 사업·기획을 지나 AI 시스템까지 — 앞 단계의 역량은 버려진 적 없이, 언제나 다음 단계의 기반이 됐습니다.',
+    en: 'Not a list of job changes — an accumulation of layers. From live ops through business and planning to AI systems: no capability was ever discarded; each became the foundation of the next.',
   } as Bi,
   mission: {
     ko: '“각 프로젝트의 시작부터 라이브까지, 광범위한 영역의 효율성을 끌어내기 위해 유관부서와 협업하는 프로젝트 오너와 매니저의 업무를 선호합니다. 그 과정에서 발생하는 이슈를 다양한 스킬로 해결하며 발전해 왔습니다.”',
     en: '“From kickoff to live service, I prefer the work of a project owner and manager — collaborating across departments to draw efficiency out of the widest possible scope, and growing by solving the issues that come with it.”',
   } as Bi,
   missionSource: {
-    ko: '— 19년을 관통해온 업무 철학. 다섯 번의 직무 전환을 지나며 다듬어진 한 문장.',
-    en: '— A working philosophy running through 19 years, honed across five role transitions.',
+    ko: '— 19년을 관통해온 업무 철학. 여러 번의 직무 전환을 지나며 다듬어진 한 문장.',
+    en: '— A working philosophy running through 19 years, honed across many role transitions.',
   } as Bi,
   workstyleTitle: {
     ko: '커리어를 관통하는 일하는 방식',
@@ -140,23 +140,24 @@ export const phases: JourneyPhase[] = [
     color: 'amber',
     name: { ko: '운영', en: 'Live Ops' },
     tagline: { ko: '모든 것의 1층', en: 'The ground floor' },
-    period: '2006 — 2007',
-    companies: { ko: '웹젠', en: 'Webzen' },
-    roleLine: { ko: 'SUN 온라인 라이브 운영', en: 'Live operations — SUN Online' },
+    period: '2006 — 2011',
+    companies: { ko: '웹젠 · NHN(한게임운영실)', en: 'Webzen · NHN Hangame Ops' },
+    roleLine: { ko: '라이브 운영 · FUN QA — 사원 → 파트장', en: 'Live operations · FUN QA — staff → part lead' },
     title: { ko: '운영 — 게임이 살아있다는 것', en: 'Live Ops — what it means for a game to be alive' },
     oneLiner: {
-      ko: '모든 것의 1층. 게임이 “살아있다”는 게 무엇인지 몸으로 배운 시기.',
-      en: 'The ground floor — learning, hands-on, what keeps a game alive.',
+      ko: '모든 것의 1층. 게임이 “살아있다”는 게 무엇인지 몸으로 배운 5년 — 그 사이 FUN QA로 “재미”까지 검수했습니다.',
+      en: 'The ground floor — five years learning hands-on what keeps a game alive, with a stint of FUN QA testing not just bugs but fun.',
     },
     intro: {
-      ko: 'MORPG SUN 온라인의 라이브 운영으로 커리어를 시작했습니다. 유저 이슈의 최전선에서 하루하루의 서비스를 지켰고 — 반복되는 업무를 기록하고 정리하는 습관, 그러니까 이 커리어 전체를 관통하게 될 히스토리 관리가 여기서 시작됐습니다.',
-      en: 'The career began with live operations on the MORPG SUN Online. On the front line of player issues, keeping the service running day by day — and this is where the habit of recording and organizing recurring work began: the history-keeping that would run through the entire career.',
+      ko: '웹젠 SUN 온라인의 라이브 운영으로 커리어를 시작해(2006–2007), NHN 한게임운영실 파트장으로 Tera 웹 운영과 아틀란티카·R2·울프팀의 라이브 운영을 이끌었습니다(2008–2011). 그 사이 FUN QA로 Tera 개발빌드·드래곤볼 온라인·십이지천2·메트로컨플릭트의 게임성을 분석하고 개선 방향을 설계했습니다 — “재미”를 검수 가능한 기준으로 바꾸는 훈련. 유저 이슈의 최전선에서 반복 업무를 기록·정리하는 습관, 이 커리어를 관통할 히스토리 관리가 여기서 시작됐습니다.',
+      en: 'The career began with live operations on Webzen’s SUN Online (2006–2007), then as part lead in NHN’s Hangame Ops running Tera web-ops and the live service for Atlantica, R2 and Wolfteam (2008–2011). In between came FUN QA — analyzing gameplay and shaping improvement direction on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict, turning “fun” into testable criteria. On the front line of player issues, the habit of recording and organizing recurring work began here — the history-keeping that runs through the whole career.',
     },
     did: [
-      { ko: '라이브 서비스 일일 운영', en: 'Day-to-day live service operations' },
-      { ko: '유저 이슈 최전선 대응', en: 'Front-line response to player issues' },
+      { ko: '라이브 서비스 운영 — 웹젠 SUN 온라인 · NHN 아틀란티카 · R2 · 울프팀/스키드러쉬', en: 'Live service operations — Webzen SUN Online · NHN Atlantica · R2 · Wolfteam/Skidrush' },
+      { ko: 'Tera 웹 운영 파트 관리 — 커뮤니티 · 테라피디아 · 웹 콘텐츠 기획/제작 · 공지', en: 'Ran Tera’s web-ops part — community, Terapedia, web content & notices' },
+      { ko: 'FUN QA — Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트 게임성 분석 · 개선 방향 설계', en: 'FUN QA — gameplay analysis & improvement direction on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict' },
+      { ko: '유저 문의/VOC 분석 · 불법프로그램 제재 · 복구/로그 감사 · 신규 입사자 교육', en: 'Player inquiries/VOC analysis · anti-cheat enforcement · restoration/log audits · onboarding training' },
       { ko: '반복 업무의 기록과 정리 — 히스토리 관리의 출발', en: 'Recording and organizing recurring work — the start of history-keeping' },
-      { ko: '개발 · QA · CS 유관부서와의 일상적 협업', en: 'Daily collaboration with dev, QA and CS' },
     ],
     problems: [
       {
@@ -164,15 +165,15 @@ export const phases: JourneyPhase[] = [
         en: 'Making today’s incident explainable tomorrow',
       },
       {
-        ko: '반복되는 문의와 이슈에서 패턴을 찾아 처리 시간을 줄이는 것',
-        en: 'Finding patterns in recurring issues to cut handling time',
+        ko: '주관적인 “재미”를 팀이 공유할 수 있는 평가 기준으로 정량화하는 것 (FUN QA)',
+        en: 'Quantifying subjective “fun” into criteria a team can share (FUN QA)',
       },
     ],
     outputs: [
       {
-        stat: { ko: '1.5년', en: '1.5 yrs' },
-        label: { ko: '라이브 운영', en: 'Live operations' },
-        sub: { ko: 'SUN 온라인 (MORPG)', en: 'SUN Online (MORPG)' },
+        stat: { ko: '5년+', en: '5+ yrs' },
+        label: { ko: '라이브 운영 · FUN QA', en: 'Live ops · FUN QA' },
+        sub: { ko: '웹젠 1.5년 · NHN 한게임운영실 3년 2개월', en: 'Webzen 1.5y · NHN Hangame Ops 3y 2m' },
       },
       {
         stat: { ko: '1층', en: 'Layer 1' },
@@ -191,90 +192,25 @@ export const phases: JourneyPhase[] = [
           en: 'Nineteen years later, being the 24/7 GM and first responder for live incidents traced straight back to this period. The career was never a jump — it was an accumulation.',
         },
       },
-    ],
-    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
-    carried: {
-      ko: '라이브 서비스의 일일 운영 감각 — 다음 층에서는 “운영되는 게임의 품질”을 재미의 관점에서 평가하는 잣대로 확장됩니다.',
-      en: 'The daily instinct for a running service — which the next layer would expand into a way of judging a live game’s quality through the lens of fun.',
-    },
-  },
-
-  // ── Phase 2 · FUN QA ─────────────────────────────────────
-  {
-    slug: 'fun-qa',
-    num: '02',
-    color: 'coral',
-    name: { ko: 'FUN QA', en: 'FUN QA' },
-    tagline: { ko: '재미를 검수하다', en: 'Testing for fun' },
-    period: '2008 — 2011',
-    companies: { ko: 'NHN Service (G-plus)', en: 'NHN Service (G-plus)' },
-    roleLine: {
-      ko: '한게임운영실 파트장 — 라이브 운영 & FUN QA',
-      en: 'Part Lead, Hangame Ops — Live Ops & FUN QA',
-    },
-    title: { ko: 'FUN QA — 버그가 아니라 재미를 검수하다', en: 'FUN QA — testing for fun, not just for bugs' },
-    oneLiner: {
-      ko: '일반 QA가 “깨졌는가”를 본다면, FUN QA는 “재미있는가”를 평가합니다.',
-      en: 'Regular QA asks “is it broken?” — FUN QA asks “is it fun?”',
-    },
-    intro: {
-      ko: '주관적인 재미를 검수 가능한 기준으로 바꾸는 훈련. 3년 2개월 동안 한게임운영실 파트장으로 Tera · 아틀란티카 · R2 · 울프팀의 라이브 운영을 지키면서, FUN QA로는 Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트의 게임성과 플레이 경험을 평가하고 그 기준을 조직의 언어로 만들었습니다.',
-      en: 'The craft of turning subjective fun into testable criteria. For three years and two months as part lead in Hangame Ops — running live operations for Tera, Atlantica, R2 and Wolfteam, while as FUN QA evaluating gameplay and player experience on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict — and turning those judgments into a shared organizational language.',
-    },
-    did: [
-      { ko: '라이브 운영 — Tera(웹 운영) · 아틀란티카 · R2 · 울프팀', en: 'Live operations — Tera (web ops) · Atlantica · R2 · Wolfteam' },
-      { ko: 'FUN QA — Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트 게임성 분석 · 개선 방향 설계', en: 'FUN QA — gameplay analysis & improvement direction on the Tera dev build, Dragon Ball Online, Twelve Sky 2 and Metro Conflict' },
-      { ko: '게임 재미(fun) 관점의 품질 평가 기준 수립', en: 'Building quality criteria from the “fun” perspective' },
-      { ko: '파트장으로서 운영 · 검수 파트 운영', en: 'Running the ops & review part as its lead' },
-    ],
-    problems: [
       {
-        ko: '“재미있다”는 감각을 팀이 공유할 수 있는 평가 기준으로 정량화하는 것',
-        en: 'Quantifying the feeling of “fun” into criteria a team can share',
-      },
-      {
-        ko: '품질 피드백이 개발 조직에서 실제 개선으로 이어지게 만드는 것',
-        en: 'Making quality feedback actually turn into fixes on the dev side',
-      },
-    ],
-    outputs: [
-      {
-        stat: { ko: '3년 2개월', en: '3y 2m' },
-        label: { ko: '한게임운영실 파트장', en: 'Part lead, Hangame Ops' },
-        sub: { ko: '라이브 운영 & FUN QA', en: 'Live ops & FUN QA' },
-      },
-      {
-        stat: { ko: '7종', en: '7' },
-        label: { ko: '담당 타이틀 — 운영 4 · FUN QA 4', en: 'Titles — 4 in ops · 4 in FUN QA' },
-        sub: {
-          ko: '운영: Tera · 아틀란티카 · R2 · 울프팀 / FUN QA: Tera 개발빌드 · 드래곤볼 온라인 · 십이지천2 · 메트로컨플릭트',
-          en: 'Ops: Tera · Atlantica · R2 · Wolfteam / FUN QA: Tera dev build · Dragon Ball Online · Twelve Sky 2 · Metro Conflict',
-        },
-      },
-    ],
-    stories: [
-      {
-        title: {
-          ko: '한 회사 안에서 직무를 갈아탄 첫 경험',
-          en: 'The first role switch — inside one company',
-        },
+        title: { ko: '재미를 지표로 바꾸는 훈련 (FUN QA)', en: 'Training to turn fun into metrics (FUN QA)' },
         body: {
-          ko: '직무 전환의 첫 경험은 NHN 안에서 일어났습니다 — 운영에서 FUN QA로. 사업으로의 전환은 소프트닉스 이직과 함께였지만, “전환은 점프가 아니라 인접 영역으로의 확장”이라는 커리어 문법은 여기서 만들어졌습니다.',
-          en: 'The first role switch happened inside NHN — from live ops into FUN QA. The move to business came later, with Softnyx; but the career grammar of “transition as adjacent expansion, not a leap” was written here.',
+          ko: '일반 QA가 “깨졌는가”를 본다면 FUN QA는 “재미있는가”를 평가합니다. 주관적인 재미를 검수 가능한 기준으로 바꾼 이 습관이, 훗날 AI 산출물을 6개 축으로 채점하는 품질 게이트의 사상이 됐습니다.',
+          en: 'Regular QA asks “is it broken?”; FUN QA asks “is it fun?” Turning subjective fun into testable criteria became, much later, the thinking behind the six-axis quality gate that grades AI output.',
         },
       },
     ],
     gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
     carried: {
-      ko: '“재미를 지표로 바꾸는 습관”은 사업 PM의 리텐션 · AU 분석으로 이어졌고 — 훗날 AI 산출물을 6개 축으로 채점하는 품질 게이트의 사상이 됩니다.',
-      en: 'The habit of turning fun into metrics carried into retention and AU analysis as a business PM — and much later, into the six-axis quality gate that grades AI output.',
+      ko: '라이브 운영 감각과 “재미를 지표로 바꾸는” 습관 — 다음 층 사업 PM의 리텐션·AU 분석으로, 그리고 훗날 AI eval 설계로 이어집니다.',
+      en: 'The instinct for live ops and the habit of turning fun into metrics — carried into retention and AU analysis as a business PM, and later into designing AI evals.',
     },
   },
 
-  // ── Phase 3 · 사업 PM ─────────────────────────────────────
+  // ── Phase 2 · 사업 PM ─────────────────────────────────────
   {
     slug: 'business-pm',
-    num: '03',
+    num: '02',
     color: 'violet',
     name: { ko: '사업 PM', en: 'Business PM' },
     tagline: { ko: '지표가 의사결정이 되는 곳', en: 'Where metrics become decisions' },
@@ -354,10 +290,10 @@ export const phases: JourneyPhase[] = [
     },
   },
 
-  // ── Phase 4 · 기획 ────────────────────────────────────────
+  // ── Phase 3 · 기획 ────────────────────────────────────────
   {
     slug: 'planning',
-    num: '04',
+    num: '03',
     color: 'amber',
     name: { ko: '기획', en: 'Planning' },
     tagline: { ko: '팀이 나 없이도 돌아가게', en: 'Teams that run without me' },
@@ -372,12 +308,12 @@ export const phases: JourneyPhase[] = [
       en: 'Planning — a lead who writes the specs and leaves systems behind',
     },
     oneLiner: {
-      ko: '기획서를 직접 쓰는 팀장이자, 팀이 나 없이도 돌아가게 만드는 설계자.',
-      en: 'A team lead who writes the specs himself — and designs the team to run without him.',
+      ko: '기획서를 직접 쓰는 팀장이자, 팀 업무를 Notion·자동화·AI로 효율화해 팀이 나 없이도 돌아가게 만든 설계자.',
+      en: 'A team lead who writes the specs himself — and made the team run without him by systematizing its work with Notion, automation and AI.',
     },
     intro: {
-      ko: '네오위즈에서 신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획 10건, 총 30건의 기획서를 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop 아이돌 IP 수집형 리듬액션 게임 12종(SuperStar 시리즈)의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
-      en: 'At NEOWIZ, authoring 30 specs hands-on — 10 new systems, 10 reworks and 10 balancing — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across twelve K-pop idol-IP collectible rhythm-action games (the SuperStar series): service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
+      ko: '네오위즈에서 신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획 10건, 총 30건의 기획서를 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop 아이돌 IP 수집형 리듬액션 게임 12종(SuperStar 시리즈)의 라이브 기획팀(10인)을 이끌었습니다. 무엇보다 이 시기의 가장 큰 방향은 팀 업무의 효율화였습니다 — Notion·AppScript·AI로 파편화된 히스토리와 수동 업무를 하나로 묶어, 위임·표준화·히스토리 관리를 이 층에서 “시스템”으로 만들었습니다.',
+      en: 'At NEOWIZ, authoring 30 specs hands-on — 10 new systems, 10 reworks and 10 balancing — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across twelve K-pop idol-IP collectible rhythm-action games (the SuperStar series). Above all, the biggest theme here was team-work efficiency — unifying fragmented history and manual tasks with Notion, AppScript and AI, and turning delegation, standardization and history-keeping into systems.',
     },
     did: [
       {
@@ -390,20 +326,32 @@ export const phases: JourneyPhase[] = [
         en: 'Built live service plans — event & product planning from analysis to proposal, ready for per-project owners to act on (12 K-pop IP titles)',
       },
       {
-        ko: '시스템 기획의 최초 기획 · 프로토타입 제작 → 개발팀과 구현 조율 — 미니게임 · 웹뷰 이벤트 (3.26.0 이후 마일스톤)',
-        en: 'First drafts & prototypes for system features, then implementation alignment with dev — minigames & webview events (the post-3.26.0 milestones)',
+        ko: '시스템 기획의 최초 기획 · 프로토타입 제작 → 개발팀과 구현 조율 — 미니게임 · 웹뷰 이벤트 (프로토타입으로 기획 방향을 더 빠르게 전파)',
+        en: 'First drafts & prototypes for system features, then implementation alignment with dev — minigames & webview events (prototypes broadcast planning direction faster)',
       },
       {
         ko: '지표 분석 기반 신규 상품 기획 — 테마 2종 · RP팩 · 정규/상시 상품 개선',
         en: 'Metric-driven new products — two themes, RP packs, improvements to regular & permanent offers',
       },
       {
-        ko: '협업의 시스템화 — 메일 중심 협업을 Notion 히스토리 체계로 전환 · 업무 프로세스 단일화 · 스토어 product ID 명세서 자동 반영(Google Apps Script)',
-        en: 'Systemized collaboration — email-only workflows moved into a Notion history system, unified processes, store product IDs auto-filled into specs (Google Apps Script)',
+        ko: '★ 팀 업무의 효율화 (달콤 최대 방향) — 파편화된 히스토리·업무를 Notion 플랫폼으로 통일해 팀 내/외부 업무 편의·효율↑, 워크플로를 지속 제작해 수동 작업을 자동화',
+        en: '★ Team-work efficiency (the biggest Dalcom theme) — unified fragmented history & tasks onto Notion for smoother internal/external collaboration, and continuously built workflows to automate manual work',
       },
       {
-        ko: 'HTML 업무현황판 구축 — 메일 · Slack · Notion의 히스토리를 한 화면에, 담당자 간 정보 전달을 빠르게',
-        en: 'Built an HTML team dashboard — mail, Slack and Notion history in one view, faster hand-offs between owners',
+        ko: 'Notion script 명세서 공유 자동화 — 기존 메일 협업을 슬랙 스레드 + Notion 페이지로 정리 (주당 프로젝트당 메일 8건+ 절감) · 스토어 product ID 명세서 자동 반영',
+        en: 'Automated spec-sharing via Notion scripting — email reorganized into Slack threads + Notion pages (8+ emails/week per project eliminated) · store product-IDs auto-filled into specs',
+      },
+      {
+        ko: '스토어 SKU 자동화 — 수동 신청하던 스토어 SKU/상품 등록을 Google Apps Script로 자동화',
+        en: 'Store SKU automation — manual store SKU/product registration automated with Google Apps Script',
+      },
+      {
+        ko: '주간 지표·매출 분석 — 엑셀 VBA 리포트를 AI 활용 HTML 대시보드 리포트로 전환',
+        en: 'Weekly metric & revenue analysis — replaced Excel VBA reports with an AI-built HTML dashboard report',
+      },
+      {
+        ko: '팀 업무 현황판 — 팀원·주요 이슈를 AI로 정리한 현황판을 매일 공유해 정보·이슈 전달 효율↑',
+        en: 'Team activity board — an AI-assembled board of members & key issues, shared daily to speed up info/issue hand-offs',
       },
       {
         ko: '유저 설문 기반 2025 · 2026 서비스 방향성 제안 — 근거를 수집해 기획의 방향을 세움',
@@ -491,10 +439,10 @@ export const phases: JourneyPhase[] = [
     },
   },
 
-  // ── Phase 5 · AI 시스템 빌더 ──────────────────────────────
+  // ── Phase 4 · AI 시스템 빌더 ──────────────────────────────
   {
     slug: 'ai-system',
-    num: '05',
+    num: '04',
     color: 'sky',
     name: { ko: 'AI 시스템 빌더', en: 'AI System Builder' },
     tagline: { ko: '운영 문법의 재구현', en: 'Operating grammar, rebuilt' },
@@ -506,8 +454,8 @@ export const phases: JourneyPhase[] = [
       en: 'AI Systems — nineteen years of operating grammar, rebuilt on AI',
     },
     oneLiner: {
-      ko: '새 직무가 아니라, 앞 네 개 층의 방식을 AI 위에 재구현한 것.',
-      en: 'Not a new job — the previous four layers, reimplemented on AI.',
+      ko: '새 직무가 아니라, 앞 세 개 층의 방식을 AI 위에 재구현한 것.',
+      en: 'Not a new job — the previous three layers, reimplemented on AI.',
     },
     intro: {
       ko: '위임 구조는 서브에이전트로, 결재선은 승인 게이트로, 인수인계 SSOT는 세컨드브레인으로, 24/7 대응은 상주 에이전트와 킬스위치로. 앞 단계에서 사람과 조직에 적용하던 방식이 AI 위에 그대로 재구현됐습니다 — 전부 회사 자산과 무관한 개인 IP로, 실제 팀 운영(루틴 업무 60% 단축)에서 검증됐습니다.',
