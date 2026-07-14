@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useReducedMotion } from 'framer-motion'
+import { m, useReducedMotion } from 'framer-motion'
 import { workAiOs, contact, home } from '../content/profile'
 import { useT } from '../lib/i18n'
 import ArchDiagram from '../components/ArchDiagram'
@@ -16,7 +16,7 @@ import WorkGallery from '../components/WorkGallery'
 function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduce = useReducedMotion()
   return (
-    <motion.div
+    <m.div
       className={className}
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -24,7 +24,7 @@ function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; 
       transition={{ duration: reduce ? 0 : 0.6, ease: [0.22, 1, 0.36, 1], delay: reduce ? 0 : delay }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 

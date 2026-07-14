@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { motion, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { m, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { home, work, skills, contact } from '../content/profile'
 import { phases, hub } from '../content/journey'
 import { useLang, useT } from '../lib/i18n'
@@ -58,7 +58,7 @@ function CountUp({ value, decimals = 0, prefix = '', suffix = '' }: StatN) {
 function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   const reduce = useReducedMotion()
   return (
-    <motion.div
+    <m.div
       className={className}
       initial={reduce ? { opacity: 1 } : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -66,14 +66,14 @@ function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; 
       transition={{ duration: reduce ? 0 : 0.6, ease: [0.22, 1, 0.36, 1], delay: reduce ? 0 : delay }}
     >
       {children}
-    </motion.div>
+    </m.div>
   )
 }
 
 function ScrollProgress() {
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.2 })
-  return <motion.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-amber/70" aria-hidden />
+  return <m.div style={{ scaleX }} className="fixed inset-x-0 top-0 z-50 h-0.5 origin-left bg-amber/70" aria-hidden />
 }
 
 /** Phase-spine ramp — warm→cool, held inside the era hard-zone (never amber). */

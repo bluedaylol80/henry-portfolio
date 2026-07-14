@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { motion, useReducedMotion, type Variants } from 'framer-motion'
+import { m, useReducedMotion, type Variants } from 'framer-motion'
 import { useT, type Bi } from '../lib/i18n'
 
 /**
@@ -112,7 +112,7 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
   }
 
   return (
-    <motion.div
+    <m.div
       variants={container}
       initial="hidden"
       whileInView="show"
@@ -132,7 +132,7 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
       />
 
       {/* header + scale readout */}
-      <motion.div variants={item} className="relative flex flex-wrap items-end justify-between gap-4">
+      <m.div variants={item} className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-ink-dim">{t(COPY.eyebrow)}</p>
           <h3 className="u-display mt-2 max-w-md text-xl font-semibold leading-tight text-ink sm:text-2xl">
@@ -147,16 +147,16 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
             </div>
           ))}
         </div>
-      </motion.div>
-      <motion.p variants={item} className="relative mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-ink-dim">
+      </m.div>
+      <m.p variants={item} className="relative mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-ink-dim">
         {t(COPY.scaleLabel)}
-      </motion.p>
+      </m.p>
 
       {/* the 3-tier flow */}
       <div className="relative mt-7 flex flex-col">
         {TIERS.map((tier, i) => (
           <div key={tier.n}>
-            <motion.button
+            <m.button
               type="button"
               variants={item}
               data-on={active === i}
@@ -177,41 +177,41 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
                   <span className="mt-1.5 block break-keep text-[13px] leading-relaxed text-ink-dim">{t(tier.detail)}</span>
                 ) : null}
               </span>
-            </motion.button>
+            </m.button>
 
             {/* cobalt data conduit between tiers */}
             {i < TIERS.length - 1 && (
-              <motion.div variants={item} className="relative flex h-9 justify-start pl-[1.4rem]" aria-hidden>
+              <m.div variants={item} className="relative flex h-9 justify-start pl-[1.4rem]" aria-hidden>
                 <span className="relative block w-px bg-gradient-to-b from-cobalt/70 to-cobalt/20">
                   {!reduce && <span className="conduit-pulse absolute left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-cobalt shadow-[0_0_8px_rgba(59,111,229,0.9)]" />}
                 </span>
-              </motion.div>
+              </m.div>
             )}
           </div>
         ))}
 
         {/* verify loop — feedback back to the top */}
-        <motion.div variants={item} className="relative mt-3 flex items-center gap-3 rounded-xl border border-dashed border-brass/40 bg-night/30 px-4 py-2.5">
+        <m.div variants={item} className="relative mt-3 flex items-center gap-3 rounded-xl border border-dashed border-brass/40 bg-night/30 px-4 py-2.5">
           <span aria-hidden className="font-mono text-sm text-brass">↺</span>
           <span className="break-keep font-mono text-[11px] uppercase tracking-[0.14em] text-ink-dim">{t(COPY.loop)}</span>
-        </motion.div>
+        </m.div>
       </div>
 
       {/* guardrail rail */}
-      <motion.div variants={item} className="relative mt-5 flex items-center gap-2.5 rounded-xl border border-brass/25 bg-brass/[0.06] px-4 py-2.5">
+      <m.div variants={item} className="relative mt-5 flex items-center gap-2.5 rounded-xl border border-brass/25 bg-brass/[0.06] px-4 py-2.5">
         <span aria-hidden className="h-1.5 w-1.5 shrink-0 rounded-full bg-brass" />
         <span className="break-keep text-[13px] text-ink-soft">{t(COPY.guardrail)}</span>
-      </motion.div>
+      </m.div>
 
       {/* legend (mandatory for colour-coded visuals — mistakes_log #9) */}
-      <motion.ul variants={item} className="relative mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-4">
+      <m.ul variants={item} className="relative mt-5 flex flex-wrap gap-x-5 gap-y-2 border-t border-line pt-4">
         {LEGEND.map((l) => (
           <li key={l.swatch} className="flex items-center gap-2">
             <span aria-hidden className={`h-2 w-2 rounded-[3px] ${l.swatch}`} />
             <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-dim">{t(l.label)}</span>
           </li>
         ))}
-      </motion.ul>
-    </motion.div>
+      </m.ul>
+    </m.div>
   )
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { AnimatePresence, motion, type Variants } from 'framer-motion'
+import { AnimatePresence, m, type Variants } from 'framer-motion'
 import { contact } from '../content/profile'
 import { useLang, useT, type Bi } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
@@ -122,7 +122,7 @@ export default function Header() {
 
   return (
     <>
-      <motion.header
+      <m.header
         variants={headerVariants}
         initial={reduce ? 'show' : 'hidden'}
         animate={reduce ? 'show' : ready ? 'show' : 'hidden'}
@@ -177,12 +177,12 @@ export default function Header() {
             </button>
           </div>
         </div>
-      </motion.header>
+      </m.header>
 
       {/* Mobile fullscreen overlay */}
       <AnimatePresence>
         {menuOpen && (
-          <motion.div
+          <m.div
             key="overlay"
             role="dialog"
             aria-modal="true"
@@ -193,9 +193,9 @@ export default function Header() {
             transition={{ duration: reduce ? 0 : 0.3 }}
             className="fixed inset-0 z-30 flex flex-col justify-center bg-night/96 backdrop-blur-xl md:hidden"
           >
-            <motion.nav variants={overlayList} initial="hidden" animate="show" exit="hidden" className="container-std flex flex-col gap-4">
+            <m.nav variants={overlayList} initial="hidden" animate="show" exit="hidden" className="container-std flex flex-col gap-4">
               {PRIMARY.map((item, i) => (
-                <motion.div key={item.to} variants={overlayItem}>
+                <m.div key={item.to} variants={overlayItem}>
                   <Link
                     to={item.to}
                     onClick={(e) => handleClick(e, item)}
@@ -204,18 +204,18 @@ export default function Header() {
                     <span className="font-mono text-sm font-normal text-ink-dim">0{i + 1}</span>
                     {t(item.label)}
                   </Link>
-                </motion.div>
+                </m.div>
               ))}
-              <motion.a
+              <m.a
                 variants={overlayItem}
                 href={`mailto:${contact.email}`}
                 onClick={() => setMenuOpen(false)}
                 className="mt-8 flex items-center justify-center gap-2 rounded-full bg-amber px-6 py-4 font-mono text-base font-semibold uppercase tracking-[0.12em] text-night transition-colors duration-200 hover:bg-amber-deep"
               >
                 {t(CONTACT)}
-              </motion.a>
-            </motion.nav>
-          </motion.div>
+              </m.a>
+            </m.nav>
+          </m.div>
         )}
       </AnimatePresence>
     </>

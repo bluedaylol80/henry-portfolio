@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
+import { LazyMotion, domAnimation } from 'framer-motion'
 import { LanguageProvider } from './lib/i18n'
 import { detectTier, type QualityTier } from './lib/quality'
 import { getLenis, initSmoothScroll } from './lib/scroll'
@@ -95,7 +96,8 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <LazyMotion features={domAnimation}>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
         <a href="#main" className="skip-link">
           Skip to content
         </a>
@@ -117,7 +119,8 @@ export default function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         <ShellFooter />
-      </BrowserRouter>
+        </BrowserRouter>
+      </LazyMotion>
     </LanguageProvider>
   )
 }
