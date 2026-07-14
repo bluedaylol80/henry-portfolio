@@ -237,8 +237,8 @@ export const work = {
       },
       label: { ko: '팀 루틴 업무 시간 단축', en: 'Routine team workload reduced' },
       sub: {
-        ko: 'AI 자동화 스킬 30+ · K-pop IP 라이브 12종 · 10인 팀 리드',
-        en: '30+ AI automation skills · 12 live K-pop IP titles · 10-person team',
+        ko: 'K-pop 아이돌 IP 수집형 리듬게임 12종 · 카드·이벤트·상품 기획 · 30+ AI 스킬 · 10인 팀',
+        en: 'K-pop idol-IP collectible rhythm games (12) · cards, events & products · 30+ AI skills · 10-person team',
       },
       emphasis: true,
       footnote: {
@@ -416,6 +416,7 @@ export const skills = {
     { name: { ko: '데이터 지표 분석 · 시각화', en: 'Data analytics · visualization' } },
     { name: { ko: '글로벌 퍼블리싱', en: 'Global publishing' } },
     { name: { ko: '라이브 서비스 운영', en: 'Live service operations' } },
+    { name: { ko: '엔터 IP 라이브 서비스 · 수집형/리듬 캐주얼', en: 'Entertainment-IP live service · collectible/rhythm casual' } },
     { name: { ko: '프로젝트 · 조직 관리', en: 'Project & org management' } },
     {
       name: { ko: '팀 운영 시스템의 AI 전환', en: 'AI transformation of team operations' },

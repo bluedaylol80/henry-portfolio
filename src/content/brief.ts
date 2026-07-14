@@ -36,8 +36,8 @@ export const brief = {
   workTitle: { ko: '숫자로 남은 것', en: 'What the numbers say' } as Bi,
   work: [
     {
-      ko: '달콤소프트 — K-pop IP 라이브 12종 기획팀장(10인), 30+ AI 스킬로 루틴 업무 60% 단축',
-      en: 'Dalcomsoft — led live planning (10 people) for 12 K-pop IP titles; 30+ AI skills cut routine work 60%',
+      ko: '달콤소프트 — K-pop 아이돌 IP 수집형 리듬게임(SuperStar 12종) 라이브 총괄, 기획팀장(10인) · 카드·이벤트·상품 기획 · 30+ AI 스킬로 루틴 60% 단축',
+      en: 'Dalcomsoft — ran live service for K-pop idol-IP collectible rhythm games (SuperStar, 12 titles), leading planning (10) · cards, events & products · 30+ AI skills cut routine 60%',
     },
     {
       ko: '린: 더 라이트브링어 — 누적 183억, 한국 양대 마켓 매출 3위 (넥슨, 사업PM)',

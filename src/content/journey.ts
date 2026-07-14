@@ -376,10 +376,14 @@ export const phases: JourneyPhase[] = [
       en: 'A team lead who writes the specs himself — and designs the team to run without him.',
     },
     intro: {
-      ko: '네오위즈에서 신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획 10건, 총 30건의 기획서를 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop IP 리듬게임 12종의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
-      en: 'At NEOWIZ, authoring 30 specs hands-on — 10 new systems, 10 reworks and 10 balancing — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across twelve K-pop IP rhythm games: service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
+      ko: '네오위즈에서 신규 시스템 기획 10건 · 기존 시스템 개편 10건 · 밸런스 기획 10건, 총 30건의 기획서를 직접 쓰며 사업에서 기획으로의 전환을 완성했고, 달콤소프트에서는 K-pop 아이돌 IP 수집형 리듬액션 게임 12종(SuperStar 시리즈)의 라이브 기획팀(10인)을 이끌었습니다. 서비스 플랜과 상품 기획은 분석에서 시작해 담당자가 바로 논의할 수 있는 제안으로 끝났고, 위임과 표준화, 히스토리 관리는 이 층에서 “시스템”이 됐습니다.',
+      en: 'At NEOWIZ, authoring 30 specs hands-on — 10 new systems, 10 reworks and 10 balancing — completed the pivot from business to planning. At Dalcomsoft, leading a 10-person live planning team across twelve K-pop idol-IP collectible rhythm-action games (the SuperStar series): service plans and product ideas started as analysis and landed as proposals owners could act on immediately. This is the layer where delegation, standardization and history-keeping became systems.',
     },
     did: [
+      {
+        ko: 'K-pop 아이돌 IP 수집형 리듬액션 캐주얼 게임(SuperStar 시리즈 12종) 라이브 총괄 — 인게임 카드 수집 · 리듬 플레이 · IP 콜라보/오프라인 연계 이벤트 · 테마·RP팩 상품 조합을 기획–개발 조율–운영 전 과정으로',
+        en: 'Ran live service for K-pop idol-IP collectible rhythm-action casual games (the SuperStar series, 12 titles) — in-game card collection, rhythm play, IP-collab & offline-linked events, and theme/RP-pack product bundles — across the full plan → dev-direction → live-ops cycle',
+      },
       { ko: '시스템 기획서 직접 작성 — 네오위즈 신규 10 · 개편 10 · 밸런스 10 (총 30건)', en: 'Wrote system specs hands-on — 10 new · 10 reworked · 10 balancing at NEOWIZ (30 in total)' },
       {
         ko: '라이브 서비스 플랜 수립 — 이벤트 · 상품 기획을 분석→제안까지, 프로젝트별 담당자가 바로 논의할 수 있는 수준으로 (K-pop IP 12종)',
