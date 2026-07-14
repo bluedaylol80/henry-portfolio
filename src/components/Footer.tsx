@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="relative z-10 border-t border-white/5">
       <div className="container-std flex flex-col items-start gap-6 py-10 text-sm text-ink-dim sm:flex-row sm:items-center sm:justify-between">
         <p className="break-keep">
-          © 2026 Henry Lim — <span className="text-ink-dim">{t(footer.tagline)}</span>
+          © 2026 Henry Lim (임현택) — <span className="text-ink-dim">{t(footer.tagline)}</span>
         </p>
 
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8">

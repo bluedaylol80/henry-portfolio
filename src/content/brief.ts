@@ -15,7 +15,7 @@ export const brief = {
   } as Bi,
 
   identity: {
-    name: '임현택 · Henry Lim',
+    name: 'Henry Lim · 임현택',
     line: {
       ko: '게임 기획·사업 19년 → AI 자동화 시스템 아키텍트',
       en: '19 years in game business & planning → AI automation systems architect',

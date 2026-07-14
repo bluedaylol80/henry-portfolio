@@ -111,7 +111,7 @@ export const hotspots: RoomHotspot[] = [
 
 /** 룸 좌하단 아이덴티티 스트립 — 3초 안에 "누구인지"가 읽히게 */
 export const identity = {
-  name: 'Henry Lim',
+  name: 'Henry Lim · 임현택',
   line: {
     ko: '게임 기획·사업 19년 → AI 시스템 아키텍트',
     en: '19y in game business & planning → AI systems architect',

@@ -28,17 +28,17 @@ function useDocumentTitle(pathname: string) {
   useEffect(() => {
     let title = meta.title // '/' — the content-first front door.
     if (pathname === '/brief') {
-      title = '3분 요약 — Henry Lim'
+      title = '3분 요약 — Henry Lim (임현택)'
     } else if (pathname === '/work/ai-os') {
-      title = 'AI-OS · Flagship Case — Henry Lim'
+      title = 'AI-OS · Flagship Case — Henry Lim (임현택)'
     } else if (pathname === '/room') {
-      title = 'The Room — Henry Lim'
+      title = 'The Room — Henry Lim (임현택)'
     } else if (pathname === '/career') {
-      title = 'Career Journey — Henry Lim'
+      title = 'Career Journey — Henry Lim (임현택)'
     } else if (pathname.startsWith('/career/')) {
       const slug = pathname.slice('/career/'.length)
       const phase = phases.find((p) => p.slug === slug)
-      if (phase) title = `Phase ${phase.num} · ${phase.name.en} — Henry Lim`
+      if (phase) title = `Phase ${phase.num} · ${phase.name.en} — Henry Lim (임현택)`
     }
     document.title = title
   }, [pathname])

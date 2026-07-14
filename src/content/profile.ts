@@ -9,9 +9,9 @@ import type { Bi } from '../lib/i18n'
  */
 
 export const meta = {
-  title: 'Henry Lim — 기획자의 진화 · The Evolution of a Planner',
+  title: 'Henry Lim (임현택) — 기획자의 진화 · The Evolution of a Planner',
   description:
-    '게임 기획·사업 19년에서 AI 자동화 시스템 아키텍트로. 임현택(Henry Lim)의 3D 인터랙티브 포트폴리오.',
+    '게임 기획·사업 19년에서 AI 자동화 시스템 아키텍트로. 임현택(Henry Lim)의 포트폴리오.',
 }
 
 export const nav: NavItem[] = [
@@ -472,7 +472,7 @@ export const contact = {
 type StatN = { value: number; prefix?: string; suffix?: string; decimals?: number }
 
 export const home = {
-  eyebrow: { ko: 'AI SYSTEMS ARCHITECT · 임현택 HENRY LIM', en: 'AI SYSTEMS ARCHITECT · HENRY LIM' } as Bi,
+  eyebrow: { ko: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택', en: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택' } as Bi,
   h1: {
     ko: '게임을 19년 운영한 사람이,\n이제 그 일을 돌리는 AI 운영체제를 짓습니다.',
     en: '19 years running live games —\nnow I build the AI operating systems that run the work.',

@@ -136,7 +136,7 @@ export default function Header() {
           <Link to="/" onClick={() => setMenuOpen(false)} className="group flex items-baseline gap-2" aria-label="Henry Lim">
             <span className="u-display text-2xl font-semibold leading-none text-amber">HL</span>
             <span className="hidden font-mono text-[11px] uppercase tracking-[0.28em] text-ink-dim transition-colors group-hover:text-ink-soft sm:inline">
-              Henry&nbsp;Lim
+              Henry&nbsp;Lim · 임현택
             </span>
           </Link>
 
