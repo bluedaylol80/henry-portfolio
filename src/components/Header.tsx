@@ -147,7 +147,8 @@ export default function Header() {
                 key={item.to}
                 to={item.to}
                 onClick={(e) => handleClick(e, item)}
-                className="font-mono text-[13px] uppercase tracking-[0.14em] text-ink-dim transition-colors duration-200 hover:text-ink"
+                aria-current={pathname === item.to ? 'page' : undefined}
+                className="font-mono text-[13px] uppercase tracking-[0.14em] text-ink-dim transition-colors duration-200 hover:text-ink aria-[current]:text-amber"
               >
                 {t(item.label)}
               </Link>
@@ -183,6 +184,9 @@ export default function Header() {
         {menuOpen && (
           <motion.div
             key="overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t({ ko: '메뉴', en: 'Menu' })}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

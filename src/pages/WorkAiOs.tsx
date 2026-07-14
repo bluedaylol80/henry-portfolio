@@ -27,12 +27,6 @@ function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; 
   )
 }
 
-const SCALE = [
-  { v: '20', k: { ko: '에이전트', en: 'agents' } },
-  { v: '65', k: { ko: '스킬', en: 'skills' } },
-  { v: '31', k: { ko: '규칙', en: 'rules' } },
-]
-
 export default function WorkAiOs() {
   const t = useT()
 
@@ -63,15 +57,9 @@ export default function WorkAiOs() {
             {t(workAiOs.title)}
           </h1>
           <p className="mt-6 max-w-2xl break-keep text-lg leading-relaxed text-ink-soft">{t(workAiOs.lede)}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-            {SCALE.map((s) => (
-              <span key={s.v} className="flex items-baseline gap-1.5">
-                <span className="u-fig text-2xl font-semibold text-ink">{s.v}</span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-cobalt">{t(s.k)}</span>
-              </span>
-            ))}
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-dim">· 100% 본인 IP</span>
-          </div>
+          <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-dim">
+            100% 본인 IP · 회사 자산 무관 · 스케일은 아래 다이어그램에
+          </p>
         </Reveal>
       </section>
 

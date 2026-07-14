@@ -134,7 +134,7 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
       {/* header + scale readout */}
       <motion.div variants={item} className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-cobalt">{t(COPY.eyebrow)}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-ink-dim">{t(COPY.eyebrow)}</p>
           <h3 className="u-display mt-2 max-w-md text-xl font-semibold leading-tight text-ink sm:text-2xl">
             {t(COPY.title)}
           </h3>
@@ -143,7 +143,7 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
           {SCALE.map((s) => (
             <div key={s.value} className="text-right">
               <div className="u-fig text-3xl font-semibold leading-none text-ink sm:text-4xl">{s.value}</div>
-              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-cobalt">{t(s.label)}</div>
+              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-dim">{t(s.label)}</div>
             </div>
           ))}
         </div>

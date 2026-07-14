@@ -537,7 +537,7 @@ export const phases: JourneyPhase[] = [
       {
         stat: { ko: '65', en: '65' },
         label: { ko: '자동화 스킬', en: 'Automation skills' },
-        sub: { ko: '규칙 31 · 에이전트 20 · MCP 4종', en: '31 rules · 20 agents · 4 MCP integrations' },
+        sub: { ko: '규칙 31 · 에이전트 20', en: '31 rules · 20 agents' },
       },
       {
         stat: { ko: '60%', en: '60%' },

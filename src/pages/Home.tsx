@@ -170,7 +170,7 @@ export default function Home() {
             </Reveal>
             <Reveal delay={0.3}>
               <p className="mt-8 flex items-center gap-2.5 break-keep text-sm text-ink-soft">
-                <span aria-hidden className="h-1.5 w-1.5 animate-pulse-slow rounded-full bg-era-cyan" />
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-amber" />
                 {t(home.now)}
               </p>
             </Reveal>

@@ -111,19 +111,19 @@ export default function RoomPage() {
           // §22.1 v14: the desk hotspot now flows through here (plain About
           // navigation). The intro film plays from the introBadge / the
           // /story#about character card instead — never on the desk click.
-          navigate('/story#about')
+          navigate('/')
           break
         case 'career':
           navigate('/career')
           break
         case 'work':
-          navigate('/story#work')
+          navigate('/#work')
           break
         case 'ai':
-          navigate('/story#ai')
+          navigate('/work/ai-os')
           break
         case 'contact':
-          navigate('/story#contact')
+          navigate('/#contact')
           break
         case 'notion':
           // 상세 이력 — external Notion page in a new tab.

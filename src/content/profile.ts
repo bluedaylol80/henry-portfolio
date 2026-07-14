@@ -245,7 +245,7 @@ export const work = {
         ko: '담당: 라이브기획팀장(총괄) · 근거: 실제 팀 운영 실측, 인수인계 문서화',
         en: 'Role: live planning team lead · Proof: measured in real team ops, documented in handover',
       },
-      linkTo: '/story#ai',
+      linkTo: '/work/ai-os',
     },
     {
       title: { ko: '린: 더 라이트브링어', en: 'Lyn: The Lightbringer' },

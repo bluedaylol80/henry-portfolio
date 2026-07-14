@@ -158,7 +158,7 @@ export default function Preloader() {
         <div className="h-px w-40 overflow-hidden bg-white/10 md:w-56">
           <div
             ref={barRef}
-            className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-era-amber via-era-violet to-era-coral"
+            className="h-full w-full origin-left scale-x-0 bg-gradient-to-r from-amber to-amber-deep"
           />
         </div>
         <div className="flex items-baseline font-display text-sm tabular-nums tracking-widest text-ink-dim">
