@@ -64,23 +64,28 @@ export default function WorkGallery({
         className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 md:gap-5"
       >
         {items.map((item, i) => (
-          <figure key={item.src} role="listitem" className="m-0">
-            <button
-              type="button"
-              onClick={() => setOpenIndex(i)}
-              aria-label={t(item.caption)}
-              className="group block w-full overflow-hidden rounded-xl border border-white/10 transition-colors duration-300 hover:border-white/25"
-            >
-              <img
-                src={base + item.src}
-                alt={t(item.caption)}
-                loading="lazy"
-                className="aspect-video w-full rounded-xl object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-              />
-            </button>
-            <figcaption className="mt-2 break-keep text-xs text-ink-dim">
-              {t(item.caption)}
-            </figcaption>
+          <figure key={i} role="listitem" className="m-0">
+            {item.src ? (
+              <button
+                type="button"
+                onClick={() => setOpenIndex(i)}
+                aria-label={t(item.caption)}
+                className="group block w-full overflow-hidden rounded-xl border border-line transition-colors duration-300 hover:border-brass/50"
+              >
+                <img
+                  src={base + item.src}
+                  alt={t(item.caption)}
+                  loading="lazy"
+                  className="aspect-video w-full rounded-xl object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+                />
+              </button>
+            ) : (
+              <div className="flex aspect-video w-full flex-col items-center justify-center rounded-xl border border-dashed border-brass/40 bg-elev/25 p-4 text-center">
+                <span aria-hidden className="flex h-9 w-9 items-center justify-center rounded-full border border-brass/40 font-mono text-sm text-brass">◱</span>
+                <span className="mt-2 font-mono text-[9px] uppercase tracking-[0.18em] text-ink-dim">스크린샷 예정 · coming soon</span>
+              </div>
+            )}
+            <figcaption className="mt-2 break-keep text-xs text-ink-dim">{t(item.caption)}</figcaption>
           </figure>
         ))}
       </div>

@@ -27,7 +27,12 @@ export interface PhaseOutput {
  * 예: { src: 'work/planning/dashboard.png', caption: { ko: '팀 업무현황판', en: 'Team dashboard' } }
  */
 export interface GalleryItem {
-  src: string
+  /**
+   * public/ 기준 이미지 경로 (예: 'work/planning/dashboard.png').
+   * 비우거나 생략하면(=아직 스크린샷 없음) 라벨된 "스크린샷 예정" 플레이스홀더
+   * 슬롯으로 렌더된다. 나중에 파일 경로만 채우면 자동으로 실제 이미지로 교체.
+   */
+  src?: string
   caption: Bi
 }
 
@@ -339,7 +344,10 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
-    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
+    gallery: [
+      { src: '', caption: { ko: '지표 기반 사업 분석 리포트', en: 'Metric-driven business analysis' } },
+      { src: '', caption: { ko: '글로벌 런칭 · 라이브 운영', en: 'Global launch & live operations' } },
+    ],
     carried: {
       ko: '매출과 지표를 다루는 감각은 “BM을 설계하는 기획자”의 기반이 됐고, 다국가 · 다장르 운영 경험은 훗날 글로벌 4개 라인 동시 운영의 베이스가 됩니다.',
       en: 'Fluency with revenue and metrics became the base of a planner who designs BMs — and the multi-market, multi-genre experience later powered running four global lines at once.',
@@ -468,7 +476,11 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
-    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
+    gallery: [
+      { src: '', caption: { ko: '업무현황판 (HTML 대시보드)', en: 'HTML team dashboard' } },
+      { src: '', caption: { ko: 'Notion 히스토리 전환', en: 'Notion history migration' } },
+      { src: '', caption: { ko: '미니게임 · 웹뷰 이벤트 기획', en: 'Minigame & webview event specs' } },
+    ],
     carried: {
       ko: '사람에게 위임하던 구조 — 3층 위임, 표준 결재선, SSOT — 가 다음 층에서 그대로 AI에게 위임하는 구조로 치환됩니다.',
       en: 'The structures once used to delegate to people — tiered delegation, standard approval lines, an SSOT — get transplanted, one for one, into delegating to AI.',
@@ -587,7 +599,10 @@ export const phases: JourneyPhase[] = [
         },
       },
     ],
-    gallery: [], // 작업 스크린샷: public/work/<slug>/에 파일을 두고 { src, caption } 추가
+    gallery: [
+      { src: '', caption: { ko: '3계층 에이전트 오케스트레이션', en: '3-tier agent orchestration' } },
+      { src: '', caption: { ko: '6축 품질 게이트 · 블라인드 채점 로그', en: '6-axis quality gate · blind-grading log' } },
+    ],
     carried: {
       ko: '이 층의 끝은 아직 없습니다. 다음 층은 지금 만들어지는 중입니다 — 이 사이트도 그 일부입니다.',
       en: 'This layer has no ceiling yet. The next one is being built right now — this site is part of it.',

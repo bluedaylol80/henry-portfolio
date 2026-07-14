@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { workAiOs, contact, home } from '../content/profile'
 import { useT } from '../lib/i18n'
 import ArchDiagram from '../components/ArchDiagram'
+import WorkGallery from '../components/WorkGallery'
 
 /**
  * /work/ai-os — the flagship case (LOCKED §5.4). A 5-act narrative (WALL → BET →
@@ -94,14 +95,10 @@ export default function WorkAiOs() {
           </ul>
         </Reveal>
 
-        {/* Gallery — no-photo-yet premium treatment */}
-        <Reveal className="mt-4">
-          <div className="img-treatment flex min-h-[180px] items-center justify-center bg-elev/30 p-8">
-            <div className="text-center">
-              <span aria-hidden className="mx-auto flex h-10 w-10 items-center justify-center rounded-full border border-brass/40 font-mono text-sm text-brass">◱</span>
-              <p className="mt-3 break-keep font-mono text-[11px] uppercase tracking-[0.18em] text-ink-dim">{t(workAiOs.galleryNote)}</p>
-            </div>
-          </div>
+        {/* Screenshot slots — labeled placeholders; drop images into workAiOs.shots later */}
+        <Reveal className="mt-8">
+          <p className="mb-4 font-mono text-[11px] uppercase tracking-[0.24em] text-brass">{t(workAiOs.shotsTitle)}</p>
+          <WorkGallery items={workAiOs.shots} label={t(workAiOs.shotsTitle)} />
         </Reveal>
       </section>
 

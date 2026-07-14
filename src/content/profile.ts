@@ -642,10 +642,15 @@ export const workAiOs = {
       { ko: '30+ AI 자동화 스킬로 팀 루틴 업무 60% 단축', en: '30+ AI automation skills cut routine team work by 60%' },
     ] as Bi[],
   },
-  galleryNote: {
-    ko: '실제 시스템 대시보드 · 로그 캡처는 준비 중입니다.',
-    en: 'Live dashboard & log captures are on the way.',
-  } as Bi,
+  shotsTitle: { ko: '실제 시스템 화면 — 준비 중', en: 'Live system captures — coming soon' } as Bi,
+  // 스크린샷 슬롯: src를 비워두면 라벨된 플레이스홀더로 렌더된다. 나중에
+  // public/work/ai-os/... 에 이미지를 두고 src만 채우면 실제 이미지로 교체.
+  shots: [
+    { src: '', caption: { ko: '업무현황판 — 메일·Slack·Notion 통합 (HTML)', en: 'Team dashboard — mail · Slack · Notion in one view' } },
+    { src: '', caption: { ko: 'Notion 히스토리 체계', en: 'Notion history system' } },
+    { src: '', caption: { ko: '스토어 product ID 자동 반영 (Google Apps Script)', en: 'Store product-ID automation (GAS)' } },
+    { src: '', caption: { ko: '3계층 에이전트 시스템 로그 · 검증 리포트', en: '3-tier agent logs · verification report' } },
+  ] as { src?: string; caption: Bi }[],
   backCta: { ko: '19년 커리어 전체 보기', en: 'See the full 19-year career' } as Bi,
 }
 
