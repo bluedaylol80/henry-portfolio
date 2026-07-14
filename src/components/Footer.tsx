@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useT } from '../lib/i18n'
 import { contact, footer } from '../content/profile'
 
@@ -51,6 +52,9 @@ export default function Footer() {
             >
               Notion
             </a>
+            <Link to="/room" className="transition-colors duration-200 hover:text-amber">
+              {t({ ko: '관제실 ↗', en: 'Control Room ↗' })}
+            </Link>
           </div>
           <span className="text-ink-dim/70">
             {t(footer.credit)} · {t(footer.music)}

@@ -76,23 +76,20 @@ export default function RoomImageNav({
               {/* soft hover ring (fills the 44px hit target) */}
               <span
                 aria-hidden
-                className="absolute inset-0 rounded-full bg-era-cyan/0 ring-1 ring-era-cyan/0 transition-all duration-300 group-hover:bg-era-cyan/10 group-hover:ring-era-cyan/40 group-focus-visible:bg-era-cyan/10 group-focus-visible:ring-era-cyan/40"
+                className="absolute inset-0 rounded-full bg-amber/0 ring-1 ring-amber/0 transition-all duration-300 group-hover:bg-amber/10 group-hover:ring-amber/40 group-focus-visible:bg-amber/10 group-focus-visible:ring-amber/40"
               />
               {/* the pin dot — gently pulses so the objects read as interactive */}
               <span
                 aria-hidden
-                className={`relative block h-3.5 w-3.5 rounded-full bg-era-cyan shadow-[0_0_12px_2px_rgba(79,172,254,0.6)] ring-2 ring-white/70 transition-transform duration-300 group-hover:scale-125 ${
+                className={`relative block h-3.5 w-3.5 rounded-full bg-amber shadow-[0_0_12px_2px_rgba(245,176,65,0.55)] ring-2 ring-white/70 transition-transform duration-300 group-hover:scale-125 ${
                   reduced ? '' : 'animate-pulse-slow'
                 }`}
               />
-              {/* label chip — revealed on hover/focus, above the pin. Uses the
-                  entry-gate handwriting font (font-hand-ko, Nanum Pen Script; renders
-                  both KO & Latin) per owner 2026-07-12; sized up a step since the
-                  hand font reads smaller than the sans at the same px. */}
+              {/* label chip — revealed on hover/focus, above the pin (v20 tokens) */}
               <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
-                <span className="glass block rounded-2xl px-3.5 py-1 text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.10)]">
-                  <span className="block font-hand-ko text-lg leading-tight text-ink">{t(h.label)}</span>
-                  <span className="block font-hand-ko text-sm leading-none text-ink-dim">{t(h.hint)}</span>
+                <span className="block rounded-xl border border-line bg-night/90 px-3 py-1.5 text-center backdrop-blur-sm">
+                  <span className="block text-sm font-medium leading-tight text-ink">{t(h.label)}</span>
+                  <span className="block text-[11px] leading-tight text-ink-dim">{t(h.hint)}</span>
                 </span>
               </span>
             </button>

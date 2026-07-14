@@ -73,13 +73,6 @@ function PhaseRoute() {
   return <PhasePage />
 }
 
-/** Single Header (LOCKED §4.2) on every route except the immersive room. */
-function ShellHeader() {
-  const { pathname } = useLocation()
-  if (pathname === '/room') return null
-  return <Header />
-}
-
 /** Footer everywhere except the immersive room (which owns its own chrome). */
 function ShellFooter() {
   const { pathname } = useLocation()
@@ -111,7 +104,7 @@ export default function App() {
         <Cursor enabled={tier === 'full'} />
         <DebugPanel />
         <RouteEffects />
-        <ShellHeader />
+        <Header />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/room" element={<RoomPage />} />

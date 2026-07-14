@@ -67,9 +67,6 @@ export default {
         display: ['"Fraunces Variable"', '"Pretendard Variable"', 'Pretendard', 'serif'],
         // Labels / tabular proof numbers — IBM Plex Mono.
         mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
-        // Legacy hand faces — removed with the room-start gate in the v20-c pass.
-        hand: ['"Permanent Marker"', 'cursive'],
-        'hand-ko': ['"Nanum Pen Script"', 'cursive'],
       },
     },
   },

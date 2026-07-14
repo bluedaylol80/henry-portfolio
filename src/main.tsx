@@ -11,10 +11,6 @@ import '@fontsource-variable/geist/wght.css'
 import '@fontsource/ibm-plex-mono/latin-400.css'
 import '@fontsource/ibm-plex-mono/latin-500.css'
 import '@fontsource/ibm-plex-mono/latin-600.css'
-// Legacy hand faces (permanent-marker / nanum-pen) — used only by the room-start
-// gate; removed when /room is cleaned up (D5). Space Grotesk is fully retired.
-import '@fontsource/permanent-marker/latin-400.css'
-import '@fontsource/nanum-pen-script/400.css'
 import './index.css'
 import App from './App.tsx'
 
