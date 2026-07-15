@@ -256,6 +256,16 @@ html.lenis body {
     animation: conduit-travel 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  /* E5 — ambient navy field (LOCKED §6 E5): layered radial glows give the hero
+     tonal depth beyond the flat 5-step ramp. Background-only, alphas ≤5% so AA
+     contrast on foreground text is untouched; cobalt stays out (diagram-only). */
+  .ambient-field {
+    background-image:
+      radial-gradient(56% 44% at 78% 12%, rgba(245, 176, 65, 0.05), transparent 70%),
+      radial-gradient(48% 42% at 12% 86%, rgba(198, 161, 91, 0.04), transparent 72%),
+      radial-gradient(120% 100% at 50% 50%, transparent 55%, rgba(6, 14, 28, 0.55) 100%);
+  }
+
   .noise-overlay {
     position: fixed;
     inset: 0;

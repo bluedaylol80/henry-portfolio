@@ -130,6 +130,41 @@ export const hub = {
       },
     },
   ] as { title: Bi; body: Bi }[],
+
+  // E2 위임/검증 루프 — workstyle 5상수의 시각화 라벨(순서 1:1 대응).
+  loop: {
+    eyebrow: { ko: '위임 · 검증 루프', en: 'THE DELEGATE · VERIFY LOOP' } as Bi,
+    caption: {
+      ko: '검증의 결과는 다시 기록으로 — 루프는 닫힙니다.',
+      en: 'Verification feeds the record — the loop closes.',
+    } as Bi,
+    steps: [
+      { ko: '기록', en: 'RECORD' },
+      { ko: '1장 표준', en: 'ONE-PAGER' },
+      { ko: '위임', en: 'DELEGATE' },
+      { ko: '검증', en: 'VERIFY' },
+      { ko: '한계 명시', en: 'HONEST LIMITS' },
+    ] as Bi[],
+  },
+}
+
+/**
+ * E3 에디토리얼 19년 타임라인(/career) — 축은 연 단위의 도식(schematic)이며,
+ * 사실 표기는 각 phase의 period 문자열(🟢)을 그대로 라벨로 쓴다. planning의
+ * 네오위즈 단독 표기 "2021"은 1년 블록으로 근사(🟡 도식 표현).
+ */
+export const timeline = {
+  eyebrow: { ko: '타임라인 2006 — 2026', en: 'TIMELINE 2006 — 2026' } as Bi,
+  start: 2006,
+  end: 2026.6,
+  ticks: [2006, 2010, 2014, 2018, 2022, 2026],
+  spans: [
+    { slug: 'ops', from: 2006, to: 2011 },
+    { slug: 'business-pm', from: 2011, to: 2024 },
+    { slug: 'planning', from: 2021, to: 2022 },
+    { slug: 'planning', from: 2024.75, to: 2026.5 },
+    { slug: 'ai-system', from: 2024, to: 2026.6, now: true },
+  ] as { slug: string; from: number; to: number; now?: boolean }[],
 }
 
 export const phases: JourneyPhase[] = [

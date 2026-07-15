@@ -562,6 +562,24 @@ export const home = {
       en: 'Roles or consulting — I reply quickly to email and coffee-chat requests. Fun proposals are always welcome.',
     } as Bi,
   },
+
+  // E4 로고월 — 모노톤 워드마크 타이포(실제 상표 로고 금지, LOCKED §6 E4).
+  // 회사명 출처 = journey.ts phases[].companies (🟢).
+  companiesWall: {
+    eyebrow: { ko: '함께한 회사들 · 2006 — 2026', en: 'COMPANIES ALONG THE WAY · 2006 — 2026' } as Bi,
+    items: [
+      { ko: '웹젠', en: 'WEBZEN' },
+      { ko: 'NHN 한게임', en: 'NHN HANGAME' },
+      { ko: '소프트닉스', en: 'SOFTNYX' },
+      { ko: '넷마블블루', en: 'NETMARBLE BLUE' },
+      { ko: '넥슨', en: 'NEXON' },
+      { ko: '넵튠 레전드', en: 'NEPTUNE LEGEND' },
+      { ko: '스카이피플', en: 'SKYPEOPLE' },
+      { ko: '원더피플', en: 'WONDER PEOPLE' },
+      { ko: '네오위즈', en: 'NEOWIZ' },
+      { ko: '달콤소프트', en: 'DALCOMSOFT' },
+    ] as Bi[],
+  },
 }
 
 /**

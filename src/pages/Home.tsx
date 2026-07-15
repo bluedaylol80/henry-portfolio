@@ -7,6 +7,7 @@ import { useLang, useT } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
 import { onReady } from '../lib/appState'
 import ArchDiagram from '../components/ArchDiagram'
+import WorkLoop from '../components/WorkLoop'
 
 /**
  * v20 front door (LOCKED §5.1) — a content-first authoring long-form. The old
@@ -118,7 +119,7 @@ export default function Home() {
       <ScrollProgress />
       <main id="main" className="relative z-10">
         {/* ── 1 · HERO (above-fold 6-second money) ─────────────── */}
-        <section className="relative flex min-h-[92vh] items-center overflow-hidden">
+        <section className="ambient-field relative flex min-h-[92vh] items-center overflow-hidden">
           <div className="container-std w-full py-24">
             <Reveal>
               <Eyebrow>{t(home.eyebrow)}</Eyebrow>
@@ -298,6 +299,20 @@ export default function Home() {
                 <span aria-hidden>→</span>
               </Link>
             </Reveal>
+
+            {/* E4 — company wall: monotone typographic wordmarks, no trademark logos */}
+            <Reveal delay={0.05} className="mt-14 border-t border-line pt-8">
+              <p className="font-mono text-[10px] uppercase tracking-[0.24em] text-ink-dim">{t(home.companiesWall.eyebrow)}</p>
+              <ul aria-label={t(home.companiesWall.eyebrow)} className="mt-5 flex flex-wrap items-baseline gap-x-8 gap-y-3">
+                {home.companiesWall.items.map((c, i) => (
+                  <li key={i}>
+                    <span className="u-display break-keep text-base font-semibold tracking-wide text-ink-dim/90 transition-colors duration-300 hover:text-ink-soft md:text-lg">
+                      {t(c)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
           </div>
         </section>
 
@@ -310,7 +325,11 @@ export default function Home() {
                 {t(home.workstyleIntro.title)}
               </h2>
             </Reveal>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {/* E2 — the delegate·verify loop, the five constants as one closed rail */}
+            <div className="mt-10">
+              <WorkLoop />
+            </div>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {hub.workstyle.map((w, i) => (
                 <Reveal key={i} delay={(i % 3) * 0.05}>
                   <div className="flex h-full flex-col rounded-2xl border border-line bg-elev/30 p-5">

@@ -7,6 +7,7 @@ import { prefersReducedMotion } from '../lib/quality'
 import { EASE } from '../lib/motion'
 import { hub, phases, sectionLabels } from '../content/journey'
 import { contact } from '../content/profile'
+import CareerTimeline from '../components/CareerTimeline'
 
 /**
  * /career — the hub for the five-layer career deep-dive (LOCKED §5.2). Re-skinned
@@ -132,6 +133,11 @@ export default function CareerHub() {
             <figcaption className="mt-5 break-keep pl-4 text-sm text-ink-dim md:pl-6">{t(hub.missionSource)}</figcaption>
           </div>
         </figure>
+
+        {/* E3 — editorial 19-year timeline (the /career signature) */}
+        <div className="mt-16 md:mt-24">
+          <CareerTimeline />
+        </div>
 
         {/* Layer stack — Phase 05 on top → 01 at bottom */}
         <section aria-label={t(hub.label)} className="mt-16 flex flex-col gap-4 md:mt-24">
