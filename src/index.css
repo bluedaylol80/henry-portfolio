@@ -103,6 +103,18 @@ html.lenis body {
     font-weight: 900;
     letter-spacing: -0.03em;
   }
+  /* KO mono-label tracking — Latin-tuned wide tracking (0.2~0.35em) scatters
+     Hangul glyphs. Under :lang(ko), cap the wide buckets; ≤0.16em stays as-is.
+     Specificity (:lang + attr) outranks the single-class utility, no !important. */
+  :lang(ko) .eyebrow {
+    letter-spacing: 0.18em;
+  }
+  :lang(ko) [class*='tracking-[0.3'] {
+    letter-spacing: 0.18em;
+  }
+  :lang(ko) [class*='tracking-[0.2'] {
+    letter-spacing: 0.14em;
+  }
   /* Oversized tabular proof numbers — the anti-slop "settings, not font-name"
      moat (§3.4-2): mono + tabular figures so proof digits align and read as
      instrumentation, not decoration. */
