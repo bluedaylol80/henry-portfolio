@@ -1,6 +1,6 @@
-import { useEffect, useMemo } from 'react'
+import { lazy, Suspense, useEffect, useMemo } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
-import { LazyMotion, domAnimation } from 'framer-motion'
+import { LazyMotion } from 'framer-motion'
 import { LanguageProvider } from './lib/i18n'
 import { detectTier, type QualityTier } from './lib/quality'
 import { getLenis, initSmoothScroll } from './lib/scroll'
@@ -12,11 +12,17 @@ import Cursor from './components/Cursor'
 import Footer from './components/Footer'
 import DebugPanel from './components/DebugPanel'
 import Home from './pages/Home'
-import CareerHub from './pages/CareerHub'
-import PhasePage from './pages/PhasePage'
-import RoomPage from './pages/RoomPage'
-import BriefPage from './pages/BriefPage'
-import WorkAiOs from './pages/WorkAiOs'
+
+// Route-split pages (F2 budget): only Home ships in the critical bundle.
+const CareerHub = lazy(() => import('./pages/CareerHub'))
+const PhasePage = lazy(() => import('./pages/PhasePage'))
+const RoomPage = lazy(() => import('./pages/RoomPage'))
+const BriefPage = lazy(() => import('./pages/BriefPage'))
+const WorkAiOs = lazy(() => import('./pages/WorkAiOs'))
+
+// Animation feature pack loads off the critical path, but the download starts
+// immediately (module scope) so reveals fire right after first paint.
+const featuresPromise = import('./lib/motionFeatures').then((m) => m.default)
 
 /** Reset scroll position instantly, respecting Lenis when it is active. */
 function scrollToTop() {
@@ -96,7 +102,7 @@ export default function App() {
 
   return (
     <LanguageProvider>
-      <LazyMotion features={domAnimation}>
+      <LazyMotion features={() => featuresPromise} strict>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
         <a href="#main" className="skip-link">
           Skip to content
@@ -107,17 +113,19 @@ export default function App() {
         <DebugPanel />
         <RouteEffects />
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/room" element={<RoomPage />} />
-          <Route path="/brief" element={<BriefPage />} />
-          <Route path="/work/ai-os" element={<WorkAiOs />} />
-          <Route path="/career" element={<CareerHub />} />
-          <Route path="/career/:slug" element={<PhaseRoute />} />
-          {/* Back-compat: the old long-form root now lives at `/`. */}
-          <Route path="/story" element={<StoryRedirect />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={null}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/room" element={<RoomPage />} />
+            <Route path="/brief" element={<BriefPage />} />
+            <Route path="/work/ai-os" element={<WorkAiOs />} />
+            <Route path="/career" element={<CareerHub />} />
+            <Route path="/career/:slug" element={<PhaseRoute />} />
+            {/* Back-compat: the old long-form root now lives at `/`. */}
+            <Route path="/story" element={<StoryRedirect />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
         <ShellFooter />
         </BrowserRouter>
       </LazyMotion>

@@ -8,19 +8,9 @@ export default defineConfig({
   build: {
     target: 'es2020',
     chunkSizeWarningLimit: 1300,
-    rollupOptions: {
-      output: {
-        manualChunks(id: string) {
-          if (!id.includes('node_modules')) return undefined
-          if (/[\\/](three|@react-three|postprocessing|maath|meshline)[\\/]/.test(id)) {
-            return 'three'
-          }
-          if (/[\\/](gsap|@gsap|framer-motion|motion-dom|motion-utils|lenis)[\\/]/.test(id)) {
-            return 'motion'
-          }
-          return 'vendor'
-        },
-      },
-    },
+    // No manualChunks on purpose (F2): route-splitting in App.tsx sets the
+    // boundaries, and auto-chunking keeps gsap/framer-features out of the
+    // critical bundle. Forcing library chunks by hand created eager edges
+    // (vendor → gsap) that dragged gsap back into the shell preload.
   },
 })

@@ -315,6 +315,20 @@ html.lenis body {
   animation: room-start-pulse 2.6s ease-in-out infinite;
 }
 
+/* Preloader wordmark rise (Preloader.tsx) — CSS so the opening curtain animates
+ * at t=0 without shipping gsap in the critical bundle (F2). Neutralized by the
+ * global reduced-motion killswitch below. */
+@keyframes pl-rise {
+  from {
+    transform: translateY(120%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Architecture-diagram conduit pulse travel (see .conduit-pulse). */
 @keyframes conduit-travel {
   0% {

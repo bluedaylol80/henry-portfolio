@@ -1,71 +1,44 @@
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 
-gsap.registerPlugin(ScrollTrigger)
-
 /**
- * Mutable scroll state read per-frame by the 3D scene (no React re-renders).
- * - progress: 0..1 across the whole page
- * - sections[id]: 0..1 while section `id` crosses the viewport
+ * Smooth-scroll singleton. gsap-free on purpose (F2 budget): the shell drives
+ * Lenis with a plain rAF loop, and the lazy career pages — the only ScrollTrigger
+ * users — bind `ScrollTrigger.update` through `addScrollListener` from their own
+ * chunk. `addScrollListener` is registration-order safe: callbacks added before
+ * Lenis exists are attached when `initSmoothScroll` creates it.
  */
-export const scrollState = {
-  progress: 0,
-  velocity: 0,
-  sections: {} as Record<string, number>,
-}
 
 let lenis: Lenis | null = null
+const scrollCallbacks = new Set<() => void>()
 
 export function getLenis(): Lenis | null {
   return lenis
 }
 
-/** App calls this once. `enabled=false` skips Lenis (reduced motion) but keeps progress tracking. */
-export function initSmoothScroll(enabled: boolean): () => void {
-  const pageTrigger = ScrollTrigger.create({
-    start: 0,
-    end: 'max',
-    onUpdate: (self) => {
-      scrollState.progress = self.progress
-      scrollState.velocity = self.getVelocity() / 1000
-    },
-  })
+/** Attach a Lenis scroll listener now or as soon as Lenis is created. */
+export function addScrollListener(cb: () => void): void {
+  if (scrollCallbacks.has(cb)) return
+  scrollCallbacks.add(cb)
+  lenis?.on('scroll', cb)
+}
 
+/** App calls this once. `enabled=false` skips Lenis entirely (reduced motion / fallback). */
+export function initSmoothScroll(enabled: boolean): () => void {
   if (!enabled) {
-    return () => pageTrigger.kill()
+    return () => {}
   }
 
   lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1, touchMultiplier: 1.5 })
-  lenis.on('scroll', ScrollTrigger.update)
+  scrollCallbacks.forEach((cb) => lenis?.on('scroll', cb))
 
-  const raf = (time: number) => {
-    lenis?.raf(time * 1000)
-  }
-  gsap.ticker.add(raf)
-  gsap.ticker.lagSmoothing(0)
+  let raf = requestAnimationFrame(function loop(time: number) {
+    lenis?.raf(time)
+    raf = requestAnimationFrame(loop)
+  })
 
   return () => {
-    pageTrigger.kill()
-    gsap.ticker.remove(raf)
+    cancelAnimationFrame(raf)
     lenis?.destroy()
     lenis = null
-  }
-}
-
-/** SectionShell calls this on mount; returns cleanup. */
-export function registerSection(id: string, el: HTMLElement): () => void {
-  scrollState.sections[id] = 0
-  const st = ScrollTrigger.create({
-    trigger: el,
-    start: 'top bottom',
-    end: 'bottom top',
-    onUpdate: (self) => {
-      scrollState.sections[id] = self.progress
-    },
-  })
-  return () => {
-    st.kill()
-    delete scrollState.sections[id]
   }
 }
