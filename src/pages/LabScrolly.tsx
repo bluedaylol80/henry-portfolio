@@ -73,6 +73,10 @@ export default function LabScrolly() {
   // Beats overlay (crossfade) only when motion is on; under reduced motion they
   // fall back to normal document flow so all three read at once (static state).
   const overlay = reduce ? '' : 'md:absolute md:inset-0'
+  // Vertical gap between stacked beats: always present in flow, but removed on
+  // desktop ONLY when they overlay (absolute) so the reset doesn't cramp the
+  // reduced-motion desktop stack.
+  const beatGap = reduce ? 'mt-12' : 'mt-12 md:mt-0'
 
   useGSAP(
     () => {
@@ -108,7 +112,7 @@ export default function LabScrolly() {
       gsap.to(yearObj, {
         v: ACT1_END_YEAR,
         ease: 'none',
-        scrollTrigger: { trigger: act1Ref.current, start: 'top 72%', end: 'bottom 72%', scrub: 0.6 },
+        scrollTrigger: { trigger: act1Ref.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
         onUpdate: () => {
           if (yearRef.current) yearRef.current.textContent = String(Math.round(yearObj.v))
         },
@@ -270,7 +274,7 @@ export default function LabScrolly() {
               </div>
 
               {/* Beat 2 · decision */}
-              <div ref={beatRefs[1]} className={`sc-beat mt-12 md:mt-0 ${overlay}`}>
+              <div ref={beatRefs[1]} className={`sc-beat ${beatGap} ${overlay}`}>
                 <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-ink-dim">{t(BEAT_LABELS[1])}</span>
                 <p className="mt-4 max-w-2xl break-keep text-2xl font-medium leading-relaxed text-ink md:text-4xl md:leading-[1.3]">
                   {t(bizPm.oneLiner)}
@@ -278,7 +282,7 @@ export default function LabScrolly() {
               </div>
 
               {/* Beat 3 · result (count-up) */}
-              <div ref={beatRefs[2]} className={`sc-beat mt-12 md:mt-0 ${overlay}`}>
+              <div ref={beatRefs[2]} className={`sc-beat ${beatGap} ${overlay}`}>
                 <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-ink-dim">{t(BEAT_LABELS[2])}</span>
                 <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
                   <span ref={numRef} className="u-fig text-6xl font-semibold leading-none text-amber md:text-8xl">
