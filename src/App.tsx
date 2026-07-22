@@ -19,6 +19,9 @@ const PhasePage = lazy(() => import('./pages/PhasePage'))
 const RoomPage = lazy(() => import('./pages/RoomPage'))
 const BriefPage = lazy(() => import('./pages/BriefPage'))
 const WorkAiOs = lazy(() => import('./pages/WorkAiOs'))
+// v21 P1 PoC — hidden scrollytelling lab. Lazy so gsap stays out of the eager
+// bundle; intentionally unlinked from any nav/page (reachable only by URL).
+const LabScrolly = lazy(() => import('./pages/LabScrolly'))
 
 // Animation feature pack loads off the critical path, but the download starts
 // immediately (module scope) so reveals fire right after first paint.
@@ -121,6 +124,8 @@ export default function App() {
             <Route path="/work/ai-os" element={<WorkAiOs />} />
             <Route path="/career" element={<CareerHub />} />
             <Route path="/career/:slug" element={<PhaseRoute />} />
+            {/* v21 P1 PoC — hidden, unlinked scrollytelling prototype. */}
+            <Route path="/lab/scrolly" element={<LabScrolly />} />
             {/* Back-compat: the old long-form root now lives at `/`. */}
             <Route path="/story" element={<StoryRedirect />} />
             <Route path="*" element={<Navigate to="/" replace />} />
