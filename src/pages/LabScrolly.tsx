@@ -121,39 +121,68 @@ export default function LabScrolly() {
       // ── Act 2 (burst): the ONE pin+scrub section, desktop vs mobile fallback. ─
       const mm = gsap.matchMedia()
 
-      // Desktop: pin the panel, crossfade three beats, scrub the count-up.
+      // Desktop: pin the panel over a SHORT range and switch beats at progress
+      // thresholds (not scrub) so a beat is never frozen half-faded at a scrub
+      // midpoint, and the pin needs only a few notches to traverse. The result
+      // count-up is a self-completing time-based tween fired the instant the
+      // result beat activates — one wheel reaches MAX, even if the user stops
+      // scrolling (본부장 2026-07-23 피드백). Re-entering the beat replays once;
+      // a re-trigger while counting is ignored. (No ScrollTrigger snap: it fights
+      // Lenis's programmatic scroll on the live site; thresholds already avoid
+      // awkward mid-transition freezes.)
       mm.add('(min-width: 769px)', () => {
+        const writeNum = (v: number) => {
+          if (numRef.current) numRef.current.textContent = fmtNum(v)
+        }
         gsap.set(beats[0], { autoAlpha: 1, y: 0 })
-        gsap.set([beats[1], beats[2]], { autoAlpha: 0, y: 28 })
-        const counter = { n: 0 }
-        if (numRef.current) numRef.current.textContent = fmtNum(0)
+        gsap.set([beats[1], beats[2]], { autoAlpha: 0, y: 24 })
+        writeNum(0)
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: act2Ref.current,
-            start: 'top top',
-            end: () => '+=' + Math.round(Math.min(2400, window.innerHeight * 2.4)),
-            scrub: 1,
-            pin: panelRef.current,
-            anticipatePin: 1,
-          },
-        })
-        tl.to(beats[0], { autoAlpha: 0, y: -28, duration: 0.5, ease: EASE.inOut }, 0.8)
-          .to(beats[1], { autoAlpha: 1, y: 0, duration: 0.5, ease: EASE.out }, 0.95)
-          .to(beats[1], { autoAlpha: 0, y: -28, duration: 0.5, ease: EASE.inOut }, 1.9)
-          .to(beats[2], { autoAlpha: 1, y: 0, duration: 0.5, ease: EASE.out }, 2.05)
-          .to(
-            counter,
-            {
-              n: stat.value,
-              duration: 1.0,
-              ease: 'none',
-              onUpdate: () => {
-                if (numRef.current) numRef.current.textContent = fmtNum(counter.n)
-              },
+        const counter = { n: 0 }
+        let countTween: gsap.core.Tween | null = null
+        let counting = false
+        const startCount = () => {
+          if (counting) return
+          counting = true
+          counter.n = 0
+          writeNum(0)
+          countTween = gsap.to(counter, {
+            n: stat.value,
+            duration: 1.2,
+            ease: 'power2.out',
+            onUpdate: () => writeNum(counter.n),
+            onComplete: () => {
+              counting = false
             },
-            2.15,
-          )
+          })
+        }
+        const resetCount = () => {
+          countTween?.kill()
+          counting = false
+          counter.n = 0
+          writeNum(0)
+        }
+
+        let curIdx = 0
+        const showBeat = (idx: number) => {
+          if (idx === curIdx) return
+          curIdx = idx
+          beats.forEach((b, i) => {
+            gsap.to(b, { autoAlpha: i === idx ? 1 : 0, y: i === idx ? 0 : 24, duration: 0.45, ease: EASE.out, overwrite: true })
+          })
+          if (idx === 2) startCount()
+          else resetCount()
+        }
+
+        ScrollTrigger.create({
+          trigger: act2Ref.current,
+          start: 'top top',
+          end: () => '+=' + Math.round(Math.min(1100, window.innerHeight * 1.15)),
+          pin: panelRef.current,
+          anticipatePin: 1,
+          onUpdate: (self) => showBeat(self.progress < 0.34 ? 0 : self.progress < 0.67 ? 1 : 2),
+          onLeaveBack: () => showBeat(0),
+        })
       })
 
       // Mobile (≤768px): NO pin — beats stack in flow, reveal + count-up on enter.

@@ -59,7 +59,7 @@ async function scrollToFrac(page, frac) {
     const y = Math.round((document.documentElement.scrollHeight - window.innerHeight) * f)
     window.scrollTo({ top: y, behavior: 'instant' })
   }, frac)
-  await wait(850) // let scrub / reveals settle
+  await wait(1500) // let threshold switch + self-running count-up (1.2s) settle
 }
 
 async function stepRun(tag, opts, fracs, target = URL) {
