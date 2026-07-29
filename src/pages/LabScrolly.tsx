@@ -41,7 +41,14 @@ const BEAT_LABELS: Bi[] = [
 const LAB_EYEBROW: Bi = { ko: '스크롤텔링 · P1 프로토타입', en: 'SCROLLYTELLING · P1 POC' }
 
 const ACT1_START_YEAR = 2006
-const ACT1_END_YEAR = 2024
+const ACT1_END_YEAR = 2026
+/**
+ * The year readout must have reached ACT1_END_YEAR by the time the scrollbar is
+ * ~40% down the page (본부장 2026-07-30). So the scrub is anchored to a fraction
+ * of the WHOLE page scroll — not to Act 1's own height, which drifts whenever
+ * copy or the Act 2 pin distance changes.
+ */
+const YEAR_DONE_AT = 0.4
 
 /** Split a display number like '183억' or '₩18.3B' into count-up parts (verbatim value). */
 function parseStat(s: string): { prefix: string; value: number; suffix: string; decimals: number } {
@@ -104,17 +111,6 @@ export default function LabScrolly() {
             batch.map((el) => el.querySelector('.sc-dot')),
             { backgroundColor: '#F5B041', scale: 1.15, duration: 0.5, stagger: 0.12, ease: EASE.out, overwrite: true },
           )
-        },
-      })
-
-      // ── Act 1: year readout climbs 2006→2024, scrubbed to scroll (no pin). ──
-      const yearObj = { v: ACT1_START_YEAR }
-      gsap.to(yearObj, {
-        v: ACT1_END_YEAR,
-        ease: 'none',
-        scrollTrigger: { trigger: act1Ref.current, start: 'top top', end: 'bottom top', scrub: 0.6 },
-        onUpdate: () => {
-          if (yearRef.current) yearRef.current.textContent = String(Math.round(yearObj.v))
         },
       })
 
@@ -216,6 +212,27 @@ export default function LabScrolly() {
         })
       })
 
+      // ── Act 1: year readout climbs 2006→2026, scrubbed to scroll (no pin). ──
+      // Ends at YEAR_DONE_AT of TOTAL page scroll. Declared after the Act 2 pin
+      // and given refreshPriority -1 so it recalculates LAST: maxScroll must
+      // already include the pin spacer, which only exists once the pin refreshes.
+      const yearObj = { v: ACT1_START_YEAR }
+      gsap.to(yearObj, {
+        v: ACT1_END_YEAR,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: () => '+=' + Math.max(1, Math.round(ScrollTrigger.maxScroll(window) * YEAR_DONE_AT)),
+          scrub: 0.6,
+          invalidateOnRefresh: true,
+          refreshPriority: -1,
+        },
+        onUpdate: () => {
+          if (yearRef.current) yearRef.current.textContent = String(Math.round(yearObj.v))
+        },
+      })
+
       ScrollTrigger.refresh()
       // Light up any company rows already in view on load (batch fires on enter only).
       gsap.utils
@@ -250,6 +267,12 @@ export default function LabScrolly() {
 
       {/* ── ACT 1 · calm: year climbs, company wall lights up ──────────── */}
       <section ref={act1Ref} className="relative border-t border-line">
+        {/* Act 1 runs long on purpose: the `sticky` year column is confined to
+            its GRID ROW, whose height comes from the company wall — so the wall
+            (not padding) is what keeps the readout on screen at YEAR_DONE_AT
+            when it lands on ACT1_END_YEAR (본부장 2026-07-30). Measured: bottom
+            padding only lengthens the page, which pushes the 40% mark later and
+            makes it worse. Verify with scripts/measure-year-anchor.mjs. */}
         <div className="container-std grid gap-12 py-20 md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:py-28">
           {/* left — sticky year readout (CSS sticky, native scroll; NOT a pin) */}
           <div className="md:sticky md:top-28 md:self-start">
@@ -273,7 +296,7 @@ export default function LabScrolly() {
           </div>
 
           {/* right — company wall (chronological, lights up on scroll) */}
-          <ul className="space-y-6 md:space-y-9">
+          <ul className="space-y-6 md:space-y-[8.5rem]">
             {companies.map((c, i) => (
               <li key={i} className="sc-company flex items-center gap-4">
                 <span aria-hidden className="sc-dot h-2.5 w-2.5 shrink-0 rounded-full" />
