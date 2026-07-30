@@ -563,6 +563,78 @@ export const home = {
     } as Bi,
   },
 
+  /**
+   * v21 Act 서사 카피 (SDD §3). 홈은 Act 0~5로 진행하는 한 편의 내러티브가 되고,
+   * 각 Act의 "무대 지시문"만 여기 있습니다. 사실·수치는 전부 기존 검증 콘텐츠에서
+   * 끌어오며(work.items · journey phases · hub.workstyle), 여기서 새로 만든 숫자는
+   * 하나도 없습니다. Act 2 케이스의 문제/결정 문장도 journey.ts의 problems·did에
+   * 근거합니다(🟢). 연출은 정보의 관문이 아니므로 모든 Act는 정적으로도 완결됩니다.
+   */
+  acts: {
+    scrollCue: { ko: '스크롤', en: 'SCROLL' } as Bi,
+
+    a1: {
+      eyebrow: { ko: 'ACT 1 · 1층부터', en: 'ACT 1 · FROM THE GROUND FLOOR' } as Bi,
+      title: { ko: '2006년, 1층에서 시작했습니다.', en: 'It started on the ground floor, in 2006.' } as Bi,
+      body: {
+        ko: '운영 · 품질 · 사업 · 기획 — 앞 단계의 역량은 버려진 적 없이 다음 단계의 기반이 됐습니다. 열 개의 회사를 지나오는 동안 쌓인 건 이력이 아니라 층이었습니다.',
+        en: 'Live ops, quality, business, planning — no layer was ever discarded; each became the base of the next. Across ten companies, what accumulated was not a résumé but a stack.',
+      } as Bi,
+      layersTitle: { ko: '네 개의 층', en: 'Four layers' } as Bi,
+    },
+
+    a2: {
+      eyebrow: { ko: 'ACT 2 · 지표가 의사결정이 되는 곳', en: 'ACT 2 · WHERE METRICS BECOME DECISIONS' } as Bi,
+      title: { ko: '사업 PM 13년 — 감각이 시장의 의사결정이 되는 자리', en: 'Thirteen years as a business PM — where instinct becomes a market decision' } as Bi,
+      // 한 장면을 3비트로. 사실 근거: 문제=journey business-pm.problems[0],
+      // 결정=business-pm.did(지표 기반 의사결정 · BM/이벤트/업데이트 조율),
+      // 결과=work.items 린(공개 순위·누적 매출). 새로 만든 수치 없음.
+      caseTag: { ko: '넥슨 모바일사업실 · 2015 — 2019', en: 'NEXON Mobile Business Div. · 2015 — 2019' } as Bi,
+      beats: [
+        {
+          label: { ko: '문제', en: 'PROBLEM' } as Bi,
+          body: {
+            ko: '숫자와 사람, 일정과 산출물을 동시에 봐야 했습니다.',
+            en: 'Numbers and people, schedules and deliverables — all at once.',
+          } as Bi,
+        },
+        {
+          label: { ko: '결정', en: 'DECISION' } as Bi,
+          body: {
+            ko: '감이 아니라 지표를 근거로 BM · 이벤트 · 업데이트 방향을 조율했습니다.',
+            en: 'Steered BM, events and update direction on metrics — not on instinct alone.',
+          } as Bi,
+        },
+        { label: { ko: '결과', en: 'RESULT' } as Bi },
+      ] as { label: Bi; body?: Bi }[],
+      restTitle: { ko: '같은 방식으로 남은 숫자들', en: 'The same method, more numbers' } as Bi,
+    },
+
+    a3: {
+      eyebrow: { ko: 'ACT 3 · 전환 (2024)', en: 'ACT 3 · THE PIVOT (2024)' } as Bi,
+      title: { ko: '새 도구를 배운 게 아닙니다.', en: "I didn't learn a new tool." } as Bi,
+      body: {
+        ko: '19년간 사람 조직을 돌리던 운영 문법 — 위임 · 결재선 · 인수인계 · 24/7 대응 — 을 AI 위에 그대로 옮겼습니다.',
+        en: 'The operating grammar that ran human orgs for 19 years — delegation, approval lines, handover, 24/7 duty — moved onto AI, one for one.',
+      } as Bi,
+    },
+
+    a4: {
+      eyebrow: { ko: 'ACT 4 · 컨트롤 룸', en: 'ACT 4 · THE CONTROL ROOM' } as Bi,
+      title: { ko: '지금, 이 방에서 돌아가고 있는 것', en: 'What runs in this room now' } as Bi,
+    },
+
+    a5: {
+      eyebrow: { ko: 'ACT 5 · 함께 일하기', en: 'ACT 5 · WORKING TOGETHER' } as Bi,
+      roomTitle: { ko: '무대 뒤 구경하기', en: 'Look behind the stage' } as Bi,
+      roomBody: {
+        ko: '19년이 쌓인 방을 사물 단위로 둘러볼 수 있습니다. 급하시면 건너뛰셔도 됩니다 — 필요한 내용은 전부 이 페이지에 있습니다.',
+        en: 'A room where nineteen years piled up, explorable object by object. Skip it if you are in a hurry — everything you need is already on this page.',
+      } as Bi,
+      roomCta: { ko: '방 열어보기', en: 'Open the room' } as Bi,
+    },
+  },
+
   // E4 로고월 — 모노톤 워드마크 타이포(실제 상표 로고 금지, LOCKED §6 E4).
   // 회사명 출처 = journey.ts phases[].companies (🟢).
   companiesWall: {
