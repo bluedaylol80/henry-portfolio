@@ -1,5 +1,6 @@
 import { useT } from '../lib/i18n'
-import { hotspots, type RoomAction } from '../content/room'
+import { hotspots } from '../content/room'
+import { PINS } from './pins'
 
 /**
  * Static-image room navigator (SPEC §24, 2026-07-12) — replaces the real-time
@@ -27,25 +28,19 @@ import { hotspots, type RoomAction } from '../content/room'
 // a/c also live in public/room/ for the owner to compare.
 const HERO = import.meta.env.BASE_URL + 'room/room-hero-b.webp'
 
-/** Pin position per hotspot id — {x,y} are fractions (0–1) of the hero image,
- *  measured against room-hero-b.webp. Re-measure if HERO changes. */
-const PINS: Record<string, { x: number; y: number }> = {
-  frame: { x: 0.157, y: 0.415 }, // framed poster, left wall (→ 대표 성과)
-  bookshelf: { x: 0.216, y: 0.595 }, // tall bookshelf, left (→ 커리어)
-  speaker: { x: 0.336, y: 0.388 }, // studio speaker on the shelf (→ 배경 음악)
-  desk: { x: 0.372, y: 0.535 }, // desk + glowing monitor (→ 소개)
-  tv: { x: 0.612, y: 0.458 }, // wall TV, right (→ 상세 이력)
-  server: { x: 0.74, y: 0.52 }, // server rack tower, back-right (→ AI 챕터)
-  coffee: { x: 0.633, y: 0.685 }, // right side-table with the coffee mug (→ 커피챗;
-  // owner 2026-07-12: the coffee-chat spot is the sofa, but the PIN sits on the
-  // right round side table where the mug is, not on the sofa itself)
-}
+/** 핀 좌표는 `room/pins.ts` — RoomPage도 읽으므로 컴포넌트 파일 밖에 둔다. */
 
 export default function RoomImageNav({
-  onAction,
+  onOpen,
+  openId,
+  seen,
   reduced,
 }: {
-  onAction: (id: string, action: RoomAction) => void
+  /** v21 P4: 핀은 더 이상 이동을 실행하지 않는다 — 사물 카드를 연다. */
+  onOpen: (id: string) => void
+  openId: string | null
+  /** 이미 열어본 사물 — 다 둘러봤는지 방문자가 알 수 있게 표시를 남긴다. */
+  seen: ReadonlySet<string>
   reduced: boolean
 }) {
   const t = useT()
@@ -64,11 +59,15 @@ export default function RoomImageNav({
         {hotspots.map((h) => {
           const p = PINS[h.id]
           if (!p) return null
+          const isOpen = openId === h.id
+          const isSeen = seen.has(h.id)
           return (
             <button
               key={h.id}
               type="button"
-              onClick={() => onAction(h.id, h.action)}
+              data-pin={h.id}
+              onClick={() => onOpen(h.id)}
+              aria-expanded={isOpen}
               aria-label={`${t(h.label)} — ${t(h.hint)}`}
               className="group absolute z-10 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
               style={{ left: `${p.x * 100}%`, top: `${p.y * 100}%` }}
@@ -76,14 +75,17 @@ export default function RoomImageNav({
               {/* soft hover ring (fills the 44px hit target) */}
               <span
                 aria-hidden
-                className="absolute inset-0 rounded-full bg-amber/0 ring-1 ring-amber/0 transition-all duration-300 group-hover:bg-amber/10 group-hover:ring-amber/40 group-focus-visible:bg-amber/10 group-focus-visible:ring-amber/40"
+                className={`absolute inset-0 rounded-full transition-all duration-300 group-hover:bg-amber/10 group-hover:ring-amber/40 group-focus-visible:bg-amber/10 group-focus-visible:ring-amber/40 ${
+                  isOpen ? 'bg-amber/15 ring-1 ring-amber/60' : 'bg-amber/0 ring-1 ring-amber/0'
+                }`}
               />
-              {/* the pin dot — gently pulses so the objects read as interactive */}
+              {/* 핀 점 — 열려 있으면 커진 채로 유지, 이미 본 사물은 맥박을 멈춘다
+                  (무엇이 남았는지 눈으로 구분되게). */}
               <span
                 aria-hidden
-                className={`relative block h-3.5 w-3.5 rounded-full bg-amber shadow-[0_0_12px_2px_rgba(245,176,65,0.55)] ring-2 ring-white/70 transition-transform duration-300 group-hover:scale-125 ${
-                  reduced ? '' : 'animate-pulse-slow'
-                }`}
+                className={`relative block h-3.5 w-3.5 rounded-full bg-amber shadow-[0_0_12px_2px_rgba(245,176,65,0.55)] ring-2 transition-transform duration-300 group-hover:scale-125 ${
+                  isOpen ? 'scale-125 ring-white' : isSeen ? 'ring-white/40' : 'ring-white/70'
+                } ${reduced || isSeen || isOpen ? '' : 'animate-pulse-slow'}`}
               />
               {/* label chip — revealed on hover/focus, above the pin (v20 tokens) */}
               <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
