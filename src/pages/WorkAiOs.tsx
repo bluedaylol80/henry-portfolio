@@ -5,6 +5,7 @@ import { workAiOs, contact, home } from '../content/profile'
 import { useT } from '../lib/i18n'
 import ArchDiagram from '../components/ArchDiagram'
 import WorkGallery from '../components/WorkGallery'
+import OpsEvidence from '../components/OpsEvidence'
 
 /**
  * /work/ai-os — the flagship case (LOCKED §5.4). A 5-act narrative (WALL → BET →
@@ -78,6 +79,14 @@ export default function WorkAiOs() {
         {workAiOs.acts.slice(3).map((act, i) => (
           <Act key={act.key} n={i + 4} act={act} />
         ))}
+      </section>
+
+      {/* P3 — 실측 카운터 + 리플레이 데모. 증거 위계에서 가장 위(조작 가능한
+          데모)를 정적 호스팅에서 정직하게 구현한 자리. */}
+      <section className="container-std mb-16 md:mb-20">
+        <Reveal className="rounded-[20px] border border-line bg-elev/20 p-6 md:p-9">
+          <OpsEvidence />
+        </Reveal>
       </section>
 
       {/* FIELD-PROVEN */}

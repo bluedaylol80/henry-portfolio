@@ -468,7 +468,7 @@ export const contact = {
 /**
  * v20 front-door (`/`) composition copy (LOCKED §5.1). All strings are
  * public-safe and sourced from the v20 content pack (🟢). Hero proof strip =
- * checkable numbers only; the 20/65/31 system scale lives inside the diagram.
+ * checkable numbers only; the system scale (measured snapshot) lives inside the diagram.
  */
 type StatN = { value: number; prefix?: string; suffix?: string; decimals?: number }
 
@@ -693,8 +693,8 @@ export const workAiOs = {
       label: { ko: '구축', en: 'THE BUILD' } as Bi,
       title: { ko: '3계층 에이전트 + 품질 게이트 + 안전장치', en: 'Three tiers + a quality gate + a fail-safe' } as Bi,
       body: {
-        ko: '오케스트레이터가 의도를 작업으로 쪼개 실행자(20 에이전트 · 65 스킬)에 위임하고, 다른 모델 계열의 검증자가 6축 루브릭으로 블라인드 채점합니다. 폭주는 LLM을 거치지 않는 결정론적 킬스위치로 막습니다.',
-        en: 'The orchestrator splits intent into tasks and delegates to executors (20 agents · 65 skills); a verifier from a different model family blind-grades on a 6-axis rubric. Runaway is stopped by a deterministic kill switch that bypasses the LLM entirely.',
+        ko: '오케스트레이터가 의도를 작업으로 쪼개 실행자(23 에이전트 · 70 스킬)에 위임하고, 다른 모델 계열의 검증자가 6축 루브릭으로 블라인드 채점합니다. 폭주는 LLM을 거치지 않는 결정론적 킬스위치로 막습니다.',
+        en: 'The orchestrator splits intent into tasks and delegates to executors (23 agents · 70 skills); a verifier from a different model family blind-grades on a 6-axis rubric. Runaway is stopped by a deterministic kill switch that bypasses the LLM entirely.',
       } as Bi,
     },
     {
@@ -733,6 +733,52 @@ export const workAiOs = {
       { ko: '30+ AI 자동화 스킬로 팀 루틴 업무 60% 단축', en: '30+ AI automation skills cut routine team work by 60%' },
     ] as Bi[],
   },
+  /**
+   * P3 증거 블록 — 카운터와 리플레이 데모의 **라벨**만 여기 있다.
+   * 수치·단계·날짜는 전부 `content/aiosEvidence.json`(집계 스크립트 산출물)에서 오며,
+   * 이 파일에 손으로 적는 수치는 없다. 정직성 라벨은 SDD §4의 하드 요건.
+   */
+  evidence: {
+    eyebrow: { ko: '실측 · 재생', en: 'MEASURED · REPLAY' } as Bi,
+    title: { ko: '말 대신, 기록', en: 'Records, not claims' } as Bi,
+    lede: {
+      ko: '아래 숫자는 손으로 쓴 게 아니라 운영 로그를 집계 스크립트가 세어 만든 스냅샷입니다. 그 아래 데모는 실제로 있었던 실행을 그대로 재생합니다 — 지금 돌리는 게 아니라, 그날의 기록입니다.',
+      en: 'These numbers are not typed by hand — an aggregation script counted them from the operations log. The demo below replays runs that actually happened; it is a record of that day, not a live invocation.',
+    } as Bi,
+    counters: {
+      runs: { ko: '자동 실행 기록', en: 'Automated runs logged' },
+      routines: { ko: '상시 루틴 종류', en: 'Standing routines' },
+      notifications: { ko: '자동 알림 발송', en: 'Automated notifications' },
+      scale: { ko: '에이전트 · 스킬 · 규칙', en: 'Agents · skills · rules' },
+    } as Record<string, Bi>,
+    windowNote: {
+      ko: '집계 구간 {from} ~ {to} · 기록이 남은 날 {days}일 · 기준일 {asOf}',
+      en: 'Window {from} – {to} · {days} days with records · as of {asOf}',
+    } as Bi,
+    sourceNote: {
+      ko: '원천: 개인 AI-OS 운영 로그 + 구성 파일 실측. 집계 스크립트와 스냅샷은 이 사이트 저장소에 함께 커밋되어 있습니다. 회사 자산과 무관한 100% 본인 IP.',
+      en: 'Source: personal AI-OS operations log + configuration counted on disk. The aggregation script and the snapshot are committed alongside this site. 100% own IP, unrelated to any employer.',
+    } as Bi,
+    replayTitle: { ko: '그날의 실행을 재생해 보세요', en: 'Replay a run that actually happened' } as Bi,
+    replayLede: {
+      ko: '시나리오를 고르면 단계와 실제 소요시간이 그대로 재생됩니다. 긴 대기는 압축했지만, 표시되는 시각은 실제 기록입니다.',
+      en: 'Pick a scenario and the steps replay with their real timings. Long waits are compressed, but every time shown is from the record.',
+    } as Bi,
+    liveDisclaimer: {
+      ko: '실제 운영 기록 재생 · {date} {time} 기록 — 라이브 호출이 아닙니다',
+      en: 'Replay of a real run · recorded {date} {time} — not a live invocation',
+    } as Bi,
+    whyNotLive: {
+      ko: '왜 라이브가 아닌가: 이 사이트는 정적 호스팅이라 실제 AI 호출을 붙이면 API 키가 공개되고 비용·악용을 막을 방법이 없습니다. 그래서 진짜 기록을 재생하는 쪽을 택했습니다.',
+      en: 'Why not live: this site is statically hosted, so wiring a real AI call would expose the API key with no way to cap cost or abuse. Replaying the real record is the honest option.',
+    } as Bi,
+    play: { ko: '재생', en: 'Play' } as Bi,
+    replay: { ko: '다시 재생', en: 'Replay' } as Bi,
+    playing: { ko: '재생 중', en: 'Playing' } as Bi,
+    elapsedLabel: { ko: '실제 소요', en: 'Real elapsed' } as Bi,
+    stepsLabel: { ko: '단계', en: 'steps' } as Bi,
+  },
+
   shotsTitle: { ko: '실제 시스템 화면 — 준비 중', en: 'Live system captures — coming soon' } as Bi,
   // 스크린샷 슬롯: src를 비워두면 라벨된 플레이스홀더로 렌더된다. 나중에
   // public/work/ai-os/... 에 이미지를 두고 src만 채우면 실제 이미지로 교체.

@@ -1,0 +1,218 @@
+{
+  "$comment": "자동 생성 — scripts/build-aios-evidence.mjs. 직접 수정하지 마세요. 원천=개인 AI-OS 운영 로그(auto_execution.jsonl) + .claude 구성 실측.",
+  "asOf": "2026-07-31",
+  "window": {
+    "from": "2026-06-17",
+    "to": "2026-07-31",
+    "activeDays": 43
+  },
+  "counters": {
+    "runs": 2859,
+    "routines": 30,
+    "notifications": 429,
+    "agents": 23,
+    "skills": 70,
+    "rules": 29
+  },
+  "scenarios": [
+    {
+      "key": "brief",
+      "name": {
+        "ko": "아침 증시 브리핑",
+        "en": "Morning market brief"
+      },
+      "intent": {
+        "ko": "예약 시각에 스스로 깨어나 리포트를 쓰고 슬랙으로 보낸다",
+        "en": "Wakes on schedule, writes the report, posts it to Slack"
+      },
+      "recordedOn": "2026-07-31",
+      "startedAt": "08:00:02",
+      "elapsedMs": 151000,
+      "steps": [
+        {
+          "offsetMs": 0,
+          "label": {
+            "ko": "예약 트리거 — 무인 실행 시작",
+            "en": "Scheduled trigger — unattended run starts"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 151000,
+          "label": {
+            "ko": "리포트 2종 저장 · 슬랙 발송 완료",
+            "en": "Two reports saved · posted to Slack"
+          },
+          "detail": null,
+          "tone": "ok"
+        }
+      ]
+    },
+    {
+      "key": "failclosed",
+      "name": {
+        "ko": "실패한 날 (닫히는 쪽으로)",
+        "en": "The day it failed (fails closed)"
+      },
+      "intent": {
+        "ko": "완료 표식이 없으면 발송하지 않고 실패로 남긴다",
+        "en": "No completion marker → nothing is sent; it is recorded as a failure"
+      },
+      "recordedOn": "2026-07-30",
+      "startedAt": "13:57:15",
+      "elapsedMs": 0,
+      "steps": [
+        {
+          "offsetMs": 0,
+          "label": {
+            "ko": "완료 표식 없음 → 발송 안 함 · 실패 기록",
+            "en": "No completion marker → not sent · logged as failure"
+          },
+          "detail": null,
+          "tone": "warn"
+        }
+      ]
+    },
+    {
+      "key": "approval",
+      "name": {
+        "ko": "무인 발행 — 승인 게이트",
+        "en": "Unattended publishing — the approval gate"
+      },
+      "intent": {
+        "ko": "발행 파수꾼이 깨어나도, 승인이 없으면 발행하지 않고 닫는다",
+        "en": "The watcher wakes on time — but without approval it closes without publishing"
+      },
+      "recordedOn": "2026-07-31",
+      "startedAt": "13:00:01",
+      "elapsedMs": 1000,
+      "steps": [
+        {
+          "offsetMs": 0,
+          "label": {
+            "ko": "발행 파수꾼 기동",
+            "en": "Publishing watcher wakes"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 0,
+          "label": {
+            "ko": "발행 작업 호출",
+            "en": "Calls the publish job"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 1000,
+          "label": {
+            "ko": "주간 발행 절차 시작",
+            "en": "Weekly publish routine starts"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 1000,
+          "label": {
+            "ko": "승인 확인 — 대기 상태(승인 없음)",
+            "en": "Approval check — pending (not approved)"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 1000,
+          "label": {
+            "ko": "발행하지 않고 정상 종료",
+            "en": "Ends cleanly without publishing"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 1000,
+          "label": {
+            "ko": "하위 작업 종료 보고",
+            "en": "Child job reports completion"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 1000,
+          "label": {
+            "ko": "파수꾼 종료",
+            "en": "Watcher stands down"
+          },
+          "detail": null,
+          "tone": "ok"
+        }
+      ]
+    },
+    {
+      "key": "killswitch",
+      "name": {
+        "ko": "일꾼 기동 + 비상정지 점검",
+        "en": "Worker start + kill-switch check"
+      },
+      "intent": {
+        "ko": "일을 받기 전에 비상정지 신호를 어디서 받을지부터 확인한다",
+        "en": "Before taking work, it verifies where the emergency stop will come from"
+      },
+      "recordedOn": "2026-07-30",
+      "startedAt": "13:52:15",
+      "elapsedMs": 47000,
+      "steps": [
+        {
+          "offsetMs": 0,
+          "label": {
+            "ko": "원격 일꾼 기동 — 작업 큐 연결",
+            "en": "Remote worker starts — connects to the queues"
+          },
+          "detail": null,
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 2000,
+          "label": {
+            "ko": "비상정지 경로 점검",
+            "en": "Emergency-stop path checked"
+          },
+          "detail": {
+            "ko": "oracle 경로 — 응답 없음",
+            "en": "oracle plane — no response"
+          },
+          "tone": "warn"
+        },
+        {
+          "offsetMs": 3000,
+          "label": {
+            "ko": "비상정지 경로 점검",
+            "en": "Emergency-stop path checked"
+          },
+          "detail": {
+            "ko": "gcp 경로 — 연결됨",
+            "en": "gcp plane — reachable"
+          },
+          "tone": "ok"
+        },
+        {
+          "offsetMs": 47000,
+          "label": {
+            "ko": "비상정지 경로 점검",
+            "en": "Emergency-stop path checked"
+          },
+          "detail": {
+            "ko": "oracle 경로 — 연결됨",
+            "en": "oracle plane — reachable"
+          },
+          "tone": "ok"
+        }
+      ]
+    }
+  ]
+}

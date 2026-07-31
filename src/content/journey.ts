@@ -498,8 +498,10 @@ export const phases: JourneyPhase[] = [
     },
     did: [
       {
-        ko: '1인 운영 AI OS 구축 — 에이전트 20 · 스킬 65 · 규칙 31',
-        en: 'Built a one-person AI OS — 20 agents · 65 skills · 31 rules',
+        // 규모 수치의 정본은 `content/aiosEvidence.json`(집계 스크립트 산출물).
+        // 구성이 바뀌면 스크립트를 다시 돌리고 이 문장도 같이 맞춘다.
+        ko: '1인 운영 AI OS 구축 — 에이전트 23 · 스킬 70 · 규칙 29',
+        en: 'Built a one-person AI OS — 23 agents · 70 skills · 29 rules',
       },
       {
         ko: '품질 게이트 — 6축 루브릭 + 블라인드 채점 + 자동 재시도',
@@ -534,9 +536,9 @@ export const phases: JourneyPhase[] = [
     ],
     outputs: [
       {
-        stat: { ko: '65', en: '65' },
+        stat: { ko: '70', en: '70' },
         label: { ko: '자동화 스킬', en: 'Automation skills' },
-        sub: { ko: '규칙 31 · 에이전트 20', en: '31 rules · 20 agents' },
+        sub: { ko: '규칙 29 · 에이전트 23', en: '29 rules · 23 agents' },
       },
       {
         stat: { ko: '60%', en: '60%' },

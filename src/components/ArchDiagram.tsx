@@ -1,11 +1,19 @@
 import { useState } from 'react'
 import { m, useReducedMotion, type Variants } from 'framer-motion'
 import { useT, type Bi } from '../lib/i18n'
+import evidence from '../content/aiosEvidence.json'
+
+/**
+ * 시스템 규모는 손으로 적지 않는다 — 집계 스냅샷(scripts/build-aios-evidence.mjs
+ * 산출물)에서 읽는다. 예전에는 상수로 박아둬서 실제 구성이 늘어도 다이어그램만
+ * 옛 숫자를 말하는 상태가 됐다(2026-07-31 실측에서 20/65/31 → 23/70/29 발견).
+ */
+const N = evidence.counters
 
 /**
  * THE signature (LOCKED §5.4 / §8) — the live 3-tier AI operating system drawn in
  * code, not a photo. Orchestrator → Executors → Verifier with a return "verify
- * loop"; the real system scale (20 agents · 65 skills · 31 rules) lives INSIDE the
+ * loop"; the real system scale (read from the measured snapshot) lives INSIDE the
  * diagram as data, never a hero stat strip (§4.3-2).
  *
  * Colour hard-zones (§3.4-3): cobalt = data/dispatch flow ONLY · amber = decision /
@@ -40,8 +48,8 @@ const TIERS: Tier[] = [
     name: { ko: '실행자', en: 'Executors' },
     role: { ko: '서브에이전트가 스킬을 조합해 실행', en: 'Sub-agents compose skills to execute' },
     detail: {
-      ko: '20개 에이전트가 65개 스킬을 호출해 병렬 작업 — 승인 게이트 통과분만 반영',
-      en: '20 agents call 65 skills in parallel — only approval-gated output lands',
+      ko: `${N.agents}개 에이전트가 ${N.skills}개 스킬을 호출해 병렬 작업 — 승인 게이트 통과분만 반영`,
+      en: `${N.agents} agents call ${N.skills} skills in parallel — only approval-gated output lands`,
     },
     accent: 'cobalt',
   },
@@ -68,16 +76,16 @@ const COPY = {
     en: 'FAIL → rejected with evidence → auto-retry',
   } as Bi,
   guardrail: {
-    ko: '킬스위치(LLM 미경유) · 31개 규칙 · 6축 품질 게이트',
-    en: 'Kill-switch (bypasses the LLM) · 31 rules · 6-axis quality gate',
+    ko: `킬스위치(LLM 미경유) · ${N.rules}개 규칙 · 6축 품질 게이트`,
+    en: `Kill-switch (bypasses the LLM) · ${N.rules} rules · 6-axis quality gate`,
   } as Bi,
   scaleLabel: { ko: '시스템 스케일 · 100% 본인 IP', en: 'System scale · 100% own IP' } as Bi,
 }
 
 const SCALE: { value: string; label: Bi }[] = [
-  { value: '20', label: { ko: '에이전트', en: 'agents' } },
-  { value: '65', label: { ko: '스킬', en: 'skills' } },
-  { value: '31', label: { ko: '규칙', en: 'rules' } },
+  { value: String(N.agents), label: { ko: '에이전트', en: 'agents' } },
+  { value: String(N.skills), label: { ko: '스킬', en: 'skills' } },
+  { value: String(N.rules), label: { ko: '규칙', en: 'rules' } },
 ]
 
 const LEGEND: { swatch: string; label: Bi }[] = [
