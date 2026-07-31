@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { m, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { home, work, skills, contact } from '../content/profile'
+import briefPdf from '../content/briefPdf.json'
 import { phases, hub, timeline } from '../content/journey'
 import { useLang, useT } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
@@ -116,6 +117,12 @@ export default function Home() {
 
   // Act 2 케이스의 결과 숫자 = 기존 검증 콘텐츠(work.items)에서 그대로. 첫 NEXON
   // 항목 = 린: 더 라이트브링어. 여기서 새로 만드는 수치는 없다.
+  // 지원용 PDF — 경로·용량·생성일은 생성기 매니페스트에서만 온다(손으로 안 적음).
+  // 해당 언어 파일이 없으면 한국어본으로 떨어진다.
+  const pdfFile = briefPdf.files[lang] ?? briefPdf.files.ko
+  const pdfHref = import.meta.env.BASE_URL + pdfFile.path
+  const pdfMeta = home.acts.a5.pdfMeta[lang].replace('{kb}', String(pdfFile.kb)).replace('{date}', pdfFile.generatedOn)
+
   const heroCase = work.items.find((it) => it.tag === 'NEXON') ?? work.items[0]
   const heroStat = heroCase.stat[lang]
   const restCases = work.items.filter((it) => it !== heroCase)
@@ -542,6 +549,27 @@ export default function Home() {
               <span>{contact.email}</span>
               <span>KakaoTalk · {contact.kakao}</span>
               <span>{t(contact.note)}</span>
+            </Reveal>
+
+            {/* 지원용 PDF 발췌 — 웹은 자산 허브, 제출 서류는 여전히 PDF 한 장. */}
+            <Reveal delay={0.18} className="mt-12 rounded-2xl border border-line bg-elev/30 p-5 md:p-6">
+              <div className="flex flex-wrap items-end justify-between gap-5">
+                <div>
+                  <h3 className="u-display break-keep text-lg font-semibold text-ink md:text-xl">{t(acts.a5.pdfTitle)}</h3>
+                  <p className="mt-2 max-w-xl break-keep text-sm leading-relaxed text-ink-soft">{t(acts.a5.pdfBody)}</p>
+                </div>
+                <div className="flex flex-col items-start gap-2">
+                  <a
+                    href={pdfHref}
+                    download
+                    className="inline-flex items-center gap-2 rounded-full border border-amber/50 px-5 py-2.5 font-mono text-sm uppercase tracking-[0.1em] text-amber transition-colors hover:bg-amber/10"
+                  >
+                    {t(acts.a5.pdfCta)}
+                    <span aria-hidden>↓</span>
+                  </a>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-dim">{pdfMeta}</span>
+                </div>
+              </div>
             </Reveal>
 
             {/* 무대 뒤 — 콘텐츠 게이트가 아니라 호기심 동선(SDD §2). */}

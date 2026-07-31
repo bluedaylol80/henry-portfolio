@@ -632,6 +632,19 @@ export const home = {
         en: 'A room where nineteen years piled up, explorable object by object. Skip it if you are in a hurry — everything you need is already on this page.',
       } as Bi,
       roomCta: { ko: '방 열어보기', en: 'Open the room' } as Bi,
+
+      /**
+       * P5 — 지원용 PDF 발췌. 국내 지원 서류의 표준은 여전히 PDF 한 장이라,
+       * 사이트의 3분 요약을 그대로 인쇄한 파일을 내려받게 한다. 경로·생성일·용량은
+       * `content/briefPdf.json`(생성기 산출물)에서 오며 손으로 적지 않는다.
+       */
+      pdfTitle: { ko: '지원용 한 장 요약 (PDF)', en: 'One-page brief for applications (PDF)' } as Bi,
+      pdfBody: {
+        ko: '서류로 제출하실 수 있게, 이 사이트의 3분 요약을 그대로 인쇄한 파일입니다. 웹에서 보신 내용과 같습니다.',
+        en: 'The same 3-minute brief from this site, printed as a file you can attach to an application.',
+      } as Bi,
+      pdfCta: { ko: 'PDF 내려받기', en: 'Download the PDF' } as Bi,
+      pdfMeta: { ko: '{kb}KB · {date} 생성', en: '{kb}KB · generated {date}' } as Bi,
     },
   },
 

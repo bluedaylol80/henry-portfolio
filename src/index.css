@@ -373,6 +373,101 @@ html.lenis body {
   top: 1rem;
 }
 
+/* ── 인쇄 / PDF (v21 P5) ───────────────────────────────────
+ * 지원용 PDF는 `/brief` 한 페이지를 그대로 인쇄해 만든다(scripts/build-pdf.mjs).
+ * 화면은 어두운 관제실이지만 종이는 **밝게** 간다 — 채용 담당자가 실제로 출력할
+ * 수 있어야 하고, 어두운 배경은 잉크를 먹고 글자를 뭉갠다. 강조색(amber)은
+ * 종이에서 대비가 낮아 텍스트에는 쓰지 않고 잉크 절약을 위해 먹색으로 내린다.
+ * 화면 전용 장치(고정 헤더·커서·노이즈·진행바·푸터)는 전부 숨긴다. */
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background: #fff !important;
+    color: #14181f !important;
+  }
+  /* 화면용 앰비언트 배경·노이즈는 종이에서 의미가 없다 */
+  body::before,
+  .noise-overlay,
+  .ambient-field {
+    display: none !important;
+    background: none !important;
+  }
+
+  /* 고정 크롬 — 인쇄하면 페이지마다 겹쳐 찍힌다 */
+  header,
+  footer,
+  nav,
+  .skip-link,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* 본문 텍스트는 전부 먹색 계열로. 화면 토큰(ink/soft/dim)을 종이 대비로 재매핑 */
+  .text-ink,
+  .text-ink-soft,
+  .text-ink-dim,
+  .text-amber,
+  .text-brass,
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  blockquote,
+  span {
+    color: #14181f !important;
+  }
+  .text-ink-dim {
+    color: #4a5568 !important;
+  }
+
+  /* 카드 면은 없애되, 작은 점(불릿·강조 막대)은 남긴다 — 통째로 투명 처리하면
+     목록의 불릿이 조용히 사라진다(인쇄 미리보기에서 실측). */
+  .bg-elev\/40,
+  .bg-elev\/30,
+  .bg-night\/40 {
+    background: transparent !important;
+  }
+  .bg-amber,
+  .bg-brass {
+    background: #14181f !important;
+  }
+  .border-line,
+  .border-t,
+  .border-l-2 {
+    border-color: #c9cfda !important;
+  }
+
+  /* 인쇄에서 튀는 요소 정리 */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  main {
+    padding-top: 0 !important;
+  }
+
+  /* 문단·항목이 페이지 경계에서 쪼개지지 않게 */
+  h1,
+  h2,
+  h3 {
+    break-after: avoid-page;
+  }
+  li,
+  blockquote,
+  section {
+    break-inside: avoid-page;
+  }
+
+  @page {
+    margin: 14mm 14mm 16mm;
+  }
+}
+
 /* ── Reduced motion: kill CSS animations globally ─────── */
 @media (prefers-reduced-motion: reduce) {
   *,

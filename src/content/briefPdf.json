@@ -1,0 +1,16 @@
+{
+  "$comment": "자동 생성 — scripts/build-pdf.mjs. 직접 수정하지 마세요.",
+  "generatedOn": "2026-08-01",
+  "files": {
+    "ko": {
+      "path": "brief/henry-lim-brief-ko.pdf",
+      "kb": 256,
+      "generatedOn": "2026-08-01"
+    },
+    "en": {
+      "path": "brief/henry-lim-brief-en.pdf",
+      "kb": 158,
+      "generatedOn": "2026-08-01"
+    }
+  }
+}

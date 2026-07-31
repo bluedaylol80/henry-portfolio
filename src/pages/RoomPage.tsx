@@ -4,7 +4,7 @@ import { detectTier, prefersReducedMotion } from '../lib/quality'
 import { toggleSound } from '../lib/sound'
 import { useT, useLang } from '../lib/i18n'
 import { contact } from '../content/profile'
-import { coach, explore, hotspots, type RoomAction } from '../content/room'
+import { coach, explore, hotspots, identity, type RoomAction } from '../content/room'
 import RoomImageNav from '../room/RoomImageNav'
 import { PINS } from '../room/pins'
 import RoomDetail from '../room/RoomDetail'
@@ -102,6 +102,10 @@ export default function RoomPage() {
 
   return (
     <main id="main" className="relative h-[100svh] overflow-hidden bg-night" style={{ touchAction: 'none' }}>
+      {/* 화면에는 안 보이지만 문서에는 있어야 하는 제목 — 이 페이지는 그림이
+          전부라 시각적 헤딩이 없었고, 스크린리더에는 "제목 없는 페이지"였다
+          (최종 점검에서 발견). */}
+      <h1 className="sr-only">{`${identity.name} — ${t(identity.line)}`}</h1>
       <RoomImageNav onOpen={open} openId={openId} seen={seen} reduced={reduced} />
 
       {/* 둘러본 정도 — 방에 머무는 동안만 유지되는 가벼운 표시. */}

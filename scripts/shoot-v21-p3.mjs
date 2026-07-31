@@ -65,10 +65,17 @@ for (let i = 0; i < snap.scenarios.length; i++) {
   // 그룹만 찍으면 타임라인이 잘린다 — 데모 카드 전체를 잡는다.
   const card = await page.evaluate(() => {
     const g = document.querySelector('[role="group"]')
-    const card = g?.closest('div.rounded-\\[20px\\]')
-    if (!card) return null
-    const r = card.getBoundingClientRect()
-    return { x: Math.max(0, r.x - 6), y: Math.max(0, r.y - 6), width: r.width + 12, height: r.height + 12 }
+    // 데모 카드 = 그룹의 조상 중 제목("재생해")을 품은 가장 가까운 블록
+    let el = g?.parentElement ?? null
+    while (el && !/재생해|Replay a run/.test(el.querySelector('h3')?.textContent ?? '')) el = el.parentElement
+    if (!el) return null
+    const r = el.getBoundingClientRect()
+    return {
+      x: Math.max(0, r.x + window.scrollX - 6),
+      y: Math.max(0, r.y + window.scrollY - 6),
+      width: Math.min(r.width + 12, document.documentElement.clientWidth),
+      height: r.height + 12,
+    }
   })
   await page.screenshot({ path: `${OUT}/scenario-${i}-${key}.png`, clip: card ?? clip ?? undefined })
   console.log(`captured ${key}`)

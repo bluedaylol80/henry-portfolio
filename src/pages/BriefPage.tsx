@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useLang, useT } from '../lib/i18n'
 import { brief } from '../content/brief'
 import { contact, home } from '../content/profile'
+import briefPdf from '../content/briefPdf.json'
 
 /**
  * /brief — the decision-maker artifact (LOCKED §5.3): the whole résumé compressed
@@ -14,6 +15,7 @@ export default function BriefPage() {
   const t = useT()
   const { lang } = useLang()
   const reduce = useReducedMotion()
+  const pdfHref = import.meta.env.BASE_URL + (briefPdf.files[lang] ?? briefPdf.files.ko).path
 
   const container: Variants = {
     hidden: {},
@@ -120,6 +122,16 @@ export default function BriefPage() {
             </a>
             <a href={contact.calendly} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3 font-mono text-sm uppercase tracking-[0.1em] text-ink-soft transition-colors hover:border-amber/50 hover:text-amber">
               {t(brief.ctas.coffee)}
+            </a>
+            {/* 이 페이지를 그대로 인쇄한 파일 — 제출용. 여기가 원천이므로
+                문구가 두 벌로 갈라지지 않는다. */}
+            <a
+              href={pdfHref}
+              download
+              className="inline-flex items-center gap-1.5 rounded-full border border-amber/50 px-6 py-3 font-mono text-sm uppercase tracking-[0.1em] text-amber transition-colors hover:bg-amber/10"
+            >
+              {t(home.acts.a5.pdfCta)}
+              <span aria-hidden>↓</span>
             </a>
             <a href={contact.notion} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-line px-6 py-3 font-mono text-sm uppercase tracking-[0.1em] text-ink-soft transition-colors hover:border-amber/50 hover:text-amber">
               {t(brief.ctas.notion)}
