@@ -37,6 +37,8 @@ const ok = (name, pass, note = '') => checks.push({ name, pass, note })
 
 // ── 1 · 라우트 전수 ──────────────────────────────────────────────────
 const seenLinks = new Set()
+/** 문서 응답이 404인데 화면은 정상인 라우트 = GitHub Pages SPA 폴백(정보용). */
+const spaFallback = []
 for (const route of ROUTES) {
   const page = await browser.newPage()
   await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 })
@@ -48,6 +50,20 @@ for (const route of ROUTES) {
   await page.goto(BASE + route, { waitUntil: 'networkidle2', timeout: 60000 })
   await wait(4200)
 
+  /**
+   * ⚠ GitHub Pages는 서버 라우팅이 없어서 `/career` 같은 딥링크에 404를 주고
+   * `404.html`(= index.html 사본)을 내려준다. 그러면 앱은 정상 부팅해 화면은
+   * 제대로 뜨지만 문서 응답 코드는 404다. **v20부터의 구조이며 이번 변경의 회귀가
+   * 아니다.** 그래서 "문서 자체의 404 + 화면은 렌더됨"은 실패가 아니라 별도
+   * 항목(SPA 폴백)으로 분류한다 — 진짜 깨진 리소스(이미지·폰트·PDF 404)와
+   * 섞이면 다음 사람이 매번 헷갈린다.
+   * (근본 해결은 라우트별 정적 HTML 프리렌더 — 미착수, 인수인계 참조.)
+   */
+  const docUrl = BASE + route
+  const docFallback = failed.filter((f) => f.startsWith('404 ') && f.slice(4).replace(/\/$/, '') === docUrl.replace(/\/$/, ''))
+  const realFailures = failed.filter((f) => !docFallback.includes(f))
+  const consoleNoise = errors.filter((e) => !/Failed to load resource: the server responded with a status of 404/.test(e))
+
   const info = await page.evaluate(() => ({
     title: document.title,
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -58,8 +74,9 @@ for (const route of ROUTES) {
 
   ok(`[${route}] 렌더 + 제목`, !!info.title && !!info.h1, `${info.title?.slice(0, 34)}…`)
   ok(`[${route}] 가로 넘침 0`, info.overflow === 0, `${info.overflow}px`)
-  ok(`[${route}] 콘솔 오류 0`, errors.length === 0, errors.slice(0, 1).join(''))
-  ok(`[${route}] 실패 요청 0`, failed.length === 0, failed.slice(0, 1).join(''))
+  ok(`[${route}] 콘솔 오류 0`, consoleNoise.length === 0, consoleNoise.slice(0, 1).join(''))
+  ok(`[${route}] 깨진 리소스 0`, realFailures.length === 0, realFailures.slice(0, 1).join(''))
+  if (docFallback.length) spaFallback.push(route)
   await page.close()
 }
 
@@ -92,17 +109,25 @@ for (const route of ROUTES) {
     ...new Set(
       [...seenLinks]
         .filter((h) => h && h.startsWith('/') && !h.startsWith('//'))
+        // 파일 링크(PDF 등)는 라우트가 아니다 — 화면 렌더 기준으로 재면 항상
+        // "죽은 링크"가 된다. 파일은 위의 PDF 항목이 따로 검사한다.
+        .filter((h) => !/\.(pdf|png|jpe?g|webp|svg|mp4|mp3)$/i.test(h.split('#')[0]))
         .map((h) => h.split('#')[0])
         .map((h) => h || '/'),
     ),
   ]
+  // "살아 있다"의 기준은 응답 코드가 아니라 **화면이 뜨는가**다. Pages 딥링크는
+  // 404를 주고도 SPA 폴백으로 정상 렌더되므로, 상태코드만 보면 전부 죽은 링크로
+  // 보인다(실측). 실제로 못 여는 링크만 잡는다.
   const dead = []
   for (const href of internal) {
     const url = BASE.replace(/\/henry-portfolio$/, '') + href
     const res = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 }).catch(() => null)
-    if (!res || res.status() >= 400) dead.push(`${res?.status() ?? 'ERR'} ${href}`)
+    await wait(2500)
+    const rendered = await page.evaluate(() => !!document.querySelector('#main, main')).catch(() => false)
+    if (!rendered) dead.push(`${res?.status() ?? 'ERR'} ${href}`)
   }
-  ok('내부 링크 살아 있음', dead.length === 0, dead.length ? dead.slice(0, 4).join(' | ') : `${internal.length}개 확인`)
+  ok('내부 링크 살아 있음(화면 기준)', dead.length === 0, dead.length ? dead.slice(0, 4).join(' | ') : `${internal.length}개 확인`)
   await page.close()
 }
 
@@ -113,4 +138,11 @@ for (const c of checks) {
   console.log(`${c.pass ? 'PASS' : 'FAIL'}  ${c.name}${c.note ? '  — ' + c.note : ''}`)
 }
 console.log(`\n${checks.length - failedCount}/${checks.length} passed`)
+if (spaFallback.length) {
+  console.log(
+    `\nNOTE  문서 응답 404 + 화면 정상(GitHub Pages SPA 폴백): ${spaFallback.join(', ')}` +
+      `\n      v20부터의 구조이며 방문자에게는 정상 동작한다. 상태코드까지 200으로 만들려면` +
+      `\n      라우트별 정적 HTML 프리렌더가 필요하다(미착수).`,
+  )
+}
 process.exit(failedCount ? 1 : 0)
