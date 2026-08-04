@@ -288,7 +288,7 @@ export default function LabScrolly() {
                 <li key={p.slug} className="flex items-center gap-2.5">
                   <span aria-hidden className="h-1.5 w-5 shrink-0 rounded-full" style={{ backgroundColor: PHASE_SPINE[i] }} />
                   <span className="break-keep font-mono text-[11px] text-ink-dim">
-                    {p.period} · {t(p.name)}
+                    {t(p.period)} · {t(p.name)}
                   </span>
                 </li>
               ))}

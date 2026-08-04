@@ -137,7 +137,7 @@ export default function PhasePage() {
         <p className="ph-oneliner mt-6 max-w-2xl break-keep text-lg leading-relaxed text-ink-soft md:text-xl">{t(phase.oneLiner)}</p>
 
         <div className="ph-meta mt-8 flex flex-wrap gap-3">
-          {[phase.period, t(phase.companies), t(phase.roleLine)].map((chip, i) => (
+          {[t(phase.period), t(phase.companies), t(phase.roleLine)].map((chip, i) => (
             <span key={i} className="break-keep rounded-full border border-line bg-elev/40 px-4 py-2 font-mono text-[11px] text-ink-dim md:text-xs">
               {chip}
             </span>

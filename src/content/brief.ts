@@ -21,8 +21,8 @@ export const brief = {
       en: '19 years in game ops, business & planning → AI automation systems architect',
     } as Bi,
     arc: {
-      ko: '운영 → FUN QA → 사업 PM → 기획 → AI 시스템 — 이직의 나열이 아니라 역할의 적층',
-      en: 'Live ops → FUN QA → business PM → planning → AI systems — layers accumulated, not jobs listed',
+      ko: '운영 → 사업 PM → 기획 → AI 시스템 — 이직의 나열이 아니라 역할의 적층',
+      en: 'Live ops → business PM → planning → AI systems — layers accumulated, not jobs listed',
     } as Bi,
   },
 
@@ -80,7 +80,7 @@ export const brief = {
     coffee: { ko: '커피챗 예약', en: 'Book a coffee chat' } as Bi,
     email: { ko: '이메일', en: 'Email' } as Bi,
     notion: { ko: '상세 이력 (Notion)', en: 'Full history (Notion)' } as Bi,
-    story: { ko: '전체 스토리 보기', en: 'See the full story' } as Bi,
+    story: { ko: '메인으로', en: 'Home' } as Bi,
     career: { ko: '커리어 딥다이브', en: 'Career deep-dive' } as Bi,
   },
 }

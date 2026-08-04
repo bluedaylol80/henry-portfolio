@@ -277,7 +277,7 @@ export default function Home() {
                   <li key={p.slug} className="flex items-center gap-2.5">
                     <span aria-hidden className="h-1.5 w-5 shrink-0 rounded-full" style={{ backgroundColor: PHASE_SPINE[i] }} />
                     <span className="break-keep font-mono text-[11px] text-ink-dim">
-                      {p.period} · {t(p.name)}
+                      {t(p.period)} · {t(p.name)}
                     </span>
                   </li>
                 ))}
@@ -315,7 +315,7 @@ export default function Home() {
                     >
                       <span className="u-fig text-xs text-ink-dim">{p.num}</span>
                       <span aria-hidden className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ backgroundColor: PHASE_SPINE[i] }} />
-                      <span className="w-24 shrink-0 break-keep font-mono text-[11px] uppercase tracking-[0.12em] text-ink-dim">{p.period}</span>
+                      <span className="w-24 shrink-0 break-keep font-mono text-[11px] uppercase tracking-[0.12em] text-ink-dim">{t(p.period)}</span>
                       <span className="min-w-0 flex-1">
                         <span className="u-display text-base font-semibold text-ink group-hover:text-amber sm:text-lg">{t(p.name)}</span>
                         <span className="ml-3 break-keep text-sm text-ink-soft">{t(p.tagline)}</span>

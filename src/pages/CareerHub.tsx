@@ -158,7 +158,7 @@ export default function CareerHub() {
                     <h2 className="u-display break-keep text-xl font-semibold text-ink md:text-2xl">{t(p.name)}</h2>
                     <p className="mt-1 break-keep text-sm text-ink-soft md:text-base">{t(p.tagline)}</p>
                     <p className="mt-2.5 break-keep font-mono text-xs text-ink-dim md:text-sm">
-                      {p.period} · {t(p.companies)}
+                      {t(p.period)} · {t(p.companies)}
                     </p>
                   </div>
                   <span style={{ color: hex }}>

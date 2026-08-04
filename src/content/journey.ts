@@ -42,7 +42,8 @@ export interface JourneyPhase {
   color: PhaseColor
   name: Bi // 짧은 이름 (허브 카드/네비)
   tagline: Bi // 허브 카드용 한 줄
-  period: string
+  /** Bi — '2024 — 현재' 같은 표기가 영문 화면에 한국어로 새지 않게 */
+  period: Bi
   companies: Bi
   roleLine: Bi
   title: Bi // 페이지 헤드라인
@@ -70,9 +71,6 @@ export const sectionLabels = {
   backToHome: { ko: '메인으로', en: 'Home' } as Bi,
   close: { ko: '닫기', en: 'Close' } as Bi,
 }
-
-/** Nav에 추가되는 딥다이브 링크 라벨 */
-export const navLabel: Bi = { ko: '여정', en: 'Journey' }
 
 export const hub = {
   label: { ko: 'CAREER JOURNEY', en: 'CAREER JOURNEY' } as Bi,
@@ -175,13 +173,13 @@ export const phases: JourneyPhase[] = [
     color: 'amber',
     name: { ko: '운영', en: 'Live Ops' },
     tagline: { ko: '모든 것의 1층', en: 'The ground floor' },
-    period: '2006 — 2011',
-    companies: { ko: '웹젠 · NHN(한게임운영실)', en: 'Webzen · NHN Hangame Ops' },
+    period: { ko: '2006 — 2011', en: '2006 — 2011' },
+    companies: { ko: '웹젠 · NHN 한게임운영실', en: 'Webzen · NHN Hangame Ops' },
     roleLine: { ko: '라이브 운영 · FUN QA — 사원 → 파트장', en: 'Live operations · FUN QA — staff → part lead' },
     title: { ko: '운영 — 게임이 살아있다는 것', en: 'Live Ops — what it means for a game to be alive' },
     oneLiner: {
-      ko: '모든 것의 1층. 게임이 “살아있다”는 게 무엇인지 몸으로 배운 5년 — 그 사이 FUN QA로 “재미”까지 검수했습니다.',
-      en: 'The ground floor — five years learning hands-on what keeps a game alive, with a stint of FUN QA testing not just bugs but fun.',
+      ko: '모든 것의 1층. 게임이 “살아있다”는 게 무엇인지 몸으로 배운 4년 8개월 — 그 사이 FUN QA로 “재미”까지 검수했습니다.',
+      en: 'The ground floor — four years and eight months learning hands-on what keeps a game alive, with a stint of FUN QA testing not just bugs but fun.',
     },
     intro: {
       ko: '웹젠 SUN 온라인의 라이브 운영으로 커리어를 시작해(2006–2007), NHN 한게임운영실 파트장으로 Tera 웹 운영과 아틀란티카·R2·울프팀의 라이브 운영을 이끌었습니다(2008–2011). 그 사이 FUN QA로 Tera 개발빌드·드래곤볼 온라인·십이지천2·메트로컨플릭트의 게임성을 분석하고 개선 방향을 설계했습니다 — “재미”를 검수 가능한 기준으로 바꾸는 훈련. 유저 이슈의 최전선에서 반복 업무를 기록·정리하는 습관, 이 커리어를 관통할 히스토리 관리가 여기서 시작됐습니다.',
@@ -206,7 +204,7 @@ export const phases: JourneyPhase[] = [
     ],
     outputs: [
       {
-        stat: { ko: '5년+', en: '5+ yrs' },
+        stat: { ko: '4년 8개월', en: '4y 8m' },
         label: { ko: '라이브 운영 · FUN QA', en: 'Live ops · FUN QA' },
         sub: { ko: '웹젠 1.5년 · NHN 한게임운영실 3년 2개월', en: 'Webzen 1.5y · NHN Hangame Ops 3y 2m' },
       },
@@ -249,7 +247,7 @@ export const phases: JourneyPhase[] = [
     color: 'violet',
     name: { ko: '사업 PM', en: 'Business PM' },
     tagline: { ko: '지표가 의사결정이 되는 곳', en: 'Where metrics become decisions' },
-    period: '2011 — 2024',
+    period: { ko: '2011 — 2024', en: '2011 — 2024' },
     companies: {
       ko: '소프트닉스 · 넷마블 블루 · 넥슨 · 넵튠 레전드 · 스카이피플 · 원더피플',
       en: 'Softnyx · Netmarble Blue · NEXON · Neptune Legend · SkyPeople · Wonder People',
@@ -332,7 +330,7 @@ export const phases: JourneyPhase[] = [
     color: 'amber',
     name: { ko: '기획', en: 'Planning' },
     tagline: { ko: '팀이 나 없이도 돌아가게', en: 'Teams that run without me' },
-    period: '2021 · 2024.10 — 2026.07',
+    period: { ko: '2021 · 2024.10 — 2026.07', en: '2021 · 2024.10 — 2026.07' },
     companies: { ko: '네오위즈 · 달콤소프트', en: 'NEOWIZ · Dalcomsoft' },
     roleLine: {
       ko: '기획팀장 → 라이브기획팀장 (라이브 디렉터)',
@@ -481,7 +479,7 @@ export const phases: JourneyPhase[] = [
     color: 'sky',
     name: { ko: 'AI 시스템 빌더', en: 'AI System Builder' },
     tagline: { ko: '운영 문법의 재구현', en: 'Operating grammar, rebuilt' },
-    period: '2024 — 현재',
+    period: { ko: '2024 — 현재', en: '2024 — now' },
     companies: { ko: '개인 프로젝트 · 100% 본인 IP', en: 'Personal projects · 100% own IP' },
     roleLine: { ko: 'AI 자동화 시스템 아키텍트', en: 'AI Automation Systems Architect' },
     title: {
@@ -551,7 +549,7 @@ export const phases: JourneyPhase[] = [
         sub: { ko: '자기 커리어 케이스 10건 — 8건 S등급', en: '10 of his own career cases — 8 graded S' },
       },
       {
-        stat: { ko: '3계열', en: '3 families' },
+        stat: { ko: '2계열', en: '2 families' },
         label: { ko: '교차 모델 검증', en: 'Cross-family verification' },
         sub: { ko: 'GPT 발주 · Claude 실행 · Codex 검증', en: 'GPT orders · Claude executes · Codex verifies' },
       },

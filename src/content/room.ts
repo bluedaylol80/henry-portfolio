@@ -8,11 +8,11 @@ import type { Bi } from '../lib/i18n'
  */
 
 export type RoomAction =
-  | 'about' // /story#about
-  | 'career' // /career
-  | 'work' // /story#work
-  | 'ai' // /story#ai
-  | 'contact' // /story#contact
+  | 'about' // → / (홈 Act 0)
+  | 'career' // → /career
+  | 'work' // → /#work
+  | 'ai' // → /work/ai-os
+  | 'contact' // → /#contact
   | 'sound' // BGM 토글
   | 'notion' // 상세 이력 (외부 새 탭)
 
@@ -47,32 +47,14 @@ export const explore = {
   cardEyebrow: { ko: '무대 뒤', en: 'BEHIND THE STAGE' } as Bi,
 }
 
-export const navLabel: Bi = { ko: '룸', en: 'Room' }
-
-/** 룸(첫 화면)의 우상단 햄버거 메뉴 */
-export const menu = {
-  open: { ko: '메뉴 열기', en: 'Open menu' } as Bi,
-  close: { ko: '메뉴 닫기', en: 'Close menu' } as Bi,
-  title: { ko: '메뉴', en: 'Menu' } as Bi,
-  storyLabel: { ko: '전체 스토리', en: 'The full story' } as Bi,
-  storyHint: {
-    ko: '한 페이지로 이어지는 소개 · 커리어 · 성과 · AI 챕터',
-    en: 'About, career, work and the AI chapter — one scrolling page',
-  } as Bi,
-  brief: { ko: '3분 요약', en: '3-minute brief' } as Bi,
-  briefHint: {
-    ko: '빠른 검토용 한 페이지 — 숫자와 핵심만',
-    en: 'One page for a quick review — just the numbers and the core',
-  } as Bi,
-}
+/* 2026-08-05 정리(G4): 렌더되지 않던 유물 export 제거 — navLabel · menu(구 햄버거) ·
+   heroLink · introBadge · identity.quick(구 /story 앵커 링크). */
 
 /** 폴백(3D 미탑재) 화면 라벨 */
 export const fallbackChrome = {
   heading: { ko: 'THE ROOM', en: 'THE ROOM' } as Bi,
-  storyCta: { ko: '전체 스토리 보기 →', en: 'See the full story →' } as Bi,
+  storyCta: { ko: '메인으로 →', en: 'Home →' } as Bi,
 }
-
-export const heroLink: Bi = { ko: '방에서 둘러보기 →', en: 'Explore the room →' }
 
 export const coach: Bi = {
   ko: '사물을 눌러 이야기를 보세요 · 아래 메뉴로 바로 이동할 수도 있어요',
@@ -88,10 +70,7 @@ export const backLabel: Bi = { ko: '메인으로', en: 'Home' }
 export const hotspots: RoomHotspot[] = [
   {
     id: 'desk',
-    // §22.1 v14: the desk no longer auto-plays the intro film — it flows through
-    // the plain 'about' navigation (→ /story#about); the intro plays instead from
-    // the /story#about character card and the room's first-visit introBadge.
-    action: 'about',
+    action: 'about', // → 홈(Act 0)
     label: { ko: '소개', en: 'About' },
     hint: { ko: '컴퓨터 · 소개 섹션으로', en: 'Computer · to About' },
     story: {
@@ -161,8 +140,8 @@ export const hotspots: RoomHotspot[] = [
     label: { ko: '대표 성과', en: 'Selected work' },
     hint: { ko: '액자', en: 'The frame' },
     story: {
-      ko: '벽에 걸어둘 만한 장면들 — 매출과 순위, 평점처럼 밖에서 확인 가능한 숫자만 골랐습니다. 내부 자료로만 아는 수치는 걸지 않았습니다.',
-      en: 'The moments worth framing — revenue, store rankings, ratings: only numbers anyone can verify from outside. Nothing that is only knowable from internal data.',
+      ko: '벽에 걸어둘 만한 장면들 — 순위와 평점처럼 밖에서 확인 가능한 숫자를 중심으로 골랐고, 내부 수치는 각주에 출처를 밝혔습니다.',
+      en: 'The moments worth framing — led by numbers anyone can verify from outside, like rankings and ratings; internal figures carry their source in a footnote.',
     },
     go: { ko: '숫자로 남은 장면들', en: 'Moments that left numbers' },
   },
@@ -175,15 +154,7 @@ export const identity = {
     ko: '게임 기획·사업 19년 → AI 시스템 아키텍트',
     en: '19y in game business & planning → AI systems architect',
   } as Bi,
-  quick: [
-    { label: { ko: '대표 성과', en: 'Work' } as Bi, to: '/story#work' },
-    { label: { ko: '커리어', en: 'Career' } as Bi, to: '/career' },
-    { label: { ko: '연락', en: 'Contact' } as Bi, to: '/story#contact' },
-  ],
 }
-
-/** 첫 방문 소개 영상 유도 배지 (자동 전체화면 대신) */
-export const introBadge: Bi = { ko: '▶ 소개 영상 보기', en: '▶ Watch the intro' }
 
 export const fallback = {
   title: { ko: '룸 메뉴', en: 'Room menu' } as Bi,
