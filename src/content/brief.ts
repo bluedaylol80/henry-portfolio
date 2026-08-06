@@ -17,8 +17,8 @@ export const brief = {
   identity: {
     name: 'Henry Lim · 임현택',
     line: {
-      ko: '게임 운영·사업·기획 19년 → AI 자동화 시스템 아키텍트',
-      en: '19 years in game ops, business & planning → AI automation systems architect',
+      ko: '라이브 게임 운영·사업·기획 19년 — 그리고 AI로 줄인 팀 루틴 60%',
+      en: '19 years in live-game ops, business & planning — and 60% of team routine cut with AI',
     } as Bi,
     arc: {
       ko: '운영 → 사업 PM → 기획 → AI 시스템 — 이직의 나열이 아니라 역할의 적층',

@@ -10,8 +10,9 @@ import type { Bi } from '../lib/i18n'
 
 export const meta = {
   title: 'Henry Lim (임현택) — 기획자의 진화 · The Evolution of a Planner',
+  // 검색결과·링크 미리보기에 뜨는 한 줄. 히어로와 같은 조준(라이브 서비스 리더 우선).
   description:
-    '게임 기획·사업 19년에서 AI 자동화 시스템 아키텍트로. 임현택(Henry Lim)의 포트폴리오.',
+    '라이브 게임 운영·사업·기획 19년 · K-pop IP 12종 라이브 총괄 · AI로 팀 루틴 60% 단축. 임현택(Henry Lim)의 포트폴리오.',
 }
 
 /* 2026-08-05 정리(G4): 어디서도 렌더되지 않던 v19 이전 유물 export 제거 —
@@ -205,18 +206,22 @@ export const contact = {
 type StatN = { value: number; prefix?: string; suffix?: string; decimals?: number }
 
 export const home = {
-  eyebrow: { ko: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택', en: 'AI SYSTEMS ARCHITECT · HENRY LIM 임현택' } as Bi,
+  // 2026-08-07 조준(취업 P1): 주력 트랙 = 라이브 서비스·사업 리더(A) + 엔터테크(B).
+  // 히어로는 "무엇을 맡을 사람인가"를 먼저 말하고, AI는 그 위의 차별화로 둔다.
+  // (종전 문구는 "AI 운영체제를 짓습니다"가 앞서 게임을 떠난 사람으로 읽힐 위험)
+  // 이름은 언어별로 하나만 — 헤더에 이미 병기돼 있고, 둘 다 넣으면 모바일에서 두 줄로 깨진다.
+  eyebrow: { ko: 'LIVE SERVICE LEADER × AI · 임현택', en: 'LIVE SERVICE LEADER × AI · HENRY LIM' } as Bi,
   h1: {
-    ko: '라이브 게임 운영·사업·기획 19년,\n이제 그 일을 돌리는 AI 운영체제를 짓습니다.',
-    en: '19 years in live-game ops, business & planning —\nnow I build the AI operating systems that run the work.',
+    ko: '라이브 게임 19년 — 운영·사업·기획을 모두 통과한 리더.\n이제 AI로 팀의 일하는 방식을 바꿉니다.',
+    en: 'Nineteen years in live games — through ops, business and planning.\nNow I change how the team works, with AI.',
   } as Bi,
   sub: {
-    ko: '넥슨·네오위즈에서 라이브 게임의 운영·사업·기획을 이끈 19년. 그 운영 문법을 그대로 AI 위에 옮겨, 자연어 지시만으로 도는 시스템을 만듭니다.',
-    en: 'Nineteen years of live-game operations, business and planning at NEXON and NEOWIZ — that operating grammar, rebuilt on AI, into systems that run from natural-language intent.',
+    ko: '웹젠에서 넥슨·네오위즈를 지나 달콤소프트까지, 18개 이상 타이틀의 라이브 서비스를 만들고 키웠습니다. 최근에는 K-pop IP 리듬게임 12종의 라이브 기획팀(10인)을 이끌며 팀 루틴의 60%를 AI로 걷어냈습니다.',
+    en: 'From Webzen through NEXON and NEOWIZ to Dalcomsoft — building and growing live service across 18+ titles. Most recently I led a 10-person live planning team across twelve K-pop IP rhythm games, cutting 60% of its routine work with AI.',
   } as Bi,
   now: {
-    ko: 'Now — AI 시스템 · 프로덕트 리더십 역할과 컨설팅 제안을 받고 있습니다.',
-    en: 'Now — open to AI-systems / product-leadership roles & consulting.',
+    ko: 'Now — 라이브 서비스 · 프로덕트 리더십 역할을 찾고 있습니다. AI 전환 과제와 컨설팅 제안도 환영합니다.',
+    en: 'Now — open to live-service / product-leadership roles. AI-transformation projects and consulting welcome too.',
   } as Bi,
   /** Checkable numbers only (LOCKED §4.3-2 / A3). amber count-up. */
   proof: [
