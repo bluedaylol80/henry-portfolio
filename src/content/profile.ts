@@ -8,11 +8,14 @@ import type { Bi } from '../lib/i18n'
  * ─────────────────────────────────────────────────────────────
  */
 
+/**
+ * 브라우저 탭 제목(런타임)만 여기서 온다.
+ * ⚠ 검색결과·링크 미리보기 문구(description·og·twitter)와 og.png는 **index.html이 정본**이다 —
+ * 크롤러는 JS 실행 전 값을 읽으므로 여기에 적어봐야 반영되지 않는다(2026-08-08 실측으로 확인,
+ * 죽은 description 필드 제거). 히어로 문구를 고치면 index.html + `npm run og`도 같이.
+ */
 export const meta = {
   title: 'Henry Lim (임현택) — 기획자의 진화 · The Evolution of a Planner',
-  // 검색결과·링크 미리보기에 뜨는 한 줄. 히어로와 같은 조준(라이브 서비스 리더 우선).
-  description:
-    '라이브 게임 운영·사업·기획 19년 · K-pop IP 12종 라이브 총괄 · AI로 팀 루틴 60% 단축. 임현택(Henry Lim)의 포트폴리오.',
 }
 
 /* 2026-08-05 정리(G4): 어디서도 렌더되지 않던 v19 이전 유물 export 제거 —

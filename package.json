@@ -10,7 +10,8 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
-    "shoot": "node scripts/shoot.mjs"
+    "shoot": "node scripts/shoot.mjs",
+    "og": "node scripts/shoot-og.mjs"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.2.9",
