@@ -49,7 +49,7 @@ export default function RoomDetail({
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber">{t(explore.cardEyebrow)}</p>
+          <p className="font-mono text-[11px] uppercase tracking-[0.3em] text-amber">{t(explore.cardEyebrow)}</p>
           <h2 className="u-display mt-2 break-keep text-lg font-semibold text-ink md:text-xl">{t(hotspot.label)}</h2>
         </div>
         <button
@@ -75,7 +75,7 @@ export default function RoomDetail({
         </button>
       </div>
 
-      <p className="mt-4 hidden font-mono text-[10px] uppercase tracking-[0.14em] text-ink-dim md:block">{t(explore.hintKeys)}</p>
+      <p className="mt-4 hidden font-mono text-[11px] uppercase tracking-[0.14em] text-ink-dim md:block">{t(explore.hintKeys)}</p>
     </div>
   )
 }

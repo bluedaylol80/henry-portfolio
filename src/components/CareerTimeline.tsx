@@ -58,7 +58,7 @@ export default function CareerTimeline() {
                   <span className="u-fig text-[11px] text-ink-dim">{p.num}</span>
                   <span className="u-display truncate text-sm font-semibold text-ink md:text-base">{t(p.name)}</span>
                 </div>
-                <div className="mt-0.5 break-keep font-mono text-[10px] text-ink-dim md:text-[11px]">{t(p.period)}</div>
+                <div className="mt-0.5 break-keep font-mono text-[11px] text-ink-dim md:text-[11px]">{t(p.period)}</div>
               </div>
               <div className="relative h-5">
                 {/* baseline */}
@@ -89,7 +89,7 @@ export default function CareerTimeline() {
           {timeline.ticks.map((y) => (
             <span
               key={y}
-              className="u-fig absolute top-1.5 -translate-x-1/2 text-[10px] text-ink-dim"
+              className="u-fig absolute top-1.5 -translate-x-1/2 text-[11px] text-ink-dim"
               style={{ left: `${pct(y)}%` }}
             >
               {y}

@@ -52,6 +52,9 @@ export default function BriefPage() {
               <p className="u-display text-xl font-semibold text-ink md:text-2xl">{brief.identity.name}</p>
               <p className="mt-2 break-keep text-base text-ink-soft md:text-lg">{t(brief.identity.line)}</p>
               <p className="mt-3 break-keep text-sm leading-relaxed text-ink-dim md:text-base">{t(brief.identity.arc)}</p>
+              <p className="mt-4 break-keep border-t border-line pt-4 text-sm leading-relaxed text-ink-soft md:text-base">
+                {t(brief.identity.roles)}
+              </p>
             </div>
           </div>
         </m.section>
@@ -109,6 +112,15 @@ export default function BriefPage() {
             {t(brief.how)}
           </blockquote>
         </m.section>
+
+        {/* 구하는 자리 — 홈의 Now 한 줄을 그대로 인용(문구가 두 벌이 되지 않게).
+            CTA 줄은 print:hidden이라 인쇄본에 안 남으므로 여기에 둔다. */}
+        <m.p
+          variants={item}
+          className="mt-14 break-keep rounded-2xl border border-amber/40 bg-amber/[0.06] px-6 py-5 text-base leading-relaxed text-ink md:mt-20"
+        >
+          {t(home.now)}
+        </m.p>
 
         {/* CTA row */}
         <m.section variants={item} className="mt-16 border-t border-line pt-10 md:mt-24 print:hidden">

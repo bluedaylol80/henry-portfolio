@@ -252,7 +252,6 @@ export const home = {
   ctaBrief: { ko: '3분 브리프 →', en: '3-minute brief →' } as Bi,
 
   manifesto: {
-    eyebrow: { ko: '명제', en: 'THE PREMISE' } as Bi,
     title: { ko: '이직의 나열이 아니라, 역할의 적층.', en: 'Layers, not jobs.' } as Bi,
     body: {
       ko: '운영·사업·기획·AI — 앞 단계의 역량은 버려진 적 없이 다음 단계의 기반이 됐습니다. 도메인 깊이가 새로운 해자이고, 저는 19년치를 보유했습니다.',
@@ -268,7 +267,6 @@ export const home = {
   },
 
   aiTeaser: {
-    eyebrow: { ko: '플래그십', en: 'FLAGSHIP' } as Bi,
     title: { ko: '개인 AI 자동화 운영체제', en: 'A personal AI automation OS' } as Bi,
     body: {
       ko: '오케스트레이터·실행자·검증자 3계층 에이전트가 24/7 클라우드에서 협업합니다. 만든 자와 검증자를 모델 계열 수준에서 분리하고, LLM을 거치지 않는 킬스위치로 폭주를 막습니다. 이 사이트도 그 시스템이 만든 산출물입니다.',
@@ -278,24 +276,20 @@ export const home = {
   },
 
   workIntro: {
-    eyebrow: { ko: '증명', en: 'PROVEN IN MARKET' } as Bi,
     title: { ko: '숫자로 남은 장면들', en: 'Moments that left numbers' } as Bi,
     sub: { ko: '기획과 사업이 시장에서 증명된 순간들 — 공개 순위·평점 중심이며, 내부 수치는 각주에 출처를 밝혔습니다.', en: 'Where planning and business were proven — public rankings and ratings first; internal figures are footnoted with their source.' } as Bi,
   },
 
   foundationIntro: {
-    eyebrow: { ko: '적층', en: 'THE STACK' } as Bi,
     title: { ko: '19년, 네 개의 층', en: '19 years, four layers' } as Bi,
     cta: { ko: '커리어 딥다이브 열기', en: 'Open the career deep-dive' } as Bi,
   },
 
   workstyleIntro: {
-    eyebrow: { ko: '일하는 방식', en: 'HOW I WORK' } as Bi,
     title: { ko: '사람에게든 AI에게든, 같은 원칙', en: 'Same principles — for people or for AI' } as Bi,
   },
 
   contactIntro: {
-    eyebrow: { ko: '연락', en: 'CONTACT' } as Bi,
     title: { ko: '다음 기획을 함께', en: "Let's plan what's next" } as Bi,
     body: {
       ko: '채용 제안이든 컨설팅이든 — 메일과 커피챗엔 빠르게 답합니다. 항상 즐거운 제안은 환영합니다.',
@@ -311,8 +305,6 @@ export const home = {
    * 근거합니다(🟢). 연출은 정보의 관문이 아니므로 모든 Act는 정적으로도 완결됩니다.
    */
   acts: {
-    scrollCue: { ko: '스크롤', en: 'SCROLL' } as Bi,
-
     a1: {
       eyebrow: { ko: 'ACT 1 · 1층부터', en: 'ACT 1 · FROM THE GROUND FLOOR' } as Bi,
       title: { ko: '2006년, 1층에서 시작했습니다.', en: 'It started on the ground floor, in 2006.' } as Bi,
@@ -320,7 +312,6 @@ export const home = {
         ko: '운영 · 사업 · 기획 · AI — 앞 단계의 역량은 버려진 적 없이 다음 단계의 기반이 됐습니다. 열 개의 회사를 지나오는 동안 쌓인 건 이력이 아니라 층이었습니다.',
         en: 'Live ops, business, planning, AI — no layer was ever discarded; each became the base of the next. Across ten companies, what accumulated was not a résumé but a stack.',
       } as Bi,
-      layersTitle: { ko: '네 개의 층', en: 'Four layers' } as Bi,
     },
 
     a2: {

@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { m, useInView, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { home, work, skills, contact } from '../content/profile'
 import briefPdf from '../content/briefPdf.json'
-import { phases, hub, timeline } from '../content/journey'
+import { phases, hub } from '../content/journey'
 import { useLang, useT } from '../lib/i18n'
 import { getLenis } from '../lib/scroll'
 import { onReady } from '../lib/appState'
@@ -238,12 +238,8 @@ export default function Home() {
                 {t(home.now)}
               </p>
             </Reveal>
-            <Reveal delay={0.35}>
-              <p aria-hidden className="mt-12 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-ink-dim">
-                <span className="h-px w-8 bg-ink-dim/50" />
-                {t(acts.scrollCue)}
-              </p>
-            </Reveal>
+            {/* 2026-08-08 제거: 히어로 하단 "스크롤" 유도 문구. 아직 스크롤하지 않은
+                방문자는 히어로를 보고 있고, 스크롤을 모르지 않는다. 장식일 뿐이라 뺀다. */}
           </div>
         </section>
 
@@ -264,8 +260,9 @@ export default function Home() {
                 이 컬럼은 자기 그리드 행을 벗어나지 못하므로, 행 높이를 정하는 건
                 오른쪽 회사 목록의 간격이다. */}
             <div className="md:sticky md:top-28 md:self-start">
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-ink-dim">{t(timeline.eyebrow)}</p>
-              <div className="mt-4 leading-none">
+              {/* 2026-08-08 제거: "타임라인 2006-2026" 라벨. 아래 계기판이 연도를
+                  직접 보여주므로 기간을 다시 적는 건 중복이고, Act 1 라벨과도 겹쳤다. */}
+              <div className="leading-none">
                 {/* 정지 상태 = 완성 상태: 연출이 없으면 도착 연도(2026)를 그대로
                     보여준다. 컨트롤러가 붙을 때만 2006으로 되돌려 스크럽을 시작한다. */}
                 <span data-scrolly="year" className="u-fig text-7xl font-semibold text-amber md:text-8xl">
@@ -300,8 +297,8 @@ export default function Home() {
         <section className="relative border-t border-line bg-night/40">
           <div className="container-std py-20 md:py-28">
             <Reveal>
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-ink-dim">{t(acts.a1.layersTitle)}</p>
-              <h3 className="u-display mt-4 break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
+              {/* 2026-08-08 제거: "네 개의 층" 라벨 — 바로 아래 제목이 같은 말을 그대로 반복했다. */}
+              <h3 className="u-display break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
                 {t(home.foundationIntro.title)}
               </h3>
             </Reveal>
@@ -382,7 +379,7 @@ export default function Home() {
                   </div>
                   {heroCase.sub && <p className="mt-4 break-keep text-sm text-ink-dim md:text-base">{t(heroCase.sub)}</p>}
                   {heroCase.footnote && (
-                    <p className="mt-3 break-keep font-mono text-[10px] leading-relaxed text-ink-dim">{t(heroCase.footnote)}</p>
+                    <p className="mt-3 break-keep font-mono text-[11px] leading-relaxed text-ink-dim">{t(heroCase.footnote)}</p>
                   )}
                 </div>
               </div>
@@ -404,7 +401,7 @@ export default function Home() {
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-ink-dim">{it.tag}</span>
+                      <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-ink-dim">{it.tag}</span>
                       {it.emphasis && <span className="h-1.5 w-1.5 rounded-full bg-amber" aria-hidden />}
                     </div>
                     <div className="mt-4 text-3xl font-semibold leading-none text-amber">{fmt(it.stat[lang])}</div>
@@ -412,7 +409,7 @@ export default function Home() {
                     <div className="mt-2 break-keep text-sm text-ink-soft">{t(it.title)}</div>
                     {it.sub && <div className="mt-2 break-keep text-[13px] text-ink-dim">{t(it.sub)}</div>}
                     {it.footnote && (
-                      <div className="mt-auto break-keep pt-4 font-mono text-[10px] leading-relaxed text-ink-dim">{t(it.footnote)}</div>
+                      <div className="mt-auto break-keep pt-4 font-mono text-[11px] leading-relaxed text-ink-dim">{t(it.footnote)}</div>
                     )}
                   </article>
                 </Reveal>
@@ -458,9 +455,9 @@ export default function Home() {
             </Reveal>
 
             <div className="mt-10 grid gap-10 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+              {/* 2026-08-08 제거: "플래그십" 라벨 — 제목과 CTA가 이미 그 역할을 한다. */}
               <Reveal className="md:pt-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-amber">{t(home.aiTeaser.eyebrow)}</p>
-                <h3 className="u-display mt-4 break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
+                <h3 className="u-display break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
                   {t(home.aiTeaser.title)}
                 </h3>
                 <p className="mt-5 max-w-md break-keep text-base leading-relaxed text-ink-soft">{t(home.aiTeaser.body)}</p>
@@ -478,9 +475,9 @@ export default function Home() {
             </div>
 
             {/* 위임·검증 루프 + 19년을 관통한 상수들 */}
+            {/* 2026-08-08: "일하는 방식" 라벨 제거 — 바로 아래 제목이 같은 말을 한다. */}
             <Reveal className="mt-16">
-              <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-ink-dim">{t(home.workstyleIntro.eyebrow)}</p>
-              <h3 className="u-display mt-4 max-w-3xl break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
+              <h3 className="u-display max-w-3xl break-keep text-2xl font-semibold leading-tight text-ink md:text-3xl">
                 {t(home.workstyleIntro.title)}
               </h3>
             </Reveal>
@@ -567,7 +564,7 @@ export default function Home() {
                     {t(acts.a5.pdfCta)}
                     <span aria-hidden>↓</span>
                   </a>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-dim">{pdfMeta}</span>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-dim">{pdfMeta}</span>
                 </div>
               </div>
             </Reveal>

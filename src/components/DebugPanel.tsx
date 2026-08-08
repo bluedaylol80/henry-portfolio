@@ -85,7 +85,7 @@ export default function DebugPanel() {
 
   return (
     <div className="fixed bottom-4 left-4 z-50 select-none rounded-lg border border-white/10 bg-black/70 px-4 py-3 font-display text-xs tabular-nums text-ink-dim backdrop-blur-md">
-      <div className="mb-2 text-[10px] uppercase tracking-[0.3em] text-ink-mute">debug</div>
+      <div className="mb-2 text-[11px] uppercase tracking-[0.3em] text-ink-mute">debug</div>
       <dl className="grid grid-cols-[auto_auto] gap-x-4 gap-y-1">
         <dt className="text-ink-mute">fps</dt>
         <dd className="text-right text-ink">
@@ -101,7 +101,7 @@ export default function DebugPanel() {
         </dd>
       </dl>
       <div className="mt-2 flex items-center gap-2">
-        <span className="text-[10px] uppercase tracking-widest text-ink-mute">scrim</span>
+        <span className="text-[11px] uppercase tracking-widest text-ink-mute">scrim</span>
         <button type="button" onClick={() => setScrim(0)} className={btn}>
           off
         </button>

@@ -110,7 +110,7 @@ export default function RoomPage() {
 
       {/* 둘러본 정도 — 방에 머무는 동안만 유지되는 가벼운 표시. */}
       <div className="pointer-events-none fixed left-1/2 top-20 z-30 -translate-x-1/2 md:left-auto md:right-8 md:translate-x-0">
-        <span className="rounded-full border border-line bg-night/80 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-ink-dim backdrop-blur-sm">
+        <span className="rounded-full border border-line bg-night/80 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-ink-dim backdrop-blur-sm">
           {progress}
         </span>
       </div>

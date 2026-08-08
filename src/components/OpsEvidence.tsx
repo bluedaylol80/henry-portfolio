@@ -159,7 +159,7 @@ export default function OpsEvidence() {
                   }`}
                 >
                   <span className="block break-keep text-sm font-semibold">{t(s.name)}</span>
-                  <span className="mt-1 block break-keep font-mono text-[10px] uppercase tracking-[0.12em] text-ink-dim">
+                  <span className="mt-1 block break-keep font-mono text-[11px] uppercase tracking-[0.12em] text-ink-dim">
                     {s.recordedOn} · {s.steps.length} {t(c.stepsLabel)}
                   </span>
                 </button>
@@ -170,7 +170,7 @@ export default function OpsEvidence() {
           {/* 타임라인 */}
           <div className="min-w-0">
             {/* ★ 정직성 라벨 — 라이브인 척 금지(SDD §4). 항상 보인다. */}
-            <p className="flex flex-wrap items-center gap-2 break-keep font-mono text-[10px] uppercase tracking-[0.14em] text-brass">
+            <p className="flex flex-wrap items-center gap-2 break-keep font-mono text-[11px] uppercase tracking-[0.14em] text-brass">
               <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-brass" />
               {fill(c.liveDisclaimer[lang], { date: active.recordedOn, time: active.startedAt })}
             </p>
@@ -209,7 +209,7 @@ export default function OpsEvidence() {
                       )}
                     </div>
                     <div className={`min-w-0 flex-1 pb-5 transition-opacity duration-300 ${on ? 'opacity-100' : 'opacity-30'}`}>
-                      <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-ink-dim">
+                      <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-dim">
                         +{humanMs(step.offsetMs, lang)}
                       </p>
                       <p className="mt-1 break-keep text-sm text-ink md:text-[15px]">{t(step.label)}</p>

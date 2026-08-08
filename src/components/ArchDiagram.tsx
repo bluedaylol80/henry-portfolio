@@ -66,7 +66,6 @@ const TIERS: Tier[] = [
 ]
 
 const COPY = {
-  eyebrow: { ko: '라이브 아키텍처', en: 'LIVE ARCHITECTURE' } as Bi,
   title: {
     ko: '실제로 돌아가는 3계층 AI 운영체제',
     en: 'A 3-tier AI operating system — actually running',
@@ -142,8 +141,8 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
       {/* header + scale readout */}
       <m.div variants={item} className="relative flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="font-mono text-[11px] uppercase tracking-[0.32em] text-ink-dim">{t(COPY.eyebrow)}</p>
-          <h3 className="u-display mt-2 max-w-md text-xl font-semibold leading-tight text-ink sm:text-2xl">
+          {/* 2026-08-08 제거: "라이브 아키텍처" 라벨 — 제목이 이미 무엇인지 말한다. */}
+          <h3 className="u-display max-w-md text-xl font-semibold leading-tight text-ink sm:text-2xl">
             {t(COPY.title)}
           </h3>
         </div>
@@ -151,12 +150,12 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
           {SCALE.map((s) => (
             <div key={s.value} className="text-right">
               <div className="u-fig text-3xl font-semibold leading-none text-ink sm:text-4xl">{s.value}</div>
-              <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.2em] text-ink-dim">{t(s.label)}</div>
+              <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.2em] text-ink-dim">{t(s.label)}</div>
             </div>
           ))}
         </div>
       </m.div>
-      <m.p variants={item} className="relative mt-1 font-mono text-[10px] uppercase tracking-[0.24em] text-ink-dim">
+      <m.p variants={item} className="relative mt-1 font-mono text-[11px] uppercase tracking-[0.24em] text-ink-dim">
         {t(COPY.scaleLabel)}
       </m.p>
 
@@ -191,7 +190,11 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
             {i < TIERS.length - 1 && (
               <m.div variants={item} className="relative flex h-9 justify-start pl-[1.4rem]" aria-hidden>
                 <span className="relative block w-px bg-gradient-to-b from-cobalt/70 to-cobalt/20">
-                  {!reduce && <span className="conduit-pulse absolute left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-cobalt shadow-[0_0_8px_rgba(59,111,229,0.9)]" />}
+                  {/* 2026-08-08: 코발트 네온 글로(zero-offset 헤일로)는 AI 생성 UI의 대표 신호라 제거.
+                      점 자체의 색으로 데이터 흐름을 읽히게 하고, 링으로만 경계를 준다. */}
+                  {!reduce && (
+                    <span className="conduit-pulse absolute left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-cobalt ring-1 ring-cobalt/40" />
+                  )}
                 </span>
               </m.div>
             )}
@@ -216,7 +219,7 @@ export default function ArchDiagram({ variant = 'teaser' }: { variant?: 'teaser'
         {LEGEND.map((l) => (
           <li key={l.swatch} className="flex items-center gap-2">
             <span aria-hidden className={`h-2 w-2 rounded-[3px] ${l.swatch}`} />
-            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-ink-dim">{t(l.label)}</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-ink-dim">{t(l.label)}</span>
           </li>
         ))}
       </m.ul>
