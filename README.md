@@ -21,7 +21,7 @@
 
 ## 🖊 콘텐츠 수정 방법 (비개발자용)
 
-**문구·데이터는 `src/content/` 안에만 있습니다:**
+**문구·데이터는 `src/content/` 안에 있습니다** (검색결과·링크 미리보기 문구만 예외 — 아래 ⚠️):
 - 홈(`/`) · 대표 사례(`/work/ai-os`) · 성과·스킬·연락처·푸터: `src/content/profile.ts`
 - 커리어 딥다이브(`/career` 타임라인 + 4단계 페이지): `src/content/journey.ts`
 - 3분 요약(`/brief`): `src/content/brief.ts`
@@ -33,6 +33,7 @@
 - 홈 히어로의 검증 숫자 3개: `profile.ts` 의 `home.proof` (같은 `value`/`prefix`/`suffix`/`decimals` 규칙).
 - 연락처: `contact` (email / kakao / instagram / calendly / Notion 상세이력 URL).
 - ⚠️ `src/content/aiosEvidence.json` · `src/content/briefPdf.json` 은 **스크립트가 만드는 파일**입니다. 손으로 고치지 말고 아래 생성 스크립트를 다시 돌리세요.
+- ⚠️ 검색결과·링크 미리보기 문구(제목·설명·OG/트위터 카드)는 **`index.html` 이 정본**입니다. 크롤러는 JS 실행 전 값을 읽으므로 `src/content/` 에 적어도 반영되지 않습니다. 히어로 문구를 고쳤다면 `index.html` 도 같이 고치고 `npm run og` 로 카드 이미지(`public/og.png`)를 다시 찍으세요.
 - 저장 후 아래 "재배포"만 하면 반영됩니다.
 
 ## 🚀 재배포 방법
@@ -57,6 +58,7 @@ npm run typecheck  # 타입체크만
 npm run lint       # oxlint
 npm run preview    # 빌드 결과 미리보기 (http://localhost:4173/henry-portfolio/)
 npm run shoot      # 스크린샷 자가 점검 (dev 서버 켜둔 상태에서, 로컬 Chrome 필요)
+npm run og         # 링크 미리보기 카드 public/og.png 재생성 (preview 4173 켜둔 상태에서)
 ```
 
 `scripts/` 에는 화면 캡처(`shoot-*.mjs`)와 검증 하니스(`verify-*.mjs`, `measure-*.mjs`)가 버전별로 쌓여 있습니다.
@@ -99,7 +101,9 @@ src/
                        ArchDiagram(3계층 시그니처 도식) · OpsEvidence(리플레이 데모) ·
                        CareerTimeline · WorkGallery · WorkLoop
 SPEC.md                디자인·구현 스펙 (설계 원본)
-scripts/               캡처·검증 하니스(shoot/verify/measure) + 스냅샷·PDF 생성기
+index.html             검색결과·링크 미리보기 메타(제목·설명·OG/트위터) 정본
+design-system/         디자인 기준 MASTER.md — 색·타이포·간격 실측 기록
+scripts/               캡처·검증 하니스(shoot/verify/measure) + 스냅샷·PDF·OG 카드 생성기
 .github/workflows/     GitHub Pages 자동 배포
 ```
 
@@ -138,9 +142,9 @@ scripts/               캡처·검증 하니스(shoot/verify/measure) + 스냅�
 ## 💬 Whisper 방명록 (지금은 화면에 없음)
 
 v20 개편 때 Contact 의 **Whisper** 방명록이 화면에서 내려갔습니다.
-문구(`profile.ts` 의 `whisper`)와 백엔드 스크립트(`scripts/whisper-backend.gs`)는 그대로 남아 있지만,
-이를 호출하는 클라이언트와 UI가 없어 사이트에는 나타나지 않습니다.
-다시 켜려면 클라이언트와 Contact 섹션 UI를 새로 붙여야 합니다.
+백엔드 스크립트(`scripts/whisper-backend.gs`)는 그대로 남아 있지만,
+문구(`profile.ts` 의 `whisper`)는 2026-08-05 콘텐츠 정리 때 지웠고 이를 호출하는 클라이언트와 UI도 없어
+사이트에는 나타나지 않습니다. 다시 켜려면 문구·클라이언트·Contact 섹션 UI를 새로 붙여야 합니다.
 
 ---
 Vibe-coded with AI · 2026
