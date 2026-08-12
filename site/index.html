@@ -147,6 +147,7 @@ img{display:block}
 .hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,var(--hero-from) 0%,#e2e1de 42%,var(--hero-to) 100%)}
 .hero-noise{position:absolute;inset:0;z-index:0;opacity:.04;pointer-events:none;background-size:180px 180px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-fx{position:absolute;inset:0;z-index:0;pointer-events:none}
 .hero-wm{position:absolute;inset-inline:0;bottom:7rem;z-index:1;color:rgba(255,255,255,.5)}
 @media (max-width:1023px){.hero-wm{bottom:3rem}}
 .hero-grid{position:relative;z-index:20;display:flex;flex-direction:column;gap:2rem;padding-block:7rem 5rem}
@@ -887,6 +888,99 @@ items.forEach((it, i) => {
 car.addEventListener('click', (e) => { if (e.target.closest('button')) return; go(1); });
 car.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
 car.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); go(1); });
+
+/* ---------- hero liquid reveal (LUMORA_SPEC 2-A, 리빌 레이어=프로시저럴 잉크) ---------- */
+const FINE = matchMedia('(hover:hover) and (pointer:fine)').matches;
+if (!RM && FINE && 'ResizeObserver' in window){
+  const hero = document.getElementById('home');
+  const fx = document.createElement('canvas');
+  fx.className = 'hero-fx';
+  fx.setAttribute('aria-hidden', 'true');
+  hero.insertBefore(fx, hero.querySelector('.hero-wm'));
+  const ctx = fx.getContext('2d');
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  const R = 143 * DPR, DIAM = Math.ceil(R * 2), DECAY = 0.016;
+  const cover = document.createElement('canvas');
+  const cctx = cover.getContext('2d');
+  const brush = document.createElement('canvas');
+  brush.width = brush.height = DIAM;
+  const bctx = brush.getContext('2d');
+  const grad = bctx.createRadialGradient(R, R, 0, R, R, R);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(.55, 'rgba(255,255,255,.82)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  let W = 0, H = 0;
+  function paintCover(){
+    let s = 20260813;
+    const rnd = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+    const g = cctx.createLinearGradient(0, 0, W * .25, H);
+    g.addColorStop(0, '#111111'); g.addColorStop(1, '#0a0a0a');
+    cctx.fillStyle = g; cctx.fillRect(0, 0, W, H);
+    const cols = ['#97501f', '#b15f2c', '#cf8047'];
+    cctx.lineCap = 'round';
+    for (let i = 0; i < 110; i++){
+      const y0 = rnd() * H, amp = (8 + rnd() * 30) * DPR, wl = (90 + rnd() * 240) * DPR;
+      const ph = rnd() * 7, drift = (rnd() - .5) * .3;
+      cctx.strokeStyle = cols[i % 3];
+      cctx.globalAlpha = .05 + rnd() * .22;
+      cctx.lineWidth = (.5 + rnd() * 1.6) * DPR;
+      cctx.beginPath();
+      const dx = 12 * DPR;
+      for (let x = -dx; x <= W + dx; x += dx){
+        const y = y0 + drift * x + Math.sin(x / wl + ph) * amp + Math.sin(x / (wl * .37) + ph * 2) * amp * .3;
+        x === -dx ? cctx.moveTo(x, y) : cctx.lineTo(x, y);
+      }
+      cctx.stroke();
+    }
+    cctx.globalAlpha = 1;
+  }
+  function measure(){
+    const r = hero.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width * DPR));
+    H = Math.max(1, Math.round(r.height * DPR));
+    fx.width = W; fx.height = H;
+    cover.width = W; cover.height = H;
+    paintCover();
+  }
+  measure();
+  new ResizeObserver(measure).observe(hero);
+  const pts = [];
+  let lastP = null, idle = 0, fxRaf = 0;
+  function stamp(x, y){
+    bctx.clearRect(0, 0, DIAM, DIAM);
+    bctx.globalCompositeOperation = 'source-over';
+    bctx.fillStyle = grad;
+    bctx.fillRect(0, 0, DIAM, DIAM);
+    bctx.globalCompositeOperation = 'source-in';
+    bctx.drawImage(cover, x - R, y - R, DIAM, DIAM, 0, 0, DIAM, DIAM);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(brush, x - R, y - R);
+  }
+  function fxTick(){
+    fxRaf = requestAnimationFrame(fxTick);
+    const drawing = pts.length > 0;
+    if (drawing) idle = 0;
+    else if (++idle > 120){ cancelAnimationFrame(fxRaf); fxRaf = 0; return; }
+    const fade = drawing ? DECAY : Math.min(DECAY + idle * 0.004, .5);
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = 'rgba(0,0,0,' + fade + ')';
+    ctx.fillRect(0, 0, W, H);
+    if (drawing){ for (const p of pts) stamp(p[0], p[1]); pts.length = 0; }
+    else if (idle === 120) ctx.clearRect(0, 0, W, H);
+  }
+  addEventListener('pointermove', (e) => {
+    const r = fx.getBoundingClientRect();
+    const x = (e.clientX - r.left) * DPR, y = (e.clientY - r.top) * DPR;
+    if (x < -R || y < -R || x > W + R || y > H + R){ lastP = null; return; }
+    if (lastP){
+      const dx = x - lastP[0], dy = y - lastP[1];
+      const n = Math.min(Math.ceil(Math.hypot(dx, dy) / Math.max(R * .3, 1)), 60);
+      for (let i = 1; i <= n; i++) pts.push([lastP[0] + dx * i / n, lastP[1] + dy * i / n]);
+    } else pts.push([x, y]);
+    lastP = [x, y];
+    if (!fxRaf) fxRaf = requestAnimationFrame(fxTick);
+  }, { passive: true });
+}
 
 /* ---------- stats count-up ---------- */
 const counters = [...document.querySelectorAll('[data-count]')];
