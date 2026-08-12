@@ -18,6 +18,12 @@
   동일 카드 3개 나열, "혁신적/열정적" 류 공허 카피.
 - 가벼움 불변: 현재 site/index.html 단일 파일 약 52KB. 새 외부 의존 추가는 INBOX 승인 필요.
 
+## 승인된 변경 (본부장 결재 2026-08-13)
+- **히어로 리퀴드 리빌 부활**: `design/reference/LUMORA_SPEC.md` "2) Hero — A) LiquidReveal" 메커니즘을
+  재현하되, 사진 대신 **자체 프로시저럴 레이어**(팔레트 내 색만, 코드 생성). 이 결재가
+  V23 시공 당시의 "liquid-reveal 의도적 제외"(`design/concepts/V23_BUILD_REPORT.md` §5)를 대체한다.
+  사진·외부 에셋·새 라이브러리는 여전히 금지.
+
 ## 기지의 수용된 이탈 (버그로 재발견 금지)
 - 창 너비 640/1024/1440px 경계에서 글자 크기 한 단계 스냅 — Lumora 캔버스 스케일 방식 고유.
   R2는 FAIL 의견, R1 부분 수용, 최종 판단 본부장 보류 상태 (`design/concepts/V23_BUILD_REPORT.md` §5).
