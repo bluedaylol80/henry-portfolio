@@ -13,6 +13,8 @@
 param(
     [int]$MaxIterations = 10,
     [int]$TimeoutMin = 20,
+    [string]$Model = 'opus',        # 조직도 R3 시공 슬롯. 미지정 시 기본 모델(Fable 5)이 물려 한도 소진 — 08-13 실사례
+    [string]$Effort = 'medium',     # Opus 5 코딩 피크
     [switch]$DryRun,
     [switch]$AllowDirty
 )
@@ -40,6 +42,18 @@ function Write-LoopLog([hashtable]$rec) {
     ($rec | ConvertTo-Json -Compress) | Add-Content (Join-Path $LogDir 'loop.jsonl')
 }
 
+# 전역 킬스위치(rule 29 #5) — OS 레포의 스위치가 켜지면 loop\STOP과 동등하게 선다
+$KillSwitch = 'D:\Github\HT_multi\.claude\_KILL_SWITCH'
+function Test-Halt { (Test-Path $StopFile) -or (Test-Path $KillSwitch) }
+
+# 본부장 알림(rule 29 #4) — 시작·종료만. 실패해도 루프는 막지 않는다(비차단)
+function Send-LoopNotify([string]$Level, [string]$Title, [string]$Text) {
+    try {
+        & py -3.13 'D:\Github\HT_multi\superstar-ai-os\scripts\notify.py' `
+            --level $Level --title $Title --text $Text 2>$null | Out-Null
+    } catch {}
+}
+
 # 사전점검 ① 브랜치 가두기 — main이면 loop-v23로 전환(없으면 생성)
 $branch = git -C $Root branch --show-current
 if ($branch -eq 'main') {
@@ -53,12 +67,15 @@ if ($dirty -and -not $AllowDirty) {
     throw "미커밋 변경 있음(사람 작업 중일 수 있음). 정리 후 재시작하거나 -AllowDirty:`n$($dirty -join "`n")"
 }
 
+$startHead = git -C $Root rev-parse HEAD
 $env:JARVIS_WORKER = '1'        # session-start 훅 announce 생략(워커 관례)
 $consecFail = 0
-Write-LoopLog @{event='loop_start'; max=$MaxIterations; dry=[bool]$DryRun}
+$stopReason = 'max_iterations'
+Write-LoopLog @{event='loop_start'; max=$MaxIterations; dry=[bool]$DryRun; model=$Model}
+if (-not $DryRun) { Send-LoopNotify 'info' '포트폴리오 루프 시작' "최대 $MaxIterations회 · 모델 $Model · 브랜치 loop-v23 (커밋이 종점, 배포는 사람)" }
 
 for ($i = 1; $i -le $MaxIterations; $i++) {
-    if (Test-Path $StopFile) { Write-Host "STOP 감지 — 종료"; Write-LoopLog @{event='stop_file'; iter=$i}; break }
+    if (Test-Halt) { Write-Host "STOP 감지 — 종료"; Write-LoopLog @{event='stop_file'; iter=$i}; $stopReason='stop_file'; break }
 
     $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
     if ($DryRun) { Write-Host "[예행] iter $i — claude 호출 생략"; Write-LoopLog @{event='dry_run'; iter=$i}; continue }
@@ -67,7 +84,7 @@ for ($i = 1; $i -le $MaxIterations; $i++) {
     $errLog = Join-Path $LogDir "iter$i-$ts.err.log"
     Write-Host "iter $i 시작 ($ts) — 새 세션(기억 없음)"
     $p = Start-Process -FilePath $Claude `
-        -ArgumentList @('-p','--output-format','text','--permission-mode','bypassPermissions','--settings',$DenyFile) `
+        -ArgumentList @('-p','--output-format','text','--permission-mode','bypassPermissions','--settings',$DenyFile,'--model',$Model,'--effort',$Effort) `
         -WorkingDirectory $Root `
         -RedirectStandardInput $PromptFile `
         -RedirectStandardOutput $outLog -RedirectStandardError $errLog `
@@ -84,13 +101,18 @@ for ($i = 1; $i -le $MaxIterations; $i++) {
         if ($p.ExitCode -ne 0) { $consecFail++ } else { $consecFail = 0 }
         Write-LoopLog @{event='iter_end'; iter=$i; exit=$p.ExitCode; log=$outLog}
         Write-Host "iter $i 종료 (exit $($p.ExitCode))"
-        if ($tail -match 'rate.?limit|usage limit|resets \d') {
+        if ($tail -match 'rate.?limit|usage limit|reached your .*limit|usage-credits|resets \d') {
             Write-Host "사용량 한도 감지 — 종료(재개는 사람이 판단)"
             Write-LoopLog @{event='rate_limit'; iter=$i; log=$outLog}
+            $stopReason = 'rate_limit'
             break
         }
     }
-    if ($consecFail -ge 2) { Write-Host "연속 실패 2회 — 종료"; Write-LoopLog @{event='consec_fail_stop'; iter=$i}; break }
+    if ($consecFail -ge 2) { Write-Host "연속 실패 2회 — 종료"; Write-LoopLog @{event='consec_fail_stop'; iter=$i}; $stopReason='consec_fail'; break }
 }
-Write-LoopLog @{event='loop_end'}
-Write-Host "루프 종료. 로그: $LogDir"
+Write-LoopLog @{event='loop_end'; reason=$stopReason}
+if (-not $DryRun) {
+    $done = (git -C $Root log --oneline "$startHead..HEAD" 2>$null | Measure-Object -Line).Lines
+    Send-LoopNotify 'success' '포트폴리오 루프 종료' "사유 $stopReason · 새 커밋 $done건 · 다음 할 일은 docs\STATUS.md"
+}
+Write-Host "루프 종료($stopReason). 로그: $LogDir"
