@@ -31,3 +31,4 @@ scripts/.bgm-norm.wav
 # loop-engineering 산출물 (loop/logs는 위 "logs" 규칙이 커버)
 loop/shots/
 loop/STOP
+loop/*.mjs
