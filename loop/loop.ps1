@@ -72,7 +72,7 @@ $env:JARVIS_WORKER = '1'        # session-start 훅 announce 생략(워커 관�
 $consecFail = 0
 $stopReason = 'max_iterations'
 Write-LoopLog @{event='loop_start'; max=$MaxIterations; dry=[bool]$DryRun; model=$Model}
-if (-not $DryRun) { Send-LoopNotify 'info' '포트폴리오 루프 시작' "최대 $MaxIterations회 · 모델 $Model · 브랜치 loop-v23 (커밋이 종점, 배포는 사람)" }
+if (-not $DryRun) { Send-LoopNotify 'info' '포트폴리오 루프 시작' "최대 ${MaxIterations}회 · 모델 $Model · 브랜치 loop-v23 (커밋이 종점, 배포는 사람)" }
 
 for ($i = 1; $i -le $MaxIterations; $i++) {
     if (Test-Halt) { Write-Host "STOP 감지 — 종료"; Write-LoopLog @{event='stop_file'; iter=$i}; $stopReason='stop_file'; break }
@@ -113,6 +113,6 @@ for ($i = 1; $i -le $MaxIterations; $i++) {
 Write-LoopLog @{event='loop_end'; reason=$stopReason}
 if (-not $DryRun) {
     $done = (git -C $Root log --oneline "$startHead..HEAD" 2>$null | Measure-Object -Line).Lines
-    Send-LoopNotify 'success' '포트폴리오 루프 종료' "사유 $stopReason · 새 커밋 $done건 · 다음 할 일은 docs\STATUS.md"
+    Send-LoopNotify 'success' '포트폴리오 루프 종료' "사유 $stopReason · 새 커밋 ${done}건 · 다음 할 일은 docs\STATUS.md"
 }
 Write-Host "루프 종료($stopReason). 로그: $LogDir"
