@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년</title>
+<meta name="description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+/* ============================================================
+   시안 B — "Ink Cinema"
+   Lumora 디자인 언어(rem 어댑티브 그리드·스프링·텍스트 리빌·컴포넌트 레시피)
+   위에 V23 §5 다크 퍼스트 토큰 반전을 적용.
+   ============================================================ */
+
+/* ---------- reset / base ---------- */
+*{ box-sizing:border-box; margin:0; padding:0 }
+html{ font-size:16px; -webkit-font-smoothing:antialiased }
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:'Pretendard Variable',Pretendard,'Onest',sans-serif;
+  overflow-x:hidden;
+  word-break:keep-all;
+}
+a{ color:inherit; text-decoration:none }
+button{ font:inherit; color:inherit; background:none; border:none; cursor:pointer }
+ul{ list-style:none }
+img{ display:block }
+.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
+:focus-visible{ outline:2px solid #cf8047; outline-offset:2px }
+
+/* ---------- tokens (V23 §5 다크 반전) ---------- */
+:root{
+  --bg:#0a0a0a;
+  --fg:#f4f3f1;
+  --muted:rgba(244,243,241,.55);
+  --subtle:rgba(244,243,241,.35);
+  --faint:rgba(244,243,241,.2);
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(255,255,255,.18);
+  --surface:#141312;
+  --card:#121110;
+  --card-ring:rgba(255,255,255,.06);
+  --accent:#cf8047;
+  --accent-to:#97501f;
+  --invert-bg:#f1f0ee;
+  --invert-fg:#111111;
+  --radius-pill:9999px;
+  --radius-card:2rem;
+  --radius-card-sm:1.25rem;
+  --radius-control:.875rem;
+  --text-watermark:13rem;
+  --container-shell:88rem;
+}
+
+/* ---------- rem 어댑티브 그리드 (Lumora 스펙 그대로) ---------- */
+@media (max-width:1920px){ html{ font-size:0.833333vw } }
+@media (max-width:1440px){ html{ font-size:1.111111vw } }
+@media (max-width:1024px){ html{ font-size:1.5625vw } }
+@media (max-width:640px){  html{ font-size:4.444444vw } }
+
+/* ---------- shell ---------- */
+.shell{ max-width:var(--container-shell); margin-inline:auto }
+
+/* ---------- skip link ---------- */
+.skip{ position:absolute; left:-9999px; top:auto }
+.skip:focus{
+  position:fixed; left:1rem; top:1rem; z-index:60;
+  border-radius:var(--radius-control); background:var(--invert-bg); color:var(--invert-fg);
+  padding:.5rem 1rem; font-size:.875rem; font-weight:500;
+}
+
+/* ---------- reveal helpers ---------- */
+[data-reveal]{
+  opacity:0;
+  transform:translateY(var(--ry,18px)) scale(var(--rsc,1));
+  transition:opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1);
+  will-change:opacity,transform;
+}
+[data-reveal].is-in{ opacity:var(--ro,1); transform:none }
+
+.lines[data-reveal]{ opacity:1; transform:none } /* 헤딩은 라인 리빌만 (이중 페이드 방지) */
+.lines .line{ display:block; overflow:hidden; padding-bottom:.06em }
+.lines .line > i{
+  display:block; font-style:normal;
+  transform:translateY(108%); opacity:0;
+  transition:transform .9s cubic-bezier(.215,.61,.355,1), opacity .9s cubic-bezier(.215,.61,.355,1);
+  transition-delay:var(--d,0ms);
+}
+.lines.is-in .line > i{ transform:none; opacity:1 }
+
+.words .w{
+  display:inline-block;
+  transform:translateY(24px); opacity:0;
+  transition:transform .7s cubic-bezier(.165,.84,.44,1), opacity .7s cubic-bezier(.165,.84,.44,1);
+  transition-delay:var(--d,0ms);
+}
+.words.is-in .w{ transform:none; opacity:1 }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation:none !important; transition:none !important }
+  [data-reveal]{ opacity:var(--ro,1) !important; transform:none !important }
+  .lines .line > i, .words .w{ transform:none !important; opacity:1 !important }
+}
+
+/* ---------- 공통 컴포넌트 ---------- */
+.eyebrow{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-size:.875rem; font-weight:500; color:var(--muted);
+}
+.eyebrow::before{
+  content:""; width:.375rem; height:.375rem; border-radius:var(--radius-pill);
+  background:var(--accent);
+}
+.eyebrow--boxed{ border:1px solid var(--line); border-radius:var(--radius-pill); padding:.375rem 1rem }
+.eyebrow--ink{ color:rgba(17,17,17,.7) }
+.eyebrow--ink::before{ background:#97501f }
+
+.pill-btn{ display:inline-block }
+.pill{
+  display:inline-flex; align-items:center; gap:.75rem;
+  border-radius:var(--radius-pill); font-size:.875rem; font-weight:500;
+  padding:.875rem 1.75rem; white-space:nowrap;
+}
+.pill-btn[data-arrow] .pill{ padding:.375rem .375rem .375rem 1.5rem }
+.pill-badge{
+  width:2.25rem; height:2.25rem; display:grid; place-items:center;
+  border-radius:var(--radius-pill); font-size:1rem; flex:none;
+}
+.pill-badge svg{ display:block }
+.v-solid .pill{ background:var(--invert-bg); color:var(--invert-fg) }
+.v-solid .pill-badge{ background:#0a0a0a; color:#fff }
+.v-outline .pill{ border:1px solid var(--line-strong); background:transparent; color:var(--fg) }
+.v-outline .pill-badge{ background:var(--invert-bg); color:var(--invert-fg) }
+.v-dark .pill{ background:#0a0a0a; color:#fff }
+.v-dark .pill-badge{ background:#fff; color:#0a0a0a }
+
+.tag{
+  display:inline-flex; border:1px solid rgba(17,17,17,.25); color:var(--invert-fg);
+  border-radius:var(--radius-pill); padding:.5rem 1rem; font-size:.875rem;
+}
+
+.alink{ display:inline-flex }
+.alink > span{ display:inline-block; opacity:.65 }
+
+.icon{ width:1em; height:1em; display:block }
+.tnum{ font-variant-numeric:tabular-nums }
+
+/* 필름 그레인 (feTurbulence data URI) */
+.grain{
+  position:absolute; inset:0; pointer-events:none; z-index:1;
+  opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:220px 220px;
+}
+
+.watermark{
+  pointer-events:none; user-select:none; text-align:center;
+  font-weight:700; line-height:1; font-size:var(--text-watermark); letter-spacing:-.02em;
+}
+@media (max-width:640px){ .watermark{ font-size:4.5rem } }
+
+/* ============================================================
+   PageLoader
+   ============================================================ */
+#loader{
+  position:fixed; inset:0; z-index:120;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2rem;
+  background:#0a0a0a; color:#fff;
+  border-radius:0 0 var(--radius-card) var(--radius-card);
+  transform:translateY(0);
+  transition:transform .75s cubic-bezier(.22,1,.36,1);
+}
+#loader.is-out{ transform:translateY(-100%) }
+.loader-center{
+  display:flex; flex-direction:column; align-items:center; gap:1.25rem; text-align:center;
+  opacity:1; transform:translateY(0);
+  transition:opacity .5s ease-out, transform .5s ease-out;
+}
+#loader.is-out .loader-center{ opacity:0; transform:translateY(-12px) }
+.loader-brand{
+  display:flex; align-items:center; gap:.5rem;
+  font-weight:600; font-size:1.5rem; letter-spacing:-.01em;
+}
+.loader-brand .icon{ font-size:1.875rem; color:var(--accent) }
+.loader-tag{ max-width:24ch; font-size:.875rem; color:rgba(255,255,255,.55); line-height:1.5 }
+.loader-progress{ width:min(22rem,72vw); display:flex; flex-direction:column; gap:.75rem }
+.loader-track{ height:1px; background:rgba(255,255,255,.15) }
+.loader-fill{ height:100%; width:0%; background:var(--accent); transition:width .1s ease-out }
+.loader-meta{
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.05em;
+  color:rgba(255,255,255,.45);
+}
+.loader-count{ color:rgba(255,255,255,.8); font-variant-numeric:tabular-nums }
+@media (min-width:640px){ .loader-brand{ font-size:1.875rem } }
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header{ position:absolute; inset-inline:0; top:0; z-index:50 }
+.header-inner{
+  display:flex; align-items:center; justify-content:space-between; gap:1.5rem;
+  padding:1.25rem;
+}
+.brand{ display:inline-flex }
+.brand > span{
+  display:flex; align-items:center; gap:.5rem;
+  font-size:1.125rem; font-weight:600; letter-spacing:-.01em;
+}
+.brand .icon{ font-size:1.25rem; color:var(--accent) }
+.nav-main{ display:none }
+.nav-main ul{ display:flex; align-items:center; gap:2rem; font-size:.875rem; font-weight:500 }
+.nav-main a > span, .nav-main button > span{ display:inline-block; opacity:.7 }
+.nav-main [aria-current="page"] > span{ opacity:1 }
+.header-right{ display:flex; align-items:center; gap:.75rem }
+.clock-chip{
+  display:none; align-items:center; gap:.75rem;
+  border:1px solid var(--line); background:rgba(255,255,255,.03);
+  backdrop-filter:blur(4px); border-radius:var(--radius-control);
+  padding:.5rem .75rem; font-size:.75rem; color:var(--muted);
+}
+.clock-chip .lbl{ color:var(--subtle) }
+.clock-chip .time{ min-width:3.5rem; font-variant-numeric:tabular-nums; font-weight:500; color:var(--fg) }
+.clock-chip .dot{ color:var(--faint) }
+.clock-chip .date{ font-weight:500 }
+.header-cta .pill{ padding:.5rem 1rem; font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.05em }
+@media (min-width:640px){ .header-inner{ padding:1.5rem 2rem } }
+@media (min-width:768px){ .clock-chip{ display:flex } }
+@media (min-width:1024px){ .nav-main{ display:block } }
+
+/* ============================================================
+   Hero
+   ============================================================ */
+#home{
+  position:relative; isolation:isolate; overflow:hidden;
+  border-radius:0 0 var(--radius-card) var(--radius-card);
+  background:#0a0a0a;
+}
+.hero-base{
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #171614 0%, #0a0a0a 62%),
+    linear-gradient(to bottom, #0d0c0b, #070706);
+}
+.hero-spot{
+  position:absolute; left:0; top:0; z-index:0; width:80rem; height:80rem;
+  pointer-events:none;
+  background:radial-gradient(circle closest-side, rgba(207,128,71,.07), rgba(207,128,71,0) 70%);
+  transform:translate3d(-40rem,-40rem,0);
+  will-change:transform;
+}
+.hero-vignette{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to bottom, rgba(0,0,0,.45), transparent 35%, transparent 62%, rgba(0,0,0,.55));
+}
+.hero-watermark{
+  position:absolute; inset-inline:0; bottom:6rem; z-index:1;
+  color:rgba(255,255,255,.04);
+}
+.hero-grid{
+  position:relative; z-index:20;
+  display:flex; flex-direction:column; gap:2rem;
+  padding:7rem 1.25rem 5rem;
+}
+.hero-left{ display:flex; flex-direction:column; gap:1.75rem }
+.hero-h1{
+  max-width:18ch; font-size:2.25rem; font-weight:600; line-height:1.02; letter-spacing:-.03em;
+}
+.hero-sub{
+  max-width:44ch; font-size:1rem; line-height:1.7; color:var(--muted);
+}
+.hero-cta{ display:flex; flex-wrap:wrap; gap:.75rem }
+.hero-right{ display:flex; flex-direction:column; align-items:flex-start; gap:2rem }
+@media (min-width:640px){
+  .hero-grid{ padding:7rem 2rem 5rem }
+  .hero-h1{ font-size:3rem }
+  .hero-sub{ font-size:1.125rem }
+}
+@media (min-width:768px){ .hero-h1{ font-size:3.75rem } }
+@media (min-width:1024px){
+  .hero-grid{
+    display:grid; min-height:100lvh; grid-template-columns:repeat(12,1fr);
+    gap:2.5rem; padding:9rem 2rem 7rem; align-content:center;
+  }
+  .hero-left{ grid-column:span 7 }
+  .hero-right{ grid-column:span 5; align-items:flex-end }
+}
+
+/* HeroCard (캐러셀) */
+.hero-card{
+  width:100%; max-width:24rem;
+  border-radius:var(--radius-card-sm);
+  background:rgba(255,255,255,.045);
+  box-shadow:0 0 0 1px var(--card-ring), 0 1.5rem 3rem rgba(0,0,0,.45);
+  backdrop-filter:blur(12px);
+  padding:.5rem;
+}
+.hero-card-row{ display:flex; gap:.5rem; cursor:pointer; border-radius:var(--radius-control) }
+.hero-card-tile{
+  aspect-ratio:1; width:6rem; flex:none; display:grid; place-items:center;
+  border-radius:var(--radius-control); background:var(--invert-bg);
+  font-size:1.875rem; color:var(--accent-to);
+}
+.hero-card-panel{
+  flex:1; border-radius:var(--radius-control); background:rgba(255,255,255,.04);
+  padding:.75rem; display:flex; flex-direction:column; justify-content:space-between; gap:.5rem;
+  min-width:0;
+}
+.hero-card-slot{ position:relative; min-height:3.75rem }
+.hc-item{
+  position:absolute; inset:0;
+  transition:opacity .35s cubic-bezier(.2,.8,.2,1), transform .35s cubic-bezier(.2,.8,.2,1);
+}
+.hc-item[data-state="in"]{ opacity:1; transform:translateY(0) }
+.hc-item[data-state="below"]{ opacity:0; transform:translateY(14px) }
+.hc-item[data-state="above"]{ opacity:0; transform:translateY(-14px) }
+.hc-cap{ font-size:.65rem; font-weight:500; text-transform:uppercase; letter-spacing:.05em; color:var(--subtle) }
+.hc-title{ margin-top:.25rem; max-width:11rem; font-size:.875rem; font-weight:500; line-height:1.35; color:var(--fg) }
+.hero-card-foot{ display:flex; align-items:center; justify-content:space-between; gap:.75rem }
+.hc-dots{ display:flex; align-items:center; gap:.25rem }
+.hc-dots i{ display:block; height:.25rem; width:.375rem; border-radius:var(--radius-pill); background:rgba(244,243,241,.2); transition:all .3s }
+.hc-dots i.on{ width:1rem; background:rgba(244,243,241,.7) }
+.hc-nav{ display:flex; gap:.25rem }
+.hc-nav button{
+  width:1.75rem; height:1.75rem; display:grid; place-items:center;
+  border-radius:var(--radius-pill); background:rgba(255,255,255,.06);
+  color:var(--muted); box-shadow:0 0 0 1px rgba(255,255,255,.1);
+  font-size:.875rem; transition:color .2s, background .2s;
+}
+.hc-nav button:hover{ color:var(--fg); background:rgba(255,255,255,.12) }
+.hc-nav .prev svg{ transform:rotate(180deg) }
+
+/* Partners = 회사명 텍스트 */
+.partners{ width:100%; max-width:24rem }
+.partners-label{ margin-bottom:.75rem; font-size:.75rem; font-weight:500; color:var(--subtle); text-align:left }
+.partners ul{ display:grid; grid-template-columns:repeat(2,1fr); column-gap:1rem; row-gap:.75rem }
+.partners li > span{
+  display:flex; align-items:center; gap:.375rem;
+  font-size:.75rem; color:var(--muted); opacity:.7;
+}
+.partners li .icon{ font-size:.875rem; color:var(--faint); flex:none }
+@media (min-width:1024px){
+  .hero-card, .partners{ max-width:19rem }
+  .partners-label{ text-align:right }
+}
+
+/* 상태 바 */
+.hero-status{
+  display:flex; align-items:center; justify-content:space-between; gap:.75rem;
+  border-top:1px solid var(--line); padding:1.25rem;
+  font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.025em;
+  color:var(--muted);
+}
+.hero-status .mid{ display:none }
+.hero-status .right{ display:inline-flex; align-items:center; gap:.5rem }
+@media (min-width:640px){
+  .hero-status{ padding:1.25rem 2rem }
+  .hero-status .mid{ display:block }
+}
+
+/* ============================================================
+   CreateBand
+   ============================================================ */
+.band ul{ display:flex; flex-direction:column; gap:.75rem; padding:2.5rem 1.25rem }
+.band li{ flex:1 }
+.band .tile{
+  display:grid; place-items:center; height:6rem;
+  border-radius:var(--radius-pill); font-size:1.875rem; font-weight:500; letter-spacing:-.01em;
+}
+.tile-surface{ background:var(--surface); color:var(--fg); box-shadow:0 0 0 1px var(--line) }
+.tile-accent{ background:linear-gradient(to bottom right,#cf8047,#97501f); color:#fff }
+.tile-light{ background:var(--invert-bg); color:var(--invert-fg); font-size:2.25rem }
+.tile-ghost{ background:rgba(255,255,255,.03); color:rgba(244,243,241,.3) }
+@media (min-width:640px){
+  .band ul{ flex-direction:row; gap:1rem; padding:2.5rem 2rem }
+  .band .tile{ height:10rem; font-size:2.25rem }
+  .tile-light{ font-size:3rem }
+}
+
+/* ============================================================
+   성과 (#works) — 반전 라이트 카드
+   ============================================================ */
+.sec{ background:var(--bg) }
+.works-inner{ padding:2.5rem 1.25rem 5rem }
+.works-head{ display:flex; flex-direction:column; align-items:center; gap:1.25rem; text-align:center }
+.works-h2{ font-size:2.25rem; font-weight:600; letter-spacing:-.03em; width:fit-content; margin-inline:auto }
+.works-grid{ margin-top:3rem; display:grid; grid-template-columns:1fr; gap:1.5rem }
+.work-card{
+  position:relative; min-height:22rem; overflow:hidden;
+  border-radius:var(--radius-card); background:var(--invert-bg);
+  padding:1.5rem; color:var(--invert-fg);
+  box-shadow:0 0 0 1px rgba(17,17,17,.08), 0 1.5rem 3.5rem rgba(0,0,0,.5);
+}
+.work-meta{
+  position:relative; z-index:2;
+  display:flex; align-items:flex-start; justify-content:space-between; gap:1rem;
+  font-size:.75rem; text-transform:uppercase; letter-spacing:.025em; color:rgba(17,17,17,.45);
+}
+.work-idx{
+  width:2.75rem; height:2.75rem; flex:none; display:grid; place-items:center;
+  border-radius:var(--radius-pill); background:rgba(17,17,17,.04);
+  box-shadow:0 0 0 1px rgba(17,17,17,.12);
+  font-size:.75rem; font-weight:500; color:rgba(17,17,17,.5);
+  font-variant-numeric:tabular-nums;
+}
+.work-wm{
+  position:absolute; inset:0; display:grid; place-items:center; pointer-events:none; z-index:0;
+  font-size:4.5rem; font-weight:700; letter-spacing:-.03em; color:rgba(17,17,17,.08);
+}
+.work-body{ position:absolute; inset-inline:1.5rem; bottom:1.5rem; z-index:2 }
+.work-body h3{ font-size:1.5rem; font-weight:600; letter-spacing:-.02em }
+.work-body p{ margin-top:.5rem; max-width:28rem; font-size:.875rem; line-height:1.6; color:rgba(17,17,17,.6) }
+.work-tags{ margin-top:1.25rem; display:flex; flex-wrap:wrap; gap:.5rem }
+@media (min-width:640px){
+  .works-inner{ padding:2.5rem 2rem 5rem }
+  .works-h2{ font-size:3rem }
+  .work-card{ min-height:26rem; padding:2rem }
+  .work-body{ inset-inline:2rem; bottom:2rem }
+  .work-body h3{ font-size:1.875rem }
+}
+@media (min-width:768px){ .works-grid{ grid-template-columns:repeat(2,1fr) } }
+@media (min-width:1024px){ .works-inner{ padding-bottom:7rem } }
+
+/* ============================================================
+   경력 / 역량 — 행 리스트
+   ============================================================ */
+.rows-inner{ padding:5rem 1.25rem }
+.rows-h2{
+  margin:1.25rem 0 3rem; max-width:20ch;
+  font-size:2.25rem; font-weight:600; letter-spacing:-.03em;
+}
+.row-li{ border-top:1px solid var(--line) }
+.row-li:first-child{ border-top:0 }
+.row{
+  display:flex; align-items:baseline; flex-wrap:wrap; gap:.5rem 1rem;
+  border-radius:var(--radius-card-sm);
+  padding:1.5rem; background:rgba(255,255,255,0);
+}
+.row-idx{
+  width:1.75rem; flex:none; font-size:.875rem; font-weight:500;
+  color:var(--subtle); font-variant-numeric:tabular-nums;
+}
+.row-main{ flex:1 1 14rem; min-width:0 }
+.row-title{ font-size:1.5rem; font-weight:500; letter-spacing:-.02em }
+.row-sub{ margin-top:.5rem; font-size:.8125rem; color:var(--subtle); line-height:1.55 }
+.row-meta{
+  flex:0 1 20rem; margin-left:auto;
+  font-size:.875rem; line-height:1.6; color:var(--muted);
+}
+.row-note{
+  display:flex; gap:1rem; padding:.875rem 1.5rem;
+  font-size:.75rem; color:var(--subtle); line-height:1.6;
+}
+@media (min-width:640px){
+  .rows-inner{ padding:5rem 2rem }
+  .rows-h2{ margin-bottom:3.5rem; font-size:3rem }
+  .row{ gap:.5rem 1.5rem; padding:2rem 1.5rem }
+  .row-idx{ width:2.5rem }
+  .row-title{ font-size:1.875rem }
+}
+@media (min-width:1024px){
+  .rows-inner{ padding-block:7rem }
+  .row-title{ font-size:2.25rem }
+  .row-meta{ flex:0 0 20rem }
+  .career .row-meta{ text-align:right }
+}
+
+/* ============================================================
+   Stats — 라이트 반전 패널
+   ============================================================ */
+.stats-inner{ padding:0 1.25rem 5rem }
+.stats-panel{
+  border-radius:var(--radius-card); background:var(--invert-bg); color:var(--invert-fg);
+  padding:3rem 1.5rem;
+  box-shadow:0 1.5rem 4rem rgba(0,0,0,.5);
+}
+.stats-h2{ margin-top:1rem; max-width:20ch; font-size:1.875rem; font-weight:600; letter-spacing:-.02em }
+.stats-grid{
+  margin-top:3.5rem; display:grid; grid-template-columns:repeat(2,1fr);
+  column-gap:2rem; row-gap:3rem;
+}
+.stat-num{ font-size:3rem; font-weight:600; letter-spacing:-.03em; font-variant-numeric:tabular-nums }
+.stat-num .suffix{ font-size:.6em; margin-left:.08em; color:#97501f }
+.stat-label{ margin-top:.75rem; font-size:.875rem; line-height:1.5; color:rgba(17,17,17,.55) }
+@media (min-width:640px){
+  .stats-inner{ padding:0 2rem 5rem }
+  .stats-panel{ padding:4rem 2rem }
+  .stat-num{ font-size:3.75rem }
+}
+@media (min-width:768px){
+  .stats-panel{ padding-inline:4rem }
+  .stats-h2{ font-size:2.25rem }
+  .stat-num{ font-size:4.5rem }
+}
+@media (min-width:1024px){
+  .stats-inner{ padding-bottom:7rem }
+  .stats-grid{ grid-template-columns:repeat(4,1fr) }
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer{
+  position:relative; overflow:hidden;
+  border-top:1px solid var(--line);
+  background:#0a0a0a; color:var(--fg);
+}
+.footer-inner{ position:relative; z-index:10; padding:5rem 1.25rem 2.5rem }
+.footer-cta{
+  display:flex; flex-direction:column; gap:2rem;
+  border-bottom:1px solid var(--line); padding-bottom:4rem;
+}
+.footer-h2{ max-width:18ch; font-size:2.25rem; font-weight:600; letter-spacing:-.03em; line-height:1.15 }
+.footer-cols{ display:grid; grid-template-columns:1fr; gap:3rem; padding-block:4rem }
+.footer-brand{ display:flex; align-items:center; gap:.5rem; font-size:1.125rem; font-weight:600 }
+.footer-brand .icon{ font-size:1.25rem; color:var(--accent) }
+.footer-tag{ margin-top:1rem; max-width:20rem; font-size:.875rem; line-height:1.6; color:var(--muted) }
+.footer-col h3{
+  font-size:.75rem; font-weight:500; text-transform:uppercase; letter-spacing:.025em; color:var(--subtle);
+}
+.footer-col ul{ margin-top:1.25rem; display:flex; flex-direction:column; gap:.75rem; font-size:.875rem }
+.footer-legal{
+  display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:1rem;
+  border-top:1px solid var(--line); padding-top:2rem;
+  font-size:.75rem; color:var(--subtle); text-align:center;
+}
+.footer-legal .right{ display:flex; gap:1.5rem }
+.footer-wm{
+  position:absolute; inset-inline:0; bottom:-1.5rem; z-index:0;
+  color:rgba(255,255,255,.04);
+}
+@media (min-width:640px){
+  .footer-inner{ padding:5rem 2rem 2.5rem }
+  .footer-h2{ font-size:3rem }
+  .footer-legal{ flex-direction:row; text-align:left }
+}
+@media (min-width:768px){
+  .footer-cols{ grid-template-columns:1.4fr 1fr 1fr }
+  .footer-h2{ font-size:3.75rem }
+}
+@media (min-width:1024px){
+  .footer-inner{ padding-top:6rem }
+  .footer-cta{ flex-direction:row; align-items:flex-end; justify-content:space-between }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+
+<!-- ========================= PageLoader ========================= -->
+<div id="loader" role="status" aria-live="polite">
+  <div class="loader-center">
+    <div class="loader-brand">
+      <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>
+      <span>Henry Lim</span>
+    </div>
+    <p class="loader-tag">임현택 — 게임 라이브 기획·사업 PM.</p>
+  </div>
+  <div class="loader-progress">
+    <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+    <div class="loader-meta">
+      <span>Loading</span>
+      <span class="loader-count" id="loaderCount">000</span>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= Header ========================= -->
+<header class="site-header">
+  <div class="shell header-inner" data-reveal data-gate="ready" data-delay="150" style="--ry:-14px">
+    <a class="brand" href="#home" data-scroll="home">
+      <span>
+        <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>
+        Henry Lim
+      </span>
+    </a>
+
+    <nav class="nav-main" aria-label="주요">
+      <ul>
+        <li><a href="#home" data-scroll="home" aria-current="page"><span>Home</span></a></li>
+        <li><a href="#works" data-scroll="works"><span>성과</span></a></li>
+        <li><a href="#career" data-scroll="career"><span>경력</span></a></li>
+        <li><a href="#skills" data-scroll="skills"><span>역량</span></a></li>
+        <li><a href="mailto:bluedaylol80@gmail.com"><span>연락</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="header-right">
+      <div class="clock-chip">
+        <span class="lbl">Local time</span>
+        <span class="time" id="clockTime">9:41am</span>
+        <span class="dot">•</span>
+        <span class="date" id="clockDate">12 March, 2026</span>
+      </div>
+      <a class="pill-btn v-outline header-cta" href="mailto:bluedaylol80@gmail.com">
+        <span class="pill">연락</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ========================= Hero ========================= -->
+<section id="home">
+  <div class="hero-base" aria-hidden="true"></div>
+  <div class="hero-spot" id="heroSpot" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="hero-vignette" aria-hidden="true"></div>
+  <div class="watermark hero-watermark" data-reveal data-gate="ready" data-delay="300" style="--ry:20px" aria-hidden="true">HENRY LIM</div>
+
+  <div class="shell hero-grid">
+    <div class="hero-left">
+      <p class="eyebrow" data-reveal data-gate="ready" data-delay="200" style="--ry:10px">Game Live-ops · Business PM</p>
+
+      <h1 class="hero-h1 lines" data-reveal data-gate="ready" data-delay="250" data-stagger="120">
+        <span class="line"><i>19년, 10개 회사.</i></span>
+        <span class="line"><i>라이브 서비스의</i></span>
+        <span class="line"><i>처음부터 끝까지.</i></span>
+      </h1>
+
+      <p class="hero-sub words" data-reveal data-gate="ready" data-delay="650" data-words>임현택 — 게임 라이브 기획·사업 PM. 런칭, 글로벌 소프트런칭, 그리고 서비스 종료까지 전 주기를 직접 운영했습니다.</p>
+
+      <div class="hero-cta" data-reveal data-gate="ready" data-delay="750">
+        <a class="pill-btn v-solid" href="#works" data-scroll="works" data-arrow="right">
+          <span class="pill">
+            성과 보기
+            <span class="pill-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </span>
+        </a>
+        <a class="pill-btn v-outline" href="mailto:bluedaylol80@gmail.com" data-arrow="up-right">
+          <span class="pill">
+            이메일 보내기
+            <span class="pill-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <!-- HeroCard 캐러셀 -->
+      <div class="hero-card" data-reveal data-gate="ready" data-delay="400" style="--ry:16px;--rsc:.96">
+        <div class="hero-card-row" id="heroCard" role="button" tabindex="0" aria-label="다음 항목 보기">
+          <div class="hero-card-tile">
+            <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>
+          </div>
+          <div class="hero-card-panel">
+            <div class="hero-card-slot" id="hcSlot">
+              <div class="hc-item" data-state="in">
+                <p class="hc-cap">LIVE OPS</p>
+                <p class="hc-title">런칭부터 종료까지, 전 주기.</p>
+              </div>
+              <div class="hc-item" data-state="below">
+                <p class="hc-cap">GLOBAL</p>
+                <p class="hc-title">소프트런칭 — 호주·동남아·북미·일본.</p>
+              </div>
+              <div class="hc-item" data-state="below">
+                <p class="hc-cap">K-POP IP</p>
+                <p class="hc-title">SuperStar 시리즈 12종 라이브.</p>
+              </div>
+            </div>
+            <div class="hero-card-foot">
+              <div class="hc-dots" id="hcDots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+              <div class="hc-nav">
+                <button type="button" class="prev" aria-label="이전 항목"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+                <button type="button" class="next" aria-label="다음 항목"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 회사 그리드 -->
+      <div class="partners" data-reveal data-gate="ready" data-delay="550" style="--ry:14px">
+        <p class="partners-label">19년을 함께한 회사들</p>
+        <ul>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>넥슨</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>네오위즈</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>넷마블 블루</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>NHN</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>웹젠</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>달콤소프트</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>원더피플</span></li>
+          <li><span><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>스카이피플</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell hero-status" data-reveal data-gate="ready" data-delay="900" style="--ry:0px">
+    <span>웹젠 2006 → 달콤소프트 2026</span>
+    <span class="mid">Seoul, Korea</span>
+    <span class="right">Scroll to explore <span aria-hidden="true">↓</span></span>
+  </div>
+</section>
+
+<!-- ========================= CreateBand ========================= -->
+<section class="sec band" aria-label="라이브 서비스 사이클">
+  <ul class="shell">
+    <li data-reveal data-delay="0" style="--ry:28px"><div class="tile tile-surface">Launch</div></li>
+    <li data-reveal data-delay="120" style="--ry:28px"><div class="tile tile-accent">Operate</div></li>
+    <li data-reveal data-delay="240" style="--ry:28px"><div class="tile tile-light" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></li>
+    <li data-reveal data-delay="360" style="--ry:28px"><div class="tile tile-ghost">Handover</div></li>
+  </ul>
+</section>
+
+<!-- ========================= 성과 ========================= -->
+<section class="sec" id="works">
+  <div class="shell works-inner">
+    <div class="works-head">
+      <p class="eyebrow eyebrow--boxed" data-reveal>Selected Results</p>
+      <h2 class="works-h2 lines" data-reveal data-delay="120"><span class="line"><i>숫자가 남은 프로젝트</i></span></h2>
+    </div>
+
+    <ul class="works-grid">
+      <li data-reveal data-delay="0" style="--ry:48px">
+        <article class="work-card">
+          <div class="work-meta">
+            <span>넥슨 — 부팀장</span>
+            <span class="work-idx" aria-hidden="true">01</span>
+          </div>
+          <div class="work-wm" aria-hidden="true">183억</div>
+          <div class="work-body">
+            <h3>린</h3>
+            <p>앱스토어·구글플레이 매출 3위. 매출 183억.</p>
+            <div class="work-tags">
+              <span class="tag">라이브 사업</span>
+              <span class="tag">FGT·사내테스트</span>
+              <span class="tag">G-star·유저 간담회</span>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <li data-reveal data-delay="90" style="--ry:48px">
+        <article class="work-card">
+          <div class="work-meta">
+            <span>넥슨 — 팀장</span>
+            <span class="work-idx" aria-hidden="true">02</span>
+          </div>
+          <div class="work-wm" aria-hidden="true">98억</div>
+          <div class="work-body">
+            <h3>카오스크로니클</h3>
+            <p>한국 앱스토어 매출 7위 · 구글 23위. 미국 매출 98억, iOS·구글 피처드. 5개국 소프트런칭 후 글로벌.</p>
+            <div class="work-tags">
+              <span class="tag">글로벌 런칭</span>
+              <span class="tag">라이브 운영</span>
+              <span class="tag">서비스 종료 운영</span>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <li data-reveal data-delay="180" style="--ry:48px">
+        <article class="work-card">
+          <div class="work-meta">
+            <span>넥슨 — 메인 PM</span>
+            <span class="work-idx" aria-hidden="true">03</span>
+          </div>
+          <div class="work-wm" aria-hidden="true">×5</div>
+          <div class="work-body">
+            <h3>영웅의 군단</h3>
+            <p>글로벌 서비스 담당 이후 기존 매출 대비 5배.</p>
+            <div class="work-tags">
+              <span class="tag">글로벌 서비스</span>
+              <span class="tag">매출 성장</span>
+            </div>
+          </div>
+        </article>
+      </li>
+
+      <li data-reveal data-delay="270" style="--ry:48px">
+        <article class="work-card">
+          <div class="work-meta">
+            <span>원더피플 — 사업 파트장</span>
+            <span class="work-idx" aria-hidden="true">04</span>
+          </div>
+          <div class="work-wm" aria-hidden="true">33만+</div>
+          <div class="work-body">
+            <h3>나이트워커</h3>
+            <p>한국 신규 33만+, DAU 피크 6.3만, D+1 리텐션 평균 약 50%.</p>
+            <div class="work-tags">
+              <span class="tag">퍼블리싱 연동</span>
+              <span class="tag">지표 관리</span>
+              <span class="tag">외주 계약·프로세스</span>
+            </div>
+          </div>
+        </article>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================= 경력 ========================= -->
+<section class="sec career" id="career">
+  <div class="shell rows-inner">
+    <p class="eyebrow" data-reveal>Career</p>
+    <h2 class="rows-h2 lines" data-reveal data-delay="120"><span class="line"><i>10개 회사, 19년의 기록</i></span></h2>
+
+    <ul>
+      <li class="row-li" data-reveal data-delay="0" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">01</span>
+          <div class="row-main">
+            <h3 class="row-title">달콤소프트</h3>
+            <p class="row-sub">SuperStar 시리즈 12종 (K-pop IP)</p>
+          </div>
+          <p class="row-meta">라이브기획팀 팀장 · 2024.10 – 2026.07</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="80" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">02</span>
+          <div class="row-main">
+            <h3 class="row-title">원더피플·에이스톰</h3>
+            <p class="row-sub">나이트워커, 슈퍼피플</p>
+          </div>
+          <p class="row-meta">사업팀 파트장 · 2022.02 – 2024.04</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="160" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">03</span>
+          <div class="row-main">
+            <h3 class="row-title">네오위즈</h3>
+            <p class="row-sub">마스터 오브 나이츠</p>
+          </div>
+          <p class="row-meta">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="240" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">04</span>
+          <div class="row-main">
+            <h3 class="row-title">스카이피플</h3>
+            <p class="row-sub">Five Stars</p>
+          </div>
+          <p class="row-meta">사업팀 팀장 · 2020.07 – 2021.02</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="320" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">05</span>
+          <div class="row-main">
+            <h3 class="row-title">넵튠 레전드</h3>
+            <p class="row-sub">Shadow Seven</p>
+          </div>
+          <p class="row-meta">스튜디오 사업PM · 2019.10 – 2020.04</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="400" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">06</span>
+          <div class="row-main">
+            <h3 class="row-title">넥슨 코리아</h3>
+            <p class="row-sub">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
+          </div>
+          <p class="row-meta">모바일사업실 팀장 · 2015.07 – 2019.10</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="480" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">07</span>
+          <div class="row-main">
+            <h3 class="row-title">넷마블 블루</h3>
+            <p class="row-sub">KON</p>
+          </div>
+          <p class="row-meta">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="560" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">08</span>
+          <div class="row-main">
+            <h3 class="row-title">소프트닉스</h3>
+            <p class="row-sub">NTD · 라키온2 · 그랑에이지</p>
+          </div>
+          <p class="row-meta">전략사업팀 사업PM · 2011.07 – 2015.02</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="640" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">09</span>
+          <div class="row-main">
+            <h3 class="row-title">NHN Service</h3>
+            <p class="row-sub">Tera 웹운영 · 아틀란티카 · R2</p>
+          </div>
+          <p class="row-meta">한게임운영실 파트장 · 2008.05 – 2011.07</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="700" style="--ry:24px">
+        <div class="row-note">
+          <span aria-hidden="true">—</span>
+          <span>※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</span>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="760" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">10</span>
+          <div class="row-main">
+            <h3 class="row-title">웹젠</h3>
+            <p class="row-sub">SUN 온라인</p>
+          </div>
+          <p class="row-meta">SUN 운영팀 · 2006.04 – 2007.10</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================= 역량 ========================= -->
+<section class="sec skills" id="skills">
+  <div class="shell rows-inner">
+    <p class="eyebrow" data-reveal>What I do</p>
+    <h2 class="rows-h2 lines" data-reveal data-delay="120"><span class="line"><i>라이브 서비스를 굴리는 네 가지 일</i></span></h2>
+
+    <ul>
+      <li class="row-li" data-reveal data-delay="0" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">01</span>
+          <div class="row-main"><h3 class="row-title">사업·계약·정산</h3></div>
+          <p class="row-meta">QA 외주 정산·계약, 중국 라이선스 계약 검토, SM 음원 정산 자동화, OST 제작·발매.</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="80" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">02</span>
+          <div class="row-main"><h3 class="row-title">조직 셋업·채용</h3></div>
+          <p class="row-meta">기획·QA·CS 리크루팅, 사업·운영 조직 셋팅, 수습 평가안 설계.</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="160" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">03</span>
+          <div class="row-main"><h3 class="row-title">검증·리서치</h3></div>
+          <p class="row-meta">FGT·FGI·사내테스트 운영, 타사 유료화 분석 (던파·마비노기·테라·아이온·와우).</p>
+        </div>
+      </li>
+      <li class="row-li" data-reveal data-delay="240" style="--ry:24px">
+        <div class="row">
+          <span class="row-idx">04</span>
+          <div class="row-main"><h3 class="row-title">퍼블리싱 기술 연동</h3></div>
+          <p class="row-meta">유료 재화 구매·쿠폰 시스템 연동, 서버 선택 UI·플로우 기획.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ========================= Stats ========================= -->
+<section class="sec" aria-label="숫자로 남긴 기록">
+  <div class="shell stats-inner">
+    <div class="stats-panel" data-reveal style="--ry:40px;--rsc:.99">
+      <p class="eyebrow eyebrow--ink">By the numbers</p>
+      <h2 class="stats-h2 lines" data-reveal data-delay="120"><span class="line"><i>말이 아니라 숫자로 남긴 기록</i></span></h2>
+      <ul class="stats-grid">
+        <li data-reveal data-delay="0" style="--ry:20px">
+          <p class="stat-num"><span class="counter" data-to="19">0</span><span class="suffix">년</span></p>
+          <p class="stat-label">총 경력 (이력서 기준)</p>
+        </li>
+        <li data-reveal data-delay="90" style="--ry:20px">
+          <p class="stat-num"><span class="counter" data-to="10">0</span><span class="suffix">개</span></p>
+          <p class="stat-label">함께한 회사</p>
+        </li>
+        <li data-reveal data-delay="180" style="--ry:20px">
+          <p class="stat-num"><span class="counter" data-to="183">0</span><span class="suffix">억</span></p>
+          <p class="stat-label">린 — 최고 매출 (앱스토어·구글 3위)</p>
+        </li>
+        <li data-reveal data-delay="270" style="--ry:20px">
+          <p class="stat-num"><span class="counter" data-to="5">0</span><span class="suffix">배</span></p>
+          <p class="stat-label">영웅의 군단 글로벌 — 기존 매출 대비</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================= Footer ========================= -->
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <div class="footer-cta">
+      <h2 class="footer-h2 lines" data-reveal data-stagger="100">
+        <span class="line"><i>이력서와 경력기술서는</i></span>
+        <span class="line"><i>요청 주시면 보내드립니다.</i></span>
+      </h2>
+      <div data-reveal data-delay="120">
+        <a class="pill-btn v-solid" href="mailto:bluedaylol80@gmail.com" data-arrow="up-right">
+          <span class="pill">
+            이메일 보내기
+            <span class="pill-badge"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+          </span>
+        </a>
+      </div>
+    </div>
+
+    <div class="footer-cols">
+      <div>
+        <div class="footer-brand">
+          <svg class="icon" viewBox="0 0 48 48" aria-hidden="true"><path fill="currentColor" d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>
+          Henry Lim
+        </div>
+        <p class="footer-tag">게임 라이브 서비스 기획·사업 PM. 런칭부터 종료까지, 19년.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Site</h3>
+        <ul>
+          <li><a class="alink" href="#works" data-scroll="works"><span>성과</span></a></li>
+          <li><a class="alink" href="#career" data-scroll="career"><span>경력</span></a></li>
+          <li><a class="alink" href="#skills" data-scroll="skills"><span>역량</span></a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Elsewhere</h3>
+        <ul>
+          <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-legal">
+      <span>© 2026 Henry Lim (임현택)</span>
+      <span class="right">본 사이트의 모든 수치는 공개 이력서 기준입니다.</span>
+    </div>
+  </div>
+  <div class="watermark footer-wm" aria-hidden="true">HENRY LIM</div>
+</footer>
+
+<script type="importmap">{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }</script>
+<script type="module">
+/* ============================================================
+   0. 유틸
+   ============================================================ */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canHover = matchMedia('(hover:hover) and (pointer:fine)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+/* ============================================================
+   1. rem 어댑티브 그리드 (1920px 초과 스케일업)
+   ============================================================ */
+function applyAdaptiveGrid(){
+  const FONT_BASE = 16, baseWidth = 1920, coef = 0.6666;
+  const w = window.innerWidth;
+  const widthReduction = ((baseWidth - w) / baseWidth) * 100;
+  const size = FONT_BASE - (FONT_BASE * (widthReduction * coef)) / 100;
+  if (size > FONT_BASE) document.documentElement.style.fontSize = size + 'px';
+  else document.documentElement.style.removeProperty('font-size');
+}
+applyAdaptiveGrid();
+addEventListener('resize', applyAdaptiveGrid);
+
+/* ============================================================
+   2. Lenis 스무스 스크롤 + 스크롤 락
+   ============================================================ */
+window.scrollTo(0, 0);
+/* CDN 실패·지연이 페이지 전체를 막지 않도록 비차단 로드 */
+let lenis = null;
+if (!reduceMotion) {
+  import('lenis').then(mod => {
+    const Lenis = mod.default || mod.Lenis;
+    lenis = new Lenis({ smoothWheel: true });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+  }).catch(() => { lenis = null; });
+}
+
+let scrollEnabled = true;
+function stopScroll(){
+  if (lenis) lenis.stop();
+  const h = document.documentElement;
+  h.style.position = 'relative'; h.style.overflow = 'hidden'; h.style.height = '100%';
+}
+function startScroll(){
+  if (lenis) lenis.start();
+  const h = document.documentElement;
+  h.style.removeProperty('position'); h.style.removeProperty('overflow'); h.style.removeProperty('height');
+}
+function scrollToId(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (lenis) { lenis.scrollTo(el, { duration: 1.1 }); return; }
+  const top = el.getBoundingClientRect().top + window.pageYOffset;
+  scrollEnabled = false;
+  setTimeout(() => window.scrollTo({ top, behavior: 'smooth' }), 50);
+  setTimeout(() => { scrollEnabled = true; }, 100);
+}
+$$('[data-scroll]').forEach(a => {
+  a.addEventListener('click', (e) => { e.preventDefault(); scrollToId(a.dataset.scroll); });
+});
+
+/* ============================================================
+   3. 스프링 헬퍼 (react-spring 대체)
+   ============================================================ */
+function makeSpring(tension, friction, apply){
+  let x = 0, v = 0, target = 0, rafId = null;
+  const dt = 1 / 60;
+  function step(){
+    rafId = null;
+    const a = tension * (target - x) - friction * v;
+    v += a * dt; x += v * dt;
+    if (Math.abs(target - x) < 0.0006 && Math.abs(v) < 0.0006) { x = target; v = 0; apply(x); return; }
+    apply(x);
+    rafId = requestAnimationFrame(step);
+  }
+  return { to(t){ target = t; if (rafId === null) rafId = requestAnimationFrame(step); } };
+}
+function hoverSpring(trigger, tension, friction, render){
+  if (!canHover || reduceMotion) return;
+  const sp = makeSpring(tension, friction, render);
+  trigger.addEventListener('mouseenter', () => sp.to(1));
+  trigger.addEventListener('mouseleave', () => sp.to(0));
+  trigger.addEventListener('focusin', () => sp.to(1));
+  trigger.addEventListener('focusout', () => sp.to(0));
+}
+
+/* --- 브랜드 / 헤더 --- */
+$$('.brand').forEach(b => {
+  const inner = b.querySelector('span');
+  hoverSpring(b, 320, 18, p => { inner.style.transform = `scale(${1 + 0.04 * p})`; });
+});
+$$('.nav-main a').forEach(a => {
+  const s = a.querySelector('span');
+  const base = a.hasAttribute('aria-current') ? 1 : 0.7;
+  hoverSpring(a, 320, 22, p => {
+    s.style.transform = `translateY(${-2 * p}px)`;
+    s.style.opacity = base + (1 - base) * p;
+  });
+});
+
+/* --- PillButton --- */
+$$('.pill-btn').forEach(btn => {
+  const pill = btn.querySelector('.pill');
+  const icon = btn.querySelector('.pill-badge svg');
+  const up = btn.dataset.arrow === 'up-right';
+  hoverSpring(btn, 320, 18, p => {
+    pill.style.transform = `scale(${1 + 0.04 * p})`;
+    if (icon) icon.style.transform = up ? `translate(${2 * p}px, ${-2 * p}px)` : `translate(${3 * p}px, 0)`;
+  });
+});
+
+/* --- 회사 그리드 --- */
+$$('.partners li').forEach(li => {
+  const s = li.querySelector('span');
+  hoverSpring(li, 320, 20, p => {
+    s.style.transform = `translateY(${-2 * p}px)`;
+    s.style.opacity = 0.7 + 0.3 * p;
+  });
+});
+
+/* --- CreateBand 타일 --- */
+$$('.band .tile').forEach(t => {
+  hoverSpring(t, 300, 18, p => { t.style.transform = `scale(${1 + 0.03 * p})`; });
+});
+
+/* --- 성과 카드 --- */
+$$('.work-card').forEach(card => {
+  const idx = card.querySelector('.work-idx');
+  hoverSpring(card, 260, 22, p => {
+    card.style.transform = `translateY(${-8 * p}px) scale(${1 + 0.012 * p})`;
+    if (idx) {
+      idx.style.transform = `scale(${1 + 0.08 * p})`;
+      idx.style.color = `rgba(17,17,17,${0.5 + 0.4 * p})`;
+    }
+  });
+});
+
+/* --- 경력·역량 행 hover fill --- */
+$$('.row').forEach(row => {
+  hoverSpring(row, 240, 26, p => {
+    row.style.background = `rgba(255,255,255,${0.04 * p})`;
+    row.style.paddingLeft = (1.5 + 0.5 * p) + 'rem';
+    row.style.paddingRight = (1.5 - 0.25 * p) + 'rem';
+  });
+});
+
+/* --- 푸터 링크 --- */
+$$('.alink').forEach(a => {
+  const s = a.querySelector('span');
+  hoverSpring(a, 320, 22, p => {
+    s.style.transform = `translateX(${4 * p}px)`;
+    s.style.opacity = 0.65 + 0.35 * p;
+  });
+});
+
+/* ============================================================
+   4. 텍스트 리빌 (라인 / 워드) + 스크롤 리빌
+   ============================================================ */
+$$('.lines').forEach(el => {
+  const stagger = Number(el.dataset.stagger || 0);
+  $$('.line > i', el).forEach((i, n) => { i.style.setProperty('--d', (n * stagger) + 'ms'); });
+});
+
+$$('[data-words]').forEach(el => {
+  const words = el.textContent.trim().split(/\s+/);
+  el.textContent = '';
+  words.forEach((w, n) => {
+    const span = document.createElement('span');
+    span.className = 'w';
+    span.style.setProperty('--d', (n * 35) + 'ms');
+    span.textContent = w;
+    el.appendChild(span);
+    if (n < words.length - 1) el.appendChild(document.createTextNode(' '));
+  });
+});
+
+let ready = false;
+const gateQueue = [];
+function play(el){
+  const d = Number(el.dataset.delay || 0);
+  if (d > 0) setTimeout(() => el.classList.add('is-in'), d);
+  else el.classList.add('is-in');
+}
+function trigger(el){
+  if (el.dataset.gate === 'ready' && !ready) { gateQueue.push(el); return; }
+  play(el);
+}
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    io.unobserve(en.target);
+    trigger(en.target);
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+$$('[data-reveal]').forEach(el => io.observe(el));
+
+function flushGate(){
+  ready = true;
+  while (gateQueue.length) play(gateQueue.shift());
+}
+
+/* ============================================================
+   5. PageLoader (000 → 100, 1300ms, easeInOutCubic)
+   ============================================================ */
+const loader = $('#loader');
+const loaderFill = $('#loaderFill');
+const loaderCount = $('#loaderCount');
+const FILL_MS = 1300;
+const easeInOutCubic = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+stopScroll();
+let loaderDone = false;
+function finishLoader(){
+  if (loaderDone) return;
+  loaderDone = true;
+  startScroll();
+  flushGate();
+  if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
+}
+const t0 = performance.now();
+function tickLoader(now){
+  const t = clamp((now - t0) / FILL_MS, 0, 1);
+  const p = Math.round(easeInOutCubic(t) * 100);
+  loaderFill.style.width = p + '%';
+  loaderCount.textContent = String(p).padStart(3, '0');
+  if (t < 1) { requestAnimationFrame(tickLoader); return; }
+  loader.classList.add('is-out');
+  loader.addEventListener('transitionend', finishLoader, { once: true });
+  setTimeout(finishLoader, 1100);
+}
+requestAnimationFrame(tickLoader);
+
+/* ============================================================
+   6. 라이브 시계 (헤더 칩)
+   ============================================================ */
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const clockTime = $('#clockTime'), clockDate = $('#clockDate');
+function tickClock(){
+  const d = new Date();
+  const h = d.getHours(), m = d.getMinutes();
+  const mer = h >= 12 ? 'pm' : 'am';
+  clockTime.textContent = `${h % 12 || 12}:${String(m).padStart(2, '0')}${mer}`;
+  clockDate.textContent = `${d.getDate()} ${MONTHS[d.getMonth()]}, ${d.getFullYear()}`;
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+/* ============================================================
+   7. 히어로 커서 스포트라이트
+   ============================================================ */
+const spot = $('#heroSpot');
+const hero = $('#home');
+if (spot && hero) {
+  const place = (x, y) => { spot.style.transform = `translate3d(${x - spot.offsetWidth / 2}px, ${y - spot.offsetHeight / 2}px, 0)`; };
+  const center = () => {
+    const r = hero.getBoundingClientRect();
+    place(r.width / 2, r.height * 0.42);
+  };
+  center();
+  addEventListener('resize', center);
+  if (!reduceMotion && canHover) {
+    let tx = 0, ty = 0, cx = null, cy = null, running = false;
+    const loop = () => {
+      cx += (tx - cx) * 0.09; cy += (ty - cy) * 0.09;
+      place(cx, cy);
+      if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) requestAnimationFrame(loop);
+      else running = false;
+    };
+    addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      if (e.clientY > r.bottom + 200) return;
+      tx = e.clientX - r.left; ty = e.clientY - r.top;
+      if (cx === null) { cx = tx; cy = ty; }
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    }, { passive: true });
+  }
+}
+
+/* ============================================================
+   8. HeroCard 캐러셀
+   ============================================================ */
+const hcItems = $$('#hcSlot .hc-item');
+const hcDots = $$('#hcDots i');
+let hcIndex = 0;
+function hcGo(step){
+  const n = hcItems.length;
+  const next = (hcIndex + step + n) % n;
+  hcItems[hcIndex].dataset.state = step > 0 ? 'above' : 'below';
+  hcItems[next].dataset.state = step > 0 ? 'below' : 'above';
+  requestAnimationFrame(() => requestAnimationFrame(() => { hcItems[next].dataset.state = 'in'; }));
+  hcDots.forEach((d, i) => d.classList.toggle('on', i === next));
+  hcIndex = next;
+}
+const heroCard = $('#heroCard');
+if (heroCard) {
+  heroCard.addEventListener('click', (e) => { if (!e.target.closest('.hc-nav')) hcGo(1); });
+  heroCard.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); hcGo(1); }
+  });
+  $('.hc-nav .prev').addEventListener('click', () => hcGo(-1));
+  $('.hc-nav .next').addEventListener('click', () => hcGo(1));
+}
+
+/* ============================================================
+   9. Stats 카운트업 (top bottom → center center)
+   ============================================================ */
+const counters = $$('.counter').map(el => ({ el, to: Number(el.dataset.to), last: -1 }));
+let lastCount = 0;
+function updateCounters(){
+  const now = performance.now();
+  if (now - lastCount < 30) return;
+  lastCount = now;
+  const vh = window.innerHeight;
+  counters.forEach(c => {
+    const r = c.el.getBoundingClientRect();
+    const startY = vh;
+    const endY = vh / 2 - r.height / 2;
+    const p = clamp((startY - r.top) / Math.max(startY - endY, 1), 0, 1);
+    const val = Math.round(p * c.to);
+    if (val !== c.last) { c.last = val; c.el.textContent = String(val); }
+  });
+}
+updateCounters();
+addEventListener('scroll', updateCounters, { passive: true });
+addEventListener('resize', updateCounters);
+</script>
+</body>
+</html>

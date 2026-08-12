@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년</title>
+<meta name="description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --bg:#ffffff; --fg:#111111; --ink:#0a0a0a;
+  --muted:#8d8d8d; --subtle:#b6b6b6;
+  --line:#e6e5e2; --surface:#f1f0ee; --surface-2:#e3e2df;
+  --accent:#b15f2c; --accent-from:#cf8047; --accent-to:#97501f;
+  --hero-from:#ecebe9; --hero-to:#c9c9c9;
+  --r-pill:9999px; --r-card:2rem; --r-card-sm:1.25rem; --r-control:.875rem;
+  --wm:13rem; --shell:88rem;
+  --e-line:cubic-bezier(.215,.61,.355,1);
+  --e-rise:cubic-bezier(.16,1,.3,1);
+  --e-hover:cubic-bezier(.34,1.56,.64,1);
+  --e-soft:cubic-bezier(.2,.8,.2,1);
+}
+
+/* ---------- reset / base ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+@media (max-width:1920px){html{font-size:0.833333vw}}
+@media (max-width:1440px){html{font-size:1.111111vw}}
+@media (max-width:1024px){html{font-size:1.5625vw}}
+@media (max-width:640px){html{font-size:4.444444vw}}
+body{background:var(--bg);color:var(--fg);font-family:'Pretendard Variable',Pretendard,'Onest',system-ui,sans-serif;overflow-x:hidden;word-break:keep-all}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+ul{list-style:none}
+img{display:block}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ic{width:1em;height:1em;display:block;flex:none}
+.sprite{position:absolute;width:0;height:0;overflow:hidden}
+
+/* ---------- utilities ---------- */
+.shell{max-width:var(--shell);margin-inline:auto}
+.px{padding-inline:1.25rem}
+@media (min-width:640px){.px{padding-inline:2rem}}
+.skip{position:absolute;left:-9999px}
+.skip:focus{position:fixed;left:1rem;top:1rem;z-index:60;border-radius:var(--r-control);background:var(--ink);padding:.5rem 1rem;font-size:.875rem;color:#fff}
+
+/* ---------- reveal ---------- */
+[data-reveal]{opacity:0;transform:translateY(var(--ry,16px)) scale(var(--rs,1));
+  transition:opacity .8s var(--e-rise),transform .8s var(--e-rise);transition-delay:var(--rd,0ms)}
+[data-reveal].is-in{opacity:1;transform:none}
+[data-lines] .line{display:block;overflow:hidden;padding-bottom:.14em;margin-bottom:-.14em}
+[data-lines] .line>span{display:block;transform:translateY(112%);opacity:0;
+  transition:transform .9s var(--e-line),opacity .9s var(--e-line);
+  transition-delay:calc(var(--rd,0ms) + var(--i,0) * var(--ls,0ms))}
+[data-lines].is-in .line>span{transform:none;opacity:1}
+
+/* ---------- components ---------- */
+.eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.7)}
+.eyebrow::before{content:"";width:.375rem;height:.375rem;border-radius:var(--r-pill);background:rgba(17,17,17,.5);flex:none}
+.eyebrow--light{color:rgba(255,255,255,.7)}
+.eyebrow--light::before{background:rgba(255,255,255,.6)}
+.eyebrow--ring{border:1px solid var(--line);border-radius:var(--r-pill);padding:.375rem 1rem}
+
+.pill{display:inline-block}
+.pill-in{display:inline-flex;align-items:center;gap:.75rem;border-radius:var(--r-pill);font-size:.875rem;font-weight:500;
+  transition:transform .38s var(--e-hover),background-color .3s var(--e-soft),border-color .3s var(--e-soft)}
+.pill--dark .pill-in{background:var(--ink);color:#fff}
+.pill--light .pill-in{background:var(--surface);color:var(--fg)}
+.pill--outline .pill-in{border:1px solid var(--line);background:transparent;color:var(--fg)}
+.pill--arrow .pill-in{padding:.375rem .375rem .375rem 1.5rem}
+.pill--plain .pill-in{padding:.875rem 1.75rem}
+.pill-badge{width:2.25rem;height:2.25rem;display:grid;place-items:center;border-radius:var(--r-pill);font-size:1rem;flex:none;
+  transition:transform .38s var(--e-hover)}
+.pill--dark .pill-badge{background:#fff;color:var(--ink)}
+.pill--light .pill-badge,.pill--outline .pill-badge{background:var(--ink);color:#fff}
+
+.tag{display:inline-flex;border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:var(--r-pill);padding:.5rem 1rem;font-size:.875rem;line-height:1}
+.alink{display:inline-flex}
+.alink>span{display:inline-flex;opacity:.65;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
+.wm{pointer-events:none;user-select:none;font-weight:700;line-height:1;letter-spacing:-.02em;font-size:var(--wm);text-align:center}
+@media (max-width:1024px){.wm{font-size:7rem}}
+@media (max-width:640px){.wm{font-size:3.5rem}}
+
+@media (hover:hover) and (pointer:fine){
+  .pill:hover .pill-in{transform:scale(1.04)}
+  .pill--arrow.pill--r:hover .pill-badge{transform:translate(3px,0)}
+  .pill--arrow.pill--ur:hover .pill-badge{transform:translate(2px,-2px)}
+  .pill--outline:hover .pill-in{border-color:rgba(17,17,17,.3)}
+  .alink:hover>span{transform:translateX(4px);opacity:1}
+  .alink--legal>span{opacity:.7}
+  .alink--legal:hover>span{transform:translateX(3px);opacity:1}
+}
+
+/* ---------- header ---------- */
+.hdr{position:absolute;inset-inline:0;top:0;z-index:50}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1.25rem}
+@media (min-width:640px){.hdr-in{padding-block:1.5rem}}
+.brand{display:inline-flex}
+.brand>span{display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:600;letter-spacing:-.01em;transition:transform .38s var(--e-hover)}
+.brand .ic{font-size:1.25rem;color:var(--accent)}
+.nav{display:none}
+@media (min-width:1024px){.nav{display:block}}
+.nav ul{display:flex;align-items:center;gap:2rem;font-size:.875rem;font-weight:500}
+.nav-b>span{display:inline-block;opacity:.8;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
+.hdr-r{display:flex;align-items:center;gap:.75rem}
+.clock{display:none}
+@media (min-width:768px){.clock{display:flex;align-items:center;gap:.75rem}}
+.clock{border:1px solid rgba(230,229,226,.8);background:rgba(255,255,255,.4);backdrop-filter:blur(4px);
+  border-radius:var(--r-control);padding:.5rem .75rem;font-size:.75rem;color:rgba(17,17,17,.7)}
+.clock-lb{color:rgba(17,17,17,.45)}
+.clock-t{min-width:3.5rem;font-variant-numeric:tabular-nums;font-weight:500;color:var(--fg)}
+.clock-sep{color:rgba(17,17,17,.3)}
+.clock-d{font-weight:500}
+.chip{border:1px solid rgba(230,229,226,.8);background:rgba(255,255,255,.4);backdrop-filter:blur(4px);
+  border-radius:var(--r-control);display:inline-flex;transition:background-color .3s var(--e-soft)}
+.chip>span{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;font-size:.75rem;font-weight:500;letter-spacing:.02em;
+  transition:transform .38s var(--e-hover)}
+.chip .ic{font-size:.875rem}
+@media (hover:hover) and (pointer:fine){
+  .brand:hover>span{transform:scale(1.04)}
+  .nav-b:hover>span{transform:translateY(-2px);opacity:1}
+  .chip:hover{background:rgba(255,255,255,.7)}
+  .chip:hover>span{transform:scale(1.05)}
+}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:0 0 var(--r-card) var(--r-card);background:var(--hero-to)}
+.hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,var(--hero-from) 0%,#e2e1de 42%,var(--hero-to) 100%)}
+.hero-noise{position:absolute;inset:0;z-index:0;opacity:.04;pointer-events:none;background-size:180px 180px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-wm{position:absolute;inset-inline:0;bottom:7rem;z-index:1;color:rgba(255,255,255,.5)}
+.hero-grid{position:relative;z-index:20;display:flex;flex-direction:column;gap:2rem;padding-block:7rem 5rem}
+@media (min-width:1024px){
+  .hero-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2.5rem;padding-block:9rem 7rem;min-height:100vh;min-height:100lvh}
+}
+.hero-l{display:flex;flex-direction:column;gap:1.75rem}
+@media (min-width:1024px){.hero-l{grid-column:span 7;justify-content:center}}
+.h1{max-width:20ch;font-size:2rem;font-weight:600;line-height:1.06;letter-spacing:-.03em}
+@media (min-width:640px){.h1{font-size:3rem}}
+@media (min-width:768px){.h1{font-size:3.75rem}}
+.hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
+@media (min-width:640px){.hero-sub{font-size:1.125rem}}
+.cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
+@media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end;justify-content:center}}
+
+.hcard{width:100%;max-width:24rem;border-radius:var(--r-card-sm);background:rgba(255,255,255,.7);padding:.5rem;
+  box-shadow:0 1px 2px rgba(17,17,17,.06),0 0 0 1px rgba(230,229,226,.7);backdrop-filter:blur(12px)}
+@media (min-width:1024px){.hcard{width:20rem}}
+.hcard-row{display:flex;align-items:stretch;gap:.5rem;cursor:pointer;border-radius:var(--r-control)}
+.hcard-tile{width:6rem;min-height:6rem;flex:none;display:grid;place-items:center;border-radius:var(--r-control);background:var(--ink);font-size:1.875rem;color:#fff}
+.hcard-tile .ic{color:var(--accent-from)}
+.hcard-panel{flex:1;min-width:0;border-radius:var(--r-control);background:rgba(241,240,238,.7);padding:.75rem;display:flex;flex-direction:column;justify-content:space-between;gap:.75rem}
+.hc-slot{position:relative;min-height:4.5rem}
+.hc-item{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .45s var(--e-soft),transform .45s var(--e-soft)}
+.hc-cap{font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(17,17,17,.45)}
+.hc-title{margin-top:.25rem;max-width:11rem;font-size:.875rem;font-weight:500;line-height:1.35}
+.hc-bot{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.hc-dots{display:flex;align-items:center;gap:.25rem}
+.hc-dots i{display:block;height:.25rem;width:.375rem;border-radius:var(--r-pill);background:rgba(17,17,17,.2);transition:all .3s var(--e-soft)}
+.hc-dots i.on{width:1rem;background:rgba(17,17,17,.7)}
+.hc-nav{display:flex;gap:.375rem}
+.hc-nav button{width:1.75rem;height:1.75rem;display:grid;place-items:center;border-radius:var(--r-pill);background:#fff;color:rgba(17,17,17,.7);
+  box-shadow:0 0 0 1px var(--line);font-size:.75rem;transition:color .3s var(--e-soft),transform .38s var(--e-hover)}
+.hc-nav .prev .ic{transform:rotate(180deg)}
+@media (hover:hover) and (pointer:fine){.hc-nav button:hover{color:var(--fg);transform:scale(1.08)}}
+
+.partners{width:100%;max-width:24rem}
+@media (min-width:1024px){.partners{width:20rem}}
+.partners-lb{margin-bottom:.75rem;font-size:.75rem;font-weight:500;color:rgba(17,17,17,.45)}
+@media (min-width:1024px){.partners-lb{text-align:right}}
+.partners ul{display:grid;grid-template-columns:repeat(2,1fr);column-gap:1rem;row-gap:.75rem}
+.partners li>span{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:rgba(17,17,17,.7);opacity:.75;
+  transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
+.partners .ic{font-size:.875rem;color:rgba(17,17,17,.4)}
+@media (hover:hover) and (pointer:fine){.partners li:hover>span{transform:translateY(-2px);opacity:1}}
+
+.hero-status{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+  border-top:1px solid rgba(17,17,17,.1);padding-block:1.25rem;font-size:.75rem;font-weight:500;letter-spacing:.02em;color:rgba(17,17,17,.6)}
+.hero-status .mid{display:none}
+@media (min-width:640px){.hero-status .mid{display:block}}
+.hero-status .right{display:inline-flex;align-items:center;gap:.5rem}
+
+/* ---------- band ---------- */
+.band ul{display:flex;flex-direction:column;gap:.75rem;padding-block:2.5rem}
+@media (min-width:640px){.band ul{flex-direction:row;gap:1rem}}
+.band li{flex:1}
+.band .tile{display:grid;place-items:center;height:6rem;border-radius:var(--r-pill);font-size:1.5rem;font-weight:500;letter-spacing:-.01em;
+  transition:transform .38s var(--e-hover)}
+@media (min-width:640px){.band .tile{height:10rem;font-size:2.25rem}}
+.tile--light{background:var(--surface);color:var(--fg)}
+.tile--accent{background:linear-gradient(to bottom right,var(--accent-from),var(--accent-to));color:#fff}
+.tile--dark{background:var(--ink);color:#fff}
+.tile--dark .ic{font-size:2.25rem}
+@media (min-width:640px){.tile--dark .ic{font-size:3rem}}
+.tile--ghost{background:rgba(241,240,238,.6);color:rgba(17,17,17,.35)}
+@media (hover:hover) and (pointer:fine){.band li:hover .tile{transform:scale(1.03)}}
+
+/* ---------- sections ---------- */
+.sec{background:var(--bg)}
+.h2{font-size:2rem;font-weight:600;letter-spacing:-.025em;line-height:1.18}
+@media (min-width:640px){.h2{font-size:3rem}}
+.center{text-align:center;display:flex;flex-direction:column;align-items:center}
+
+/* portfolio */
+.works-in{padding-block:2.5rem 5rem}
+@media (min-width:1024px){.works-in{padding-bottom:7rem}}
+.works-hd{margin-bottom:3rem;gap:1.25rem}
+.works-hd .h2{width:fit-content;max-width:100%}
+.cards{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media (min-width:768px){.cards{grid-template-columns:repeat(2,1fr)}}
+.card{position:relative;min-height:22rem;overflow:hidden;border-radius:var(--r-card);background:var(--ink);padding:1.5rem;color:#fff;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05);transition:transform .45s var(--e-hover)}
+@media (min-width:640px){.card{min-height:26rem;padding:2rem}}
+.card-meta{position:relative;z-index:2;font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.45)}
+.card-wm{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;user-select:none;
+  font-size:4.5rem;font-weight:700;letter-spacing:-.03em;color:rgba(255,255,255,.12)}
+@media (min-width:640px){.card-wm{font-size:6rem}}
+.card-bot{position:absolute;inset-inline:1.5rem;bottom:1.5rem;z-index:2}
+@media (min-width:640px){.card-bot{inset-inline:2rem;bottom:2rem}}
+.card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
+@media (min-width:640px){.card-bot h3{font-size:1.875rem}}
+.card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.55)}
+.card-tags{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.5rem}
+@media (hover:hover) and (pointer:fine){.cards li:hover .card{transform:translateY(-8px) scale(1.012)}}
+
+/* rows (career / skills) */
+.rows-in{padding-block:5rem}
+@media (min-width:1024px){.rows-in{padding-block:7rem}}
+.rows-hd .h2{margin:1.25rem 0 3rem;max-width:22ch}
+@media (min-width:640px){.rows-hd .h2{margin-bottom:3.5rem}}
+.row-li{border-top:1px solid var(--line)}
+.row-li:first-child{border-top:0}
+.row{display:flex;align-items:center;gap:1rem;border-radius:var(--r-card-sm);padding-block:1.5rem;padding-inline:1.5rem;
+  background:rgba(241,240,238,0);transition:background-color .4s var(--e-soft),padding .4s var(--e-soft)}
+@media (min-width:640px){.row{gap:1.5rem;padding-block:2rem}}
+.row-i{width:1.75rem;flex:none;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.4);font-variant-numeric:tabular-nums}
+@media (min-width:640px){.row-i{width:2.5rem}}
+.row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.375rem}
+.row-body h3{font-size:1.375rem;font-weight:500;letter-spacing:-.015em}
+@media (min-width:640px){.row-body h3{font-size:1.75rem}}
+@media (min-width:768px){.row-body h3{font-size:2rem}}
+.row-sub{font-size:.875rem;color:rgba(17,17,17,.55);line-height:1.5}
+.row-note{font-size:.875rem;color:rgba(17,17,17,.45);line-height:1.5}
+@media (min-width:1024px){
+  .row-body{flex-direction:row;align-items:baseline;gap:1.5rem}
+  .row-title{width:16rem;flex:none}
+  .row-note{flex:1;min-width:0}
+  .row-sub{width:19rem;flex:none;text-align:right;color:rgba(17,17,17,.65)}
+  .row-body>.row-note:last-child{flex:none;max-width:26rem;margin-left:auto}
+}
+.row-note--mobile-hide{display:none}
+@media (min-width:1024px){.row-note--mobile-hide{display:block}}
+.row-foot{padding:1rem 1.5rem;font-size:.75rem;color:rgba(17,17,17,.4);border-top:1px solid var(--line)}
+@media (hover:hover) and (pointer:fine){
+  .row:hover{background:rgba(241,240,238,1);padding-left:2rem;padding-right:1.25rem}
+}
+
+/* stats */
+.stats-in{padding-block:0 5rem}
+@media (min-width:1024px){.stats-in{padding-bottom:7rem}}
+.stats-panel{border-radius:var(--r-card);background:var(--ink);padding:3rem 1.5rem;color:#fff}
+@media (min-width:640px){.stats-panel{padding:4rem 2rem}}
+@media (min-width:768px){.stats-panel{padding-inline:4rem}}
+.stats-panel .h2{margin-top:1rem;max-width:22ch;font-size:1.875rem;font-weight:500;letter-spacing:-.015em}
+@media (min-width:768px){.stats-panel .h2{font-size:2.25rem}}
+.stats-grid{margin-top:3.5rem;display:grid;grid-template-columns:repeat(2,1fr);column-gap:2rem;row-gap:3rem}
+@media (min-width:1024px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-n{font-size:3rem;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+@media (min-width:640px){.stat-n{font-size:3.75rem}}
+@media (min-width:768px){.stat-n{font-size:4.5rem}}
+.stat-l{margin-top:.75rem;font-size:.875rem;line-height:1.5;color:rgba(255,255,255,.55)}
+
+/* footer */
+.ft{position:relative;overflow:hidden;border-radius:var(--r-card) var(--r-card) 0 0;background:var(--ink);color:#fff}
+.ft-in{position:relative;z-index:10;padding-block:5rem 2.5rem}
+@media (min-width:1024px){.ft-in{padding-top:6rem}}
+.ft-cta{display:flex;flex-direction:column;gap:2rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:4rem}
+@media (min-width:1024px){.ft-cta{flex-direction:row;align-items:flex-end;justify-content:space-between}}
+.ft-cta .h2{max-width:18ch;font-size:1.875rem}
+@media (min-width:640px){.ft-cta .h2{font-size:2.75rem}}
+@media (min-width:768px){.ft-cta .h2{font-size:3.25rem}}
+.ft-cols{display:grid;grid-template-columns:1fr;gap:3rem;padding-block:4rem}
+@media (min-width:768px){.ft-cols{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1024px){.ft-cols{grid-template-columns:repeat(4,1fr)}.ft-brand{grid-column:span 2}}
+.ft-brand .name{display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:600}
+.ft-brand .name .ic{font-size:1.25rem}
+.ft-brand p{margin-top:1rem;max-width:22rem;font-size:.875rem;line-height:1.6;color:rgba(255,255,255,.55)}
+.ft-col h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.025em;color:rgba(255,255,255,.4)}
+.ft-col ul{margin-top:1.25rem;display:flex;flex-direction:column;gap:.75rem;font-size:.875rem}
+.ft-legal{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1rem;
+  border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;font-size:.75rem;color:rgba(255,255,255,.45);text-align:center}
+@media (min-width:640px){.ft-legal{flex-direction:row;text-align:left}}
+.ft-wm{position:absolute;inset-inline:0;bottom:-1.5rem;z-index:0;color:rgba(255,255,255,.05)}
+
+/* ---------- loader ---------- */
+.loader{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
+  background:var(--ink);color:#fff;border-radius:0 0 var(--r-card) var(--r-card);transform:translateY(0);
+  transition:transform .75s cubic-bezier(.22,1,.36,1)}
+.loader.is-out{transform:translateY(-100%)}
+.loader-c{display:flex;flex-direction:column;align-items:center;gap:1.25rem;text-align:center;padding-inline:1.25rem;
+  transition:opacity .55s var(--e-soft),transform .55s var(--e-soft)}
+.loader.is-out .loader-c{opacity:0;transform:translateY(-12px)}
+.loader-brand{display:flex;align-items:center;gap:.5rem;font-weight:600;font-size:1.5rem}
+@media (min-width:640px){.loader-brand{font-size:1.875rem}}
+.loader-brand .ic{font-size:1.875rem;color:var(--accent-from)}
+.loader-c p{max-width:26ch;font-size:.875rem;line-height:1.6;color:rgba(255,255,255,.55)}
+.loader-p{width:min(22rem,72vw);display:flex;flex-direction:column;gap:.75rem}
+.loader-track{height:1px;background:rgba(255,255,255,.15)}
+.loader-fill{height:100%;width:0%;background:var(--accent-from);transition:width .1s ease-out}
+.loader-row{display:flex;justify-content:space-between;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.45)}
+.loader-num{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.8)}
+
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-mark" viewBox="0 0 48 48"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z" fill="currentColor"/></symbol>
+  <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-arrup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></symbol>
+  <symbol id="i-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></symbol>
+</svg>
+
+<a class="skip" href="#main">본문 바로가기</a>
+
+<!-- ================= LOADER ================= -->
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <div class="loader-c">
+    <div class="loader-brand"><svg class="ic"><use href="#i-mark"/></svg>Henry Lim</div>
+    <p>임현택 — 게임 라이브 기획·사업 PM.</p>
+  </div>
+  <div class="loader-p">
+    <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+    <div class="loader-row"><span>Loading</span><span class="loader-num" id="loaderNum">000</span></div>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header class="hdr" data-reveal data-gate="ready" style="--rd:150ms;--ry:-14px">
+  <div class="shell px hdr-in">
+    <button class="brand" data-scroll="home" aria-label="맨 위로">
+      <span><svg class="ic"><use href="#i-mark"/></svg>Henry Lim</span>
+    </button>
+
+    <nav class="nav" aria-label="주요 메뉴">
+      <ul>
+        <li><button class="nav-b" data-scroll="home" aria-current="page"><span>Home</span></button></li>
+        <li><button class="nav-b" data-scroll="works"><span>성과</span></button></li>
+        <li><button class="nav-b" data-scroll="career"><span>경력</span></button></li>
+        <li><button class="nav-b" data-scroll="skills"><span>역량</span></button></li>
+        <li><a class="nav-b" href="mailto:bluedaylol80@gmail.com"><span>연락</span></a></li>
+      </ul>
+    </nav>
+
+    <div class="hdr-r">
+      <div class="clock">
+        <span class="clock-lb">Local time</span>
+        <span class="clock-t" id="clockTime">9:41am</span>
+        <span class="clock-sep">•</span>
+        <span class="clock-d" id="clockDate">12 March, 2025</span>
+      </div>
+      <a class="chip" href="mailto:bluedaylol80@gmail.com">
+        <span><svg class="ic"><use href="#i-arrup"/></svg>연락</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section id="home" class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-noise" aria-hidden="true"></div>
+  <div class="wm hero-wm" aria-hidden="true" data-reveal data-gate="ready" style="--rd:300ms;--ry:20px">HENRY LIM</div>
+
+  <div class="shell px hero-grid">
+    <div class="hero-l">
+      <p class="eyebrow" data-reveal data-gate="ready" style="--rd:200ms;--ry:10px">Game Live-ops · Business PM</p>
+
+      <h1 class="h1" data-lines data-gate="ready" style="--rd:250ms;--ls:120ms">
+        <span class="line" style="--i:0"><span>19년, 10개 회사.</span></span>
+        <span class="line" style="--i:1"><span>라이브 서비스의</span></span>
+        <span class="line" style="--i:2"><span>처음부터 끝까지.</span></span>
+      </h1>
+
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">임현택 — 게임 라이브 기획·사업 PM. 런칭, 글로벌 소프트런칭, 그리고 서비스 종료까지 전 주기를 직접 운영했습니다.</p>
+
+      <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
+        <button class="pill pill--dark pill--arrow pill--r" data-scroll="works">
+          <span class="pill-in">성과 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
+        </button>
+        <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
+          <span class="pill-in">이메일 보내기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-r">
+      <div class="hcard" data-reveal data-gate="ready" style="--rd:400ms;--ry:16px;--rs:.96">
+        <div class="hcard-row" id="carousel" role="button" tabindex="0" aria-label="다음 항목 보기">
+          <div class="hcard-tile"><svg class="ic"><use href="#i-mark"/></svg></div>
+          <div class="hcard-panel">
+            <div class="hc-slot">
+              <div class="hc-item"><p class="hc-cap">LIVE OPS</p><p class="hc-title">런칭부터 종료까지, 전 주기.</p></div>
+              <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">소프트런칭 — 호주·동남아·북미·일본.</p></div>
+              <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">SuperStar 시리즈 12종 라이브.</p></div>
+            </div>
+            <div class="hc-bot">
+              <div class="hc-dots" id="hcDots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+              <div class="hc-nav">
+                <button class="prev" type="button" aria-label="이전 항목"><svg class="ic"><use href="#i-arr"/></svg></button>
+                <button class="next" type="button" aria-label="다음 항목"><svg class="ic"><use href="#i-arr"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="partners" data-reveal data-gate="ready" style="--rd:550ms;--ry:14px">
+        <p class="partners-lb">19년을 함께한 회사들</p>
+        <ul>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>넥슨</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>네오위즈</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>넷마블 블루</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>NHN</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>웹젠</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>달콤소프트</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>원더피플</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>스카이피플</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell px hero-status" data-reveal data-gate="ready" style="--rd:900ms;--ry:0px">
+    <span>웹젠 2006 → 달콤소프트 2026</span>
+    <span class="mid">Seoul, Korea</span>
+    <span class="right">Scroll to explore <span aria-hidden="true">↓</span></span>
+  </div>
+</section>
+
+<!-- ================= BAND ================= -->
+<section class="sec band" aria-label="라이브 서비스 사이클">
+  <ul class="shell px">
+    <li data-reveal style="--rd:0ms;--ry:28px"><div class="tile tile--light">Launch</div></li>
+    <li data-reveal style="--rd:120ms;--ry:28px"><div class="tile tile--accent">Operate</div></li>
+    <li data-reveal style="--rd:240ms;--ry:28px"><div class="tile tile--dark"><svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></div></li>
+    <li data-reveal style="--rd:360ms;--ry:28px"><div class="tile tile--ghost">Handover</div></li>
+  </ul>
+</section>
+
+<!-- ================= WORKS ================= -->
+<section id="works" class="sec">
+  <div class="shell px works-in">
+    <div class="center works-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>Selected Results</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>숫자가 남은 프로젝트</span></span></h2>
+    </div>
+
+    <ul class="cards">
+      <li data-reveal style="--rd:0ms;--ry:48px">
+        <article class="card">
+          <div class="card-meta">넥슨 — 부팀장</div>
+          <div class="card-wm" aria-hidden="true">183억</div>
+          <div class="card-bot">
+            <h3>린</h3>
+            <p>앱스토어·구글플레이 매출 3위. 매출 183억.</p>
+            <div class="card-tags"><span class="tag">라이브 사업</span><span class="tag">FGT·사내테스트</span><span class="tag">G-star·유저 간담회</span></div>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:90ms;--ry:48px">
+        <article class="card">
+          <div class="card-meta">넥슨 — 팀장</div>
+          <div class="card-wm" aria-hidden="true">98억</div>
+          <div class="card-bot">
+            <h3>카오스크로니클</h3>
+            <p>한국 앱스토어 매출 7위 · 구글 23위. 미국 매출 98억, iOS·구글 피처드. 5개국 소프트런칭 후 글로벌.</p>
+            <div class="card-tags"><span class="tag">글로벌 런칭</span><span class="tag">라이브 운영</span><span class="tag">서비스 종료 운영</span></div>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:180ms;--ry:48px">
+        <article class="card">
+          <div class="card-meta">넥슨 — 메인 PM</div>
+          <div class="card-wm" aria-hidden="true">×5</div>
+          <div class="card-bot">
+            <h3>영웅의 군단</h3>
+            <p>글로벌 서비스 담당 이후 기존 매출 대비 5배.</p>
+            <div class="card-tags"><span class="tag">글로벌 서비스</span><span class="tag">매출 성장</span></div>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:270ms;--ry:48px">
+        <article class="card">
+          <div class="card-meta">원더피플 — 사업 파트장</div>
+          <div class="card-wm" aria-hidden="true">33만+</div>
+          <div class="card-bot">
+            <h3>나이트워커</h3>
+            <p>한국 신규 33만+, DAU 피크 6.3만, D+1 리텐션 평균 약 50%.</p>
+            <div class="card-tags"><span class="tag">퍼블리싱 연동</span><span class="tag">지표 관리</span><span class="tag">외주 계약·프로세스</span></div>
+          </div>
+        </article>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= CAREER ================= -->
+<section id="career" class="sec">
+  <div class="shell px rows-in">
+    <div class="rows-hd">
+      <p class="eyebrow" data-reveal>Career</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>10개 회사, 19년의 기록</span></span></h2>
+    </div>
+
+    <ul>
+      <li class="row-li" data-reveal style="--rd:0ms;--ry:24px"><div class="row">
+        <span class="row-i">01</span>
+        <div class="row-body">
+          <h3 class="row-title">달콤소프트</h3>
+          <p class="row-note row-note--mobile-hide">SuperStar 시리즈 12종 (K-pop IP)</p>
+          <p class="row-sub">라이브기획팀 팀장 · 2024.10 – 2026.07</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
+        <span class="row-i">02</span>
+        <div class="row-body">
+          <h3 class="row-title">원더피플·에이스톰</h3>
+          <p class="row-note row-note--mobile-hide">나이트워커, 슈퍼피플</p>
+          <p class="row-sub">사업팀 파트장 · 2022.02 – 2024.04</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
+        <span class="row-i">03</span>
+        <div class="row-body">
+          <h3 class="row-title">네오위즈</h3>
+          <p class="row-note row-note--mobile-hide">마스터 오브 나이츠</p>
+          <p class="row-sub">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
+        <span class="row-i">04</span>
+        <div class="row-body">
+          <h3 class="row-title">스카이피플</h3>
+          <p class="row-note row-note--mobile-hide">Five Stars</p>
+          <p class="row-sub">사업팀 팀장 · 2020.07 – 2021.02</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:320ms;--ry:24px"><div class="row">
+        <span class="row-i">05</span>
+        <div class="row-body">
+          <h3 class="row-title">넵튠 레전드</h3>
+          <p class="row-note row-note--mobile-hide">Shadow Seven</p>
+          <p class="row-sub">스튜디오 사업PM · 2019.10 – 2020.04</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:400ms;--ry:24px"><div class="row">
+        <span class="row-i">06</span>
+        <div class="row-body">
+          <h3 class="row-title">넥슨 코리아</h3>
+          <p class="row-note row-note--mobile-hide">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
+          <p class="row-sub">모바일사업실 팀장 · 2015.07 – 2019.10</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:480ms;--ry:24px"><div class="row">
+        <span class="row-i">07</span>
+        <div class="row-body">
+          <h3 class="row-title">넷마블 블루</h3>
+          <p class="row-note row-note--mobile-hide">KON</p>
+          <p class="row-sub">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:560ms;--ry:24px"><div class="row">
+        <span class="row-i">08</span>
+        <div class="row-body">
+          <h3 class="row-title">소프트닉스</h3>
+          <p class="row-note row-note--mobile-hide">NTD · 라키온2 · 그랑에이지</p>
+          <p class="row-sub">전략사업팀 사업PM · 2011.07 – 2015.02</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:640ms;--ry:24px"><div class="row">
+        <span class="row-i">09</span>
+        <div class="row-body">
+          <h3 class="row-title">NHN Service</h3>
+          <p class="row-note row-note--mobile-hide">Tera 웹운영 · 아틀란티카 · R2</p>
+          <p class="row-sub">한게임운영실 파트장 · 2008.05 – 2011.07</p>
+        </div>
+      </div></li>
+      <li data-reveal style="--rd:700ms;--ry:16px"><p class="row-foot">※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</p></li>
+      <li class="row-li" data-reveal style="--rd:760ms;--ry:24px"><div class="row">
+        <span class="row-i">10</span>
+        <div class="row-body">
+          <h3 class="row-title">웹젠</h3>
+          <p class="row-note row-note--mobile-hide">SUN 온라인</p>
+          <p class="row-sub">SUN 운영팀 · 2006.04 – 2007.10</p>
+        </div>
+      </div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= SKILLS ================= -->
+<section id="skills" class="sec">
+  <div class="shell px rows-in" style="padding-top:0">
+    <div class="rows-hd">
+      <p class="eyebrow" data-reveal>What I do</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>라이브 서비스를 굴리는 네 가지 일</span></span></h2>
+    </div>
+
+    <ul>
+      <li class="row-li" data-reveal style="--rd:0ms;--ry:24px"><div class="row">
+        <span class="row-i">01</span>
+        <div class="row-body">
+          <h3 class="row-title">사업·계약·정산</h3>
+          <p class="row-note">QA 외주 정산·계약, 중국 라이선스 계약 검토, SM 음원 정산 자동화, OST 제작·발매.</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
+        <span class="row-i">02</span>
+        <div class="row-body">
+          <h3 class="row-title">조직 셋업·채용</h3>
+          <p class="row-note">기획·QA·CS 리크루팅, 사업·운영 조직 셋팅, 수습 평가안 설계.</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
+        <span class="row-i">03</span>
+        <div class="row-body">
+          <h3 class="row-title">검증·리서치</h3>
+          <p class="row-note">FGT·FGI·사내테스트 운영, 타사 유료화 분석 (던파·마비노기·테라·아이온·와우).</p>
+        </div>
+      </div></li>
+      <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
+        <span class="row-i">04</span>
+        <div class="row-body">
+          <h3 class="row-title">퍼블리싱 기술 연동</h3>
+          <p class="row-note">유료 재화 구매·쿠폰 시스템 연동, 서버 선택 UI·플로우 기획.</p>
+        </div>
+      </div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<section class="sec" aria-label="숫자로 보는 기록">
+  <div class="shell px stats-in">
+    <div class="stats-panel" data-reveal style="--ry:40px;--rs:.99">
+      <p class="eyebrow eyebrow--light">By the numbers</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>말이 아니라 숫자로 남긴 기록</span></span></h2>
+      <ul class="stats-grid">
+        <li data-reveal style="--rd:0ms;--ry:20px">
+          <p class="stat-n"><span data-count="19">0</span>년</p>
+          <p class="stat-l">총 경력 (이력서 기준)</p>
+        </li>
+        <li data-reveal style="--rd:90ms;--ry:20px">
+          <p class="stat-n"><span data-count="10">0</span>개</p>
+          <p class="stat-l">함께한 회사</p>
+        </li>
+        <li data-reveal style="--rd:180ms;--ry:20px">
+          <p class="stat-n"><span data-count="183">0</span>억</p>
+          <p class="stat-l">린 — 최고 매출 (앱스토어·구글 3위)</p>
+        </li>
+        <li data-reveal style="--rd:270ms;--ry:20px">
+          <p class="stat-n"><span data-count="5">0</span>배</p>
+          <p class="stat-l">영웅의 군단 글로벌 — 기존 매출 대비</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="ft">
+  <div class="shell px ft-in">
+    <div class="ft-cta">
+      <h2 class="h2" data-lines style="--ls:100ms">
+        <span class="line" style="--i:0"><span>이력서와 경력기술서는</span></span>
+        <span class="line" style="--i:1"><span>요청 주시면 보내드립니다.</span></span>
+      </h2>
+      <a class="pill pill--light pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com" data-reveal style="--rd:200ms;--ry:12px">
+        <span class="pill-in">이메일 보내기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+      </a>
+    </div>
+
+    <div class="ft-cols">
+      <div class="ft-brand">
+        <div class="name"><svg class="ic"><use href="#i-mark"/></svg>Henry Lim</div>
+        <p>게임 라이브 서비스 기획·사업 PM. 런칭부터 종료까지, 19년.</p>
+      </div>
+      <div class="ft-col">
+        <h3>Site</h3>
+        <ul>
+          <li><button class="alink" data-scroll="works"><span>성과</span></button></li>
+          <li><button class="alink" data-scroll="career"><span>경력</span></button></li>
+          <li><button class="alink" data-scroll="skills"><span>역량</span></button></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h3>Elsewhere</h3>
+        <ul>
+          <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ft-legal">
+      <span>© 2026 Henry Lim (임현택)</span>
+      <span>본 사이트의 모든 수치는 공개 이력서 기준입니다.</span>
+    </div>
+  </div>
+  <div class="wm ft-wm" aria-hidden="true">HENRY LIM</div>
+</footer>
+
+<script type="importmap">{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }</script>
+<script type="module">
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let lenis = null, ready = false, scrollLocked = false;
+
+/* ---------- adaptive grid (scale-up above 1920) ---------- */
+function applyAdaptiveGrid(){
+  const FONT_BASE = 16, baseWidth = 1920, coef = 0.6666;
+  const w = window.innerWidth;
+  const widthReduction = ((baseWidth - w) / baseWidth) * 100;
+  const size = FONT_BASE - (FONT_BASE * (widthReduction * coef)) / 100;
+  if (size > FONT_BASE) document.documentElement.style.fontSize = size + 'px';
+  else document.documentElement.style.removeProperty('font-size');
+}
+applyAdaptiveGrid();
+addEventListener('resize', applyAdaptiveGrid);
+
+/* ---------- scroll lock ---------- */
+function stopScroll(){
+  scrollLocked = true;
+  if (lenis) lenis.stop();
+  const h = document.documentElement;
+  h.style.position = 'relative'; h.style.overflow = 'hidden'; h.style.height = '100%';
+}
+function startScroll(){
+  scrollLocked = false;
+  if (lenis) lenis.start();
+  const h = document.documentElement;
+  h.style.removeProperty('position'); h.style.removeProperty('overflow'); h.style.removeProperty('height');
+}
+function scrollToId(id){
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (lenis) { lenis.scrollTo(el, { offset: 0 }); return; }
+  const top = el.getBoundingClientRect().top + window.pageYOffset;
+  window.scrollTo({ top, behavior: RM ? 'auto' : 'smooth' });
+}
+document.querySelectorAll('[data-scroll]').forEach(el => {
+  el.addEventListener('click', () => scrollToId(el.dataset.scroll));
+});
+
+/* ---------- reveals ---------- */
+const gated = [...document.querySelectorAll('[data-gate="ready"]')];
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+}, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+document.querySelectorAll('[data-reveal],[data-lines]').forEach(el => {
+  if (el.hasAttribute('data-gate')) return;
+  io.observe(el);
+});
+function revealGated(){ gated.forEach(el => el.classList.add('is-in')); }
+
+/* ---------- clock ---------- */
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const elTime = document.getElementById('clockTime');
+const elDate = document.getElementById('clockDate');
+function tickClock(){
+  const d = new Date();
+  const h = d.getHours(), m = d.getMinutes();
+  elTime.textContent = (h % 12 || 12) + ':' + String(m).padStart(2, '0') + (h < 12 ? 'am' : 'pm');
+  elDate.textContent = d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + d.getFullYear();
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+/* ---------- hero card carousel ---------- */
+const car = document.getElementById('carousel');
+const items = [...car.querySelectorAll('.hc-item')];
+const dots = [...document.getElementById('hcDots').children];
+let idx = 0;
+function paint(next, dir){
+  items.forEach((it, i) => {
+    if (i === next){
+      it.style.transition = 'none';
+      it.style.transform = 'translateY(' + (14 * dir) + 'px)';
+      it.style.opacity = '0';
+      void it.offsetHeight;
+      it.style.transition = '';
+      it.style.transform = 'translateY(0)';
+      it.style.opacity = '1';
+      it.style.zIndex = '2';
+    } else if (i === idx){
+      it.style.zIndex = '1';
+      it.style.transform = 'translateY(' + (-14 * dir) + 'px)';
+      it.style.opacity = '0';
+    } else {
+      it.style.zIndex = '0';
+      it.style.opacity = '0';
+    }
+  });
+  dots.forEach((d, i) => d.classList.toggle('on', i === next));
+  idx = next;
+}
+function go(step){
+  const n = items.length;
+  paint((idx + step + n) % n, step > 0 ? 1 : -1);
+}
+items.forEach((it, i) => { it.style.opacity = i === 0 ? '1' : '0'; it.style.transform = 'translateY(0)'; });
+car.addEventListener('click', (e) => { if (!e.target.closest('.hc-nav')) go(1); });
+car.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(1); }
+});
+car.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
+car.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); go(1); });
+
+/* ---------- stats count-up ---------- */
+const counters = [...document.querySelectorAll('[data-count]')];
+if (RM){
+  counters.forEach(el => { el.textContent = el.dataset.count; });
+} else {
+  let last = 0;
+  function tickCounts(){
+    const now = performance.now();
+    if (now - last < 30) return;
+    last = now;
+    const vh = window.innerHeight;
+    counters.forEach(el => {
+      const r = el.getBoundingClientRect();
+      const end = vh / 2 - r.height / 2;
+      let p = (vh - r.top) / (vh - end);
+      p = Math.max(0, Math.min(1, p));
+      const val = Math.round(p * Number(el.dataset.count));
+      if (el._v !== val){ el._v = val; el.textContent = String(val); }
+    });
+  }
+  addEventListener('scroll', tickCounts, { passive: true });
+  addEventListener('resize', tickCounts);
+  tickCounts();
+}
+
+/* ---------- loader ---------- */
+const loader = document.getElementById('loader');
+const loaderFill = document.getElementById('loaderFill');
+const loaderNum = document.getElementById('loaderNum');
+const FILL_MS = 1300;
+let t0 = null, done = false;
+function easeInOutCubic(t){ return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+function finish(){
+  if (done) return;
+  done = true;
+  ready = true;
+  startScroll();
+  loader.remove();
+  revealGated();
+}
+function step(ts){
+  if (t0 === null) t0 = ts;
+  const t = Math.min((ts - t0) / FILL_MS, 1);
+  const p = Math.round(easeInOutCubic(t) * 100);
+  loaderFill.style.width = p + '%';
+  loaderNum.textContent = String(p).padStart(3, '0');
+  if (t < 1) requestAnimationFrame(step);
+  else { loader.classList.add('is-out'); setTimeout(finish, RM ? 0 : 820); }
+}
+stopScroll();
+requestAnimationFrame(step);
+
+/* ---------- lenis ---------- */
+window.scrollTo(0, 0);
+try {
+  const mod = await import('lenis');
+  const Lenis = mod.default || mod.Lenis;
+  lenis = new Lenis({ smoothWheel: true });
+  const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+  requestAnimationFrame(raf);
+  if (scrollLocked) lenis.stop();
+} catch (err) {
+  lenis = null;
+}
+</script>
+</body>
+</html>
