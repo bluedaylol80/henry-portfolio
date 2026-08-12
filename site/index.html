@@ -14,10 +14,12 @@
 <meta property="og:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
 <meta name="twitter:description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
 <meta name="twitter:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
+<meta name="twitter:image:alt" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23b15f2c' d='M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
@@ -40,10 +42,10 @@
 /* ---------- reset / base ---------- */
 *{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px;-webkit-font-smoothing:antialiased}
-@media (max-width:1920px){html{font-size:0.833333vw}}
-@media (max-width:1440px){html{font-size:1.111111vw}}
-@media (max-width:1024px){html{font-size:1.5625vw}}
-@media (max-width:640px){html{font-size:4.444444vw}}
+@media (max-width:1920px){html{font-size:max(0.833333vw,12px)}}
+@media (max-width:1440px){html{font-size:max(1.111111vw,12px)}}
+@media (max-width:1024px){html{font-size:max(1.5625vw,12px)}}
+@media (max-width:640px){html{font-size:clamp(12px,4.444444vw,24px)}}
 body{background:var(--bg);color:var(--fg);font-family:'Pretendard Variable',Pretendard,'Onest',system-ui,sans-serif;overflow-x:hidden;word-break:keep-all}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
@@ -172,7 +174,9 @@ img{display:block}
 .hcard-tile .ic{color:var(--accent-from)}
 .hcard-panel{flex:1;min-width:0;border-radius:var(--r-control);background:rgba(241,240,238,.7);padding:.75rem;display:flex;flex-direction:column;justify-content:space-between;gap:.75rem}
 .hc-slot{position:relative;min-height:3.75rem}
-.hc-item{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .45s var(--e-soft),transform .45s var(--e-soft)}
+.hc-item{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .45s var(--e-soft),transform .45s var(--e-soft),visibility 0s linear .45s}
+.hc-item.is-on{visibility:visible;transition:opacity .45s var(--e-soft),transform .45s var(--e-soft),visibility 0s linear 0s}
 .hc-cap{font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(17,17,17,.45)}
 .hc-title{margin-top:.25rem;max-width:11rem;font-size:.875rem;font-weight:500;line-height:1.35}
 .hc-bot{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
@@ -213,7 +217,7 @@ img{display:block}
 .tile--dark{background:var(--ink);color:#fff}
 .tile--dark .ic{font-size:2.25rem}
 @media (min-width:640px){.tile--dark .ic{font-size:3rem}}
-.tile--ghost{background:rgba(241,240,238,.6);color:rgba(17,17,17,.35)}
+.tile--ghost{background:rgba(241,240,238,.6);color:rgba(17,17,17,.45)}
 @media (hover:hover) and (pointer:fine){.band li:hover .tile{transform:scale(1.03)}}
 
 /* ---------- sections ---------- */
@@ -232,7 +236,7 @@ img{display:block}
 .card{position:relative;display:flex;flex-direction:column;min-height:22rem;overflow:hidden;border-radius:var(--r-card);
   background:var(--ink);padding:1.5rem;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.05);transition:transform .45s var(--e-hover)}
 @media (min-width:640px){.card{min-height:26rem;padding:2rem}}
-.card-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.45)}
+.card-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.66)}
 .card-wm{flex:1;display:grid;place-items:center;padding-block:1.5rem 2.25rem;pointer-events:none;user-select:none;
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
@@ -252,14 +256,14 @@ img{display:block}
 .row{display:flex;align-items:flex-start;gap:1rem;border-radius:var(--r-card-sm);padding-block:1.5rem;padding-inline:1.5rem;
   background:rgba(241,240,238,0);transition:background-color .4s var(--e-soft),padding .4s var(--e-soft)}
 @media (min-width:640px){.row{gap:1.5rem;padding-block:2rem}}
-.row-i{width:1.75rem;flex:none;padding-top:.3rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.4);font-variant-numeric:tabular-nums}
+.row-i{width:1.75rem;flex:none;padding-top:.3rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.55);font-variant-numeric:tabular-nums}
 @media (min-width:640px){.row-i{width:2.5rem}}
 .row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.375rem}
 .row-body h3{font-size:1.375rem;font-weight:500;letter-spacing:-.015em}
 @media (min-width:640px){.row-body h3{font-size:1.75rem}}
 @media (min-width:768px){.row-body h3{font-size:2rem}}
-.row-sub{font-size:.875rem;color:rgba(17,17,17,.55);line-height:1.5}
-.row-note{font-size:.875rem;color:rgba(17,17,17,.45);line-height:1.5}
+.row-sub{font-size:.875rem;color:rgba(17,17,17,.62);line-height:1.5}
+.row-note{font-size:.875rem;color:rgba(17,17,17,.62);line-height:1.5}
 @media (min-width:1024px){
   .row{align-items:center}
   .row-i{padding-top:0}
@@ -271,7 +275,7 @@ img{display:block}
 }
 .row-note--mobile-hide{display:none}
 @media (min-width:1024px){.row-note--mobile-hide{display:block}}
-.row-foot{padding:1rem 1.5rem;font-size:.75rem;color:rgba(17,17,17,.4);border-top:1px solid var(--line)}
+.row-foot{padding:1rem 1.5rem;font-size:.75rem;color:rgba(17,17,17,.62);border-top:1px solid var(--line)}
 @media (hover:hover) and (pointer:fine){
   .row:hover{background:rgba(241,240,238,1);padding-left:2rem;padding-right:1.25rem}
 }
@@ -306,10 +310,10 @@ img{display:block}
 .ft-brand .name{display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:600}
 .ft-brand .name .ic{font-size:1.25rem}
 .ft-brand p{margin-top:1rem;max-width:22rem;font-size:.875rem;line-height:1.6;color:rgba(255,255,255,.55)}
-.ft-col h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.025em;color:rgba(255,255,255,.4)}
+.ft-col h3{font-size:.75rem;text-transform:uppercase;letter-spacing:.025em;color:rgba(255,255,255,.66)}
 .ft-col ul{margin-top:1.25rem;display:flex;flex-direction:column;gap:.75rem;font-size:.875rem}
 .ft-legal{display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:1rem;
-  border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;font-size:.75rem;color:rgba(255,255,255,.45);text-align:center}
+  border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;font-size:.75rem;color:rgba(255,255,255,.66);text-align:center}
 @media (min-width:640px){.ft-legal{flex-direction:row;text-align:left}}
 .ft-wm{position:absolute;inset-inline:0;bottom:-1.5rem;z-index:0;color:rgba(255,255,255,.05)}
 
@@ -328,11 +332,17 @@ img{display:block}
 .loader-p{width:min(22rem,72vw);display:flex;flex-direction:column;gap:.75rem}
 .loader-track{height:1px;background:rgba(255,255,255,.15)}
 .loader-fill{height:100%;width:0%;background:var(--accent-from);transition:width .1s ease-out}
-.loader-row{display:flex;justify-content:space-between;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.45)}
+.loader-row{display:flex;justify-content:space-between;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.55)}
 .loader-num{font-variant-numeric:tabular-nums;color:rgba(255,255,255,.8)}
 
 @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
 </style>
+<noscript><style>
+.loader{display:none !important}
+[data-reveal]{opacity:1 !important;transform:none !important}
+[data-lines] .line>span{opacity:1 !important;transform:none !important}
+.hc-item:first-child{opacity:1 !important;visibility:visible !important}
+</style></noscript>
 </head>
 <body>
 
@@ -353,7 +363,7 @@ img{display:block}
   </div>
   <div class="loader-p">
     <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
-    <div class="loader-row"><span>Loading</span><span class="loader-num" id="loaderNum">000</span></div>
+    <div class="loader-row"><span>Loading</span><span class="loader-num" id="loaderNum" aria-hidden="true">000</span></div>
   </div>
 </div>
 
@@ -377,9 +387,9 @@ img{display:block}
     <div class="hdr-r">
       <div class="clock">
         <span class="clock-lb">Local time</span>
-        <span class="clock-t" id="clockTime">9:41am</span>
+        <span class="clock-t" id="clockTime"></span>
         <span class="clock-sep">•</span>
-        <span class="clock-d" id="clockDate">12 March, 2025</span>
+        <span class="clock-d" id="clockDate"></span>
       </div>
       <a class="chip" href="mailto:bluedaylol80@gmail.com">
         <span><svg class="ic"><use href="#i-arrup"/></svg>연락</span>
@@ -420,12 +430,12 @@ img{display:block}
 
     <div class="hero-r">
       <div class="hcard" data-reveal data-gate="ready" style="--rd:400ms;--ry:16px;--rs:.96">
-        <div class="hcard-row" id="carousel" role="button" tabindex="0" aria-label="다음 항목 보기">
+        <div class="hcard-row" id="carousel">
           <div class="hcard-tile"><svg class="ic"><use href="#i-mark"/></svg></div>
           <div class="hcard-panel">
             <div class="hc-slot">
               <div class="hc-item"><p class="hc-cap">LIVE OPS</p><p class="hc-title">런칭부터 종료까지, 전 주기.</p></div>
-              <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">소프트런칭 — 호주·동남아·북미·일본.</p></div>
+              <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">소프트런칭 — 린 · 카오스크로니클 · Shadow Seven.</p></div>
               <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">SuperStar 시리즈 12종 라이브.</p></div>
             </div>
             <div class="hc-bot">
@@ -437,6 +447,7 @@ img{display:block}
             </div>
           </div>
         </div>
+        <p class="sr-only" id="hcLive" aria-live="polite"></p>
       </div>
 
       <div class="partners" data-reveal data-gate="ready" style="--rd:550ms;--ry:14px">
@@ -445,7 +456,7 @@ img{display:block}
           <li><span><svg class="ic"><use href="#i-dot"/></svg>넥슨</span></li>
           <li><span><svg class="ic"><use href="#i-dot"/></svg>네오위즈</span></li>
           <li><span><svg class="ic"><use href="#i-dot"/></svg>넷마블 블루</span></li>
-          <li><span><svg class="ic"><use href="#i-dot"/></svg>NHN</span></li>
+          <li><span><svg class="ic"><use href="#i-dot"/></svg>NHN Service</span></li>
           <li><span><svg class="ic"><use href="#i-dot"/></svg>웹젠</span></li>
           <li><span><svg class="ic"><use href="#i-dot"/></svg>달콤소프트</span></li>
           <li><span><svg class="ic"><use href="#i-dot"/></svg>원더피플</span></li>
@@ -487,7 +498,7 @@ img{display:block}
           <div class="card-wm" aria-hidden="true">183억</div>
           <div class="card-bot">
             <h3>린</h3>
-            <p>앱스토어·구글플레이 매출 3위. 매출 183억.</p>
+            <p>앱스토어·구글 매출 3위. 매출 183억.</p>
             <div class="card-tags"><span class="tag">라이브 사업</span><span class="tag">FGT·사내테스트</span><span class="tag">G-star·유저 간담회</span></div>
           </div>
         </article>
@@ -672,19 +683,19 @@ img{display:block}
       <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>말이 아니라 숫자로 남긴 기록</span></span></h2>
       <ul class="stats-grid">
         <li data-reveal style="--rd:0ms;--ry:20px">
-          <p class="stat-n"><span data-count="19">0</span>년</p>
+          <p class="stat-n"><span data-count="19">19</span>년</p>
           <p class="stat-l">총 경력 (이력서 기준)</p>
         </li>
         <li data-reveal style="--rd:90ms;--ry:20px">
-          <p class="stat-n"><span data-count="10">0</span>개</p>
+          <p class="stat-n"><span data-count="10">10</span>개</p>
           <p class="stat-l">함께한 회사</p>
         </li>
         <li data-reveal style="--rd:180ms;--ry:20px">
-          <p class="stat-n"><span data-count="183">0</span>억</p>
-          <p class="stat-l">린 — 최고 매출 (앱스토어·구글 3위)</p>
+          <p class="stat-n"><span data-count="183">183</span>억</p>
+          <p class="stat-l">린 매출 (앱스토어·구글 3위)</p>
         </li>
         <li data-reveal style="--rd:270ms;--ry:20px">
-          <p class="stat-n"><span data-count="5">0</span>배</p>
+          <p class="stat-n"><span data-count="5">5</span>배</p>
           <p class="stat-l">영웅의 군단 글로벌 — 기존 매출 대비</p>
         </li>
       </ul>
@@ -741,6 +752,30 @@ img{display:block}
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 let lenis = null, ready = false, scrollLocked = false;
 
+/* ---------- fail-safe (script error / stalled loader) ---------- */
+function setInert(on){
+  document.querySelectorAll('.skip,header,main,footer').forEach(el => {
+    if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+  });
+}
+function failSafe(){
+  try {
+    const h = document.documentElement;
+    h.style.removeProperty('position'); h.style.removeProperty('overflow'); h.style.removeProperty('height');
+    const l = document.getElementById('loader');
+    if (l) l.remove();
+    setInert(false);
+    document.querySelectorAll('[data-reveal],[data-lines]').forEach(el => el.classList.add('is-in'));
+    document.querySelectorAll('[data-count]').forEach(el => { el.textContent = el.dataset.count; });
+    const first = document.querySelector('.hc-item');
+    if (first){ first.classList.add('is-on'); first.style.opacity = '1'; first.setAttribute('aria-hidden', 'false'); }
+    ready = true;
+  } catch (e) {}
+}
+setTimeout(() => { if (document.getElementById('loader')) failSafe(); }, 4000);
+
+try {
+
 /* ---------- adaptive grid (scale-up above 1920) ---------- */
 function applyAdaptiveGrid(){
   const FONT_BASE = 16, baseWidth = 1920, coef = 0.6666;
@@ -779,13 +814,15 @@ document.querySelectorAll('[data-scroll]').forEach(el => {
 
 /* ---------- reveals ---------- */
 const gated = [...document.querySelectorAll('[data-gate="ready"]')];
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
-}, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
-document.querySelectorAll('[data-reveal],[data-lines]').forEach(el => {
-  if (el.hasAttribute('data-gate')) return;
-  io.observe(el);
-});
+const revealables = [...document.querySelectorAll('[data-reveal],[data-lines]')].filter(el => !el.hasAttribute('data-gate'));
+if ('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  revealables.forEach(el => io.observe(el));
+} else {
+  revealables.forEach(el => el.classList.add('is-in'));
+}
 function revealGated(){ gated.forEach(el => el.classList.add('is-in')); }
 
 /* ---------- clock ---------- */
@@ -805,10 +842,16 @@ setInterval(tickClock, 1000);
 const car = document.getElementById('carousel');
 const items = [...car.querySelectorAll('.hc-item')];
 const dots = [...document.getElementById('hcDots').children];
+const live = document.getElementById('hcLive');
 let idx = 0;
+function setActive(el, on){
+  el.classList.toggle('is-on', on);
+  el.setAttribute('aria-hidden', String(!on));
+}
 function paint(next, dir){
   items.forEach((it, i) => {
     if (i === next){
+      setActive(it, true);
       it.style.transition = 'none';
       it.style.transform = 'translateY(' + (14 * dir) + 'px)';
       it.style.opacity = '0';
@@ -818,26 +861,30 @@ function paint(next, dir){
       it.style.opacity = '1';
       it.style.zIndex = '2';
     } else if (i === idx){
+      setActive(it, false);
       it.style.zIndex = '1';
       it.style.transform = 'translateY(' + (-14 * dir) + 'px)';
       it.style.opacity = '0';
     } else {
+      setActive(it, false);
       it.style.zIndex = '0';
       it.style.opacity = '0';
     }
   });
   dots.forEach((d, i) => d.classList.toggle('on', i === next));
+  if (live) live.textContent = [...items[next].querySelectorAll('p')].map(p => p.textContent.trim()).join(' — ');
   idx = next;
 }
 function go(step){
   const n = items.length;
   paint((idx + step + n) % n, step > 0 ? 1 : -1);
 }
-items.forEach((it, i) => { it.style.opacity = i === 0 ? '1' : '0'; it.style.transform = 'translateY(0)'; });
-car.addEventListener('click', (e) => { if (!e.target.closest('.hc-nav')) go(1); });
-car.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(1); }
+items.forEach((it, i) => {
+  setActive(it, i === 0);
+  it.style.opacity = i === 0 ? '1' : '0';
+  it.style.transform = 'translateY(0)';
 });
+car.addEventListener('click', (e) => { if (e.target.closest('button')) return; go(1); });
 car.querySelector('.prev').addEventListener('click', (e) => { e.stopPropagation(); go(-1); });
 car.querySelector('.next').addEventListener('click', (e) => { e.stopPropagation(); go(1); });
 
@@ -870,6 +917,9 @@ if (RM){
 const loader = document.getElementById('loader');
 const loaderFill = document.getElementById('loaderFill');
 const loaderNum = document.getElementById('loaderNum');
+const SEEN_KEY = 'v23-seen';
+let seen = false;
+try { seen = sessionStorage.getItem(SEEN_KEY) === '1'; } catch (e) {}
 const FILL_MS = 1300;
 let t0 = null, done = false;
 function easeInOutCubic(t){ return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
@@ -878,8 +928,10 @@ function finish(){
   done = true;
   ready = true;
   startScroll();
-  loader.remove();
+  setInert(false);
+  if (loader) loader.remove();
   revealGated();
+  try { sessionStorage.setItem(SEEN_KEY, '1'); } catch (e) {}
 }
 function step(ts){
   if (t0 === null) t0 = ts;
@@ -888,22 +940,33 @@ function step(ts){
   loaderFill.style.width = p + '%';
   loaderNum.textContent = String(p).padStart(3, '0');
   if (t < 1) requestAnimationFrame(step);
-  else { loader.classList.add('is-out'); setTimeout(finish, RM ? 0 : 820); }
+  else { loader.classList.add('is-out'); setTimeout(finish, 820); }
 }
-stopScroll();
-requestAnimationFrame(step);
+if (RM || seen){
+  finish();
+} else {
+  setInert(true);
+  stopScroll();
+  requestAnimationFrame(step);
+}
 
 /* ---------- lenis ---------- */
 window.scrollTo(0, 0);
-try {
-  const mod = await import('lenis');
-  const Lenis = mod.default || mod.Lenis;
-  lenis = new Lenis({ smoothWheel: true });
-  const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
-  requestAnimationFrame(raf);
-  if (scrollLocked) lenis.stop();
+if (!RM){
+  try {
+    const mod = await import('lenis');
+    const Lenis = mod.default || mod.Lenis;
+    lenis = new Lenis({ smoothWheel: true });
+    const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
+    if (scrollLocked) lenis.stop();
+  } catch (err) {
+    lenis = null;
+  }
+}
+
 } catch (err) {
-  lenis = null;
+  failSafe();
 }
 </script>
 </body>
