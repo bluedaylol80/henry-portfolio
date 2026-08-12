@@ -817,8 +817,24 @@ document.querySelectorAll('[data-scroll]').forEach(el => {
 const gated = [...document.querySelectorAll('[data-gate="ready"]')];
 const revealables = [...document.querySelectorAll('[data-reveal],[data-lines]')].filter(el => !el.hasAttribute('data-gate'));
 if ('IntersectionObserver' in window){
+  // 스태거는 "같이 보일 때"만 의미가 있다. 요소별 IO라 아래 행일수록 홀로 진입하는데,
+  // 작성된 --rd(최대 760ms)를 그대로 쓰면 화면에 들어온 뒤 그만큼 빈칸으로 서 있게 된다.
+  // → 같은 부모 안에서 이번 배치에 함께 들어온 것들끼리만 상대 스태거를 유지하고,
+  //    홀로 들어온 요소는 0ms로 내린다. 마크업의 --rd는 그대로 두고 런타임에서만 정규화.
+  const rdOf = el => parseFloat(getComputedStyle(el).getPropertyValue('--rd')) || 0;
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+    const hits = entries.filter(e => e.isIntersecting).map(e => e.target);
+    if (!hits.length) return;
+    const base = new Map();
+    hits.forEach(el => {
+      const k = el.parentElement, d = rdOf(el);
+      if (!base.has(k) || d < base.get(k)) base.set(k, d);
+    });
+    hits.forEach(el => {
+      el.style.setProperty('--rd', (rdOf(el) - base.get(el.parentElement)) + 'ms');
+      el.classList.add('is-in');
+      io.unobserve(el);
+    });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
   revealables.forEach(el => io.observe(el));
 } else {
