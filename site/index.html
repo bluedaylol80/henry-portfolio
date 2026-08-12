@@ -109,6 +109,17 @@ img{display:block}
   .alink--legal>span{opacity:.7}
   .alink--legal:hover>span{transform:translateX(3px);opacity:1}
 }
+/* 키보드 포커스: 호버와 같은 어포던스 (hover 미디어 밖 — 키보드는 포인터와 무관) */
+/* 링은 .pill이 아니라 .pill-in에 — 둥근 쪽이 자식이라 부모에 그리면 각진 사각형이 된다 */
+.pill:focus-visible{outline:none}
+.pill:focus-visible .pill-in{outline:2px solid var(--accent);outline-offset:2px;transform:scale(1.04)}
+.pill--arrow.pill--r:focus-visible .pill-badge{transform:translate(3px,0)}
+.pill--arrow.pill--ur:focus-visible .pill-badge{transform:translate(2px,-2px)}
+.pill--outline:focus-visible .pill-in{border-color:rgba(17,17,17,.3)}
+.alink:focus-visible>span{transform:translateX(4px);opacity:1}
+.alink--legal:focus-visible>span{transform:translateX(3px);opacity:1}
+/* 텍스트 링크는 링이 글자에 붙어 답답하다 — 여유를 주되, span이 움직이는 만큼(2~4px)을 더 확보 */
+.alink:focus-visible{outline-offset:8px;border-radius:5px}
 
 /* ---------- header ---------- */
 .hdr{position:absolute;inset-inline:0;top:0;z-index:50}
@@ -141,6 +152,11 @@ img{display:block}
   .chip:hover{background:rgba(255,255,255,.7)}
   .chip:hover>span{transform:scale(1.05)}
 }
+.brand:focus-visible>span{transform:scale(1.04)}
+.nav-b:focus-visible>span{transform:translateY(-2px);opacity:1}
+.brand:focus-visible,.nav-b:focus-visible{outline-offset:6px;border-radius:5px}
+.chip:focus-visible{background:rgba(255,255,255,.7)}
+.chip:focus-visible>span{transform:scale(1.05)}
 
 /* ---------- hero ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;border-radius:0 0 var(--r-card) var(--r-card);background:var(--hero-to)}
