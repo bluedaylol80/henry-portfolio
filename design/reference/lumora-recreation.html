@@ -301,6 +301,7 @@ html.lenis,html.lenis body{ height:auto }
 
 /* ---------- NavMenu ---------- */
 .navmenu{ position:fixed; inset:0; z-index:115; display:flex; flex-direction:column; background:#0a0a0a; color:#fff; opacity:0 }
+.navmenu > .shell{ width:100% }
 .navmenu__top{ display:flex; align-items:center; justify-content:space-between; padding:1.25rem }
 @media (min-width:640px){ .navmenu__top{ padding:1.5rem 2rem } }
 .navmenu__brand{ display:flex; align-items:center; gap:.5rem; font-size:1.125rem; font-weight:600 }
@@ -327,6 +328,7 @@ html.lenis,html.lenis body{ height:auto }
 .modal{ position:fixed; inset:0; z-index:110; display:flex; align-items:flex-end; justify-content:center; padding:1rem; background:rgba(17,17,17,.3); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px); opacity:0 }
 @media (min-width:640px){ .modal{ align-items:center } }
 .modal__panel{ position:relative; width:100%; max-width:32rem; overflow:hidden; border-radius:var(--radius-card); background:#fff; padding:1.5rem; box-shadow:0 25px 50px -12px rgba(0,0,0,.25), 0 0 0 1px #e6e5e2; will-change:transform,opacity }
+.modal__panel:focus,.modal__panel:focus-visible{ outline:none }
 @media (min-width:640px){ .modal__panel{ padding:2rem } }
 .modal__close{ position:absolute; right:1rem; top:1rem; width:2.25rem; height:2.25rem; display:grid; place-items:center; border-radius:var(--radius-pill); background:#f1f0ee; color:rgba(17,17,17,.6); font-size:.875rem }
 .modal__close:hover{ background:#e3e2df; color:#111 }
