@@ -5,9 +5,14 @@
 
 작업 루트: `D:\Github\henry-portfolio` · 배포물은 `site/index.html` 단일 파일(빌드 없음).
 
-## 칸 0 — 브랜치 확인
+## 칸 0 — 브랜치 확인 + 중단 복구
 - `git branch --show-current`가 `loop-v23`가 아니면 `git switch loop-v23`(없으면 `git switch -c loop-v23`).
 - **main 접근 금지.** main에 push하면 39초 뒤 실사이트가 발행된다.
+- `git status --porcelain`에 미커밋 변경이 있으면 **새 작업을 시작하지 마라**. 직전 회차가 검증·커밋 전에
+  죽었을 수 있다(모델 한도·타임아웃). 그 변경이 STATUS.md 큐 최상단 작업의 산출물로 읽히면 —
+  **그것부터 마무리한다**: 촬영 → 눈 판정 → 커밋 → STATUS 갱신. 그게 이번 회차의 작업 1건이다.
+  직전 회차 산출물인지 확신이 서지 않으면(무관한 파일·사람 작업으로 보임) 손대지 말고
+  `docs/feedback/INBOX.md`에 질문을 남기고 `loop/STOP`을 만든 뒤 종료한다.
 
 ## 칸 1 — 읽기 순서 (반드시 이 순서)
 1. `docs/feedback/INBOX.md` — 본부장 지시, 최우선. 처리한 줄에 `[처리됨 <날짜>]` 표기.

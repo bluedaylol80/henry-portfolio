@@ -63,6 +63,25 @@ if ($branch -eq 'main') {
 }
 # 사전점검 ② 미커밋 변경
 $dirty = git -C $Root status --porcelain 2>$null
+
+# 직전 가동이 비정상 종료(한도·타임아웃·연속실패)했다면 미커밋 변경은 그 회차의 산출물일 공산이 크다.
+# 사람이 치워야 재가동되는 구조는 "본부장 액션 0" 위반 — 복구 회차로 인계한다(판정은 칸 0에서 세션이).
+$LoopLogPath = Join-Path $LogDir 'loop.jsonl'
+if ($dirty -and -not $AllowDirty -and (Test-Path $LoopLogPath)) {
+    $lines = Get-Content $LoopLogPath
+    $lastStart = ($lines | Select-String -Pattern '"event":"loop_start"' | Select-Object -Last 1).LineNumber
+    if ($lastStart) {
+        $after = $lines[($lastStart - 1)..($lines.Count - 1)] -join "`n"
+        $abnormal = ($after -notmatch '"event":"loop_end"') -or
+                    ($after -match '"reason":"(rate_limit|consec_fail)"') -or
+                    ($after -match '"event":"(timeout|rate_limit|consec_fail_stop)"')
+        if ($abnormal) {
+            Write-Host "직전 가동 비정상 종료 감지 — 복구 회차로 인계(미커밋 변경을 세션이 판정한다)"
+            Write-LoopLog @{event='auto_recover'; files=($dirty -join '; ')}
+            $AllowDirty = $true
+        }
+    }
+}
 if ($dirty -and -not $AllowDirty) {
     throw "미커밋 변경 있음(사람 작업 중일 수 있음). 정리 후 재시작하거나 -AllowDirty:`n$($dirty -join "`n")"
 }
