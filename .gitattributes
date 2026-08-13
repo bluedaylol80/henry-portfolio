@@ -1,0 +1,7 @@
+# 줄바꿈 고정 — Windows 도구가 CRLF로 되쓰면 파일 전체가 "변경"으로 잡혀
+# 루프의 더티 체크가 중단된 작업으로 오인하고, 커밋 diff도 수천 줄로 부풀려진다.
+# (2026-08-13 실사례: 실제 71줄 변경이 2,268줄로 기록됨)
+*.html text eol=lf
+*.md   text eol=lf
+*.mjs  text eol=lf
+*.ps1  text eol=lf

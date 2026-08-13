@@ -32,3 +32,4 @@ scripts/.bgm-norm.wav
 loop/shots/
 loop/STOP
 loop/*.mjs
+loop/*.png
