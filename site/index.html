@@ -163,7 +163,22 @@ img{display:block}
 .hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,var(--hero-from) 0%,#e2e1de 42%,var(--hero-to) 100%)}
 .hero-noise{position:absolute;inset:0;z-index:0;opacity:.04;pointer-events:none;background-size:180px 180px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
-.hero-fx{position:absolute;inset:0;z-index:0;pointer-events:none}
+/* canvas=대체요소: w/h 필수 (STATUS 함정) */
+.hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+/* 보색 에코 — 리빌된 잉크 자리에서만 보이는 장식 복제본(원본 DOM 텍스트는 불변) */
+/* 숨김은 display로 — visibility는 클론 안 .hc-item.is-on{visibility:visible}에 뚫린다 */
+.hero-echo{position:absolute;inset:0;z-index:21;pointer-events:none;display:none;
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+.hero-echo,.hero-echo *{color:#f4f1eb !important;border-color:rgba(244,241,235,.3) !important;
+  box-shadow:none !important;transition:none !important;animation:none !important;
+  opacity:1 !important;transform:none !important}
+.hero-echo .hcard,.hero-echo .hcard-panel{background:rgba(244,241,235,.08) !important;backdrop-filter:none !important}
+.hero-echo .hcard-tile,.hero-echo .pill--dark .pill-in{background:rgba(244,241,235,.14) !important}
+.hero-echo .pill--outline .pill-in{background:transparent !important}
+/* currentColor는 use에서 풀림 (STATUS 함정) */
+.hero-echo .ic,.hero-echo .ic *{color:var(--accent-from) !important}
+.hero-echo .pill-badge{background:#f4f1eb !important;color:#141210 !important}
+.hero-echo .pill-badge .ic,.hero-echo .pill-badge .ic *{color:inherit !important}
 .hero-wm{position:absolute;inset-inline:0;bottom:7rem;z-index:1;color:rgba(255,255,255,.5)}
 @media (max-width:1023px){.hero-wm{bottom:3rem}}
 .hero-grid{position:relative;z-index:20;display:flex;flex-direction:column;gap:2rem;padding-block:7rem 5rem}
@@ -966,6 +981,59 @@ if (!RM && FINE && 'ResizeObserver' in window){
     }
     cctx.globalAlpha = 1;
   }
+  /* 보색 에코: 캔버스는 CSS 마스크가 못 읽으므로 같은 붓 점 배열로 SVG stroke 마스크를 만든다 */
+  const echo = document.createElement('div');
+  echo.className = 'hero-echo';
+  echo.setAttribute('aria-hidden', 'true');
+  echo.setAttribute('inert', '');
+  hero.appendChild(echo);
+  let echoRaf = 0;
+  function buildEcho(){
+    echo.textContent = '';
+    hero.querySelectorAll(':scope > .shell').forEach((src) => {
+      const c = src.cloneNode(true);
+      c.removeAttribute('id');
+      c.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
+      c.classList.add('is-in');
+      c.querySelectorAll('[data-reveal],[data-lines]').forEach((n) => n.classList.add('is-in'));
+      c.style.cssText = 'position:absolute;margin:0;left:' + src.offsetLeft + 'px;top:' + src.offsetTop +
+        'px;width:' + src.offsetWidth + 'px;height:' + src.offsetHeight + 'px';
+      echo.appendChild(c);
+    });
+  }
+  const hcSlot = hero.querySelector('.hc-slot');
+  if (hcSlot) new MutationObserver(() => {
+    if (echoRaf) return;
+    echoRaf = requestAnimationFrame(() => { echoRaf = 0; buildEcho(); });
+  }).observe(hcSlot, { subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+  /* 마스크는 잉크 캔버스에서 직접 뽑는다 — 궤적을 따로 모델링하면 실제 농도와 어긋나
+     (옅어진 자리에 밝은 글자가 남아 원본보다 안 읽히는 증상). 축소본이라 읽기 비용이 작다. */
+  const MW = 80, MH = 60, KLO = .48, KHI = .72;
+  const mc = document.createElement('canvas');
+  mc.width = MW; mc.height = MH;
+  const mctx = mc.getContext('2d', { willReadFrequently: true });
+  let echoOn = false;
+  function paintMask(){
+    mctx.clearRect(0, 0, MW, MH);
+    mctx.drawImage(fx, 0, 0, MW, MH);
+    const im = mctx.getImageData(0, 0, MW, MH), d = im.data;
+    let on = false;
+    for (let i = 0; i < d.length; i += 4){
+      const a = d[i + 3] / 255;
+      // 무릎: 잉크가 옅으면(≤.48) 원본 어두운 글자가 그대로 읽히므로 에코를 띄우지 않는다
+      const v = a <= KLO ? 0 : a >= KHI ? 255 : ((a - KLO) / (KHI - KLO) * 255) | 0;
+      d[i] = d[i + 1] = d[i + 2] = 255; d[i + 3] = v;
+      if (v) on = true;
+    }
+    if (!on){
+      if (echoOn){ echoOn = false; echo.style.display = 'none'; }
+      return;
+    }
+    mctx.putImageData(im, 0, 0);
+    const u = 'url(' + mc.toDataURL() + ')';
+    echo.style.webkitMaskImage = u; echo.style.maskImage = u;
+    if (!echoOn){ echoOn = true; echo.style.display = 'block'; }
+  }
   function measure(){
     const r = hero.getBoundingClientRect();
     W = Math.max(1, Math.round(r.width * DPR));
@@ -973,6 +1041,7 @@ if (!RM && FINE && 'ResizeObserver' in window){
     fx.width = W; fx.height = H;
     cover.width = W; cover.height = H;
     paintCover();
+    buildEcho();
   }
   measure();
   new ResizeObserver(measure).observe(hero);
@@ -999,6 +1068,7 @@ if (!RM && FINE && 'ResizeObserver' in window){
     ctx.fillRect(0, 0, W, H);
     if (drawing){ for (const p of pts) stamp(p[0], p[1]); pts.length = 0; }
     else if (idle === 120) ctx.clearRect(0, 0, W, H);
+    paintMask();
   }
   addEventListener('pointermove', (e) => {
     const r = fx.getBoundingClientRect();
