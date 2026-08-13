@@ -1,7 +1,7 @@
 <#
 웹 포트폴리오 루프 러너 — 헤드리스 새 세션(claude -p)을 반복 스폰. 기억은 docs/ 파일 3종이 잇는다.
 
-시작:  pwsh -File loop\loop.ps1                (기본 10회, 회당 20분 제한)
+시작:  pwsh -File loop\loop.ps1                (기본 10회, 회당 40분 제한)
 정지:  loop\STOP 파일 생성 → 다음 확인 시점에 멈춤   (예: ni loop\STOP)
 예행:  pwsh -File loop\loop.ps1 -DryRun        (claude 호출 없이 사전점검만)
 
@@ -12,7 +12,7 @@
 #>
 param(
     [int]$MaxIterations = 10,
-    [int]$TimeoutMin = 20,
+    [int]$TimeoutMin = 40,          # 20분은 짧다 — 큰 작업 1건이 통째로 잘려 2회 연속 실패로 죽었다(08-13 실사례)
     [string]$Model = 'opus',        # 조직도 R3 시공 슬롯. 미지정 시 기본 모델(Fable 5)이 물려 한도 소진 — 08-13 실사례
     [string]$Effort = 'medium',     # Opus 5 코딩 피크
     [switch]$DryRun,
