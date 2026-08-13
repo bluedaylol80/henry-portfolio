@@ -276,7 +276,49 @@ img{display:block}
 @media (min-width:640px){.card-bot h3{font-size:1.875rem}}
 .card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.55)}
 .card-tags{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.5rem}
-@media (hover:hover) and (pointer:fine){.cards li:hover .card{transform:translateY(-8px) scale(1.012)}}
+/* 카드 전체가 클릭 대상 — 링은 제목 버튼에만 걸려 둥근 카드에 각진 사각형이 그려지지 않는다 */
+.card-open{display:inline-flex;align-items:center;gap:.5rem;text-align:left;letter-spacing:inherit}
+.card-open::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
+.card-open .ic{font-size:.6em;opacity:.5;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
+.card-open:focus-visible{outline-color:var(--accent-from);outline-offset:8px;border-radius:5px}
+.card-open:focus-visible .ic{transform:translate(2px,-2px);opacity:1}
+@media (hover:hover) and (pointer:fine){
+  .cards li:hover .card{transform:translateY(-8px) scale(1.012)}
+  .cards li:hover .card-open .ic{transform:translate(2px,-2px);opacity:1}
+}
+
+/* 성과 상세 다이얼로그 (네이티브 dialog — Esc·포커스 가둠은 브라우저가 처리) */
+.wdlg{border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
+  border-radius:var(--r-card);background:var(--bg);color:var(--fg);box-shadow:0 24px 60px rgba(17,17,17,.2)}
+.wdlg::backdrop{background:rgba(10,10,10,.55)}
+.wdlg-in{position:relative;overflow-y:auto;max-height:inherit;padding:2rem 1.5rem 2.25rem}
+@media (min-width:640px){.wdlg-in{padding:2.5rem}}
+.wdlg-x{position:absolute;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
+  border-radius:var(--r-pill);background:var(--surface);font-size:1rem;
+  transition:transform .38s var(--e-hover),background-color .3s var(--e-soft)}
+.wdlg-x:focus-visible{background:var(--surface-2);transform:scale(1.06)}
+@media (hover:hover) and (pointer:fine){.wdlg-x:hover{background:var(--surface-2);transform:scale(1.06)}}
+.wdlg-meta{padding-right:3rem;font-size:.75rem;letter-spacing:.02em;color:rgba(17,17,17,.55)}
+.wdlg-t{margin-top:.5rem;font-size:1.75rem;font-weight:500;letter-spacing:-.015em}
+@media (min-width:640px){.wdlg-t{font-size:2rem}}
+.wdlg-st{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:1.25rem 2.5rem}
+.wdlg-st div{display:flex;flex-direction:column;gap:.375rem}
+.wdlg-st b{font-size:1.75rem;font-weight:600;letter-spacing:-.02em;line-height:1}
+.wdlg-st span{font-size:.8125rem;color:rgba(17,17,17,.55)}
+.wdlg-rows{margin-top:2rem;border-top:1px solid var(--line)}
+.wdlg-rows>div{display:flex;flex-direction:column;gap:.375rem;border-bottom:1px solid var(--line);padding-block:1rem}
+.wdlg-rows>div:last-child{border-bottom:0;padding-bottom:0}
+@media (min-width:640px){.wdlg-rows>div{flex-direction:row;align-items:baseline;gap:1.5rem}}
+.wdlg-rows dt{font-size:.8125rem;color:rgba(17,17,17,.5)}
+@media (min-width:640px){.wdlg-rows dt{width:7rem;flex:none}}
+.wdlg-rows dd{font-size:.9375rem;line-height:1.6}
+@keyframes wdlgIn{from{opacity:0;transform:translateY(14px) scale(.985)}}
+@keyframes wdlgBd{from{opacity:0}}
+.wdlg[open] .wdlg-in{animation:wdlgIn .45s var(--e-rise)}
+.wdlg[open]::backdrop{animation:wdlgBd .3s ease}
+@media (prefers-reduced-motion:reduce){.wdlg[open] .wdlg-in,.wdlg[open]::backdrop{animation:none}}
+/* 모달 중 배경 스크롤 잠금 — 스크롤바가 사라지며 생기는 폭 변화를 padding으로 상쇄 */
+html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
 /* rows (career / skills) */
 .rows-in{padding-block:5rem}
@@ -386,6 +428,7 @@ img{display:block}
   <symbol id="i-arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-arrup" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></symbol>
   <symbol id="i-dot" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
 </svg>
 
 <a class="skip" href="#main">본문 바로가기</a>
@@ -532,7 +575,7 @@ img{display:block}
           <div class="card-meta">넥슨 — 부팀장</div>
           <div class="card-wm" aria-hidden="true">183억</div>
           <div class="card-bot">
-            <h3>린</h3>
+            <h3><button class="card-open" type="button" data-work="lyn" aria-haspopup="dialog">린<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>앱스토어·구글 매출 3위. 매출 183억.</p>
             <div class="card-tags"><span class="tag">라이브 사업</span><span class="tag">FGT·사내테스트</span><span class="tag">G-star·유저 간담회</span></div>
           </div>
@@ -543,7 +586,7 @@ img{display:block}
           <div class="card-meta">넥슨 — 팀장</div>
           <div class="card-wm" aria-hidden="true">98억</div>
           <div class="card-bot">
-            <h3>카오스크로니클</h3>
+            <h3><button class="card-open" type="button" data-work="chaos" aria-haspopup="dialog">카오스크로니클<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>한국 앱스토어 매출 7위 · 구글 23위. 미국 매출 98억, iOS·구글 피처드. 5개국 소프트런칭 후 글로벌.</p>
             <div class="card-tags"><span class="tag">글로벌 런칭</span><span class="tag">라이브 운영</span><span class="tag">서비스 종료 운영</span></div>
           </div>
@@ -554,7 +597,7 @@ img{display:block}
           <div class="card-meta">넥슨 — 메인 PM</div>
           <div class="card-wm" aria-hidden="true">×5</div>
           <div class="card-bot">
-            <h3>영웅의 군단</h3>
+            <h3><button class="card-open" type="button" data-work="heroes" aria-haspopup="dialog">영웅의 군단<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>글로벌 서비스 담당 이후 기존 매출 대비 5배.</p>
             <div class="card-tags"><span class="tag">글로벌 서비스</span><span class="tag">매출 성장</span></div>
           </div>
@@ -565,7 +608,7 @@ img{display:block}
           <div class="card-meta">원더피플 — 사업 파트장</div>
           <div class="card-wm" aria-hidden="true">33만+</div>
           <div class="card-bot">
-            <h3>나이트워커</h3>
+            <h3><button class="card-open" type="button" data-work="nightwalker" aria-haspopup="dialog">나이트워커<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>한국 신규 33만+, DAU 피크 6.3만, D+1 리텐션 평균 약 50%.</p>
             <div class="card-tags"><span class="tag">퍼블리싱 연동</span><span class="tag">지표 관리</span><span class="tag">외주 계약·프로세스</span></div>
           </div>
@@ -785,6 +828,17 @@ img{display:block}
   </div>
   <div class="wm ft-wm" aria-hidden="true">HENRY LIM</div>
 </footer>
+
+<!-- ================= WORK DETAIL ================= -->
+<dialog id="wdlg" class="wdlg" aria-labelledby="wdlgT">
+  <div class="wdlg-in" data-lenis-prevent>
+    <button class="wdlg-x" id="wdlgX" type="button" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+    <p class="wdlg-meta" id="wdlgM"></p>
+    <h3 class="wdlg-t" id="wdlgT"></h3>
+    <div class="wdlg-st" id="wdlgS"></div>
+    <dl class="wdlg-rows" id="wdlgR"></dl>
+  </div>
+</dialog>
 
 <script type="importmap">{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }</script>
 <script type="module">
@@ -1114,6 +1168,79 @@ if (RM){
   addEventListener('scroll', tickCounts, { passive: true });
   addEventListener('resize', tickCounts);
   tickCounts();
+}
+
+/* ---------- work detail dialog ---------- */
+/* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
+const WORKS = {
+  lyn: { m:'넥슨 코리아 · 모바일사업실 — 부팀장', t:'린',
+    s:[['3위','앱스토어·구글 매출'],['183억','매출']],
+    r:[['소프트런칭','호주 · 말레이시아 · 필리핀'],
+       ['검증·리서치','FGT · 사내테스트'],
+       ['대외 활동','G-star 출전 · 유저 간담회']] },
+  chaos: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'카오스크로니클',
+    s:[['7위','한국 앱스토어 매출'],['23위','한국 구글 매출'],['98억','미국 매출']],
+    r:[['미국 성적','앱스토어 112위 · 북미 등 iOS·구글 피처드'],
+       ['소프트런칭','5개국 소프트런칭 후 글로벌'],
+       ['서비스 종료 운영','2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당']] },
+  heroes: { m:'넥슨 코리아 · 모바일사업실 — 메인 PM', t:'영웅의 군단',
+    s:[['×5','글로벌 서비스 담당 이후 기존 매출 대비']],
+    r:[['담당','글로벌 서비스 · 메인 PM']] },
+  nightwalker: { m:'원더피플/에이스톰 · 사업팀 — 파트장', t:'나이트워커',
+    s:[['33만+','한국 신규'],['6.3만','DAU 피크'],['약 50%','D+1 리텐션 평균']],
+    r:[['퍼블리싱 연동','유료 재화 구매 연동 · 쿠폰 시스템 연동 · 서버 선택창 UI/플로우 기획'],
+       ['검증·리서치','FGT · 사내테스트'],
+       ['대외 활동','원티드 콜라보 · PR 영상']] }
+};
+const wdlg = document.getElementById('wdlg');
+if (wdlg && typeof wdlg.showModal === 'function'){
+  const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
+  const wS = document.getElementById('wdlgS'), wR = document.getElementById('wdlgR');
+  let opener = null;
+  function modalLock(on){
+    const h = document.documentElement;
+    if (on){
+      h.style.setProperty('--sbw', (window.innerWidth - h.clientWidth) + 'px');
+      h.classList.add('is-modal');
+      if (lenis) lenis.stop();
+    } else {
+      h.classList.remove('is-modal');
+      h.style.removeProperty('--sbw');
+      if (lenis && !scrollLocked) lenis.start();
+    }
+  }
+  function fill(parent, list, tags){
+    parent.replaceChildren(...list.map(([a, b]) => {
+      const box = document.createElement('div');
+      const x = document.createElement(tags[0]), y = document.createElement(tags[1]);
+      x.textContent = a; y.textContent = b;
+      box.append(x, y);
+      return box;
+    }));
+  }
+  function openWork(key, btn){
+    const w = WORKS[key];
+    if (!w) return;
+    opener = btn;
+    wM.textContent = w.m;
+    wT.textContent = w.t;
+    fill(wS, w.s, ['b', 'span']);
+    fill(wR, w.r, ['dt', 'dd']);
+    modalLock(true);
+    wdlg.showModal();
+  }
+  document.querySelectorAll('.card-open').forEach(btn => {
+    btn.addEventListener('click', () => openWork(btn.dataset.work, btn));
+  });
+  document.getElementById('wdlgX').addEventListener('click', () => wdlg.close());
+  // 바깥 클릭 = dialog 요소 자체(패널은 .wdlg-in)를 맞힌 경우
+  wdlg.addEventListener('click', (e) => { if (e.target === wdlg) wdlg.close(); });
+  // Esc는 브라우저가 처리 — close 이벤트에 잠금 해제·포커스 복귀를 한곳으로 모은다
+  wdlg.addEventListener('close', () => {
+    modalLock(false);
+    if (opener && document.contains(opener)) opener.focus();
+    opener = null;
+  });
 }
 
 /* ---------- loader ---------- */
