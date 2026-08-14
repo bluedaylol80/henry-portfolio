@@ -286,6 +286,20 @@ img{display:block}
 .card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.55)}
 .card-tags{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.5rem}
 .card-rights{margin-top:1rem;font-size:.6875rem;line-height:1.5;color:rgba(255,255,255,.34)}
+/* 앞면 외부 링크 — 카드 전체 클릭 영역(.card-open::after)보다 위로 올려야 상세창에 먹히지 않는다.
+   본문 클릭=상세창 / 이 링크 클릭=새 탭 체험판. width:fit-content로 링크 밖 여백은 카드에 돌려준다. */
+.card-cta{position:relative;z-index:1;margin-top:1.5rem;width:fit-content;font-size:.875rem}
+.card-cta .alink:focus-visible{outline-offset:6px}   /* .alink 기본 8px은 위 태그 줄에 링이 닿는다 */
+.card-cta .alink>span{align-items:center;gap:.4rem;opacity:.82;
+  text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,.32)}
+.card-cta .ic{font-size:.75em;transition:transform .38s var(--e-hover)}
+/* 특이도가 .alink 호버 규칙을 이기므로 opacity 복귀도 여기서 다시 쓴다(키보드는 미디어 밖에) */
+@media (hover:hover) and (pointer:fine){
+  .card-cta .alink:hover>span{opacity:1;text-decoration-color:rgba(255,255,255,.7)}
+  .card-cta .alink:hover .ic{transform:translate(2px,-2px)}
+}
+.card-cta .alink:focus-visible>span{opacity:1;text-decoration-color:rgba(255,255,255,.7)}
+.card-cta .alink:focus-visible .ic{transform:translate(2px,-2px)}
 /* 카드 전체가 클릭 대상 — 링은 제목 버튼에만 걸려 둥근 카드에 각진 사각형이 그려지지 않는다 */
 .card-open{display:inline-flex;align-items:center;gap:.5rem;text-align:left;letter-spacing:inherit}
 .card-open::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
@@ -489,6 +503,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <ul>
         <li><button class="nav-b" data-scroll="home" aria-current="page"><span>Home</span></button></li>
         <li><button class="nav-b" data-scroll="works"><span>성과</span></button></li>
+        <li><button class="nav-b" data-scroll="lab"><span>개인</span></button></li>
         <li><button class="nav-b" data-scroll="career"><span>경력</span></button></li>
         <li><button class="nav-b" data-scroll="skills"><span>역량</span></button></li>
         <li><a class="nav-b" href="mailto:bluedaylol80@gmail.com"><span>연락</span></a></li>
@@ -703,6 +718,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <h3><button class="card-open" type="button" data-work="budget" aria-haspopup="dialog">우리집 가계부<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성으로 라이브 운영 중.</p>
             <div class="card-tags"><span class="tag">AI로 혼자 제작</span><span class="tag">라이브 운영</span><span class="tag">체험판 배포</span></div>
+            <p class="card-cta"><a class="alink" href="https://bluedaylol80.github.io/family-budget-lite/" target="_blank" rel="noopener"><span>라이트 체험판 열기<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (새 창에서 열림)</span></span></a></p>
           </div>
         </article>
       </li>
