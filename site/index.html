@@ -297,6 +297,21 @@ img{display:block}
   .cards li:hover .card-open .ic{transform:translate(2px,-2px);opacity:1}
 }
 
+/* ---------- 개인 프로덕트 ----------
+   회사 성과(#works)와 절대 섞지 않는다 — 별도 섹션·별도 제목·별도 리스트.
+   카드 뼈대(.card 계열)는 그대로 재사용해 시각 언어만 맞춘다. */
+.lab-in{padding-block:5rem}
+.lab-hd{margin-bottom:3rem;gap:1.25rem}
+.lab-hd .h2{width:fit-content;max-width:100%}
+.lab-list{max-width:34rem;margin-inline:auto}
+@media (min-width:768px){.lab-list{grid-template-columns:1fr}}
+.lab-list li[hidden]{display:none}   /* 자리만 잡아 둔 항목이 그리드 칸을 먹지 않게 */
+/* 가계부 화면은 밝은 UI라 성과 카드 스크림(어두운 게임 아트 기준)으로는 카드 글자와 부딪힌다.
+   배경에서는 흐리게 깔아 분위기만 남기고, 선명한 화면은 상세 다이얼로그에서 보여 준다. */
+.lab-list .card-shot{filter:blur(7px);transform:scale(1.1)}
+.lab-list .card-shot::after{background:linear-gradient(180deg,
+  rgba(10,10,10,.74) 0%,rgba(10,10,10,.86) 46%,rgba(10,10,10,.95) 100%)}
+
 /* 성과 상세 다이얼로그 (네이티브 dialog — Esc·포커스 가둠은 브라우저가 처리) */
 .wdlg{border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
   border-radius:var(--r-card);background:var(--bg);color:var(--fg);box-shadow:0 24px 60px rgba(17,17,17,.2)}
@@ -322,6 +337,14 @@ img{display:block}
 .wdlg-rows dt{font-size:.8125rem;color:rgba(17,17,17,.5)}
 @media (min-width:640px){.wdlg-rows dt{width:7rem;flex:none}}
 .wdlg-rows dd{font-size:.9375rem;line-height:1.6}
+/* 시연 영상 — 상세를 열 때만 JS가 <img>를 만든다(첫 화면에서 받지 않게) */
+.wdlg-fig{margin-top:1.75rem;display:flex;flex-direction:column;gap:.75rem}
+.wdlg-fig[hidden]{display:none}   /* 클래스의 display가 UA의 [hidden]{display:none}을 이겨서 빈 칸이 남는다 */
+.wdlg-fig img{display:block;margin-inline:auto;width:auto;max-width:100%;max-height:min(46vh,22rem);
+  border-radius:var(--r-card-sm);box-shadow:0 12px 30px rgba(17,17,17,.14)}
+.wdlg-fig figcaption{text-align:center;font-size:.75rem;line-height:1.5;color:rgba(17,17,17,.5)}
+.wdlg-cta{margin-top:2rem}
+.wdlg-cta:empty{display:none}
 @keyframes wdlgIn{from{opacity:0;transform:translateY(14px) scale(.985)}}
 @keyframes wdlgBd{from{opacity:0}}
 .wdlg[open] .wdlg-in{animation:wdlgIn .45s var(--e-rise)}
@@ -662,6 +685,33 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   </div>
 </section>
 
+<!-- ================= PERSONAL PRODUCTS ================= -->
+<section id="lab" class="sec">
+  <div class="shell px lab-in">
+    <div class="center lab-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>Personal Products</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>혼자 만들어 운영하는 것</span></span></h2>
+    </div>
+
+    <ul class="cards lab-list">
+      <li data-reveal style="--rd:0ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="budget" aria-hidden="true"></div>
+          <div class="card-meta">개인 프로덕트 · 기획 · 개발 · 운영</div>
+          <div class="card-wm" aria-hidden="true">v2.23</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="budget" aria-haspopup="dialog">우리집 가계부<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p>부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성으로 라이브 운영 중.</p>
+            <div class="card-tags"><span class="tag">AI로 혼자 제작</span><span class="tag">라이브 운영</span><span class="tag">체험판 배포</span></div>
+          </div>
+        </article>
+      </li>
+      <!-- 작은 의뢰소: 퀄리티 리부트 완료 후 여기를 켠다(hidden 제거 + 카드 작성). 미완성 화면은 내보내지 않는다. -->
+      <li hidden data-product-slot="small-request-office"></li>
+    </ul>
+  </div>
+</section>
+
 <!-- ================= CAREER ================= -->
 <section id="career" class="sec">
   <div class="shell px rows-in">
@@ -880,6 +930,9 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <p class="wdlg-meta" id="wdlgM"></p>
     <h3 class="wdlg-t" id="wdlgT"></h3>
     <div class="wdlg-st" id="wdlgS"></div>
+    <!-- 외부 링크는 시연 영상 위에 둔다 — 아래에 두면 긴 패널에서 접히는 순간 보이지 않는다 -->
+    <p class="wdlg-cta" id="wdlgL"></p>
+    <figure class="wdlg-fig" id="wdlgF" hidden></figure>
     <dl class="wdlg-rows" id="wdlgR"></dl>
   </div>
 </dialog>
@@ -1248,12 +1301,22 @@ const WORKS = {
   nanakage: { m:'넵튠 레전드 · 스튜디오 — 사업PM', t:'Shadow Seven',
     s:[['4개국','소프트런칭']],
     r:[['담당','사업PM (2019.10 ~ 2020.04)'],
-       ['소프트런칭','한국 · 일본 · 대만 · 미국 (중국 제외)']] }
+       ['소프트런칭','한국 · 일본 · 대만 · 미국 (중국 제외)']] },
+  // 개인 프로덕트 — v(시연 영상)·l(외부 링크)은 이 항목에만 있는 선택 필드다.
+  budget: { m:'개인 프로덕트 · 기획 · 개발 · 운영', t:'우리집 가계부',
+    s:[['222/222','jsdom 테스트'],['56/56','레이아웃 테스트']],
+    r:[['무엇','부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성'],
+       ['상태','라이브 운영 중 — 우리집판 v2.23, 배포 @44 (2026-08-03 기준)'],
+       ['만든 방식','AI로 혼자 만들어 매일 돌리고, 라이트 체험판까지 외부 배포']],
+    v:{ src:'media/budget-demo.webp', still:'works/budget.jpg', alt:'우리집 가계부 폰 화면 시연',
+        cap:'가상 데이터로 촬영한 시연 — 실제 가계 수치가 아닙니다.' },
+    l:{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'라이트 체험판 열기' } }
 };
 const wdlg = document.getElementById('wdlg');
 if (wdlg && typeof wdlg.showModal === 'function'){
   const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
   const wS = document.getElementById('wdlgS'), wR = document.getElementById('wdlgR');
+  const wF = document.getElementById('wdlgF'), wL = document.getElementById('wdlgL');
   let opener = null;
   function modalLock(on){
     const h = document.documentElement;
@@ -1276,6 +1339,37 @@ if (wdlg && typeof wdlg.showModal === 'function'){
       return box;
     }));
   }
+  /* 시연 영상은 여기서 처음 <img>를 만든다 — 상세를 열기 전에는 네트워크 요청이 나가지 않는다.
+     reduced-motion이면 움직이는 WebP 대신 정지 이미지를 건다. */
+  function fillMedia(v){
+    if (!v){ wF.replaceChildren(); wF.hidden = true; return; }
+    const img = document.createElement('img');
+    img.src = RM ? v.still : v.src;
+    img.alt = v.alt;
+    const cap = document.createElement('figcaption');
+    cap.textContent = v.cap;
+    wF.replaceChildren(img, cap);
+    wF.hidden = false;
+  }
+  function fillLink(l){
+    if (!l){ wL.replaceChildren(); return; }
+    const a = document.createElement('a');
+    a.className = 'pill pill--dark pill--arrow pill--ur';
+    a.href = l.href; a.target = '_blank'; a.rel = 'noopener';
+    const inner = document.createElement('span');
+    inner.className = 'pill-in';
+    inner.append(l.label);
+    const sr = document.createElement('span');
+    sr.className = 'sr-only'; sr.textContent = ' (새 창에서 열림)';
+    const badge = document.createElement('span');
+    badge.className = 'pill-badge';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'ic'); svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#i-arrup');
+    svg.append(use); badge.append(svg); inner.append(sr, badge); a.append(inner);
+    wL.replaceChildren(a);
+  }
   function openWork(key, btn){
     const w = WORKS[key];
     if (!w) return;
@@ -1284,6 +1378,8 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     wT.textContent = w.t;
     fill(wS, w.s, ['b', 'span']);
     fill(wR, w.r, ['dt', 'dd']);
+    fillMedia(w.v);
+    fillLink(w.l);
     modalLock(true);
     wdlg.showModal();
   }
