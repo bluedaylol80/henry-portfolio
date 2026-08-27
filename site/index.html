@@ -383,6 +383,12 @@ img{display:block}
 @media (prefers-reduced-motion:reduce){.wdlg[open] .wdlg-in,.wdlg[open]::backdrop{animation:none}}
 /* 모달 중 배경 스크롤 잠금 — 스크롤바가 사라지며 생기는 폭 변화를 padding으로 상쇄 */
 html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
+/* ---------- 이메일 복사 토스트 ---------- */
+.toast{position:fixed;left:50%;bottom:2rem;z-index:110;transform:translateX(-50%) translateY(8px);opacity:0;pointer-events:none;
+  background:var(--ink);color:#fff;border-radius:999px;padding:.7rem 1.25rem;font-size:.8125rem;letter-spacing:.01em;max-width:calc(100vw - 2rem);
+  transition:opacity .3s var(--e-soft),transform .3s var(--e-soft)}
+.toast.is-on{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none;transform:translateX(-50%)}}
 
 /* rows (career / skills) */
 .rows-in{padding-block:5rem}
@@ -1029,6 +1035,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   </div>
 </dialog>
 
+<div class="toast" id="mailToast" role="status"></div>
+
 <script type="importmap">{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }</script>
 <script type="module">
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1519,6 +1527,23 @@ document.querySelectorAll('.card-shot').forEach(slot => {
     img.onerror = () => probe(i + 1);
     img.src = base + exts[i];
   })(0);
+});
+
+/* ---------- 이메일 버튼 폴백 ----------
+   mailto:는 OS 기본 메일 앱에 넘기는 방식이라, 메일 앱이 연결 안 된 PC에선 클릭해도 아무 일이 없다.
+   그래서 클릭하면 주소를 클립보드에 복사하고 토스트로 알린다 — 메일 앱이 열리는 환경이면 둘 다 된다. */
+const mailToast = document.getElementById('mailToast');
+let mailToastT = 0;
+document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+  a.addEventListener('click', () => {
+    const addr = a.getAttribute('href').replace('mailto:', '');
+    try { navigator.clipboard.writeText(addr); } catch (e) {}
+    if (!mailToast) return;
+    mailToast.textContent = '이메일 주소를 복사했습니다 — ' + addr;
+    mailToast.classList.add('is-on');
+    clearTimeout(mailToastT);
+    mailToastT = setTimeout(() => mailToast.classList.remove('is-on'), 2600);
+  });
 });
 
 /* ---------- loader ---------- */
