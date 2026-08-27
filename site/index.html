@@ -383,11 +383,18 @@ img{display:block}
 @media (prefers-reduced-motion:reduce){.wdlg[open] .wdlg-in,.wdlg[open]::backdrop{animation:none}}
 /* 모달 중 배경 스크롤 잠금 — 스크롤바가 사라지며 생기는 폭 변화를 padding으로 상쇄 */
 html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
+/* ---------- 연락처 창 ---------- */
+.cdlg .wdlg-in{max-width:34rem}
+.contact-rows>div[hidden]{display:none}
+.contact-val{display:block;font-size:1.0625rem;font-weight:600;margin-bottom:.7rem;user-select:all}
+.contact-acts{display:flex;flex-wrap:wrap;gap:.5rem}
+.contact-acts .pill-in{padding:.6rem 1.05rem;font-size:.8125rem}
 /* ---------- 이메일 복사 토스트 ---------- */
-.toast{position:fixed;left:50%;bottom:2rem;z-index:110;transform:translateX(-50%) translateY(8px);opacity:0;pointer-events:none;
+/* popover(top layer)로 띄워 모달 연락처 창 위에서도 보인다 — UA popover 기본값(inset:0·margin:auto·border) 무효화 */
+.toast{position:fixed;inset:auto;left:50%;bottom:2rem;margin:0;border:0;z-index:110;transform:translateX(-50%) translateY(8px);opacity:0;pointer-events:none;
   background:var(--ink);color:#fff;border-radius:999px;padding:.7rem 1.25rem;font-size:.8125rem;letter-spacing:.01em;max-width:calc(100vw - 2rem);
   transition:opacity .3s var(--e-soft),transform .3s var(--e-soft)}
-.toast.is-on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.is-on,.toast:popover-open{opacity:1;transform:translateX(-50%) translateY(0)}
 @media (prefers-reduced-motion:reduce){.toast{transition:none;transform:translateX(-50%)}}
 
 /* rows (career / skills) */
@@ -572,7 +579,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <span class="pill-in">성과 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
         </button>
         <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
-          <span class="pill-in">이메일 보내기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+          <span class="pill-in">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
         </a>
       </div>
     </div>
@@ -988,7 +995,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="line" style="--i:1"><span>요청 주시면 보내드립니다.</span></span>
       </h2>
       <a class="pill pill--light pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com" data-reveal style="--rd:200ms;--ry:12px">
-        <span class="pill-in">이메일 보내기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+        <span class="pill-in">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
       </a>
     </div>
 
@@ -1035,7 +1042,38 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   </div>
 </dialog>
 
-<div class="toast" id="mailToast" role="status"></div>
+<!-- ================= CONTACT ================= -->
+<dialog id="cdlg" class="wdlg cdlg" aria-labelledby="cdlgT">
+  <div class="wdlg-in" data-lenis-prevent>
+    <button class="wdlg-x" id="cdlgX" type="button" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+    <p class="wdlg-meta">Contact</p>
+    <h3 class="wdlg-t" id="cdlgT">연락처</h3>
+    <dl class="wdlg-rows contact-rows">
+      <div>
+        <dt>이메일</dt>
+        <dd>
+          <span class="contact-val">bluedaylol80@gmail.com</span>
+          <span class="contact-acts">
+            <button class="pill pill--dark" type="button" id="copyMail"><span class="pill-in">주소 복사</span></button>
+            <a class="pill pill--outline" href="mailto:bluedaylol80@gmail.com"><span class="pill-in">메일 앱으로 쓰기</span></a>
+            <a class="pill pill--outline" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bluedaylol80@gmail.com" target="_blank" rel="noopener"><span class="pill-in">Gmail로 쓰기<span class="sr-only"> (새 창에서 열림)</span></span></a>
+          </span>
+        </dd>
+      </div>
+      <!-- 카카오톡 오픈채팅: 본부장이 링크를 주면 hidden 제거 + href 기입 -->
+      <div hidden data-contact-slot="kakao">
+        <dt>카카오톡</dt>
+        <dd>
+          <span class="contact-acts">
+            <a class="pill pill--dark" id="kakaoLink" href="" target="_blank" rel="noopener"><span class="pill-in">오픈채팅 열기<span class="sr-only"> (새 창에서 열림)</span></span></a>
+          </span>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</dialog>
+
+<div class="toast" id="mailToast" role="status" popover="manual"></div>
 
 <script type="importmap">{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }</script>
 <script type="module">
@@ -1509,6 +1547,34 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     if (opener && document.contains(opener)) opener.focus();
     opener = null;
   });
+
+  /* ---------- contact dialog ----------
+     mailto:는 메일 앱이 연결 안 된 PC에선 무반응이라(본부장 실기 재현),
+     모든 연락 진입점은 연락처 창을 연다 — JS가 없으면 원래 mailto로 폴백. */
+  const cdlg = document.getElementById('cdlg');
+  if (cdlg && typeof cdlg.showModal === 'function'){
+    let copener = null;
+    document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+      if (a.closest('#cdlg')) return;   // 창 안의 "메일 앱으로 쓰기"는 원래 동작 유지
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        copener = a;
+        modalLock(true);
+        cdlg.showModal();
+      });
+    });
+    document.getElementById('cdlgX').addEventListener('click', () => cdlg.close());
+    cdlg.addEventListener('click', (e) => { if (e.target === cdlg) cdlg.close(); });
+    cdlg.addEventListener('close', () => {
+      modalLock(false);
+      if (copener && document.contains(copener)) copener.focus();
+      copener = null;
+    });
+    document.getElementById('copyMail').addEventListener('click', () => {
+      try { navigator.clipboard.writeText('bluedaylol80@gmail.com'); } catch (e) {}
+      showToast('이메일 주소를 복사했습니다 — bluedaylol80@gmail.com');
+    });
+  }
 }
 
 /* ---------- 성과 카드 대표 이미지 슬롯 ----------
@@ -1529,22 +1595,21 @@ document.querySelectorAll('.card-shot').forEach(slot => {
   })(0);
 });
 
-/* ---------- 이메일 버튼 폴백 ----------
-   mailto:는 OS 기본 메일 앱에 넘기는 방식이라, 메일 앱이 연결 안 된 PC에선 클릭해도 아무 일이 없다.
-   그래서 클릭하면 주소를 클립보드에 복사하고 토스트로 알린다 — 메일 앱이 열리는 환경이면 둘 다 된다. */
+/* ---------- 복사 토스트 헬퍼 (연락처 창에서 사용) ---------- */
 const mailToast = document.getElementById('mailToast');
 let mailToastT = 0;
-document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
-  a.addEventListener('click', () => {
-    const addr = a.getAttribute('href').replace('mailto:', '');
-    try { navigator.clipboard.writeText(addr); } catch (e) {}
-    if (!mailToast) return;
-    mailToast.textContent = '이메일 주소를 복사했습니다 — ' + addr;
+function showToast(msg){
+  if (!mailToast) return;
+  mailToast.textContent = msg;
+  clearTimeout(mailToastT);
+  if (mailToast.showPopover){   // top layer — 모달 위에서도 보인다
+    try { mailToast.showPopover(); } catch (e) {}
+    mailToastT = setTimeout(() => { try { mailToast.hidePopover(); } catch (e) {} }, 2600);
+  } else {
     mailToast.classList.add('is-on');
-    clearTimeout(mailToastT);
     mailToastT = setTimeout(() => mailToast.classList.remove('is-on'), 2600);
-  });
-});
+  }
+}
 
 /* ---------- loader ---------- */
 const loader = document.getElementById('loader');
