@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>꾸미기 이벤트 와이어프레임 체험판</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf9f6;
+    --text: #1e293b;
+    --phone-bg: linear-gradient(135deg, #4a9eff 0%, #2979ff 50%, #1565c0 100%);
+    --card-bg: rgba(255,255,255,0.95);
+    --card-border: rgba(255,255,255,0.3);
+    --note-bg: #fef9e7;
+    --note-border: #f0d060;
+    --accent: #ff6b35;
+    --coin: #fbbf24;
+    --diamond: #60a5fa;
+    --tier-newcomer: #8bc34a;
+    --tier-light: #66bb6a;
+    --tier-core: #fdd835;
+    --tier-true: #42a5f5;
+    --tier-legend: #ff7043;
+    --nav-bg: rgba(255,255,255,0.15);
+    --nav-active: rgba(255,255,255,0.35);
+  }
+
+  .dark {
+    --bg: #1a1a2e;
+    --text: #e2e8f0;
+    --phone-bg: linear-gradient(135deg, #1a365d 0%, #1e3a5f 50%, #0f2847 100%);
+    --card-bg: rgba(30,41,59,0.95);
+    --card-border: rgba(255,255,255,0.1);
+    --note-bg: #2d2a1e;
+    --note-border: #8b7a2e;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.6;
+    margin-bottom: 16px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .controls button {
+    padding: 6px 14px;
+    border: 1px solid var(--text);
+    background: transparent;
+    color: var(--text);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .controls button:hover { opacity: 0.7; }
+  .controls button.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  /* Screen navigation */
+  .screen-nav {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .screen-nav button {
+    padding: 5px 10px;
+    border: none;
+    background: rgba(100,100,100,0.15);
+    color: var(--text);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .screen-nav button:hover { background: rgba(100,100,100,0.25); }
+  .screen-nav button.active {
+    background: #2979ff;
+    color: white;
+  }
+
+  /* Phone frame — landscape (default) */
+  .phone-frame {
+    width: 740px;
+    min-height: 420px;
+    margin: 0 auto 24px;
+    border-radius: 36px;
+    background: var(--phone-bg);
+    padding: 16px 20px;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width 0.4s, min-height 0.4s, border-radius 0.4s;
+  }
+
+  .phone-frame::before {
+    content: '';
+    display: block;
+    width: 120px;
+    height: 5px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 3px;
+    margin: 0 auto 12px;
+  }
+
+  /* Portrait mode */
+  .phone-frame.portrait {
+    width: 375px;
+    min-height: 700px;
+  }
+
+  /* Screen sections */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Common inner components */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding: 0 4px;
+  }
+  .top-bar .back { cursor: pointer; opacity: 0.8; }
+  .top-bar .timer {
+    font-size: 11px;
+    opacity: 0.85;
+    text-align: center;
+    margin-top: 2px;
+  }
+
+  .currency-bar {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 10px;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .progress-bar {
+    height: 8px;
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 6px 0;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+
+  .bottom-nav {
+    display: flex;
+    background: rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 6px;
+    margin-top: 10px;
+  }
+  .bottom-nav .nav-item {
+    flex: 1;
+    text-align: center;
+    padding: 6px 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    font-size: 10px;
+    transition: background 0.2s;
+    position: relative;
+  }
+  .bottom-nav .nav-item:hover { background: var(--nav-bg); }
+  .bottom-nav .nav-item.active { background: var(--nav-active); }
+  .nav-item .icon { font-size: 18px; display: block; margin-bottom: 2px; }
+  .nav-item .badge {
+    position: absolute;
+    top: 2px;
+    right: calc(50% - 16px);
+    width: 14px;
+    height: 14px;
+    background: #ef4444;
+    border-radius: 50%;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+  }
+
+  /* Grid helpers */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+
+  .mini-card {
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .mini-card:hover { transform: scale(1.03); }
+  .mini-card .price { font-weight: 700; margin-top: 4px; }
+  .mini-card .emoji { font-size: 22px; margin-bottom: 4px; }
+
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.1s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: #fbbf24; color: #1e293b; }
+  .btn-blue { background: #2979ff; color: white; }
+  .btn-outline { background: transparent; border: 1.5px solid white; color: white; }
+
+  /* Annotation note */
+  .note {
+    background: var(--note-bg);
+    border: 1.5px solid var(--note-border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #5a4e1e;
+    margin: 10px 0;
+  }
+  .dark .note { color: #d4c87a; }
+
+  /* Member circles */
+  .members {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 8px 0;
+  }
+  .member {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .member.selected { border-color: #fbbf24; }
+
+  /* Frame grid */
+  .frame-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+    font-weight: 600;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .frame-cell:hover { transform: scale(1.08); }
+  .frame-cell.owned { background: rgba(255,255,255,0.25); }
+  .frame-cell.locked { background: rgba(0,0,0,0.2); }
+  .frame-cell.equipped { background: rgba(76,175,80,0.4); border: 2px solid #4caf50; }
+  .frame-cell.new { background: rgba(255,107,53,0.4); }
+  .frame-new-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #ef4444;
+    color: white;
+    font-size: 7px;
+    padding: 1px 3px;
+    border-radius: 3px;
+    font-weight: 800;
+  }
+
+  /* Tier display */
+  .tier-display {
+    text-align: center;
+    color: white;
+    margin: 10px 0;
+  }
+  .tier-icon { font-size: 40px; }
+  .tier-name { font-size: 18px; font-weight: 800; margin: 4px 0; }
+  .tier-score { font-size: 13px; opacity: 0.9; }
+
+  /* Checklist */
+  .checklist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    font-size: 12px;
+    color: var(--text);
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .check { color: #4caf50; font-weight: 700; }
+  .uncheck { color: #9e9e9e; }
+
+  /* Calendar */
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: white;
+  }
+  .cal-cell.done { background: rgba(76,175,80,0.4); }
+  .cal-cell.today { background: rgba(33,150,243,0.5); border: 1.5px solid white; }
+  .cal-cell.future { background: rgba(255,255,255,0.08); opacity: 0.5; }
+  .cal-cell.milestone { background: rgba(255,193,7,0.5); }
+
+  /* v2.7: 출석부 슬롯 하이라이트 애니메이션 */
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(33,150,243,0.4); }
+    50% { box-shadow: 0 0 12px rgba(33,150,243,0.8); }
+  }
+
+  /* Rank row */
+  .rank-row {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    color: white;
+    font-size: 12px;
+  }
+  .rank-row.me { background: rgba(255,193,7,0.25); border: 1px solid rgba(255,193,7,0.4); }
+  .rank-row:not(.me) { background: rgba(255,255,255,0.08); }
+  .rank-num { width: 28px; font-weight: 800; font-size: 14px; }
+  .rank-name { flex: 1; font-weight: 600; }
+  .rank-score { font-weight: 700; }
+  .rank-tier { margin-left: 6px; }
+
+  /* Star pass track */
+  .pass-row {
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    font-size: 11px;
+    color: white;
+  }
+  .pass-row.claimed { background: rgba(76,175,80,0.2); }
+  .pass-row.current { background: rgba(33,150,243,0.25); border: 1px solid rgba(33,150,243,0.4); }
+  .pass-row:not(.claimed):not(.current) { background: rgba(255,255,255,0.06); }
+  .pass-lv { width: 30px; font-weight: 800; }
+  .pass-free { flex: 1; text-align: center; }
+  .pass-premium { flex: 1; text-align: center; opacity: 0.7; }
+  .pass-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); margin: 0 6px; }
+
+  /* Codex grid */
+  .codex-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+    color: var(--text);
+  }
+  .codex-table th, .codex-table td {
+    padding: 6px 4px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .codex-table th {
+    font-weight: 700;
+    font-size: 10px;
+    opacity: 0.6;
+  }
+
+  /* Settlement */
+  .reward-item {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 4px;
+    color: white;
+    font-size: 10px;
+  }
+  .reward-item .r-icon { font-size: 24px; margin-bottom: 4px; }
+
+  /* Tab selector */
+  .tabs {
+    display: flex;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 10px;
+  }
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 6px;
+    border-radius: 8px;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .tab.active { background: rgba(255,255,255,0.2); }
+
+  /* Landscape layout helpers */
+  .phone-frame:not(.portrait) .land-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .phone-frame.portrait .land-cols {
+    display: block;
+  }
+
+  .phone-frame:not(.portrait) .land-full {
+    grid-column: 1 / -1;
+  }
+
+  .phone-frame:not(.portrait) .bottom-nav {
+    grid-column: 1 / -1;
+  }
+
+  .phone-frame:not(.portrait) .note {
+    grid-column: 1 / -1;
+  }
+
+  .phone-frame:not(.portrait) .grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .white-text { color: white; }
+  .small { font-size: 11px; }
+  .tiny { font-size: 10px; }
+  .bold { font-weight: 700; }
+  .center { text-align: center; }
+  .mt-8 { margin-top: 8px; }
+  .mb-8 { margin-bottom: 8px; }
+  .opacity-7 { opacity: 0.7; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>꾸미기 이벤트 시스템 Wireframe</h1>
+  <p class="subtitle">SUPERSTAR STAYC · unchild Decoration Event v2.8 — Slack 피드백 반영</p>
+
+  <div class="controls">
+    <button onclick="toggleDark()" id="darkBtn">Toggle Dark Mode</button>
+    <button onclick="toggleOrientation()" id="orientBtn">📱 세로 모드로 전환</button>
+    
+  </div>
+
+  
+  
+
+  <div class="screen-nav" id="screenNav">
+    <button data-screen="transition">전환 연출</button>
+    <button class="active" data-screen="lobby">이벤트 로비</button>
+    <button data-screen="shop">교환상점</button>
+    <button data-screen="deco">꾸미기</button>
+    <button data-screen="codex">도감 (통합)</button>
+    <button data-screen="mission">미션</button>
+    <button data-screen="attendance">출석부</button>
+    <button data-screen="ranking">리더보드</button>
+    <button data-screen="score">점수 대시보드</button>
+    <button data-screen="starpass">스타패스</button>
+    <button data-screen="cardopen">카드팩 개봉</button>
+    <button data-screen="reward-popup">보상 팝업</button>
+    <button data-screen="settle">정산</button>
+    <button data-screen="archive">아카이브</button>
+    
+  </div>
+
+  
+  <div class="phone-frame">
+
+    
+    <div class="screen" id="screen-transition">
+      <div style="width:100%;min-height:380px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;background:#000;color:white;border-radius:14px;position:relative;">
+        <div style="font-size:14px;opacity:0.6;margin-bottom:8px;">MV 재생 영역 (YouTube Embed)</div>
+        <div style="font-size:60px;">🎬</div>
+        <div style="font-size:16px;font-weight:800;letter-spacing:4px;color:#c084fc;">unchild MV — 10~12초</div>
+        <div style="font-size:11px;opacity:0.5;margin-top:4px;">하루 1회 재생, 이후 짧은 전환 애니메이션</div>
+
+        
+        <div style="position:absolute;bottom:20px;right:20px;display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+          <label style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.1);padding:5px 10px;border-radius:6px;font-size:10px;">
+            <input type="checkbox" disabled=""> 다음에 안 보기
+          </label>
+          <div style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:6px 16px;font-size:12px;font-weight:600;letter-spacing:1px;">SKIP 12s</div>
+        </div>
+      </div>
+
+      
+      <div style="margin-top:12px;background:linear-gradient(135deg,#1a0a2e,#2d1b4e);border-radius:14px;padding:20px;text-align:center;color:white;">
+        <div style="font-size:10px;opacity:0.5;margin-bottom:8px;">↓ 이미 MV를 본 경우 (같은 날 재방문)</div>
+        <div style="font-size:36px;">🔥</div>
+        <div style="font-size:16px;font-weight:900;letter-spacing:6px;color:#c084fc;margin-top:8px;">DECORATION MODE</div>
+        <div style="width:60px;height:2px;background:#c084fc;margin:8px auto;border-radius:2px;"></div>
+        <div style="font-size:10px;opacity:0.4;">1.5초 후 자동 전환</div>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen active" id="screen-lobby">
+      
+      <div class="top-bar land-full" style="padding:4px 8px;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="back" style="font-size:18px;cursor:pointer;">＜</span>
+          <span style="font-size:13px;font-weight:800;">꾸미기 이벤트 로비</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;background:rgba(255,255,255,0.1);border-radius:16px;padding:3px 10px;">
+          <span style="font-size:10px;">⏱</span>
+          <span style="font-size:11px;font-weight:700;">남은 시간 6일 01:55:55</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="display:flex;align-items:center;gap:3px;background:rgba(255,193,7,0.2);border-radius:12px;padding:2px 8px;">
+            <span style="font-size:12px;">🪙</span><span style="font-size:12px;font-weight:800;">99,999</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:3px;background:rgba(96,165,250,0.2);border-radius:12px;padding:2px 8px;">
+            <span style="font-size:12px;">💎</span><span style="font-size:12px;font-weight:800;">99,999</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <div style="display:flex;align-items:stretch;margin:4px 0;min-height:220px;">
+
+        
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:8px;padding:4px 2px;width:70px;flex-shrink:0;">
+          <div onclick="goScreen('shop')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">🛒</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">교환상점</div>
+            </div>
+            <div style="position:absolute;top:-6px;right:-6px;transform:rotate(-45deg);width:14px;height:14px;background:#ef4444;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">N</div>
+          </div>
+          <div onclick="goScreen('codex')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">📖</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">도감</div>
+            </div>
+            <div style="position:absolute;top:-6px;right:-6px;transform:rotate(-45deg);width:14px;height:14px;background:#ef4444;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">N</div>
+          </div>
+          <div onclick="goScreen('deco')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">🎨</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">꾸미기</div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+          <div style="width:140px;height:190px;border-radius:12px;background:linear-gradient(135deg,rgba(192,192,192,0.4),rgba(255,255,255,0.15));display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid rgba(192,192,192,0.6);box-shadow:0 4px 24px rgba(192,192,192,0.3),0 0 40px rgba(124,77,255,0.1);position:relative;">
+            <div style="position:absolute;top:6px;left:8px;font-size:22px;font-weight:900;color:#fbbf24;text-shadow:0 1px 3px rgba(0,0,0,0.5);">R</div>
+            <div style="font-size:48px;margin-top:10px;">🃏</div>
+            <div style="font-size:14px;font-weight:900;color:white;margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,0.5);">ISA</div>
+            <div style="display:flex;gap:1px;margin-top:2px;">
+              <span style="font-size:12px;color:#fbbf24;">⭐⭐⭐⭐⭐</span>
+            </div>
+            <div style="position:absolute;bottom:6px;left:8px;font-size:10px;font-weight:800;color:white;background:rgba(0,0,0,0.4);padding:1px 6px;border-radius:4px;">99</div>
+          </div>
+          <div style="font-size:8px;opacity:0.4;color:white;margin-top:4px;">대표 카드 <b>(1장만 설정 가능)</b></div>
+        </div>
+
+        
+        <div style="display:flex;flex-direction:column;justify-content:center;gap:8px;padding:4px 2px;width:70px;flex-shrink:0;">
+          <div onclick="goScreen('mission')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">🏆</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">미션</div>
+            </div>
+            <div style="position:absolute;top:-6px;right:-6px;transform:rotate(-45deg);width:14px;height:14px;background:#ef4444;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">N</div>
+          </div>
+          <div onclick="goScreen('attendance')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">📅</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">출석부</div>
+            </div>
+            <div style="position:absolute;top:-6px;right:-6px;transform:rotate(-45deg);width:14px;height:14px;background:#ef4444;border-radius:50%;font-size:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:800;">N</div>
+          </div>
+          <div onclick="goScreen('ranking')" style="cursor:pointer;position:relative;width:52px;height:52px;margin:0 auto;background:linear-gradient(135deg,#9c27b0,#7b1fa2);border:2px solid rgba(255,255,255,0.3);border-radius:8px;transform:rotate(45deg);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(156,39,176,0.4);">
+            <div style="transform:rotate(-45deg);text-align:center;">
+              <div style="font-size:14px;">🏆</div>
+              <div style="font-size:6px;color:white;font-weight:700;white-space:nowrap;">리더보드</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.08);border-radius:12px;padding:8px 14px;margin:0 6px 6px;cursor:pointer;" onclick="goScreen('score')">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+          <span style="font-size:22px;">⚡</span>
+          <div style="flex:1;">
+            <div style="font-size:8px;opacity:0.5;color:white;">팬 등급</div>
+            <div style="font-size:13px;font-weight:900;color:white;">찐팬 (True Fan)</div>
+          </div>
+          <div style="font-size:20px;font-weight:900;color:#e040fb;">15618</div>
+        </div>
+        <div class="progress-bar" style="height:6px;background:rgba(255,255,255,0.15);"><div class="fill" style="width:99%;background:linear-gradient(90deg,#e040fb,#ce93d8);"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:8px;opacity:0.5;color:white;margin-top:2px;">
+          <span>99,999 / 99,999</span>
+          <span>99%</span>
+        </div>
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:8px 10px;margin:0 6px 6px;">
+        <div style="color:white;font-size:11px;font-weight:700;text-align:center;margin-bottom:6px;">일간 미션</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+          
+          <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 6px;text-align:center;">
+            <div style="font-size:10px;color:white;font-weight:600;margin-bottom:4px;">카드팩 1회 구매</div>
+            <div style="font-size:10px;color:white;opacity:0.6;">카드팩 1회 구매</div>
+            <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:3px;">
+              <span style="font-size:12px;">⚡</span><span style="font-size:14px;font-weight:900;color:#e040fb;">500</span>
+            </div>
+          </div>
+          
+          <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 6px;text-align:center;position:relative;">
+            <div style="font-size:10px;color:white;font-weight:600;margin-bottom:4px;">카드팩 1회 구매</div>
+            <div style="font-size:11px;font-weight:900;color:#fbbf24;font-style:italic;letter-spacing:1px;">COMPLETED</div>
+            <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:3px;">
+              <span style="font-size:12px;">⚡</span><span style="font-size:14px;font-weight:900;color:#e040fb;">500</span>
+            </div>
+          </div>
+          
+          <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 6px;text-align:center;">
+            <div style="font-size:10px;color:white;font-weight:600;margin-bottom:4px;">카드팩 1회 구매</div>
+            <div style="font-size:11px;font-weight:900;color:#fbbf24;font-style:italic;letter-spacing:1px;">COMPLETED</div>
+            <div style="margin-top:6px;display:flex;align-items:center;justify-content:center;gap:3px;">
+              <span style="font-size:12px;">⚡</span><span style="font-size:14px;font-weight:900;color:#e040fb;">500</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+
+      
+    </div>
+
+    
+
+    
+    <div class="screen" id="screen-shop">
+      
+      <div style="display:flex;align-items:center;background:#3a3a3a;padding:6px 10px;border-bottom:1px solid rgba(255,255,255,0.15);">
+        <span class="back" onclick="goScreen('lobby')" style="color:white;font-size:13px;cursor:pointer;margin-right:10px;">＜ 로비</span>
+        <div style="flex:1;"></div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:18px;height:18px;background:linear-gradient(135deg,#f9a825,#f57f17);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;">🪙</div>
+            <span style="color:white;font-weight:700;font-size:13px;">1,222</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:4px;">
+            <div style="width:18px;height:18px;background:linear-gradient(135deg,#42a5f5,#1565c0);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;">💎</div>
+            <span style="color:white;font-weight:700;font-size:13px;">555</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <div style="position:relative;margin:6px 8px 4px;">
+        <div style="background:#5b8cc5;border:2px solid #e53935;border-radius:4px;padding:6px 16px;text-align:center;color:white;font-size:12px;font-weight:700;">
+          보유 카드 : 42 / 60 장
+        </div>
+        
+        <div style="position:absolute;top:-28px;left:50%;transform:translateX(-50%);background:white;color:#333;font-size:8px;padding:3px 8px;border-radius:3px;white-space:nowrap;text-align:center;line-height:1.4;box-shadow:0 1px 4px rgba(0,0,0,0.3);">
+          보유 카드/프레임 현황을 알려주는 텍스트<br>보유 카드/프레임이 모두 채워진 경우 카드/프레임 구매 불가
+          <div style="position:absolute;bottom:-4px;left:8%;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid white;"></div>
+        </div>
+      </div>
+
+      
+      <div style="display:flex;flex:1;gap:0;margin:0 8px 8px;overflow:hidden;">
+
+        
+        <div style="width:90px;display:flex;flex-direction:column;gap:4px;padding-top:4px;flex-shrink:0;">
+          
+          <div style="background:#555;border:1px solid #888;border-radius:4px;padding:6px 4px;text-align:center;color:white;font-size:11px;font-weight:700;">
+            이벤트 상점 △
+          </div>
+          
+          <div style="background:#4caf50;border:1px solid #66bb6a;border-radius:4px;padding:8px 4px;text-align:center;color:white;font-size:11px;font-weight:700;cursor:pointer;">
+            카드 팩
+          </div>
+          
+          <div style="background:#555;border:1px solid #888;border-radius:4px;padding:8px 4px;text-align:center;color:white;font-size:11px;font-weight:700;cursor:pointer;">
+            프레임
+          </div>
+          
+          <div style="background:#555;border:1px solid #888;border-radius:4px;padding:8px 4px;text-align:center;color:white;font-size:11px;font-weight:700;cursor:pointer;">
+            부스트 상품
+          </div>
+          
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 4px;">
+            <div style="color:#42a5f5;font-size:16px;margin-bottom:4px;">↑</div>
+            <div style="color:white;font-size:9px;text-align:center;opacity:0.7;line-height:1.4;">부스트 상품은<br>추후 예정</div>
+          </div>
+        </div>
+
+        
+        <div style="flex:1;background:#1a6a7a;border-radius:6px;padding:10px;overflow-x:auto;">
+          <div style="display:flex;gap:12px;min-width:max-content;">
+
+            
+            <div style="width:140px;background:#2a7a8a;border:2px solid #3a9aaa;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="color:white;font-size:13px;font-weight:700;">카드 팩 1</div>
+              
+              <div style="width:100px;height:100px;background:#5ba0c0;border:2px solid #6ab0d0;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;opacity:0.8;">
+                상품 리소스
+              </div>
+              
+              <div style="color:white;font-size:16px;font-weight:700;">1</div>
+              
+              <div style="width:32px;height:32px;background:#666;border-radius:50%;border:2px solid #888;cursor:pointer;"></div>
+              
+              <div style="display:flex;align-items:center;gap:4px;">
+                <div style="width:16px;height:16px;background:linear-gradient(135deg,#f9a825,#f57f17);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;">🪙</div>
+                <span style="color:white;font-size:14px;font-weight:700;">9,999</span>
+              </div>
+            </div>
+
+            
+            <div style="width:140px;background:#2a7a8a;border:2px solid #3a9aaa;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="color:white;font-size:13px;font-weight:700;">카드 팩 5</div>
+              <div style="width:100px;height:100px;background:#5ba0c0;border:2px solid #6ab0d0;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;opacity:0.8;">
+                상품 리소스
+              </div>
+              <div style="color:white;font-size:16px;font-weight:700;">1</div>
+              <div style="width:32px;height:32px;background:#666;border-radius:50%;border:2px solid #888;cursor:pointer;"></div>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <div style="width:16px;height:16px;background:linear-gradient(135deg,#f9a825,#f57f17);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;">🪙</div>
+                <span style="color:white;font-size:14px;font-weight:700;">9,999</span>
+              </div>
+            </div>
+
+            
+            <div style="width:140px;background:#2a7a8a;border:2px solid #3a9aaa;border-radius:8px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="color:white;font-size:13px;font-weight:700;">카드 팩 10</div>
+              <div style="width:100px;height:100px;background:#5ba0c0;border:2px solid #6ab0d0;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;opacity:0.8;">
+                상품 리소스
+              </div>
+              <div style="color:white;font-size:16px;font-weight:700;">1</div>
+              <div style="width:32px;height:32px;background:#666;border-radius:50%;border:2px solid #888;cursor:pointer;"></div>
+              <div style="display:flex;align-items:center;gap:4px;">
+                <div style="width:16px;height:16px;background:linear-gradient(135deg,#f9a825,#f57f17);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;">🪙</div>
+                <span style="color:white;font-size:14px;font-weight:700;">9,999</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-deco">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>🎨 꾸미기</span>
+        <span></span>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:8px;margin-bottom:10px;color:white;font-size:11px;text-align:center;">
+        ⓘ "꾸미기는 점수에 영향 없어요! 자유롭게 즐기세요~"
+      </div>
+
+      
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;">
+          
+          <div style="display:flex;gap:3px;margin-bottom:6px;">
+            <button class="tab active preview-state-btn" style="font-size:8px;padding:3px 5px;" data-state="default">규칙1 디폴트(빈카드)</button>
+            <button class="tab preview-state-btn" style="font-size:8px;padding:3px 5px;" data-state="nosave">규칙2 미저장카드</button>
+            <button class="tab preview-state-btn" style="font-size:8px;padding:3px 5px;" data-state="saved">규칙3 저장카드</button>
+          </div>
+
+          
+          <div id="preview-default" class="preview-state" style="background:rgba(255,255,255,0.08);border-radius:14px;padding:16px;text-align:center;color:white;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,0.2);">
+            <div style="font-size:40px;margin-bottom:8px;opacity:0.3;">🃏</div>
+            <div style="font-size:11px;font-weight:600;opacity:0.6;">오른쪽에서 카드를 선택하세요</div>
+            <div style="font-size:8px;opacity:0.3;margin-top:4px;">v2.7: 디폴트 = 빈카드 이미지 + 안내 텍스트</div>
+          </div>
+
+          
+          <div id="preview-nosave" class="preview-state" style="display:none;background:rgba(255,255,255,0.15);border-radius:14px;padding:16px;text-align:center;color:white;aspect-ratio:3/4;display:none;flex-direction:column;align-items:center;justify-content:center;">
+            <div style="font-size:40px;margin-bottom:8px;">🃏</div>
+            <div style="font-size:13px;font-weight:700;">수민 R</div>
+            <div style="font-size:10px;opacity:0.7;">Card #A Type</div>
+            <div style="margin-top:8px;border:2px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 8px;font-size:10px;background:rgba(255,255,255,0.05);">기본 프레임</div>
+            <div style="font-size:8px;opacity:0.3;margin-top:4px;">저장 기록 없음 → 기본 리소스 출력</div>
+          </div>
+
+          
+          <div id="preview-saved" class="preview-state" style="display:none;background:rgba(255,255,255,0.15);border-radius:14px;padding:16px;text-align:center;color:white;aspect-ratio:3/4;display:none;flex-direction:column;align-items:center;justify-content:center;">
+            <div style="font-size:40px;margin-bottom:8px;">🃏</div>
+            <div style="font-size:13px;font-weight:700;">시은 S</div>
+            <div style="font-size:10px;opacity:0.7;">Card #B Type</div>
+            <div style="margin-top:8px;border:2px solid #fbbf24;border-radius:8px;padding:4px 8px;font-size:10px;background:rgba(251,191,36,0.15);">🟣 unchild #12</div>
+            <div style="font-size:8px;opacity:0.3;margin-top:4px;">저장된 프레임 정보 출력</div>
+          </div>
+
+          <div style="display:flex;justify-content:center;gap:16px;margin-top:8px;color:white;font-size:12px;">
+            <span style="cursor:pointer;">◀ 이전</span>
+            <span style="cursor:pointer;">다음 ▶</span>
+          </div>
+
+          
+          <div style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);border-radius:8px;padding:6px 8px;margin-top:6px;color:white;font-size:9px;text-align:center;">
+            ⚠ 저장 버튼 미클릭 시 변경사항 미저장 (별도 confirm 팝업 없음)
+          </div>
+        </div>
+
+        
+        <div style="flex:1;">
+          <div style="display:flex;gap:4px;margin:6px 0;">
+            <div class="tab active" style="font-size:9px;padding:4px;">전체</div>
+            <div class="tab" style="font-size:9px;padding:4px;">보유</div>
+            <div class="tab" style="font-size:9px;padding:4px;">최근</div>
+          </div>
+          <div class="grid-4">
+            <div class="frame-cell equipped" style="position:relative;">✅<div style="position:absolute;bottom:1px;font-size:6px;opacity:0.6;">장착중</div></div>
+            <div class="frame-cell owned">🔵</div>
+            <div class="frame-cell owned">🟣</div>
+            <div class="frame-cell new" style="border:2px solid #fbbf24;">🟣<span class="frame-new-badge">NEW</span><div style="position:absolute;bottom:1px;font-size:6px;color:#fbbf24;">← 포커스</div></div>
+            <div class="frame-cell owned">🔵</div>
+            <div class="frame-cell owned">🔵</div>
+            <div class="frame-cell locked" title="교환상점에서 구매하세요">🔒</div>
+            <div class="frame-cell locked" title="교환상점에서 구매하세요">🔒</div>
+          </div>
+          <div style="color:white;font-size:10px;text-align:center;margin-top:6px;">◀ 1 / 134 ▶</div>
+
+          
+          <div style="background:rgba(0,0,0,0.7);border-radius:8px;padding:6px 10px;margin-top:6px;color:white;font-size:10px;text-align:center;">
+            🔒 교환상점에서 구매할 수 있어요!
+          </div>
+        </div>
+      </div>
+
+      
+      
+
+      
+      <div class="card mt-8">
+        <div class="card-title">카드 선택 — 보유 전체 카드 (v2.4 구조 개편)</div>
+
+        
+        <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;">
+          <div class="member selected" style="width:32px;height:32px;font-size:9px;background:rgba(251,191,36,0.3);border-color:#fbbf24;">ALL</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">수민</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">시은</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">아이</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">세은</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">윤</div>
+          <div class="member" style="width:32px;height:32px;font-size:9px;">재이</div>
+        </div>
+
+        
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-bottom:6px;">
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.3);">보유<br><span style="font-size:7px;color:#4caf50;">ON</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);">최근<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);">낮은등급<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);">높은등급<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.1);"></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(120,144,156,0.25);color:#b0bec5;border:1.5px solid #78909c;">C 등급<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(102,187,106,0.25);color:#81c784;border:1.5px solid #66bb6a;">B 등급<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(66,165,245,0.3);color:#64b5f6;border:1.5px solid #42a5f5;">A 등급<br><span style="font-size:7px;color:#4caf50;">ON</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(171,71,188,0.25);color:#ce93d8;border:1.5px solid #ab47bc;">S 등급<br><span style="font-size:7px;">OFF</span></div>
+          <div style="font-size:8px;padding:4px 2px;border-radius:6px;text-align:center;font-weight:700;cursor:pointer;background:rgba(255,112,67,0.25);color:#ff8a65;border:1.5px solid #ff7043;">R 등급<br><span style="font-size:7px;">OFF</span></div>
+        </div>
+
+        <div style="font-size:9px;color:var(--text);opacity:0.5;margin-bottom:4px;">토글 ON/OFF로 필터 조합 · 선택한 카드 1장이 좌측 미리보기에 크게 노출</div>
+
+        
+        <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;">
+          <div style="text-align:center;font-size:10px;color:var(--text);"><div style="width:44px;height:56px;background:#e3f2fd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;border:2px solid #fbbf24;">수민 C</div>#A</div>
+          <div style="text-align:center;font-size:10px;color:var(--text);"><div style="width:44px;height:56px;background:#e3f2fd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">수민 B</div>#A</div>
+          <div style="text-align:center;font-size:10px;color:var(--text);"><div style="width:44px;height:56px;background:#e3f2fd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">수민 R</div>#A</div>
+          <div style="text-align:center;font-size:10px;color:var(--text);"><div style="width:44px;height:56px;background:#e3f2fd;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">시은 A</div>#A</div>
+          <div style="text-align:center;font-size:10px;color:var(--text);border-left:2px solid #fbbf24;padding-left:6px;"><div style="width:44px;height:56px;background:#fff3e0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">수민 R</div>#B</div>
+          <div style="text-align:center;font-size:10px;color:var(--text);"><div style="width:44px;height:56px;background:#fff3e0;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;">시은 S</div>#B</div>
+        </div>
+
+        <div style="font-size:9px;color:var(--text);opacity:0.4;margin-top:4px;text-align:center;">⚠ 대표 카드 설정은 <b>한 장만</b> 가능</div>
+      </div>
+
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-outline" style="flex:1;font-size:11px;">프레임 해제</button>
+        <button class="btn btn-primary" style="flex:2;font-size:11px;">적용/저장</button>
+        <button class="btn btn-outline" style="flex:1;font-size:11px;">대표 설정</button>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-codex">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>📖 도감</span>
+        <span></span>
+      </div>
+
+      <div style="display:flex;gap:0;min-height:400px;">
+        
+        <div style="width:130px;flex-shrink:0;background:rgba(0,0,0,0.2);border-right:1px solid rgba(255,255,255,0.1);padding:6px;">
+          
+          <div onclick="switchCodexTab('card-a')" id="codex-tab-card" style="cursor:pointer;background:rgba(124,77,255,0.4);border:1.5px solid #7c4dff;border-radius:8px;padding:8px;margin-bottom:4px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:white;font-size:11px;font-weight:700;">카드 도감</span>
+              <span style="color:white;font-size:10px;">▴</span>
+            </div>
+            <span style="position:absolute;top:2px;right:2px;background:#fbbf24;color:#000;font-size:6px;font-weight:900;padding:1px 3px;border-radius:2px;">N</span>
+          </div>
+          
+          <div id="codex-card-sub" style="padding-left:8px;margin-bottom:4px;">
+            <div onclick="switchCodexTab('card-a')" id="codex-sub-a" style="cursor:pointer;background:rgba(124,77,255,0.3);border:1px solid rgba(124,77,255,0.5);border-radius:6px;padding:6px 8px;margin-bottom:3px;position:relative;">
+              <span style="color:white;font-size:10px;font-weight:600;">A type</span>
+              <span style="position:absolute;top:2px;right:2px;background:#fbbf24;color:#000;font-size:6px;font-weight:900;padding:1px 3px;border-radius:2px;">N</span>
+            </div>
+            <div onclick="switchCodexTab('card-b')" id="codex-sub-b" style="cursor:pointer;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:6px 8px;">
+              <span style="color:white;font-size:10px;opacity:0.6;">B type</span>
+            </div>
+          </div>
+          
+          <div onclick="switchCodexTab('frame')" id="codex-tab-frame" style="cursor:pointer;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px;margin-bottom:4px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:white;font-size:11px;font-weight:700;">프레임 도감</span>
+              <span style="color:white;font-size:10px;opacity:0.4;">✕✕</span>
+            </div>
+            <span style="position:absolute;top:2px;right:2px;background:#fbbf24;color:#000;font-size:6px;font-weight:900;padding:1px 3px;border-radius:2px;">N</span>
+          </div>
+          
+          <div onclick="switchCodexTab('prism')" id="codex-tab-prism" style="cursor:pointer;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px;position:relative;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="color:white;font-size:11px;font-weight:700;">프리즘 도감</span>
+              <span style="color:white;font-size:10px;opacity:0.4;">✕✕</span>
+            </div>
+            <span style="position:absolute;top:2px;right:2px;background:#fbbf24;color:#000;font-size:6px;font-weight:900;padding:1px 3px;border-radius:2px;">N</span>
+          </div>
+        </div>
+
+        
+        <div style="flex:1;padding:6px;overflow-y:auto;">
+
+          
+          <div class="codex-content" id="codex-panel-card-a">
+      <div style="font-size:12px;font-weight:700;color:white;text-align:center;margin-bottom:8px;">카드 도감 — A Type</div>
+
+      
+      <div class="card">
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#ff6b9d40,#ff6b9d15);display:flex;align-items:center;justify-content:center;font-weight:900;color:#ff6b9d;font-size:16px;border:2px solid #22c55e;">수</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#ff6b9d;">수민</span>
+              <span style="font-size:9px;opacity:0.4;">SUMIN</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">5/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;box-shadow:0 0 6px #78909c40;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#66bb6a;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;box-shadow:0 0 6px #66bb6a40;">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#42a5f5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;box-shadow:0 0 6px #42a5f540;">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#ab47bc;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;box-shadow:0 0 6px #ab47bc40;">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#ff7043;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;box-shadow:0 0 6px #ff704340;">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:100%;background:linear-gradient(90deg,#ff6b9d,#ff6b9dcc);"></div></div>
+          </div>
+        </div>
+
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#7c4dff40,#7c4dff15);display:flex;align-items:center;justify-content:center;font-weight:900;color:#7c4dff;font-size:16px;border:2px solid #7c4dff60;">시</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#7c4dff;">시은</span>
+              <span style="font-size:9px;opacity:0.4;">SIEUN</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">3/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#66bb6a;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#42a5f5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:60%;background:linear-gradient(90deg,#7c4dff,#7c4dffcc);"></div></div>
+          </div>
+        </div>
+
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#26a69a40,#26a69a15);display:flex;align-items:center;justify-content:center;font-weight:900;color:#26a69a;font-size:16px;border:2px solid #26a69a60;">아</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#26a69a;">아이사</span>
+              <span style="font-size:9px;opacity:0.4;">ISA</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">4/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#66bb6a;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#42a5f5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#ab47bc;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:80%;background:linear-gradient(90deg,#26a69a,#26a69acc);"></div></div>
+          </div>
+        </div>
+
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#ffa72640,#ffa72615);display:flex;align-items:center;justify-content:center;font-weight:900;color:#ffa726;font-size:16px;border:2px solid #ffa72660;">세</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#ffa726;">세은</span>
+              <span style="font-size:9px;opacity:0.4;">SEEUN</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">2/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#66bb6a;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:40%;background:linear-gradient(90deg,#ffa726,#ffa726cc);"></div></div>
+          </div>
+        </div>
+
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#ec407a40,#ec407a15);display:flex;align-items:center;justify-content:center;font-weight:900;color:#ec407a;font-size:16px;border:2px solid #ec407a60;">윤</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#ec407a;">윤</span>
+              <span style="font-size:9px;opacity:0.4;">YOON</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">3/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#66bb6a;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:#42a5f5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:60%;background:linear-gradient(90deg,#ec407a,#ec407acc);"></div></div>
+          </div>
+        </div>
+
+        
+        <div style="display:flex;align-items:center;gap:10px;padding:8px 0;">
+          <div style="width:48px;height:64px;border-radius:6px;background:linear-gradient(135deg,#5c6bc040,#5c6bc015);display:flex;align-items:center;justify-content:center;font-weight:900;color:#5c6bc0;font-size:16px;border:2px solid #5c6bc060;">재</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+              <span style="font-size:12px;font-weight:800;color:#5c6bc0;">재이</span>
+              <span style="font-size:9px;opacity:0.4;">J</span>
+              <span style="font-size:9px;opacity:0.5;margin-left:auto;">1/5</span>
+            </div>
+            <div style="display:flex;gap:4px;margin-bottom:4px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:#78909c;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:white;">C</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">B</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">A</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">S</div>
+              <div style="width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.1);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:rgba(0,0,0,0.2);border:2px solid rgba(0,0,0,0.08);">R</div>
+            </div>
+            <div class="progress-bar" style="height:5px;margin:0;"><div class="fill" style="width:20%;background:linear-gradient(90deg,#5c6bc0,#5c6bc0cc);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="card" style="padding:10px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);margin-bottom:4px;">
+          <span style="font-weight:700;">Card #A Type 진행</span>
+          <span style="color:#fbbf24;">18/30 (60%)</span>
+        </div>
+        <div class="progress-bar"><div class="fill" style="width:60%;background:linear-gradient(90deg,#fbbf24,#f59e0b);"></div></div>
+        <div style="text-align:center;font-size:10px;opacity:0.4;margin-top:4px;">완료 시 → 🌟 프리즘 카드 해금!</div>
+      </div>
+
+      
+          </div>
+
+          
+          <div class="codex-content" id="codex-panel-card-b" style="display:none;">
+            <div style="color:white;font-size:12px;font-weight:700;text-align:center;margin-bottom:8px;">Card #B Type (한정 테마)</div>
+            <div style="color:white;font-size:10px;opacity:0.5;text-align:center;margin-bottom:10px;">한정 테마 카드 수집 현황 — 구조는 A Type과 동일</div>
+            <div class="card" style="padding:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);margin-bottom:4px;">
+                <span style="font-weight:700;">Card #B Type 진행</span>
+                <span style="color:#fbbf24;">22/30 (73%)</span>
+              </div>
+              <div class="progress-bar"><div class="fill" style="width:73%;background:linear-gradient(90deg,#fbbf24,#f59e0b);"></div></div>
+              <div style="text-align:center;font-size:10px;opacity:0.4;margin-top:4px;">완료 시 → 🌟 B Type 프리즘 카드 해금!</div>
+            </div>
+            
+          </div>
+
+          
+          <div class="codex-content" id="codex-panel-frame" style="display:none;">
+      <div class="tabs">
+        <div class="tab active">전체 (134종)</div>
+        <div class="tab">🔵 STAYC</div>
+        <div class="tab">🟣 unchild</div>
+      </div>
+
+      <div style="color:white;font-size:12px;text-align:center;margin-bottom:8px;">
+        보유: 63/134종 &nbsp;│&nbsp; 1,890점
+        <div class="progress-bar"><div class="fill" style="width:47%;background:#fbbf24;"></div></div>
+      </div>
+
+      <div class="grid-4" style="margin-bottom:8px;">
+        <div class="frame-cell equipped" style="font-size:18px;">🔵</div>
+        <div class="frame-cell owned" style="font-size:18px;">🔵</div>
+        <div class="frame-cell owned" style="font-size:18px;">🟣</div>
+        <div class="frame-cell new" style="font-size:18px;">🟣<span class="frame-new-badge">NEW</span></div>
+        <div class="frame-cell owned" style="font-size:18px;">🔵</div>
+        <div class="frame-cell owned" style="font-size:18px;">🔵</div>
+        <div class="frame-cell owned" style="font-size:18px;">🟣</div>
+        <div class="frame-cell locked" style="font-size:18px;">🔒</div>
+        <div class="frame-cell locked" style="font-size:18px;">🔒</div>
+        <div class="frame-cell locked" style="font-size:18px;">🔒</div>
+        <div class="frame-cell locked" style="font-size:18px;">🔒</div>
+        <div class="frame-cell locked" style="font-size:18px;">🔒</div>
+      </div>
+
+      <div class="card" style="padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">마일스톤</div>
+        
+        
+        
+        
+      </div>
+
+      
+          </div>
+
+          
+          <div class="codex-content" id="codex-panel-prism" style="display:none;">
+      <div style="color:white;font-size:10px;text-align:right;margin-bottom:6px;opacity:0.6;">9/14</div>
+
+      
+      <div style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:10px;padding:10px;margin-bottom:8px;">
+        <div style="color:white;font-size:12px;font-weight:700;margin-bottom:6px;">🌟 테마 완성 A타입 프리즘 — 1/2</div>
+        <div style="color:white;font-size:9px;opacity:0.6;margin-bottom:8px;">카드 30종 전체 수집 완성 시 해금</div>
+        <div class="grid-2" style="gap:8px;">
+          <div class="mini-card" style="background:rgba(255,215,0,0.3);border:1px solid rgba(255,215,0,0.4);">
+            <div style="font-size:18px;">✨</div>
+            <div style="font-size:10px;font-weight:700;">A Type 프리즘</div>
+            <div style="font-size:8px;opacity:0.6;">테마 30/30 ✅</div>
+          </div>
+          <div class="mini-card" style="background:rgba(255,255,255,0.08);opacity:0.5;">
+            <div style="font-size:18px;">🔒</div>
+            <div style="font-size:10px;font-weight:700;">B Type 프리즘</div>
+            <div style="font-size:8px;">테마 22/30</div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div style="background:rgba(124,77,255,0.1);border:1px solid rgba(124,77,255,0.3);border-radius:10px;padding:10px;margin-bottom:8px;">
+        <div style="color:white;font-size:12px;font-weight:700;margin-bottom:6px;">💎 멤버별 프리즘 — 8/12</div>
+        <div style="color:white;font-size:9px;opacity:0.6;margin-bottom:8px;">아티스트 1명의 모든 등급(C~R) 수집 → 해당 멤버 프리즘 카드 해금</div>
+
+        <div style="color:white;font-size:10px;font-weight:600;margin-bottom:4px;">A Type 멤버별</div>
+        <div class="grid-3" style="margin-bottom:8px;">
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 수민<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 시은<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 아이사<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 세은<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(255,255,255,0.08);opacity:0.5;">🔒 윤<div style="font-size:8px;">C~R 3/5</div></div>
+          <div class="mini-card" style="background:rgba(255,255,255,0.08);opacity:0.5;">🔒 재이<div style="font-size:8px;">C~R 2/5</div></div>
+        </div>
+
+        <div style="color:white;font-size:10px;font-weight:600;margin-bottom:4px;">B Type 멤버별</div>
+        <div class="grid-3">
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 수민<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(255,255,255,0.08);opacity:0.5;">🔒 시은<div style="font-size:8px;">C~R 4/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 아이사<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(255,255,255,0.08);opacity:0.5;">🔒 세은<div style="font-size:8px;">C~R 3/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 윤<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+          <div class="mini-card" style="background:rgba(124,77,255,0.3);">✨ 재이<div style="font-size:8px;opacity:0.6;">C~R 5/5</div></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px;">보너스 현황</div>
+        
+        
+        
+        
+      </div>
+
+      
+          </div>
+
+        </div>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-mission">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>🏆 미션</span>
+        <span></span>
+      </div>
+
+      <div class="tabs" id="mission-tabs">
+        <div class="tab active" onclick="switchMissionTab('daily')">일간</div>
+        <div class="tab" onclick="switchMissionTab('weekly')">주간</div>
+        <div class="tab" onclick="switchMissionTab('event')">이벤트</div>
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:6px 10px;margin-bottom:8px;color:white;font-size:10px;text-align:center;">
+        ⚙ 미션 개수/내용은 서버에서 동적 제공 (고정 아님) — <code>Challenge</code> 엔티티 기반
+      </div>
+
+      
+      <div class="mission-tab-content" data-mission-tab="daily">
+        <div class="card">
+          <div class="card-title">일간 미션 (매일 00:00 리셋) <span style="font-size:9px;opacity:0.5;font-weight:400;">개수 서버 결정</span></div>
+          
+          
+          
+          <div style="font-size:9px;color:white;opacity:0.4;text-align:center;margin-top:4px;border-top:1px dashed rgba(255,255,255,0.15);padding-top:4px;">↑ 예시 — 실제 개수/내용은 서버에서 결정</div>
+          <div style="text-align:right;font-size:11px;color:var(--text);margin-top:4px;">올클리어 보너스: 🪙50</div>
+        </div>
+        
+        <div style="background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.3);border-radius:8px;padding:8px 10px;margin-top:6px;color:white;font-size:10px;line-height:1.6;">
+          <b style="color:#ff6b35;">🚀 미션 부스터 효과</b> (교환상점 💎30/7일)<br>
+          • 일간 미션 보상 ×1.5배 / 주간 미션 보상 ×1.2배<br>
+          • 부스터 활성 시 미션 카드에 🚀 표시
+        </div>
+      </div>
+
+      
+      <div class="mission-tab-content" data-mission-tab="weekly" style="display:none;">
+        <div class="card">
+          <div class="card-title">주간 미션 (매주 월 00:00 리셋) <span style="font-size:9px;opacity:0.5;font-weight:400;">개수 서버 결정</span></div>
+          
+          
+          
+        </div>
+      </div>
+
+      
+      <div class="mission-tab-content" data-mission-tab="event" style="display:none;">
+        <div class="card">
+          <div class="card-title">이벤트 미션 (기간 내 1회) <span style="font-size:9px;opacity:0.5;font-weight:400;">개수 서버 결정</span></div>
+          
+          
+          
+        </div>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-attendance">
+      
+      <div class="top-bar" style="padding:4px 8px;">
+        <div style="display:flex;align-items:center;gap:4px;background:rgba(255,255,255,0.1);border-radius:12px;padding:2px 8px;">
+          <span style="font-size:10px;">⏱</span>
+          <span style="font-size:10px;font-weight:700;">17:19:29:13</span>
+        </div>
+        <span style="font-size:14px;font-weight:800;color:#4dd0e1;">꾸미기 출석 이벤트</span>
+        <div style="display:flex;gap:8px;">
+          <span style="font-size:16px;cursor:pointer;opacity:0.6;">?</span>
+          <span style="font-size:16px;cursor:pointer;opacity:0.6;" onclick="goScreen('lobby')">✕</span>
+        </div>
+      </div>
+
+      
+      <div style="text-align:center;color:#4dd0e1;margin:6px 0 4px;">
+        <div style="font-size:13px;font-weight:800;">꾸미기 출석 이벤트</div>
+        <div style="font-size:10px;color:white;opacity:0.7;margin-top:2px;">이벤트 기간 동안 출석을 완료하고 다양한 보상을 받아가세요!</div>
+        <div style="font-size:9px;color:white;opacity:0.5;margin-top:1px;">이벤트 기간: 시작일 ~ 종료일 (21일간)</div>
+      </div>
+
+      
+      
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:6px 4px 2px;">
+        
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;position:relative;">
+          <div style="font-size:8px;color:white;opacity:0.7;">1일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">5,000</div>
+        </div>
+        
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">2일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">💎 10</div>
+        </div>
+        
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">3일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">5,000</div>
+        </div>
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">4일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">💎 10</div>
+        </div>
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">5일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">5,000</div>
+        </div>
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">6일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">💎 10</div>
+        </div>
+        
+        <div style="background:rgba(255,193,7,0.15);border:2px solid rgba(255,193,7,0.5);border-radius:8px;padding:4px 2px;text-align:center;box-shadow:0 0 6px rgba(255,193,7,0.2);">
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">7일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">🃏 R카드</div>
+        </div>
+      </div>
+
+      
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 4px;">
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">8일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">5,000</div>
+        </div>
+        <div style="background:rgba(76,175,80,0.15);border:1px solid rgba(76,175,80,0.3);border-radius:8px;padding:4px 2px;text-align:center;">
+          <div style="font-size:8px;color:white;opacity:0.7;">9일</div>
+          <div style="font-size:16px;color:white;opacity:0.3;">✓</div>
+          <div style="font-size:8px;color:white;opacity:0.6;">Complete</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">💎 10</div>
+        </div>
+        
+        <div style="background:rgba(33,150,243,0.3);border:2px solid white;border-radius:8px;padding:4px 2px;text-align:center;animation:pulse 2s infinite;">
+          <div style="font-size:8px;color:white;font-weight:700;">10일</div>
+          <div style="font-size:14px;">🎁</div>
+          <div style="font-size:8px;color:white;font-weight:700;">TODAY</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">5,000</div>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">11일</div>
+          <div style="font-size:12px;">🃏</div>
+          <div style="font-size:8px;color:#e040fb;font-weight:700;">R 5,000</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">12일</div>
+          <div style="font-size:12px;">💎</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">10</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">13일</div>
+          <div style="font-size:12px;">🃏</div>
+          <div style="font-size:8px;color:#e040fb;font-weight:700;">R 5,000</div>
+        </div>
+        
+        <div style="background:rgba(255,193,7,0.1);border:2px solid rgba(255,193,7,0.3);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.6;box-shadow:0 0 4px rgba(255,193,7,0.15);">
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">14일</div>
+          <div style="font-size:12px;">🌟</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">S카드</div>
+        </div>
+      </div>
+
+      
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:2px 4px 6px;">
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">15일</div>
+          <div style="font-size:12px;">🃏</div>
+          <div style="font-size:8px;color:#e040fb;font-weight:700;">R 5,000</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">16일</div>
+          <div style="font-size:12px;">💎</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">10</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">17일</div>
+          <div style="font-size:12px;">🃏</div>
+          <div style="font-size:8px;color:#e040fb;font-weight:700;">R 5,000</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">18일</div>
+          <div style="font-size:12px;">🌟</div>
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">S카드</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">19일</div>
+          <div style="font-size:12px;">💎</div>
+          <div style="font-size:8px;color:#60a5fa;font-weight:700;">10</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.5;">
+          <div style="font-size:8px;color:white;">20일</div>
+          <div style="font-size:12px;">🃏</div>
+          <div style="font-size:8px;color:#e040fb;font-weight:700;">R 5,000</div>
+        </div>
+        
+        <div style="background:rgba(255,193,7,0.1);border:2px solid rgba(255,193,7,0.3);border-radius:8px;padding:4px 2px;text-align:center;opacity:0.6;box-shadow:0 0 4px rgba(255,193,7,0.15);">
+          <div style="font-size:8px;color:#fbbf24;font-weight:700;">21일</div>
+          <div style="font-size:12px;">🏆</div>
+          <div style="font-size:7px;color:#fbbf24;font-weight:700;">한정아이템</div>
+        </div>
+      </div>
+
+      
+      <div style="text-align:center;color:white;font-size:9px;opacity:0.5;margin:4px 0;padding:0 8px;">
+        ※ 접속한 일자부터 순차적으로 하루 한 번씩 선물을 획득할 수 있습니다.
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-ranking">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>🏆 리더보드</span>
+        <span style="cursor:pointer;background:rgba(255,255,255,0.2);border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;" title="리더보드 도움말">?</span>
+      </div>
+
+      <div style="color:white;font-size:11px;text-align:center;margin-bottom:10px;opacity:0.8;">실시간 갱신 (30분)</div>
+
+      
+      <div class="card" style="padding:10px;">
+        <div style="font-size:11px;font-weight:700;color:var(--text);margin-bottom:4px;">보상 구간</div>
+        <div style="font-size:10px;line-height:1.8;color:var(--text);">
+          <div>🥇 Top 1 — 🃏 한정테마(런칭한정)</div>
+          <div style="background:rgba(251,191,36,0.2);border-radius:4px;padding:2px 6px;">🥈 Top 2~10 — 🃏 한정테마(런칭한정) ← 현재</div>
+          <div>🥉 Top 50 — 🃏 한정테마(런칭한정)</div>
+          <div>&nbsp;&nbsp;&nbsp; 전체 참여 — 🃏 한정테마</div>
+        </div>
+      </div>
+
+      
+      <div class="card">
+        <div class="card-title">리더보드 <span style="font-size:9px;opacity:0.5;font-weight:400;">상위 100명</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <span style="font-size:14px;width:24px;text-align:center;">🥇</span>
+          <div style="width:36px;height:48px;background:linear-gradient(135deg,#ff6b35,#ff9800);border-radius:4px;border:1.5px solid gold;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-size:7px;color:white;">🃏R</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:11px;font-weight:700;color:var(--text);">SuperFan_01 <span style="font-size:9px;opacity:0.5;">👑 성덕</span></div>
+            <div style="font-size:9px;color:var(--text);opacity:0.5;">🖼️ unchild #07</div>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text);">22,720</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <span style="font-size:14px;width:24px;text-align:center;">🥈</span>
+          <div style="width:36px;height:48px;background:linear-gradient(135deg,#7c4dff,#448aff);border-radius:4px;border:1.5px solid silver;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-size:7px;color:white;">🃏S</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:11px;font-weight:700;color:var(--text);">StayC_Love <span style="font-size:9px;opacity:0.5;">👑 성덕</span></div>
+            <div style="font-size:9px;color:var(--text);opacity:0.5;">🖼️ STAYC #12</div>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text);">21,500</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,0.06);">
+          <span style="font-size:14px;width:24px;text-align:center;">🥉</span>
+          <div style="width:36px;height:48px;background:linear-gradient(135deg,#26a69a,#4db6ac);border-radius:4px;border:1.5px solid #cd7f32;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <span style="font-size:7px;color:white;">🃏R</span>
+          </div>
+          <div style="flex:1;">
+            <div style="font-size:11px;font-weight:700;color:var(--text);">unchild_4ever <span style="font-size:9px;opacity:0.5;">👑 성덕</span></div>
+            <div style="font-size:9px;color:var(--text);opacity:0.5;">🖼️ unchild #03</div>
+          </div>
+          <span style="font-size:12px;font-weight:700;color:var(--text);">20,100</span>
+        </div>
+        <div style="text-align:center;color:var(--text);opacity:0.3;font-size:9px;padding:4px 0;">· · · (100위까지 표시)</div>
+      </div>
+
+      
+      <div class="card" style="margin-top:6px;border:1.5px solid rgba(251,191,36,0.4);background:rgba(251,191,36,0.08);">
+        <div style="font-size:9px;font-weight:700;color:var(--text);opacity:0.5;margin-bottom:4px;">내 순위 (고정)</div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="width:48px;height:64px;background:linear-gradient(135deg,#7c4dff,#448aff);border-radius:6px;border:2px solid #fbbf24;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <div style="font-size:8px;color:white;text-align:center;line-height:1.2;">🃏<br>R</div>
+          </div>
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="font-size:18px;font-weight:800;color:var(--text);">🏅 #47</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:11px;color:var(--text);opacity:0.5;">💎 찐팬</div>
+                <div style="font-size:16px;font-weight:700;color:var(--text);">13,990점</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:8px;color:white;font-size:10px;text-align:center;margin-top:6px;">
+        ⏱ 남은 8일 12:30:15 &nbsp;│&nbsp; 다음 컷(Top 10): 18,200점 — 4,210점 부족
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px;margin-top:8px;color:white;font-size:10px;line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <b style="font-size:11px;">❓ 리더보드 도움말</b>
+          <span style="opacity:0.4;cursor:pointer;">✕ 닫기</span>
+        </div>
+        • 리더보드는 이벤트 총 점수(카드+프리즘+테두리) 기준 절대값으로 산정<br>
+        • 실시간 갱신 (30분 주기)<br>
+        • 동점 시 먼저 달성한 유저 우선<br>
+        • 상위 100명까지 리더보드에 노출<br>
+        • 각 유저의 대표 카드 + 적용 중 테두리가 리스트에 표시<br>
+        • 구간 보상은 이벤트 종료 시 일괄 지급<br>
+        • 이벤트 종료 전까지 순위 변동 가능<br>
+        • 🆕 보상 = 한정테마 기반 (v2.7): Top1 한정테마+프로필+배경, Top2~10 한정테마+배경, Top50 한정테마(런칭한정), 전체 한정테마
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-score">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>📊 점수 대시보드</span>
+        <span></span>
+      </div>
+
+      <div class="land-cols">
+        
+        <div>
+          <div class="tier-display">
+            <div class="tier-icon">💎</div>
+            <div class="tier-name">찐팬 (True Fan)</div>
+            <div class="tier-score">총 점수: 13,990점</div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:4px;color:white;font-size:10px;margin:8px 0;">
+            <span>🌱</span><span>──</span><span>💚</span><span>────</span><span>⭐</span><span>──────</span><span style="font-weight:800;text-decoration:underline;">💎</span><span>────────</span><span>👑</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.08);border-radius:10px;padding:8px;color:white;font-size:11px;text-align:center;margin-top:6px;">
+            🎨 꾸미기 = 점수 무관 — 자유롭게 즐기세요!
+          </div>
+        </div>
+
+        
+        <div>
+          <div class="card">
+            <div class="card-title">📖 카드 도감</div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);">
+              <span>카드 60장 + 세트 2개</span><span style="font-weight:700;">6,000 / 6,000</span>
+            </div>
+            <div class="progress-bar"><div class="fill" style="width:100%;background:#4caf50;"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🌟 프리즘 도감</div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);">
+              <span>프리즘 12장 + 세트 + 올 프리즘</span><span style="font-weight:700;">4,200 / 4,200</span>
+            </div>
+            <div class="progress-bar"><div class="fill" style="width:100%;background:#7c4dff;"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">🖼️ 테두리 도감</div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text);">
+              <span>프레임 63종 + 마일스톤 2개</span><span style="font-weight:700;">3,790 / 12,520</span>
+            </div>
+            <div class="progress-bar"><div class="fill" style="width:30%;background:#fbbf24;"></div></div>
+          </div>
+        </div>
+
+        
+      </div>
+    </div>
+
+    
+    <div class="screen" id="screen-starpass">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 로비</span>
+        <span>⭐ 스타패스</span>
+        <span></span>
+      </div>
+
+      <div style="background:rgba(255,193,7,0.15);border:1px dashed rgba(255,193,7,0.4);border-radius:10px;padding:12px;margin-bottom:10px;color:white;font-size:12px;text-align:center;">
+        ⚠️ MVP 범위에서 제외 — v2에서 구현 예정<br>
+        <span style="font-size:10px;opacity:0.5;">아래는 v2 참고용 와이어프레임</span>
+      </div>
+
+      <div class="card" style="text-align:center;">
+        <div style="font-size:12px;font-weight:700;color:var(--text);">Lv. 5 / 20</div>
+        <div style="font-size:10px;color:var(--text);opacity:0.6;">경험치: 850 / 1,200</div>
+        <div class="progress-bar"><div class="fill" style="width:71%;background:#fbbf24;"></div></div>
+        <div style="font-size:9px;color:var(--text);opacity:0.5;margin-top:4px;">카드팩(+50) / 미션(+30) / 출석(+20) / 꾸미기(+10)</div>
+      </div>
+
+      <div style="display:flex;color:white;font-size:10px;font-weight:700;margin-bottom:4px;padding:0 6px;">
+        <span style="width:30px;">Lv</span>
+        <span style="flex:1;text-align:center;">무료 트랙</span>
+        <span style="flex:1;text-align:center;">프리미엄 (💎200)</span>
+      </div>
+      <div class="pass-row claimed"><span class="pass-lv">1</span><span class="pass-free">🪙100 ✅</span><span class="pass-divider"></span><span class="pass-premium">🪙200 🔒</span></div>
+      <div class="pass-row claimed"><span class="pass-lv">2</span><span class="pass-free">🪙100 ✅</span><span class="pass-divider"></span><span class="pass-premium">프레임×1 🔒</span></div>
+      <div class="pass-row claimed"><span class="pass-lv">3</span><span class="pass-free">🪙150 ✅</span><span class="pass-divider"></span><span class="pass-premium">🪙300 🔒</span></div>
+      <div class="pass-row claimed"><span class="pass-lv">4</span><span class="pass-free">🪙150 ✅</span><span class="pass-divider"></span><span class="pass-premium">선택권×1 🔒</span></div>
+      <div class="pass-row current"><span class="pass-lv">5</span><span class="pass-free">🪙200 ✅</span><span class="pass-divider"></span><span class="pass-premium">🪙400 🔒 ←</span></div>
+      <div class="pass-row"><span class="pass-lv">10</span><span class="pass-free">🪙300</span><span class="pass-divider"></span><span class="pass-premium">선택권×2</span></div>
+      <div class="pass-row"><span class="pass-lv">20</span><span class="pass-free">🪙500+칭호</span><span class="pass-divider"></span><span class="pass-premium">최애프레임+배경</span></div>
+
+      <button class="btn btn-primary mt-8">💎 200으로 프리미엄 해금</button>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-cardopen">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('shop')">← 상점</span>
+        <span>카드팩 개봉</span>
+        <span></span>
+      </div>
+
+      <div style="text-align:center;color:white;margin:20px 0;">
+        <div style="font-size:60px;margin-bottom:12px;">📦</div>
+        <div style="font-size:16px;font-weight:700;">카드팩 ×5</div>
+        <div style="font-size:12px;opacity:0.7;margin-top:4px;">[unchild] 한정+일반</div>
+      </div>
+
+      <div style="display:flex;justify-content:center;gap:8px;margin:16px 0;">
+        <div style="width:54px;height:72px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;">??</div>
+        <div style="width:54px;height:72px;background:rgba(255,255,255,0.25);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;border:2px solid #fbbf24;"><span>수민</span><span style="color:#fbbf24;">B</span></div>
+        <div style="width:54px;height:72px;background:rgba(255,255,255,0.25);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;"><span>시은</span><span style="color:#4caf50;">A</span></div>
+        <div style="width:54px;height:72px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;">??</div>
+        <div style="width:54px;height:72px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;">??</div>
+      </div>
+
+      <div style="text-align:center;color:white;font-size:12px;opacity:0.8;">터치하여 다음 카드 공개</div>
+
+      <button class="btn btn-primary mt-8">전체 공개</button>
+      <button class="btn btn-outline mt-8" onclick="goScreen('deco')">꾸미기로 이동 →</button>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-reward-popup">
+      <div class="top-bar">
+        <span></span>
+        <span>🎉 보상 획득!</span>
+        <span style="cursor:pointer;opacity:0.6;" onclick="goScreen('lobby')">✕</span>
+      </div>
+
+      <div style="text-align:center;color:white;margin:20px 0;">
+        <div style="font-size:80px;margin-bottom:16px;">✨</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px;">새로운 보상을 획득했습니다!</div>
+        <div style="font-size:12px;opacity:0.7;">터치하여 확인</div>
+      </div>
+
+      
+      <div style="display:flex;justify-content:center;gap:12px;margin:16px 0;">
+        <div style="width:80px;height:110px;background:linear-gradient(135deg,rgba(251,191,36,0.4),rgba(255,215,0,0.2));border-radius:10px;border:2px solid #fbbf24;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;box-shadow:0 0 20px rgba(251,191,36,0.3);">
+          <div style="font-size:28px;">🃏</div>
+          <div style="font-size:10px;font-weight:700;margin-top:4px;">R 카드</div>
+          <div style="font-size:8px;opacity:0.6;">수민</div>
+        </div>
+      </div>
+
+      
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px;margin:10px 0;color:white;font-size:10px;line-height:1.8;">
+        <b>등급별 연출:</b><br>
+        • C/B 등급: 기본 공개 애니메이션<br>
+        • A 등급: 파란 빛 이펙트<br>
+        • S 등급: 보라 빛 이펙트 + 파티클<br>
+        • R 등급: 금빛 파티클 + 전체화면 플래시
+      </div>
+
+      <button class="btn btn-primary mt-8" onclick="goScreen('deco')">꾸미기로 이동 →</button>
+      <button class="btn btn-outline mt-8" onclick="goScreen('lobby')">로비로 돌아가기</button>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-settle">
+      <div class="top-bar">
+        <span></span>
+        <span>🏆 이벤트 정산 완료!</span>
+        <span></span>
+      </div>
+
+      <div class="tier-display">
+        <div class="tier-icon" style="font-size:50px;">💎</div>
+        <div class="tier-name">찐팬 (True Fan)</div>
+        <div style="font-size:11px;opacity:0.8;">"진심인 거 다 알아"</div>
+        <div class="tier-score">최종 점수: 13,990점</div>
+        <div style="font-size:11px;opacity:0.8;margin-top:4px;">#247 / 5,230명 — 전체 참여 구간</div>
+      </div>
+
+      <div class="card" style="padding:10px;">
+        <div class="card-title">3-Track 요약</div>
+        
+        
+        
+      </div>
+
+      <div style="color:white;font-size:12px;font-weight:700;margin:8px 0;">📦 보상 수령 (v2.7: 한정테마 기반)</div>
+      <div style="text-align:center;">
+        <div class="reward-item"><div class="r-icon">🃏</div>한정<br>테마</div>
+        <div class="reward-item"><div class="r-icon">💎</div>뱃지<br>"찐팬"</div>
+      </div>
+      <div style="color:white;font-size:9px;opacity:0.5;text-align:center;margin-top:4px;">
+        ※ 전체 참여 구간 = 한정테마 | Top50+ = 런칭한정 | Top10+ = +배경 | Top1 = +프로필
+      </div>
+
+      <button class="btn btn-primary mt-8">전체 보상 수령하기</button>
+
+      <div style="display:flex;gap:6px;margin-top:8px;">
+        <button class="btn btn-outline" style="flex:1;font-size:11px;" onclick="goScreen('archive')">내 시즌 결과 보기</button>
+        <button class="btn btn-outline" style="flex:1;font-size:11px;" onclick="goScreen('lobby')">메인으로 돌아가기</button>
+      </div>
+
+      
+    </div>
+
+    
+    <div class="screen" id="screen-archive">
+      <div class="top-bar">
+        <span class="back" onclick="goScreen('lobby')">← 메인</span>
+        <span>🗂️ 시즌 아카이브</span>
+        <span></span>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px;color:white;font-size:11px;text-align:center;margin-bottom:10px;">
+        Season 1 · unchild Decoration Event<br>
+        <span style="opacity:0.7;">2026.03.08 ~ 2026.03.28</span>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.08);border-radius:10px;padding:10px;color:white;text-align:center;margin-bottom:10px;">
+        <span style="font-size:24px;">💎</span>
+        <div style="font-weight:700;">찐팬 &nbsp; 13,990점 &nbsp; #247 (전체 참여)</div>
+      </div>
+
+      <div style="color:white;font-size:12px;font-weight:700;margin-bottom:6px;">⭐ 베스트 카드 6종 쇼케이스</div>
+      <div class="grid-3" style="margin-bottom:10px;">
+        <div class="mini-card">🃏<br>수민 R<br><span style="font-size:9px;">한정+프레임</span></div>
+        <div class="mini-card">🃏<br>시은 R<br><span style="font-size:9px;">한정+프레임</span></div>
+        <div class="mini-card">🃏<br>아이사 R<br><span style="font-size:9px;">한정+프레임</span></div>
+        <div class="mini-card">🃏<br>세은 R<br><span style="font-size:9px;">한정+프레임</span></div>
+        <div class="mini-card">🃏<br>윤 R<br><span style="font-size:9px;">한정+프레임</span></div>
+        <div class="mini-card">🃏<br>재이 R<br><span style="font-size:9px;">한정+프레임</span></div>
+      </div>
+
+      <div class="card" style="padding:10px;">
+        <div class="card-title">달성 수량</div>
+        
+        
+        
+        
+        
+      </div>
+
+      <div style="display:flex;gap:6px;margin-top:6px;">
+        <button class="btn btn-outline" style="flex:1;font-size:10px;">📖 카드 도감</button>
+        <button class="btn btn-outline" style="flex:1;font-size:10px;">🌟 프리즘</button>
+        <button class="btn btn-outline" style="flex:1;font-size:10px;">🖼️ 테두리</button>
+      </div>
+
+      
+    </div>
+
+    
+    
+
+  </div>
+</div>
+
+<script>
+  // v2.7: 통합 도감 탭 전환
+  function switchCodexTab(tab) {
+    // 모든 패널 숨기기
+    document.querySelectorAll('.codex-content').forEach(p => p.style.display = 'none');
+    // 선택 패널 표시
+    var panel = document.getElementById('codex-panel-' + tab);
+    if (panel) panel.style.display = 'block';
+    // 탭 스타일 업데이트
+    var tabs = ['card','frame','prism'];
+    tabs.forEach(function(t) {
+      var el = document.getElementById('codex-tab-' + t);
+      if (el) {
+        if ((tab.startsWith('card') && t === 'card') || tab === t) {
+          el.style.background = 'rgba(124,77,255,0.4)';
+          el.style.borderColor = '#7c4dff';
+        } else {
+          el.style.background = 'rgba(255,255,255,0.06)';
+          el.style.borderColor = 'rgba(255,255,255,0.15)';
+        }
+      }
+    });
+    // 카드 서브탭 표시/숨김
+    var sub = document.getElementById('codex-card-sub');
+    if (sub) sub.style.display = tab.startsWith('card') ? 'block' : 'none';
+    // 서브탭 활성화
+    var subA = document.getElementById('codex-sub-a');
+    var subB = document.getElementById('codex-sub-b');
+    if (subA && subB) {
+      if (tab === 'card-a') {
+        subA.style.background = 'rgba(124,77,255,0.3)';
+        subA.style.borderColor = 'rgba(124,77,255,0.5)';
+        subB.style.background = 'rgba(255,255,255,0.06)';
+        subB.style.borderColor = 'rgba(255,255,255,0.1)';
+      } else if (tab === 'card-b') {
+        subB.style.background = 'rgba(124,77,255,0.3)';
+        subB.style.borderColor = 'rgba(124,77,255,0.5)';
+        subA.style.background = 'rgba(255,255,255,0.06)';
+        subA.style.borderColor = 'rgba(255,255,255,0.1)';
+      }
+    }
+  }
+
+  // v2.5: 미션 탭별 화면 분리
+  function switchMissionTab(tab) {
+    // 탭 활성화
+    document.querySelectorAll('#mission-tabs .tab').forEach(t => t.classList.remove('active'));
+    document.querySelector('#mission-tabs .tab[onclick*="' + tab + '"]').classList.add('active');
+    // 콘텐츠 토글
+    document.querySelectorAll('.mission-tab-content').forEach(c => {
+      c.style.display = c.dataset.missionTab === tab ? 'block' : 'none';
+    });
+  }
+
+  function goScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    document.querySelectorAll('.screen-nav button').forEach(b => {
+      b.classList.toggle('active', b.dataset.screen === id);
+    });
+    // 미션 화면 진입 시 일간 탭 기본 선택
+    if (id === 'mission') { switchMissionTab('daily'); }
+    // 도감 화면 진입 시 카드 A type 기본 선택
+    if (id === 'codex') { switchCodexTab('card-a'); }
+  }
+
+  document.querySelectorAll('.screen-nav button').forEach(btn => {
+    btn.addEventListener('click', () => goScreen(btn.dataset.screen));
+  });
+
+  function toggleChangelog() {
+    const panel = document.getElementById('changelogPanel');
+    const btn = document.getElementById('changelogBtn');
+    const isVisible = panel.style.display !== 'none';
+    panel.style.display = isVisible ? 'none' : 'block';
+    btn.classList.toggle('active', !isVisible);
+  }
+
+  function toggleDark() {
+    document.body.classList.toggle('dark');
+    document.getElementById('darkBtn').textContent =
+      document.body.classList.contains('dark') ? 'Toggle Light Mode' : 'Toggle Dark Mode';
+  }
+
+  function toggleOrientation() {
+    const phone = document.querySelector('.phone-frame');
+    phone.classList.toggle('portrait');
+    const isPortrait = phone.classList.contains('portrait');
+    document.getElementById('orientBtn').textContent =
+      isPortrait ? '🖥️ 가로 모드로 전환' : '📱 세로 모드로 전환';
+  }
+
+  // Member selection in deco screen
+  document.querySelectorAll('.member').forEach(m => {
+    m.addEventListener('click', () => {
+      document.querySelectorAll('.member').forEach(x => x.classList.remove('selected'));
+      m.classList.add('selected');
+    });
+  });
+
+  // Tab switching
+  document.querySelectorAll('.tabs').forEach(tabGroup => {
+    tabGroup.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        if (this.getAttribute('onclick')) return;
+        tabGroup.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  });
+
+  // Preview state toggle (v2.3 — 미리보기 영역 출력 규칙)
+  document.querySelectorAll('.preview-state-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.preview-state-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const state = this.dataset.state;
+      document.querySelectorAll('.preview-state').forEach(el => {
+        el.style.display = 'none';
+      });
+      const target = document.getElementById('preview-' + state);
+      if (target) {
+        target.style.display = 'flex';
+      }
+    });
+  });
+</script>
+
+
+</body></html>

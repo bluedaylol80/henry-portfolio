@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Cinzel:wght@700;900&amp;display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117; --surface: #16181f; --surface-el: #1c1f28;
+  --border: #252a36; --border-subtle: #1e222c;
+  --text: #e8eaed; --text-sub: #7a7f94; --text-dim: #4a4f63;
+  --accent: #6366f1; --accent-soft: rgba(99,102,241,0.12); --accent-hover: #818cf8;
+  --success: #22c55e; --success-soft: rgba(34,197,94,0.12);
+  --warning: #f59e0b; --warning-soft: rgba(245,158,11,0.12);
+  --error: #ef4444; --error-soft: rgba(239,68,68,0.12);
+  --info: #38bdf8; --purple: #a855f7; --purple-soft: rgba(168,85,247,0.15);
+  --ssj: #f59e0b;
+  --gold: #fbbf24; --gold-soft: rgba(251,191,36,0.12);
+  --inferno-1: #fef3c7;  /* 가장 밝은 코어 */
+  --inferno-2: #fbbf24;  /* 골드 */
+  --inferno-3: #f97316;  /* 오렌지 */
+  --inferno-4: #b91c1c;  /* 다크 레드 */
+  --inferno-bg-deep: #0a0604;  /* 카드 내부 검은 베이스 */
+  --inferno-bg-warm: #1a0e08;  /* 따뜻한 다크 */
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  height: 100%; width: 100%;
+  font-family: 'Noto Sans KR', -apple-system, sans-serif;
+  background: #000; color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+body {
+  display: flex; align-items: center; justify-content: center;
+  background:
+    radial-gradient(ellipse 800px 400px at 30% 20%, rgba(249,115,22,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 600px 600px at 80% 90%, rgba(185,28,28,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse at top, #1a0e08 0%, #000 70%);
+}
+
+/* 핸드폰 가로 프레임 */
+.phone-frame {
+  width: 844px; height: 390px;
+  background: #000;
+  border: 8px solid #2a201a;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.7),
+    0 0 80px rgba(245,158,11,0.18);
+}
+.phone-frame::before {
+  content: ''; position: absolute; top: 50%; left: 12px;
+  width: 4px; height: 60px; background: #1a1d24; border-radius: 2px;
+  transform: translateY(-50%); z-index: 100;
+}
+.phone-frame::after {
+  content: ''; position: absolute; top: 50%; right: 12px;
+  width: 4px; height: 60px; background: #1a1d24; border-radius: 2px;
+  transform: translateY(-50%); z-index: 100;
+}
+.app {
+  width: 100%; height: 100%;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(ellipse 500px 360px at 50% 100%, rgba(249,115,22,0.18) 0%, transparent 60%),
+    radial-gradient(ellipse 700px 240px at 50% 0%, rgba(245,158,11,0.10) 0%, transparent 65%),
+    #07050a;
+  font-size: 13px;
+  line-height: 1.4;
+  position: relative;
+}
+/* 미세 별빛/잿불 파티클 (배경 위로 떠오름) */
+.app::before, .app::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-repeat: repeat;
+  z-index: 0;
+}
+.app::before {
+  background-image:
+    radial-gradient(1px 1px at 12% 80%, rgba(251,191,36,0.7) 0%, transparent 50%),
+    radial-gradient(1px 1px at 38% 70%, rgba(249,115,22,0.6) 0%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 62% 88%, rgba(251,191,36,0.55) 0%, transparent 50%),
+    radial-gradient(1px 1px at 86% 75%, rgba(254,243,199,0.7) 0%, transparent 50%),
+    radial-gradient(1px 1px at 24% 50%, rgba(249,115,22,0.4) 0%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 70% 40%, rgba(251,191,36,0.45) 0%, transparent 50%);
+  animation: emberRise 8s ease-in-out infinite;
+}
+.app::after {
+  background-image:
+    radial-gradient(1px 1px at 50% 90%, rgba(254,243,199,0.65) 0%, transparent 50%),
+    radial-gradient(1.2px 1.2px at 78% 60%, rgba(251,191,36,0.5) 0%, transparent 50%),
+    radial-gradient(1px 1px at 18% 30%, rgba(249,115,22,0.5) 0%, transparent 50%);
+  animation: emberRise 11s ease-in-out infinite reverse;
+  opacity: 0.6;
+}
+@keyframes emberRise {
+  0%, 100% { transform: translateY(0); opacity: 0.55; }
+  50%      { transform: translateY(-6px); opacity: 0.9; }
+}
+.app > * { position: relative; z-index: 1; }
+
+/* 헤더 */
+.hdr {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 8px 0 12px;
+  display: flex; align-items: center; gap: 12px;
+  border-bottom: 1px solid rgba(245,158,11,0.25);
+  background:
+    linear-gradient(180deg, rgba(245,158,11,0.08) 0%, rgba(0,0,0,0) 100%),
+    rgba(10,6,4,0.85);
+  position: relative;
+  z-index: 5;
+}
+.hdr::after {
+  content: '';
+  position: absolute; left: 0; right: 0; bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--inferno-2) 50%, transparent);
+  opacity: 0.6;
+}
+/* 10TH ANNIVERSARY 워드마크 */
+.hdr-title {
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -0.3px;
+}
+.hdr-title .anniv {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1;
+  background: linear-gradient(180deg, var(--inferno-1) 0%, var(--inferno-2) 45%, var(--inferno-3) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter:
+    drop-shadow(0 0 4px rgba(251,191,36,0.55))
+    drop-shadow(0 0 10px rgba(249,115,22,0.35));
+  animation: flicker 3.4s ease-in-out infinite;
+  position: relative;
+}
+.hdr-title .anniv::after {
+  content: 'TH';
+  font-size: 9px;
+  font-weight: 700;
+  position: absolute; top: 1px; right: -14px;
+  color: var(--inferno-2);
+  text-shadow: 0 0 4px rgba(251,191,36,0.6);
+  letter-spacing: 0.3px;
+  -webkit-text-fill-color: var(--inferno-2);
+}
+@keyframes flicker {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(251,191,36,0.55)) drop-shadow(0 0 10px rgba(249,115,22,0.35)); }
+  45%      { filter: drop-shadow(0 0 6px rgba(254,243,199,0.85)) drop-shadow(0 0 16px rgba(249,115,22,0.55)); }
+  55%      { filter: drop-shadow(0 0 3px rgba(251,191,36,0.5)) drop-shadow(0 0 8px rgba(249,115,22,0.3)); }
+}
+.hdr-title .sub {
+  display: flex; align-items: center; gap: 6px;
+  margin-left: 18px;
+  border-left: 1px solid rgba(245,158,11,0.25);
+  padding-left: 10px;
+  white-space: nowrap;
+  font-size: 10px; font-weight: 700;
+  color: var(--inferno-1); letter-spacing: 0.7px;
+  text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+}
+.hdr-title .sub .sep {
+  color: var(--inferno-2); opacity: 0.55; font-weight: 400;
+}
+.hdr-meta { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.dday {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--inferno-1);
+  padding: 3px 9px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(245,158,11,0.4);
+  border-radius: 4px;
+  letter-spacing: -0.3px;
+  text-shadow: 0 0 5px rgba(251,191,36,0.6);
+}
+.apply-counter {
+  display: flex; align-items: center; gap: 5px;
+  background: linear-gradient(180deg, rgba(168,85,247,0.22), rgba(168,85,247,0.08));
+  border: 1px solid rgba(168,85,247,0.5);
+  padding: 4px 10px; border-radius: 12px;
+  font-size: 11px; font-weight: 600;
+  color: #d8b4fe;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 10px rgba(168,85,247,0.18);
+}
+.apply-counter:hover {
+  background: linear-gradient(180deg, rgba(168,85,247,0.32), rgba(168,85,247,0.12));
+  box-shadow: 0 0 14px rgba(168,85,247,0.4);
+}
+.apply-counter .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 4px rgba(168,85,247,0.7);
+}
+.dev-toggle {
+  font-size: 10px; padding: 2px 7px;
+  background: var(--accent-soft); color: var(--accent-hover);
+  border-radius: 3px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  border: 1px solid rgba(99,102,241,0.3);
+}
+.hdr-close {
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  color: var(--text-sub);
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-left: 4px;
+  line-height: 1;
+}
+.hdr-close:hover {
+  color: var(--error);
+  border-color: rgba(239,68,68,0.5);
+  background: var(--error-soft);
+}
+
+/* 풀폭 큰 탭 */
+.tab-row {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 6px;
+  height: 36px;
+  padding: 4px 14px 0;
+  background:
+    linear-gradient(180deg, rgba(10,6,4,0.85) 0%, rgba(7,5,10,0.95) 100%);
+  border-bottom: 1px solid rgba(245,158,11,0.2);
+}
+.tab.tab-apply {
+  background: linear-gradient(180deg, rgba(168,85,247,0.18) 0%, rgba(7,5,10,0.6) 100%);
+  border-color: rgba(168,85,247,0.45);
+}
+.tab.tab-apply:hover:not(.active) {
+  background: linear-gradient(180deg, rgba(168,85,247,0.32) 0%, rgba(7,5,10,0.6) 100%);
+  border-color: var(--purple);
+}
+.tab.tab-apply.active {
+  background: linear-gradient(180deg, rgba(168,85,247,0.4) 0%, rgba(168,85,247,0.18) 50%, rgba(7,5,10,0.6) 100%);
+  border-color: var(--purple);
+  box-shadow:
+    0 -4px 18px rgba(168,85,247,0.45),
+    inset 0 0 16px rgba(168,85,247,0.2);
+  color: #f5d0fe;
+}
+.tab.tab-apply.active::before {
+  background: linear-gradient(90deg, transparent, #d8b4fe 30%, var(--purple) 50%, #d8b4fe 70%, transparent);
+  box-shadow: 0 0 8px var(--purple);
+}
+.tab.tab-apply .tab-label .badge-pt {
+  display: inline-block;
+  margin-left: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(168,85,247,0.25);
+  color: #f5d0fe;
+  padding: 1px 5px;
+  border-radius: 8px;
+  border: 1px solid rgba(168,85,247,0.5);
+  vertical-align: middle;
+}
+.tab .tab-icon { font-size: 13px; line-height: 1; margin-right: 2px; }
+.tab {
+  height: 32px;
+  padding: 0 12px;
+  display: flex; flex-direction: row; align-items: center; justify-content: center;
+  gap: 4px;
+  font-family: inherit;
+  color: var(--text-sub);
+  background: linear-gradient(180deg, #1a1208 0%, #0f0a06 100%);
+  border: 1px solid rgba(245,158,11,0.15);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.22,1,0.36,1);
+  position: relative;
+  letter-spacing: -0.2px;
+}
+.tab:hover:not(.locked):not(.active) {
+  color: var(--text);
+  background: linear-gradient(180deg, #2a1c10 0%, #1a1208 100%);
+  border-color: rgba(245,158,11,0.4);
+  transform: translateY(-1px);
+}
+.tab.active {
+  color: var(--inferno-1);
+  background: linear-gradient(180deg, rgba(249,115,22,0.32) 0%, rgba(245,158,11,0.16) 50%, rgba(7,5,10,0.6) 100%);
+  border: 1px solid var(--inferno-2);
+  border-bottom: 1px solid #07050a;
+  height: 34px;
+  margin-bottom: -1px;
+  box-shadow:
+    0 -4px 14px rgba(249,115,22,0.4),
+    inset 0 0 12px rgba(251,191,36,0.18);
+  z-index: 2;
+}
+.tab.active::before {
+  content: '';
+  position: absolute; top: -1px; left: 8px; right: 8px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--inferno-1) 30%, var(--inferno-2) 50%, var(--inferno-1) 70%, transparent);
+  border-radius: 1px;
+  box-shadow: 0 0 8px var(--inferno-2);
+  animation: ridgePulse 2.4s ease-in-out infinite;
+}
+@keyframes ridgePulse {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; box-shadow: 0 0 14px var(--inferno-1); }
+}
+.tab.locked {
+  color: var(--text-dim); cursor: not-allowed;
+  background: var(--surface);
+  opacity: 0.55;
+}
+.tab .tab-label {
+  font-size: 14px; font-weight: 600; line-height: 1;
+  display: flex; align-items: center; gap: 4px;
+}
+.tab .lock { font-size: 11px; }
+.tab.partial:not(.active) { border-color: rgba(34,197,94,0.4); }
+.tab.complete:not(.active) {
+  border-color: rgba(34,197,94,0.6);
+  background: rgba(34,197,94,0.08);
+}
+
+/* 메인 */
+.main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── 응모 현황 view ───────────────────────────────────── */
+.apply-view {
+  position: absolute; inset: 0;
+  display: none;
+  flex-direction: column;
+  padding: 10px 14px 14px;
+  background:
+    radial-gradient(ellipse 600px 280px at 50% 100%, rgba(168,85,247,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 500px 300px at 50% 0%, rgba(249,115,22,0.10) 0%, transparent 65%),
+    #07050a;
+  z-index: 10;
+  overflow-y: auto;
+}
+.apply-view.show { display: flex; }
+.apply-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(168,85,247,0.25);
+  margin-bottom: 10px;
+}
+.apply-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--inferno-1);
+  letter-spacing: -0.2px;
+  text-shadow: 0 0 6px rgba(168,85,247,0.4);
+  display: flex; align-items: center; gap: 6px;
+}
+.apply-title::before {
+  content: '🎁';
+  font-size: 16px;
+  filter: drop-shadow(0 0 4px rgba(168,85,247,0.6));
+}
+.apply-sub {
+  font-size: 10.5px; color: rgba(216,180,254,0.85);
+  margin-top: 3px; letter-spacing: -0.1px;
+}
+.apply-pt-block {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+  padding: 6px 12px;
+  background: linear-gradient(180deg, rgba(168,85,247,0.22), rgba(168,85,247,0.06));
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(168,85,247,0.3);
+}
+.apply-pt-label {
+  font-size: 9px; font-weight: 600;
+  color: #d8b4fe; letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.apply-pt-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 18px; font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  line-height: 1;
+  text-shadow: 0 0 8px rgba(168,85,247,0.7);
+}
+.apply-pt-value .unit {
+  font-size: 11px; color: #d8b4fe; font-weight: 500;
+  margin-left: 1px;
+}
+.apply-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.apply-card {
+  display: flex; flex-direction: column;
+  background: linear-gradient(180deg, rgba(26,14,8,0.7) 0%, rgba(10,6,4,0.85) 100%);
+  border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.18s;
+  position: relative;
+}
+.apply-card.active {
+  border-color: var(--purple);
+  box-shadow:
+    0 0 14px rgba(168,85,247,0.4),
+    inset 0 0 10px rgba(168,85,247,0.08);
+  animation: applyPulse 2.4s ease-in-out infinite;
+}
+@keyframes applyPulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(168,85,247,0.4), inset 0 0 10px rgba(168,85,247,0.08); }
+  50%      { box-shadow: 0 0 22px rgba(216,180,254,0.6), inset 0 0 14px rgba(168,85,247,0.18); }
+}
+.apply-card.entered {
+  border-color: rgba(34,197,94,0.55);
+  box-shadow: 0 0 10px rgba(34,197,94,0.25);
+}
+.apply-card-img {
+  height: 70px;
+  position: relative;
+  background:
+    linear-gradient(135deg, #2a2a30 0%, #1a1a20 100%);
+  display: flex; align-items: center; justify-content: center;
+  border-bottom: 1px solid rgba(168,85,247,0.2);
+  overflow: hidden;
+}
+.apply-card.active .apply-card-img {
+  background:
+    radial-gradient(ellipse at center, rgba(168,85,247,0.25) 0%, transparent 70%),
+    linear-gradient(135deg, #3a2a4a 0%, #1a1020 100%);
+}
+.apply-card.entered .apply-card-img {
+  background:
+    radial-gradient(ellipse at center, rgba(34,197,94,0.22) 0%, transparent 70%),
+    linear-gradient(135deg, #1a2a1f 0%, #0f1a14 100%);
+}
+.apply-card-img .ph-frame {
+  width: 50px; height: 60px;
+  border-radius: 4px;
+  border: 1px solid rgba(168,85,247,0.4);
+  background: linear-gradient(180deg, rgba(168,85,247,0.08) 0%, rgba(0,0,0,0.4) 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 2px;
+  filter: grayscale(0.85) brightness(0.55);
+  transition: filter 0.25s;
+  position: relative;
+}
+.apply-card.active .ph-frame {
+  filter: grayscale(0) brightness(1);
+  border-color: var(--purple);
+  box-shadow: 0 0 10px rgba(168,85,247,0.5);
+}
+.apply-card.entered .ph-frame {
+  filter: grayscale(0) brightness(1);
+  border-color: var(--success);
+  box-shadow: 0 0 8px rgba(34,197,94,0.4);
+}
+.ph-frame .ph-icon {
+  font-size: 18px;
+  filter: drop-shadow(0 0 3px rgba(168,85,247,0.5));
+}
+.ph-frame .ph-label {
+  font-size: 7px; font-weight: 700;
+  color: #d8b4fe; letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.apply-card.entered .ph-frame .ph-label { color: var(--success); }
+.apply-card-body {
+  padding: 6px 8px 7px;
+  display: flex; flex-direction: column; gap: 5px;
+  flex: 1;
+}
+.apply-card-name {
+  font-size: 11px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.apply-card-meta {
+  font-size: 9.5px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.1px;
+}
+.apply-card-meta .entered-num { color: var(--success); font-weight: 700; }
+.apply-card-btn {
+  margin-top: auto;
+  height: 26px;
+  border-radius: 5px;
+  border: 1px solid;
+  font-family: inherit;
+  font-size: 10.5px; font-weight: 600;
+  cursor: not-allowed;
+  letter-spacing: -0.2px;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+}
+.apply-card-btn.locked {
+  background: rgba(0,0,0,0.4);
+  border-color: rgba(168,85,247,0.2);
+  color: var(--text-dim);
+}
+.apply-card-btn.ready {
+  background: linear-gradient(135deg, var(--purple) 0%, #c084fc 100%);
+  color: #fff;
+  border-color: var(--purple);
+  cursor: pointer;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  box-shadow:
+    0 2px 8px rgba(168,85,247,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.25);
+}
+.apply-card-btn.ready:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(168,85,247,0.6),
+    inset 0 1px 0 rgba(255,255,255,0.3);
+}
+.apply-card-btn.entered {
+  background: rgba(34,197,94,0.18);
+  color: var(--success);
+  border-color: rgba(34,197,94,0.5);
+  cursor: default;
+}
+
+/* 좌 패널 (28%) */
+.left {
+  flex: 0 0 28%;
+  border-right: 1px solid rgba(245,158,11,0.18);
+  padding: 9px 11px 9px 12px;
+  display: flex; flex-direction: column;
+  gap: 7px;
+  background:
+    radial-gradient(ellipse 200px 240px at 50% 50%, rgba(249,115,22,0.10) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(26,14,8,0.6) 0%, rgba(7,5,10,0.85) 100%);
+  overflow: hidden;
+  position: relative;
+}
+
+/* 좌 패널 — 보상 섹션 헤더 (고정) */
+.reward-section-h-row {
+  flex-shrink: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(245,158,11,0.18);
+  margin-bottom: 2px;
+  gap: 8px;
+}
+
+/* 좌 패널 — 보상 리스트 스크롤 영역 */
+.reward-list-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+.reward-section-title {
+  font-size: 13px; font-weight: 700;
+  color: var(--inferno-1);
+  letter-spacing: -0.3px;
+  text-shadow: 0 0 5px rgba(251,191,36,0.4);
+  white-space: nowrap;
+}
+.theme-list-btn-inline {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 11px;
+  background: rgba(245,158,11,0.08);
+  color: var(--inferno-2);
+  border: 1px solid rgba(245,158,11,0.4);
+  font-family: inherit;
+  font-size: 10px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center;
+  gap: 3px;
+  letter-spacing: -0.2px;
+  white-space: nowrap;
+}
+.theme-list-btn-inline:hover {
+  background: rgba(245,158,11,0.18);
+  border-color: var(--inferno-2);
+  color: var(--inferno-1);
+  box-shadow: 0 0 8px rgba(249,115,22,0.3);
+}
+.slot-counter .sc-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--inferno-1);
+}
+.slot-counter.partial {
+  border-color: var(--inferno-2);
+  background: rgba(245,158,11,0.12);
+  box-shadow: 0 0 8px rgba(249,115,22,0.25);
+}
+.slot-counter.partial .sc-num { color: var(--inferno-1); }
+.slot-counter.complete {
+  border-color: var(--success);
+  background: rgba(34,197,94,0.14);
+  box-shadow: 0 0 8px rgba(34,197,94,0.3);
+}
+.slot-counter.complete .sc-num { color: var(--success); }
+
+/* 미션 진행도 (우측 패널 — W1 탭 아래 고정, 미션 리스트 위) */
+.progress-block {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background:
+    linear-gradient(180deg, rgba(26,14,8,0.7) 0%, rgba(10,6,4,0.7) 100%);
+  border: 1px solid rgba(245,158,11,0.25);
+  border-radius: 7px;
+  padding: 22px 18px 10px 14px;
+  margin-bottom: 8px;
+  box-shadow: inset 0 0 10px rgba(249,115,22,0.06);
+}
+.progress-track {
+  flex: 1;
+  height: 10px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 5px;
+  overflow: visible;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.6);
+}
+.progress-val {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--inferno-1);
+  font-weight: 700;
+  letter-spacing: -0.2px;
+  text-shadow: 0 0 6px rgba(251,191,36,0.5);
+  white-space: nowrap;
+}
+.progress-fill {
+  height: 100%;
+  background:
+    linear-gradient(90deg, var(--inferno-4) 0%, var(--inferno-3) 30%, var(--inferno-2) 70%, var(--inferno-1) 100%);
+  border-radius: 5px;
+  transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+  box-shadow:
+    0 0 10px rgba(249,115,22,0.6),
+    inset 0 0 6px rgba(254,243,199,0.4);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 8px;
+  background: linear-gradient(90deg, transparent, var(--inferno-1));
+  filter: blur(3px);
+  animation: emberHead 1.6s ease-in-out infinite;
+}
+@keyframes emberHead {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+/* 보상 체크포인트 스팟 (80%, 100% 지점의 ○ 형태) */
+.progress-mark {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(10,6,4,0.95);
+  border: 2px solid rgba(251,191,36,0.55);
+  z-index: 2;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.4);
+  transition: all 0.3s ease;
+}
+.progress-mark.m80 { left: 80%; }
+.progress-mark.m100 { left: 100%; }
+
+/* 도달 시: 안쪽이 빛나는 골드로 채워짐 */
+.progress-mark.reached {
+  background: radial-gradient(circle, var(--inferno-1) 0%, var(--inferno-2) 50%, var(--inferno-3) 100%);
+  border-color: var(--inferno-1);
+  box-shadow:
+    0 0 0 2px rgba(0,0,0,0.4),
+    0 0 10px var(--inferno-2),
+    0 0 18px rgba(251,191,36,0.6);
+  animation: spotPulse 1.8s ease-in-out infinite;
+}
+@keyframes spotPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 2px rgba(0,0,0,0.4),
+      0 0 10px var(--inferno-2),
+      0 0 18px rgba(251,191,36,0.6);
+  }
+  50% {
+    box-shadow:
+      0 0 0 2px rgba(0,0,0,0.4),
+      0 0 14px var(--inferno-1),
+      0 0 26px rgba(254,243,199,0.85);
+  }
+}
+
+/* 라벨 (스팟 위에 떠있음) */
+.progress-mark::after {
+  content: attr(data-label);
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--text-sub);
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+}
+.progress-mark.reached::after {
+  color: var(--inferno-1);
+  text-shadow: 0 0 6px rgba(254,243,199,0.7);
+}
+
+/* 보상 리스트 (3개 R카드 고정 노출) */
+.reward-section-h {
+  font-size: 10px; font-weight: 700;
+  color: var(--inferno-2);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 2px;
+  text-shadow: 0 0 4px rgba(251,191,36,0.4);
+}
+.reward-section-h::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, rgba(245,158,11,0.4), transparent);
+}
+.reward-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.reward-item {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 6px 9px 6px 6px;
+  background: linear-gradient(180deg, rgba(26,14,8,0.85) 0%, rgba(10,6,4,0.85) 100%);
+  border: 1px solid rgba(245,158,11,0.18);
+  border-radius: 7px;
+  min-height: 50px;
+  transition: all 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.reward-item.locked { opacity: 0.55; }
+.reward-item.locked .ri-icon { filter: grayscale(0.7) brightness(0.65); }
+.reward-item.claimable {
+  border-color: var(--inferno-2);
+  background:
+    linear-gradient(90deg, rgba(249,115,22,0.18) 0%, rgba(245,158,11,0.05) 60%, rgba(10,6,4,0.85) 100%);
+  box-shadow:
+    0 0 14px rgba(249,115,22,0.35),
+    inset 0 0 10px rgba(251,191,36,0.06);
+  animation: shineRow 2.2s ease-in-out infinite;
+}
+@keyframes shineRow {
+  0%, 100% { box-shadow: 0 0 14px rgba(249,115,22,0.35), inset 0 0 10px rgba(251,191,36,0.06); }
+  50%      { box-shadow: 0 0 22px rgba(254,243,199,0.55), inset 0 0 14px rgba(251,191,36,0.16); }
+}
+.reward-item.has-claim {
+  border-color: rgba(34,197,94,0.55);
+  background:
+    linear-gradient(90deg, rgba(34,197,94,0.14) 0%, rgba(10,6,4,0.85) 70%);
+  box-shadow: 0 0 10px rgba(34,197,94,0.18);
+}
+
+/* ── R 카드 (좌측 아이콘 자리) ─────────────────────────── */
+.ri-icon {
+  width: 38px; height: 50px;
+  border-radius: 4px;
+  background:
+    radial-gradient(ellipse 24px 18px at 50% 75%, rgba(249,115,22,0.5) 0%, transparent 60%),
+    linear-gradient(160deg, #2a1810 0%, #1a0e08 50%, #0a0604 100%);
+  border: 1px solid rgba(251,191,36,0.55);
+  display: flex; flex-direction: column;
+  align-items: stretch; justify-content: space-between;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 10px rgba(249,115,22,0.25),
+    0 0 8px rgba(245,158,11,0.18);
+  padding: 2px;
+}
+/* 카드 외곽 골드 그라디언트 보더 (가짜 듀얼 보더) */
+.ri-icon::before {
+  content: '';
+  position: absolute; inset: -1px;
+  border-radius: 4px;
+  padding: 1px;
+  background: linear-gradient(160deg, var(--inferno-1) 0%, var(--inferno-2) 30%, var(--inferno-3) 60%, var(--inferno-4) 100%);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.85;
+}
+/* 카드 안 R 글자 + 별점 */
+.ri-icon .r-glyph {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1;
+  text-align: left;
+  padding: 2px 0 0 3px;
+  background: linear-gradient(180deg, var(--inferno-1) 0%, var(--inferno-2) 60%, var(--inferno-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 3px rgba(251,191,36,0.7));
+  position: relative; z-index: 2;
+}
+.ri-icon .r-body {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  filter: drop-shadow(0 0 4px rgba(249,115,22,0.6));
+  position: relative; z-index: 2;
+}
+.ri-icon .r-star {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; font-weight: 700;
+  color: var(--inferno-1);
+  text-shadow: 0 0 3px rgba(251,191,36,0.8);
+  padding: 0 0 1px 3px;
+  letter-spacing: -0.3px;
+  position: relative; z-index: 2;
+}
+/* 카드 광택 라인 */
+.ri-icon::after {
+  content: '';
+  position: absolute; top: 0; left: -50%;
+  width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(254,243,199,0.18), transparent);
+  transform: skewX(-20deg);
+  animation: cardShine 4.5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 3;
+}
+@keyframes cardShine {
+  0%, 80%, 100% { left: -50%; opacity: 0; }
+  40%           { left: 100%; opacity: 1; }
+}
+.reward-item.claimable .ri-icon {
+  box-shadow:
+    inset 0 0 14px rgba(249,115,22,0.45),
+    0 0 14px rgba(249,115,22,0.5);
+}
+.reward-item.has-claim .ri-icon {
+  border-color: rgba(34,197,94,0.6);
+  filter: hue-rotate(60deg) saturate(0.9);
+}
+.ri-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.ri-name {
+  font-size: 11px; color: var(--text); font-weight: 500;
+  letter-spacing: -0.2px;
+  line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ri-meta {
+  font-size: 10px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+.ri-action {
+  height: 26px;
+  padding: 0 10px;
+  font-size: 10.5px; font-weight: 600;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  letter-spacing: -0.1px;
+  cursor: not-allowed;
+  display: flex; align-items: center; gap: 4px;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.ri-action.locked {
+  background: var(--surface-el);
+  color: var(--text-dim);
+  border-color: var(--border-subtle);
+}
+.ri-action.ready {
+  background: linear-gradient(135deg, var(--inferno-2) 0%, var(--inferno-3) 70%, var(--inferno-4) 100%);
+  color: #fff;
+  cursor: pointer;
+  border-color: var(--inferno-2);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow:
+    0 2px 10px rgba(249,115,22,0.55),
+    inset 0 1px 0 rgba(254,243,199,0.4);
+}
+.ri-action.ready:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 14px rgba(249,115,22,0.7),
+    inset 0 1px 0 rgba(254,243,199,0.5);
+}
+.ri-action.claimed {
+  background: var(--success-soft);
+  color: var(--success);
+  border-color: rgba(34,197,94,0.4);
+  cursor: default;
+}
+
+/* 헬퍼 텍스트 */
+.helper-note {
+  font-size: 10px;
+  color: rgba(251,191,36,0.55);
+  letter-spacing: -0.1px;
+  line-height: 1.4;
+  padding: 6px 2px 2px;
+  text-align: center;
+}
+
+/* 테마 리스트 보기 버튼 */
+.theme-list-btn {
+  width: 100%;
+  height: 32px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(245,158,11,0.06), rgba(0,0,0,0.4));
+  color: var(--inferno-1);
+  border: 1px solid rgba(245,158,11,0.5);
+  font-family: inherit;
+  font-size: 10.5px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  gap: 5px;
+  letter-spacing: -0.2px;
+  text-shadow: 0 0 4px rgba(251,191,36,0.4);
+}
+.theme-list-btn:hover {
+  background: linear-gradient(180deg, rgba(245,158,11,0.18), rgba(249,115,22,0.08));
+  border-color: var(--inferno-2);
+  box-shadow: 0 0 12px rgba(249,115,22,0.35);
+}
+
+/* 우 패널 — 미션 (72%) */
+.right {
+  flex: 1;
+  padding: 10px 14px 10px 14px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(ellipse 600px 200px at 50% 100%, rgba(249,115,22,0.08) 0%, transparent 70%),
+    transparent;
+}
+/* 미션 리스트 영역 — 이 부분만 스크롤 */
+.missions-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex; flex-direction: column;
+  gap: 6px;
+  padding-right: 4px;
+}
+.right-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 4px;
+}
+.right-head .h-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--inferno-2);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  text-shadow: 0 0 4px rgba(251,191,36,0.4);
+}
+.right-head .h-meta {
+  font-size: 10px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+.mission {
+  display: grid;
+  grid-template-columns: 22px 1fr auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  background: linear-gradient(180deg, rgba(26,14,8,0.7) 0%, rgba(10,6,4,0.7) 100%);
+  border: 1px solid rgba(245,158,11,0.15);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-size: 13px;
+  min-height: 38px;
+}
+.mission:hover {
+  border-color: rgba(245,158,11,0.45);
+  background: linear-gradient(180deg, rgba(42,24,16,0.85) 0%, rgba(26,14,8,0.85) 100%);
+  box-shadow: 0 0 10px rgba(249,115,22,0.15);
+}
+.mission.done {
+  background: linear-gradient(90deg, rgba(249,115,22,0.18) 0%, rgba(26,14,8,0.7) 100%);
+  border-color: rgba(245,158,11,0.5);
+  box-shadow: inset 0 0 10px rgba(249,115,22,0.1);
+}
+.mission.done .m-name { color: var(--inferno-1); text-decoration: none; }
+.mission.t-paid { border-left: 3px solid var(--inferno-3); }
+.mission.t-apply {
+  border-left: 3px solid var(--purple);
+  background: linear-gradient(90deg, rgba(168,85,247,0.16) 0%, rgba(26,14,8,0.7) 100%);
+}
+.mission.t-apply.done {
+  background: linear-gradient(90deg, rgba(168,85,247,0.25) 0%, rgba(249,115,22,0.1) 100%);
+  border-color: var(--purple);
+}
+.m-check {
+  width: 18px; height: 18px; border-radius: 4px;
+  border: 1.5px solid rgba(245,158,11,0.35);
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  color: transparent;
+  flex-shrink: 0;
+}
+.mission.done .m-check {
+  background: linear-gradient(135deg, var(--inferno-2), var(--inferno-3));
+  border-color: var(--inferno-2);
+  color: #fff;
+  box-shadow: 0 0 8px rgba(249,115,22,0.6);
+}
+.mission.t-apply.done .m-check {
+  background: var(--purple); border-color: var(--purple);
+}
+.m-name {
+  font-size: 13px; color: var(--text);
+  display: flex; align-items: center; gap: 6px;
+  letter-spacing: -0.2px;
+}
+.m-name .icon { font-size: 14px; }
+.m-prog {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--text-sub);
+  letter-spacing: -0.2px;
+}
+.m-reward {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: rgba(245,158,11,0.1);
+  color: var(--inferno-2);
+  white-space: nowrap;
+  border: 1px solid rgba(245,158,11,0.2);
+}
+.mission.t-paid .m-reward {
+  background: rgba(249,115,22,0.18);
+  color: var(--inferno-1);
+  border-color: rgba(249,115,22,0.4);
+}
+.mission.t-apply .m-reward {
+  background: var(--purple-soft);
+  color: #c084fc;
+  border-color: rgba(168,85,247,0.4);
+}
+.mission.done .m-reward {
+  background: rgba(249,115,22,0.25);
+  color: var(--inferno-1);
+  border-color: var(--inferno-2);
+}
+
+/* 잠금 오버레이 */
+.lock-overlay {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(26,14,8,0.88) 0%, rgba(7,5,10,0.96) 70%);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 50;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
+}
+.lock-overlay.show { display: flex; }
+.lock-icon {
+  font-size: 36px;
+  color: var(--inferno-3);
+  filter: drop-shadow(0 0 8px rgba(249,115,22,0.5));
+}
+.lock-title {
+  font-size: 14px; font-weight: 700;
+  color: var(--inferno-1);
+  text-shadow: 0 0 6px rgba(251,191,36,0.5);
+}
+.lock-sub { font-size: 12px; color: rgba(251,191,36,0.7); }
+
+/* 닫기 확인 모달 */
+.close-modal {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 250;
+}
+.close-modal.show { display: flex; }
+.close-card {
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  width: 280px;
+  text-align: center;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+}
+.close-card .ct-title {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  letter-spacing: -0.2px;
+}
+.close-card .ct-sub {
+  font-size: 12px; color: var(--text-sub);
+  letter-spacing: -0.1px; line-height: 1.5;
+}
+.close-card .ct-actions { display: flex; gap: 8px; }
+.close-card button {
+  flex: 1;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 12px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.close-card button:hover { background: var(--surface); }
+.close-card button.danger {
+  background: var(--error-soft);
+  border-color: rgba(239,68,68,0.3);
+  color: var(--error);
+}
+.close-card button.danger:hover { background: rgba(239,68,68,0.18); }
+
+/* 테마 리스트 모달 */
+.theme-modal {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(3px);
+  display: none;
+  align-items: center; justify-content: center;
+  z-index: 240;
+}
+.theme-modal.show { display: flex; }
+.theme-card {
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  width: 620px;
+  max-height: 320px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.7);
+}
+.theme-card .tc-head {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.theme-card .tc-title {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  letter-spacing: -0.2px;
+}
+.theme-card .tc-x {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-sub);
+  cursor: pointer;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.theme-card .tc-x:hover { color: var(--error); border-color: rgba(239,68,68,0.4); }
+.tc-tabs {
+  display: flex; gap: 6px;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 0;
+}
+.tc-tab {
+  padding: 7px 12px;
+  font-size: 11px; font-weight: 500;
+  color: var(--text-sub);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+  display: flex; align-items: center; gap: 5px;
+}
+.tc-tab:hover { color: var(--text); }
+.tc-tab.active {
+  color: var(--ssj);
+  border-bottom-color: var(--ssj);
+}
+.tc-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.theme-cell {
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 7px 8px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.theme-cell .tc-artist {
+  font-size: 10px; color: var(--ssj); font-weight: 600;
+  letter-spacing: -0.1px;
+}
+.theme-cell .tc-name {
+  font-size: 11px; color: var(--text); font-weight: 500;
+  letter-spacing: -0.2px;
+}
+.theme-cell .tc-rare {
+  font-size: 10px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* 토스트 */
+.toast {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface-el);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 12px;
+  color: var(--text);
+  z-index: 200;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+  pointer-events: none;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast .ic { font-size: 14px; }
+.toast.success { border-color: var(--success); }
+.toast.purple { border-color: var(--purple); }
+.toast.warn { border-color: var(--warning); }
+
+/* 외곽 가이드 */
+.guide {
+  position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: -0.2px;
+  display: flex; align-items: center; gap: 14px;
+}
+.guide kbd {
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 2px 5px; border-radius: 3px;
+  color: var(--text-sub); font-family: inherit;
+  font-size: 10px;
+}
+
+/* 스크롤바 */
+.left::-webkit-scrollbar, .right::-webkit-scrollbar,
+.missions-scroll::-webkit-scrollbar,
+.tc-body::-webkit-scrollbar { width: 4px; }
+.left::-webkit-scrollbar-thumb, .right::-webkit-scrollbar-thumb,
+.missions-scroll::-webkit-scrollbar-thumb,
+.tc-body::-webkit-scrollbar-thumb {
+  background: var(--border); border-radius: 2px;
+}
+.left::-webkit-scrollbar-track, .right::-webkit-scrollbar-track,
+.missions-scroll::-webkit-scrollbar-track,
+.tc-body::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="app">
+
+    
+    <div class="hdr">
+      <div class="hdr-title">
+        <span class="anniv">10</span>
+        <span class="sub">
+          SSJ&nbsp;ANNIVERSARY <span class="sep">·</span> INFERNO <span class="sep">·</span> R&nbsp;CARD
+        </span>
+      </div>
+      <div class="hdr-meta">
+        <div class="dday" id="dday">D-12</div>
+        <div class="apply-counter" id="applyCounter" title="포토카드 응모 포인트">
+          🎁 응모 포인트 <span class="num" id="applyNum">0</span>
+        </div>
+        
+        <button class="hdr-close" id="hdrClose" title="닫기">✕</button>
+      </div>
+    </div>
+
+    
+    <div class="tab-row" id="tabRow">
+      <button class="tab tab-apply" data-week="0">
+        <span class="tab-label"><span class="tab-icon">🎁</span>응모 현황<span class="badge-pt" id="tabApplyPt">0</span></span>
+      </button>
+      <button class="tab active" data-week="1">
+        <span class="tab-label">W1</span>
+      </button>
+      <button class="tab" data-week="2">
+        <span class="tab-label">W2</span>
+      </button>
+      <button class="tab locked" data-week="3">
+        <span class="tab-label">W3 <span class="lock">🔒</span></span>
+      </button>
+      <button class="tab locked" data-week="4">
+        <span class="tab-label">W4 <span class="lock">🔒</span></span>
+      </button>
+    </div>
+
+    
+    <div class="main" id="main">
+
+      
+      <div class="apply-view" id="applyView">
+        <div class="apply-head">
+          <div class="apply-h-left">
+            <div class="apply-title">10주년 PVC 포토카드 응모</div>
+            <div class="apply-sub">경품응모 미션 완료 시마다 +1, 주차 100% 달성 시 보너스 +1 · 응모는 무제한</div>
+          </div>
+          <div class="apply-h-right">
+            <div class="apply-pt-block">
+              <div class="apply-pt-label">보유 응모 포인트</div>
+              <div class="apply-pt-value"><span id="applyPtBig">0</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="apply-grid" id="applyGrid"></div>
+      </div>
+
+      
+      <div class="left">
+
+        
+        <div class="reward-section-h-row">
+          <span class="reward-section-title" id="weekName">W1 보상</span>
+          <button class="theme-list-btn-inline" id="themeListBtn">
+            📋 테마 보기
+          </button>
+        </div>
+
+        
+        <div class="reward-list-scroll">
+          <div class="reward-list" id="rewardList">
+            
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="right">
+
+        
+        <div class="progress-block">
+          <div class="progress-track">
+            <div class="progress-fill" id="enFill" style="width:0%"></div>
+            <div class="progress-mark m80" id="mark80" data-label="80%"></div>
+            <div class="progress-mark m100" id="mark100" data-label="100% +🎁"></div>
+          </div>
+          <span class="progress-val">
+            <span id="enDone">0</span>/<span id="enTotal">7</span>
+          </span>
+        </div>
+
+        
+        <div class="missions-scroll" id="missionsRoot"></div>
+      </div>
+
+      
+      <div class="lock-overlay" id="lockOverlay">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">아직 열리지 않은 주차</div>
+        <div class="lock-sub">매주 목요일 14:00 점검 후 다음 주차가 열립니다.</div>
+      </div>
+
+      
+      <div class="close-modal" id="closeModal">
+        <div class="close-card">
+          <div class="ct-title">웹뷰를 닫을까요?</div>
+          <div class="ct-sub">진행 중인 미션은 자동 저장되며 언제든 다시 들어와서 이어 진행할 수 있습니다.</div>
+          <div class="ct-actions">
+            <button id="closeCancel">계속 진행</button>
+            <button class="danger" id="closeConfirm">닫기</button>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="theme-modal" id="themeModal">
+        <div class="theme-card">
+          <div class="tc-head">
+            <div class="tc-title">선택권으로 선택가능한 테마 리스트</div>
+            <button class="tc-x" id="themeClose">✕</button>
+          </div>
+          <div class="tc-tabs" id="tcTabs">
+            <button class="tc-tab active" data-tt="card">🃏 한정테마 R카드</button>
+            <button class="tc-tab" data-tt="bg">🖼️ 스페셜 배경</button>
+            <button class="tc-tab" data-tt="profile">👤 프로필</button>
+          </div>
+          <div class="tc-body">
+            <div class="theme-grid" id="themeGrid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div class="toast" id="toast">
+      <span class="ic">✨</span><span class="msg">메시지</span>
+    </div>
+
+  </div>
+</div>
+
+
+
+<script>
+// ────────────────────────────────────────────────────────────
+//  SSJ 10주년 웹뷰 프로토타입 v0.7 — INFERNO 스킨 (R카드 컨셉)
+//  변경: 인페르노 무드(블랙+골드/오렌지/레드) / 10TH 워드마크 / R카드 프레임
+//  애니메이션: 잿불(emberRise), 카드 광택(cardShine), 화염 펄스(flicker, ridgePulse)
+// ────────────────────────────────────────────────────────────
+
+const params = new URLSearchParams(location.search);
+const FAST = params.get('fast') === '1';
+const FORCE_WEEK = parseInt(params.get('week'), 10);
+const FORCE_UNLOCK = parseInt(params.get('unlock'), 10);
+const T80 = 0.8, T100 = 1.0;
+
+// 응모 그룹 — JYPnation 8팀
+const APPLY_GROUPS = [
+  { code:'kickflip',      name:'KickFlip',        icon:'🛹', color:'#fb923c' },
+  { code:'day6',          name:'DAY6',            icon:'🎸', color:'#60a5fa' },
+  { code:'twice',         name:'TWICE',           icon:'🍑', color:'#f472b6' },
+  { code:'straykids',     name:'Stray Kids',      icon:'🐺', color:'#a78bfa' },
+  { code:'itzy',          name:'ITZY',            icon:'💎', color:'#f87171' },
+  { code:'nmixx',         name:'NMIXX',           icon:'🌀', color:'#34d399' },
+  { code:'xdinaryheroes', name:'Xdinary Heroes',  icon:'⚡', color:'#fbbf24' },
+  { code:'niziu',         name:'NiziU',           icon:'🌸', color:'#f9a8d4' },
+];
+
+// 보상 후보 — 3종 선택권 공통 (R카드 프레임 표시용 글리프 추가)
+const REWARD_OPTIONS = [
+  { code:'CARD-PICK',    name:'한정테마 R카드 선택권', icon:'🃏', meta:'아티스트 선택', glyph:'R',  body:'🎴' },
+  { code:'BG-PICK',      name:'스페셜 배경 선택권',    icon:'🖼️', meta:'아티스트 선택', glyph:'BG', body:'🌅' },
+  { code:'PROFILE-PICK', name:'프로필 선택권',         icon:'👤', meta:'아티스트 선택', glyph:'P',  body:'🎭' },
+];
+
+// 테마 리스트 모달용 (선택권 사용 시 받을 수 있는 후보)
+const THEME_LIBRARY = {
+  card: [
+    { artist:'NiziU',       name:'10주년 한정 마코',    rare:'R' },
+    { artist:'NiziU',       name:'10주년 한정 리쿠',    rare:'R' },
+    { artist:'NiziU',       name:'10주년 한정 리마',    rare:'R' },
+    { artist:'NiziU',       name:'10주년 한정 마야',    rare:'R' },
+    { artist:'ITZY',        name:'10주년 한정 예지',    rare:'R' },
+    { artist:'ITZY',        name:'10주년 한정 리아',    rare:'R' },
+    { artist:'ITZY',        name:'10주년 한정 류진',    rare:'R' },
+    { artist:'ITZY',        name:'10주년 한정 채령',    rare:'R' },
+    { artist:'Stray Kids',  name:'10주년 한정 방찬',    rare:'R' },
+    { artist:'Stray Kids',  name:'10주년 한정 리노',    rare:'R' },
+    { artist:'Stray Kids',  name:'10주년 한정 창빈',    rare:'R' },
+    { artist:'TWICE',       name:'10주년 한정 나연',    rare:'R' },
+  ],
+  bg: [
+    { artist:'NiziU',      name:'10th 스튜디오 라이트',  rare:'SP' },
+    { artist:'ITZY',       name:'10th 네온 스테이지',    rare:'SP' },
+    { artist:'Stray Kids', name:'10th 시그니처 백드롭',  rare:'SP' },
+    { artist:'TWICE',      name:'10th 골드 셀러브레이션',rare:'SP' },
+    { artist:'공통',        name:'10th SSJ 로고 배경',    rare:'SP' },
+    { artist:'공통',        name:'10th 케이크 룸',       rare:'SP' },
+  ],
+  profile: [
+    { artist:'NiziU',      name:'10th 한정 프로필 프레임 A', rare:'P' },
+    { artist:'ITZY',       name:'10th 한정 프로필 프레임 B', rare:'P' },
+    { artist:'Stray Kids', name:'10th 한정 프로필 프레임 C', rare:'P' },
+    { artist:'TWICE',      name:'10th 한정 프로필 프레임 D', rare:'P' },
+    { artist:'공통',        name:'10th 칭호 — 별빛',       rare:'P' },
+    { artist:'공통',        name:'10th 칭호 — 무대 위에서', rare:'P' },
+  ],
+};
+
+// 누적 미션 베이스 — 매 주차 max = baseMax * w (W2는 W1+W2, W3는 W1+W2+W3 누적)
+const MISSION_BASE = [
+  { id:'play',    type:'free',  icon:'🎵', name:'곡 플레이',                       baseMax:5,    reward:'+RP 2,000' },
+  { id:'star',    type:'free',  icon:'⭐', name:'★ 수집',                          baseMax:30,   reward:'+RP 3,000' },
+  { id:'collect', type:'free',  icon:'🃏', name:'R 카드 수집',                      baseMax:5,    reward:'+프리미엄팩' },
+  { id:'enhance', type:'free',  icon:'✨', name:'R 카드 강화',                      baseMax:5,    reward:'+DIA 50' },
+  { id:'dia',     type:'paid',  icon:'💎', name:'다이아 사용',                       baseMax:300,  reward:'+한정테마 S카드 (랜덤)' },
+  { id:'rp',      type:'paid',  icon:'⚡', name:'RP 사용',                          baseMax:5000, reward:'+카드팩 30' },
+  { id:'apply',   type:'apply', icon:'🎁', name:'경품응모 — PVC 포토카드팩 구매',     baseMax:4,    reward:'응모포인트 +1 / 회' },
+];
+
+function buildWeekMissions(w) {
+  return MISSION_BASE.map(b => ({
+    id: b.id, type: b.type, icon: b.icon, name: b.name, reward: b.reward,
+    baseMax: b.baseMax,
+    max: b.baseMax * w,
+  }));
+}
+
+const unlockMask = !isNaN(FORCE_UNLOCK) ? String(FORCE_UNLOCK) : '12';
+function isUnlocked(w) {
+  if (w === 0) return true; // 응모 현황은 항상 열림
+  return unlockMask.includes(String(w));
+}
+
+const state = {
+  activeWeek: !isNaN(FORCE_WEEK) ? FORCE_WEEK : 1,
+  // 각 주차에 받은 보상 인덱스 배열 (중복 허용, 최대 2개)
+  claims: { 1:[], 2:[], 3:[], 4:[] },
+  missions: { 1:buildWeekMissions(1), 2:buildWeekMissions(2), 3:buildWeekMissions(3), 4:buildWeekMissions(4) },
+  // 누적 진행도 (단일 객체) — 시연용: W1 거의 완료(다이아만 미완)
+  progress: { play:5, star:30, collect:5, enhance:5, dia:240, rp:5000, apply:4 },
+  // 100% 보너스 1회 지급 추적 (주차별)
+  bonusGranted: { 1:false, 2:false, 3:false, 4:false },
+  applyTickets: 1, // W1 apply 누적 4 도달로 응모 포인트 1점 보유
+  // 그룹별 응모 누적 횟수 (무제한)
+  applyEntries: { kickflip:0, day6:0, twice:0, straykids:0, itzy:0, nmixx:0, xdinaryheroes:0, niziu:0 },
+  themeTab: 'card',
+};
+
+// ──────────── 헬퍼 ────────────
+function maxFor(w, mid) {
+  const base = MISSION_BASE.find(b => b.id === mid);
+  return base ? base.baseMax * w : 0;
+}
+function isDone(w, mid) {
+  return (state.progress[mid] || 0) >= maxFor(w, mid);
+}
+function getCompletionRatio(w) {
+  const ms = state.missions[w];
+  const doneCount = ms.filter(m => isDone(w, m.id)).length;
+  return { doneCount, total: ms.length, ratio: doneCount / ms.length };
+}
+
+// 80% → 1슬롯, 100% → 2슬롯
+function allowedSlots(w) {
+  const { ratio } = getCompletionRatio(w);
+  if (ratio >= T100) return 2;
+  if (ratio >= T80)  return 1;
+  return 0;
+}
+
+function claimedCount(w)        { return state.claims[w].length; }
+function canClaimMore(w)        { return claimedCount(w) < allowedSlots(w); }
+function claimedOfReward(w, idx){ return state.claims[w].filter(i => i === idx).length; }
+
+// ──────────── 렌더 ────────────
+function renderTabs() {
+  document.querySelectorAll('.tab').forEach(t => {
+    const w = +t.dataset.week;
+    t.classList.toggle('active', w === state.activeWeek);
+
+    // 응모 현황 탭은 별도 처리 (포인트 뱃지만 갱신)
+    if (w === 0) {
+      const ptBadge = document.getElementById('tabApplyPt');
+      if (ptBadge) ptBadge.textContent = state.applyTickets;
+      return;
+    }
+
+    const labelEl = t.querySelector('.tab-label');
+    if (!isUnlocked(w)) {
+      t.classList.add('locked');
+      t.classList.remove('partial', 'complete');
+      labelEl.innerHTML = `W${w} <span class="lock">🔒</span>`;
+      return;
+    }
+    t.classList.remove('locked');
+    labelEl.innerHTML = `W${w}`;
+
+    const { doneCount, total } = getCompletionRatio(w);
+    const cc = claimedCount(w);
+    t.classList.toggle('complete', cc >= 2);
+    t.classList.toggle('partial', (doneCount > 0 || cc > 0) && cc < 2);
+  });
+}
+
+function renderApplyView() {
+  const isApply = state.activeWeek === 0;
+  document.getElementById('applyView').classList.toggle('show', isApply);
+  // 좌/우 패널 가시성 토글
+  document.querySelector('.left').style.display = isApply ? 'none' : 'flex';
+  document.querySelector('.right').style.display = isApply ? 'none' : 'flex';
+  if (!isApply) return;
+
+  document.getElementById('applyPtBig').textContent = state.applyTickets;
+
+  const grid = document.getElementById('applyGrid');
+  grid.innerHTML = '';
+  APPLY_GROUPS.forEach(g => {
+    const entered = state.applyEntries[g.code] || 0;
+    const canEnter = state.applyTickets > 0;
+
+    let cls = 'apply-card';
+    let btnCls, btnText;
+    if (canEnter) {
+      cls += entered > 0 ? ' entered active' : ' active';
+      btnCls = 'ready';
+      btnText = entered > 0 ? '🎁 또 응모하기' : '🎁 응모하기';
+    } else {
+      if (entered > 0) cls += ' entered';
+      btnCls = 'locked';
+      btnText = entered > 0 ? `✓ ${entered}회 응모됨` : '포인트 부족';
+    }
+
+    const meta = entered > 0
+      ? `<span class="entered-num">${entered}회 누적 응모</span>`
+      : '10주년 PVC 포토카드';
+
+    const el = document.createElement('div');
+    el.className = cls;
+    el.innerHTML = `
+      <div class="apply-card-img">
+        <div class="ph-frame">
+          <div class="ph-icon">${g.icon}</div>
+          <div class="ph-label">PHOTO</div>
+        </div>
+      </div>
+      <div class="apply-card-body">
+        <div class="apply-card-name">${g.name}</div>
+        <div class="apply-card-meta">${meta}</div>
+        <button class="apply-card-btn ${btnCls}" data-code="${g.code}">${btnText}</button>
+      </div>
+    `;
+    const btn = el.querySelector('.apply-card-btn');
+    if (btnCls === 'ready') {
+      btn.onclick = (ev) => { ev.stopPropagation(); enterApply(g.code, g.name); };
+    }
+    grid.appendChild(el);
+  });
+}
+
+function enterApply(code, name) {
+  if (state.applyTickets <= 0) {
+    toast('응모 포인트가 부족합니다', 'warn'); return;
+  }
+  state.applyTickets--;
+  state.applyEntries[code] = (state.applyEntries[code] || 0) + 1;
+  const cnt = state.applyEntries[code];
+  toast(`🎁 ${name} 응모 완료! (누적 ${cnt}회)`, 'purple');
+  renderAll();
+}
+
+function renderProgress() {
+  const w = state.activeWeek;
+  const { doneCount, total, ratio } = getCompletionRatio(w);
+  document.getElementById('enDone').textContent = doneCount;
+  document.getElementById('enTotal').textContent = total;
+  document.getElementById('enFill').style.width = Math.round(ratio * 100) + '%';
+
+  document.getElementById('mark80').classList.toggle('reached', ratio >= T80);
+  document.getElementById('mark100').classList.toggle('reached', ratio >= T100);
+}
+
+function renderSlotCounter() {
+  const w = state.activeWeek;
+  document.getElementById('weekName').textContent = `W${w} 보상`;
+}
+
+function renderRewardList() {
+  const w = state.activeWeek;
+  const root = document.getElementById('rewardList');
+  root.innerHTML = '';
+  const canClaim = canClaimMore(w);
+  const slots = allowedSlots(w);
+  const cc = claimedCount(w);
+
+  REWARD_OPTIONS.forEach((r, i) => {
+    const myCount = claimedOfReward(w, i);
+    const el = document.createElement('div');
+
+    let cls = 'reward-item';
+    let actionCls, actionText;
+
+    if (myCount > 0 && cc >= 2) {
+      cls += ' has-claim';
+      actionCls = 'claimed'; actionText = `✓ 받음 ×${myCount}`;
+    } else if (canClaim) {
+      cls += ' claimable';
+      if (myCount > 0) { actionCls = 'ready'; actionText = `+ 추가 받기 (×${myCount})`; }
+      else             { actionCls = 'ready'; actionText = '받기'; }
+    } else {
+      cls += ' locked';
+      if (myCount > 0) { actionCls = 'claimed'; actionText = `✓ 받음 ×${myCount}`; }
+      else             { actionCls = 'locked';  actionText = '🔒 80% 도달 시'; }
+    }
+
+    el.className = cls;
+    el.innerHTML = `
+      <div class="ri-icon">
+        <div class="r-glyph">${r.glyph}</div>
+        <div class="r-body">${r.body}</div>
+        <div class="r-star">★1</div>
+      </div>
+      <div class="ri-info">
+        <div class="ri-name">${r.name}</div>
+        <div class="ri-meta">${r.meta}</div>
+      </div>
+      <button class="ri-action ${actionCls}" data-idx="${i}">${actionText}</button>
+    `;
+
+    const btn = el.querySelector('.ri-action');
+    if (actionCls === 'ready') {
+      btn.onclick = (ev) => { ev.stopPropagation(); claimReward(w, i); };
+    }
+    root.appendChild(el);
+  });
+}
+
+function renderMissions() {
+  const w = state.activeWeek;
+  const root = document.getElementById('missionsRoot');
+  root.innerHTML = '';
+
+  state.missions[w].forEach(m => {
+    const prog = state.progress[m.id] || 0;
+    const done = isDone(w, m.id);
+    const showProg = Math.min(prog, m.max);
+    const el = document.createElement('div');
+    el.className = `mission t-${m.type}` + (done ? ' done' : '');
+    el.innerHTML = `
+      <div class="m-check">${done ? '✓' : ''}</div>
+      <div class="m-name"><span class="icon">${m.icon}</span>${m.name}</div>
+      <div class="m-prog">${showProg.toLocaleString()}/${m.max.toLocaleString()}</div>
+      <div class="m-reward">${m.reward}</div>
+    `;
+    el.onclick = () => incMission(w, m.id);
+    root.appendChild(el);
+  });
+}
+
+function renderApply() {
+  document.getElementById('applyNum').textContent = state.applyTickets;
+}
+
+function renderLock() {
+  document.getElementById('lockOverlay').classList.toggle('show', !isUnlocked(state.activeWeek));
+}
+
+function renderThemeGrid() {
+  const grid = document.getElementById('themeGrid');
+  const list = THEME_LIBRARY[state.themeTab] || [];
+  grid.innerHTML = '';
+  list.forEach(it => {
+    const c = document.createElement('div');
+    c.className = 'theme-cell';
+    c.innerHTML = `
+      <div class="tc-artist">${it.artist}</div>
+      <div class="tc-name">${it.name}</div>
+      <div class="tc-rare">[${it.rare}]</div>
+    `;
+    grid.appendChild(c);
+  });
+  document.querySelectorAll('.tc-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tt === state.themeTab);
+  });
+}
+
+function renderAll() {
+  renderTabs();
+  renderApply();
+  renderApplyView();
+  if (state.activeWeek === 0) {
+    // 응모 현황 모드 — W 패널 갱신 스킵, 잠금 오버레이도 숨김
+    document.getElementById('lockOverlay').classList.remove('show');
+    return;
+  }
+  renderProgress();
+  renderSlotCounter();
+  renderRewardList();
+  renderMissions();
+  renderLock();
+}
+
+// ──────────── 액션 ────────────
+function incMission(w, mid) {
+  if (!isUnlocked(w) || w !== state.activeWeek) return;
+  const m = state.missions[w].find(x => x.id === mid);
+  if (isDone(w, mid)) return;
+
+  const baseMax = m.baseMax;
+  const targetMax = m.max; // = baseMax * w (이 주차의 누적 목표치)
+  const inc = FAST ? (targetMax - (state.progress[mid] || 0)) : Math.max(1, Math.ceil(baseMax / 5));
+  const before = state.progress[mid] || 0;
+  state.progress[mid] = Math.min(targetMax, before + inc);
+  const after = state.progress[mid];
+
+  // 1) apply 미션 — baseMax 경계를 새로 넘을 때마다 응모 포인트 +1
+  if (mid === 'apply') {
+    const crossedBefore = Math.floor(before / baseMax);
+    const crossedAfter  = Math.floor(after  / baseMax);
+    const newTickets = crossedAfter - crossedBefore;
+    if (newTickets > 0) {
+      state.applyTickets += newTickets;
+      toast(`🎁 응모 포인트 +${newTickets} (현재 ${state.applyTickets}점)`, 'purple');
+    }
+  } else if (after >= targetMax) {
+    toast(m.name + ' 완료 → ' + m.reward, 'success');
+  }
+
+  // 2) 주차 100% 도달 시 1회 보너스 +1 응모 포인트
+  const { ratio } = getCompletionRatio(w);
+  if (ratio >= T100 && !state.bonusGranted[w]) {
+    state.bonusGranted[w] = true;
+    state.applyTickets++;
+    toast(`🔥 W${w} 100% 달성! 보너스 응모 포인트 +1`, 'purple');
+  }
+
+  renderAll();
+}
+
+function claimReward(w, idx) {
+  if (!canClaimMore(w)) {
+    toast('받을 수 있는 슬롯이 없습니다', 'warn'); return;
+  }
+  state.claims[w].push(idx);
+  const r = REWARD_OPTIONS[idx];
+  const remaining = allowedSlots(w) - claimedCount(w);
+  let msg = `🎁 ${r.name} 획득!`;
+  if (remaining > 0) msg += ` (${remaining}개 더 선택 가능)`;
+  toast(msg, 'success');
+  renderAll();
+}
+
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.querySelector('.msg').textContent = msg;
+  t.className = 'toast show ' + (type || '');
+  clearTimeout(window._toastT);
+  window._toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ──────────── 이벤트 ────────────
+document.querySelectorAll('.tab').forEach(t => {
+  t.onclick = () => {
+    const w = +t.dataset.week;
+    if (w !== 0 && !isUnlocked(w)) {
+      toast('아직 열리지 않은 주차입니다 (목 14:00 갱신)', 'warn'); return;
+    }
+    state.activeWeek = w;
+    renderAll();
+  };
+});
+
+document.getElementById('applyCounter').onclick = () => {
+  // 응모 현황 탭으로 이동
+  state.activeWeek = 0;
+  renderAll();
+};
+
+(document.getElementById('devToggle')||{}).onclick = () => {
+  const next = !FAST;
+  const url = new URL(location.href);
+  url.searchParams.set('fast', next ? '1' : '0');
+  location.href = url.toString();
+};
+
+// X 닫기
+document.getElementById('hdrClose').onclick = () => {
+  document.getElementById('closeModal').classList.add('show');
+};
+document.getElementById('closeCancel').onclick = () => {
+  document.getElementById('closeModal').classList.remove('show');
+};
+document.getElementById('closeConfirm').onclick = () => {
+  document.getElementById('closeModal').classList.remove('show');
+  toast('웹뷰가 닫혔습니다 (실제 환경에서는 메인 화면으로 이동)', 'warn');
+};
+
+// 테마 리스트 모달
+document.getElementById('themeListBtn').onclick = () => {
+  document.getElementById('themeModal').classList.add('show');
+  renderThemeGrid();
+};
+document.getElementById('themeClose').onclick = () => {
+  document.getElementById('themeModal').classList.remove('show');
+};
+document.querySelectorAll('.tc-tab').forEach(t => {
+  t.onclick = () => {
+    state.themeTab = t.dataset.tt;
+    renderThemeGrid();
+  };
+});
+
+renderAll();
+</script>
+
+
+
+</body></html>

@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년</title>
-<meta name="description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
+<title>Henry Lim (임현택) — 게임 라이브서비스 PM·디렉터, 19년</title>
+<meta name="description" content="사용자의 목소리로 방향을 정하고 프로토타입으로 실행하는 게임 라이브서비스 PM·디렉터, 19년. 글로벌 론칭부터 라이브 운영, 서비스 종료까지." />
 <meta name="theme-color" content="#0a0a0a" />
 <link rel="canonical" href="https://bluedaylol80.github.io/henry-portfolio/" />
 <meta property="og:type" content="website" />
-<meta property="og:title" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
-<meta property="og:description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
+<meta property="og:title" content="Henry Lim (임현택) — 게임 라이브서비스 PM·디렉터, 19년" />
+<meta property="og:description" content="사용자의 목소리로 방향을 정하고 프로토타입으로 실행하는 게임 라이브서비스 PM·디렉터, 19년. 글로벌 론칭부터 라이브 운영, 서비스 종료까지." />
 <meta property="og:url" content="https://bluedaylol80.github.io/henry-portfolio/" />
 <meta property="og:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
+<meta property="og:image:alt" content="Henry Lim (임현택) — 게임 라이브서비스 PM·디렉터, 19년" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
-<meta name="twitter:description" content="웹젠에서 달콤소프트까지 10개 회사, 19년. 런칭부터 서비스 종료까지 라이브 게임의 전 주기를 운영한 기록." />
+<meta name="twitter:title" content="Henry Lim (임현택) — 게임 라이브서비스 PM·디렉터, 19년" />
+<meta name="twitter:description" content="사용자의 목소리로 방향을 정하고 프로토타입으로 실행하는 게임 라이브서비스 PM·디렉터, 19년. 글로벌 론칭부터 라이브 운영, 서비스 종료까지." />
 <meta name="twitter:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
-<meta name="twitter:image:alt" content="Henry Lim (임현택) — 게임 라이브 서비스·사업 PM, 19년" />
+<meta name="twitter:image:alt" content="Henry Lim (임현택) — 게임 라이브서비스 PM·디렉터, 19년" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23b15f2c' d='M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z'/%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
@@ -202,8 +202,9 @@ img{display:block}
   box-shadow:0 1px 2px rgba(17,17,17,.06),0 0 0 1px rgba(230,229,226,.7);backdrop-filter:blur(12px)}
 @media (min-width:1024px){.hcard{width:20rem}}
 .hcard-row{display:flex;align-items:stretch;gap:.5rem;cursor:pointer;border-radius:var(--r-control)}
-.hcard-tile{width:6rem;min-height:6rem;flex:none;display:grid;place-items:center;border-radius:var(--r-control);background:var(--ink);font-size:1.875rem;color:#fff}
+.hcard-tile{width:6rem;min-height:6rem;flex:none;display:grid;place-items:center;border-radius:var(--r-control);background:var(--ink);background-size:cover;background-position:center;font-size:1.875rem;color:#fff}
 .hcard-tile .ic{color:var(--accent-from)}
+.hcard-tile.has-img .ic{display:none}  /* 이미지가 뜨면 마크는 숨김, 파일이 없으면 마크 폴백 */
 .hcard-panel{flex:1;min-width:0;border-radius:var(--r-control);background:rgba(241,240,238,.7);padding:.75rem;display:flex;flex-direction:column;justify-content:space-between;gap:.75rem}
 .hc-slot{position:relative;min-height:3.75rem}
 .hc-item{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;
@@ -285,7 +286,7 @@ img{display:block}
 @media (min-width:640px){.card-bot h3{font-size:1.875rem}}
 .card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.55)}
 .card-tags{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.5rem}
-.card-rights{margin-top:1rem;font-size:.6875rem;line-height:1.5;color:rgba(255,255,255,.34)}
+.card-rights{margin-top:1rem;font-size:.6875rem;line-height:1.5;color:rgba(255,255,255,.5)}  /* R2 감리: .34=3:1 미달 → .5=4.7:1 */
 /* 앞면 외부 링크 — 카드 전체 클릭 영역(.card-open::after)보다 위로 올려야 상세창에 먹히지 않는다.
    본문 클릭=상세창 / 이 링크 클릭=새 탭 체험판. width:fit-content로 링크 밖 여백은 카드에 돌려준다. */
 .card-cta{position:relative;z-index:1;margin-top:1.5rem;width:fit-content;font-size:.875rem}
@@ -301,15 +302,31 @@ img{display:block}
 .card-cta .alink:focus-visible>span{opacity:1;text-decoration-color:rgba(255,255,255,.7)}
 .card-cta .alink:focus-visible .ic{transform:translate(2px,-2px)}
 /* 카드 전체가 클릭 대상 — 링은 제목 버튼에만 걸려 둥근 카드에 각진 사각형이 그려지지 않는다 */
-.card-open{display:inline-flex;align-items:center;gap:.5rem;text-align:left;letter-spacing:inherit}
-.card-open::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
-.card-open .ic{font-size:.6em;opacity:.5;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
-.card-open:focus-visible{outline-color:var(--accent-from);outline-offset:8px;border-radius:5px}
-.card-open:focus-visible .ic{transform:translate(2px,-2px);opacity:1}
+.card-open,.card-go{display:inline-flex;align-items:center;gap:.5rem;text-align:left;letter-spacing:inherit}
+.card-open::after,.card-go::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
+.card-open .ic,.card-go .ic{font-size:.6em;opacity:.5;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
+.card-open:focus-visible,.card-go:focus-visible{outline-color:var(--accent-from);outline-offset:8px;border-radius:5px}
+.card-open:focus-visible .ic,.card-go:focus-visible .ic{transform:translate(2px,-2px);opacity:1}
+/* .card-go = 상세창 대신 외부 문서(체험판)로 가는 카드 전체 링크 — 팝업 바인딩(.card-open) 미적용 */
 @media (hover:hover) and (pointer:fine){
   .cards li:hover .card{transform:translateY(-8px) scale(1.012)}
-  .cards li:hover .card-open .ic{transform:translate(2px,-2px);opacity:1}
+  .cards li:hover .card-open .ic,.cards li:hover .card-go .ic{transform:translate(2px,-2px);opacity:1}
 }
+
+/* ---------- method ---------- */
+.method-in{padding-block:2.5rem 5rem}
+@media (min-width:1024px){.method-in{padding-bottom:7rem}}
+.method-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:.875rem;list-style:none;padding:0;margin:3rem 0 0}
+.method-flow li{position:relative;border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);padding:1.25rem 1.25rem 1.4rem}
+.method-flow .mf-i{font-size:.75rem;font-weight:600;color:var(--accent-to);letter-spacing:.04em}  /* R2 감리: --accent 4.06:1 미달 → accent-to 5.3:1 */
+.method-flow h3{margin:.5rem 0 .25rem;font-size:1rem}
+.method-flow p{font-size:.8125rem;line-height:1.55;color:rgba(17,17,17,.72);margin:0}
+.method-flow li:not(:last-child)::after{content:'→';position:absolute;right:-.8rem;top:50%;transform:translateY(-50%);color:var(--accent);font-size:.9rem;z-index:1}
+@media (max-width:1023px){.method-flow{grid-template-columns:repeat(2,1fr)}.method-flow li:not(:last-child)::after{content:none}}
+@media (max-width:639px){.method-flow{grid-template-columns:1fr}}
+
+/* ---------- proto ---------- */
+.proto-lede{margin-top:1rem;font-size:.9375rem;color:rgba(17,17,17,.72)}
 
 /* ---------- 개인 프로덕트 ----------
    회사 성과(#works)와 절대 섞지 않는다 — 별도 섹션·별도 제목·별도 리스트.
@@ -374,31 +391,31 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 @media (min-width:640px){.rows-hd .h2{margin-bottom:3.5rem}}
 .row-li{border-top:1px solid var(--line)}
 .row-li:first-child{border-top:0}
-.row{display:flex;align-items:flex-start;gap:1rem;border-radius:var(--r-card-sm);padding-block:1.5rem;padding-inline:1.5rem;
+.row{display:flex;align-items:flex-start;gap:1rem;border-radius:var(--r-card-sm);padding-block:1.2rem;padding-inline:1.5rem;
   background:rgba(241,240,238,0);transition:background-color .4s var(--e-soft),padding .4s var(--e-soft)}
-@media (min-width:640px){.row{gap:1.5rem;padding-block:2rem}}
+@media (min-width:640px){.row{gap:1.5rem;padding-block:1.6rem}}
 .row-i{width:1.75rem;flex:none;padding-top:.3rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.55);font-variant-numeric:tabular-nums}
 @media (min-width:640px){.row-i{width:2.5rem}}
 .row-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:.375rem}
 .row-body h3{font-size:1.375rem;font-weight:500;letter-spacing:-.015em}
 @media (min-width:640px){.row-body h3{font-size:1.75rem}}
 @media (min-width:768px){.row-body h3{font-size:2rem}}
-.row-sub{font-size:.875rem;color:rgba(17,17,17,.62);line-height:1.5}
-.row-note{font-size:.875rem;color:rgba(17,17,17,.62);line-height:1.5}
+.row-sub{font-size:.875rem;color:rgba(17,17,17,.72);line-height:1.5}
+.row-note{font-size:.875rem;color:rgba(17,17,17,.72);line-height:1.5}
 @media (min-width:1024px){
   .row{align-items:center}
   .row-i{padding-top:0}
   .row-body{flex-direction:row;align-items:baseline;gap:1.5rem}
   .row-title{width:16rem;flex:none}
   .row-note{flex:1;min-width:0}
-  .row-sub{width:19rem;flex:none;text-align:right;color:rgba(17,17,17,.65)}
+  .row-sub{width:19rem;flex:none;text-align:right;color:rgba(17,17,17,.72)}
   .row-body>.row-note:last-child{max-width:34rem}
 }
 .row-note--mobile-hide{display:none}
 @media (min-width:1024px){.row-note--mobile-hide{display:block}}
 /* 역량: 회사 목록은 메타 — 세로 배치일 때 본문과 붙어 한 덩어리로 읽히지 않게 */
-#skills .row-sub{font-size:.8125rem;color:rgba(17,17,17,.45)}
-@media (min-width:1024px){#skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.65)}}
+#skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.62)}
+@media (min-width:1024px){#skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.72)}}
 .row-foot{padding:1rem 1.5rem;font-size:.75rem;color:rgba(17,17,17,.62);border-top:1px solid var(--line)}
 @media (hover:hover) and (pointer:fine){
   .row:hover{background:rgba(241,240,238,1);padding-left:2rem;padding-right:1.25rem}
@@ -503,8 +520,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <ul>
         <li><button class="nav-b" data-scroll="home" aria-current="page"><span>Home</span></button></li>
         <li><button class="nav-b" data-scroll="works"><span>성과</span></button></li>
-        <li><button class="nav-b" data-scroll="lab"><span>개인</span></button></li>
         <li><button class="nav-b" data-scroll="career"><span>경력</span></button></li>
+        <li><button class="nav-b" data-scroll="lab"><span>개인</span></button></li>
         <li><button class="nav-b" data-scroll="skills"><span>역량</span></button></li>
         <li><a class="nav-b" href="mailto:bluedaylol80@gmail.com"><span>연락</span></a></li>
       </ul>
@@ -534,15 +551,15 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
   <div class="shell px hero-grid">
     <div class="hero-l">
-      <p class="eyebrow" data-reveal data-gate="ready" style="--rd:200ms;--ry:10px">Game Live-ops · Business PM</p>
+      <p class="eyebrow" data-reveal data-gate="ready" style="--rd:200ms;--ry:10px">게임 라이브서비스 PM·디렉터 · 19년</p>
 
       <h1 class="h1" data-lines data-gate="ready" style="--rd:250ms;--ls:120ms">
-        <span class="line" style="--i:0"><span>19년, 10개 회사.</span></span>
-        <span class="line" style="--i:1"><span>라이브 서비스의</span></span>
-        <span class="line" style="--i:2"><span>처음부터 끝까지.</span></span>
+        <span class="line" style="--i:0"><span>사용자의 목소리로</span></span>
+        <span class="line" style="--i:1"><span>방향을 정하고,</span></span>
+        <span class="line" style="--i:2"><span>프로토타입으로 실행합니다.</span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">임현택 — 게임 라이브 기획·사업 PM. 런칭, 글로벌 소프트런칭, 그리고 서비스 종료까지 전 주기를 직접 운영했습니다.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">글로벌 론칭, 라이브 운영, 사업 관리와 서비스 종료까지. 만족도 조사에서 개선 과제를 찾아 제품 방향·와이어프레임·개발 일정·운영 체계로 연결합니다.</p>
 
       <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
         <button class="pill pill--dark pill--arrow pill--r" data-scroll="works">
@@ -561,11 +578,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="hcard-panel">
             <div class="hc-slot">
               <div class="hc-item"><p class="hc-cap">LIVE OPS</p><p class="hc-title">런칭부터 종료까지, 전 주기.</p></div>
-              <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">소프트런칭 — 린 · 카오스크로니클 · Shadow Seven.</p></div>
-              <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">SuperStar 시리즈 12종 라이브.</p></div>
+              <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">소프트런칭 — 린 · 카오스크로니클.</p></div>
+              <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">SuperStar 시리즈 11개→7개 재편 라이브.</p></div>
+              <div class="hc-item"><p class="hc-cap">SOFT LAUNCH</p><p class="hc-title">Shadow Seven — 한국 · 일본 · 대만 · 미국.</p></div>
             </div>
             <div class="hc-bot">
-              <div class="hc-dots" id="hcDots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+              <div class="hc-dots" id="hcDots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
               <div class="hc-nav">
                 <button class="prev" type="button" aria-label="이전 항목"><svg class="ic"><use href="#i-arr"/></svg></button>
                 <button class="next" type="button" aria-label="다음 항목"><svg class="ic"><use href="#i-arr"/></svg></button>
@@ -622,11 +640,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <article class="card">
           <div class="card-shot" data-shot="dalcom" aria-hidden="true"></div>
           <div class="card-meta">달콤소프트 · 라이브기획팀 — 팀장</div>
-          <div class="card-wm" aria-hidden="true">12종</div>
+          <div class="card-wm" aria-hidden="true">11→7</div>
           <div class="card-bot">
-            <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">SuperStar 시리즈<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>K-pop IP 타이틀 12종 라이브 서비스. IP 협업 · 개발 관리 · 마일스톤 · 연간 계획.</p>
-            <div class="card-tags"><span class="tag">라이브 기획</span><span class="tag">IP 협업</span><span class="tag">조직 셋업·채용</span></div>
+            <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">SuperStar 시리즈 운영 포트폴리오 및 제품 방향성<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p>입사 당시 11개였던 담당 프로젝트를 사업성과 운영 효율에 따라 재편했습니다. 5개 서비스의 종료와 SSWO 신규 론칭을 병행해 7개 프로젝트의 안정적인 운영 체계를 구축했습니다.</p>
+            <div class="card-tags"><span class="tag">라이브 디렉터</span><span class="tag">VOC→제품 방향</span><span class="tag">AI 프로토타입</span><span class="tag">개발 마일스톤</span></div>
             <p class="card-rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다.</p>
           </div>
         </article>
@@ -700,31 +718,20 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   </div>
 </section>
 
-<!-- ================= PERSONAL PRODUCTS ================= -->
-<section id="lab" class="sec">
-  <div class="shell px lab-in">
-    <div class="center lab-hd">
-      <p class="eyebrow eyebrow--ring" data-reveal>Personal Products</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>혼자 만들어 운영하는 것</span></span></h2>
+<!-- ================= METHOD ================= -->
+<section id="method" class="sec" aria-label="문제를 해결하는 방식">
+  <div class="shell px method-in">
+    <div class="center works-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>How I Work</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>문제를 해결하는 방식</span></span></h2>
     </div>
-
-    <ul class="cards lab-list">
-      <li data-reveal style="--rd:0ms;--ry:48px">
-        <article class="card">
-          <div class="card-shot" data-shot="budget" aria-hidden="true"></div>
-          <div class="card-meta">개인 프로덕트 · 기획 · 개발 · 운영</div>
-          <div class="card-wm" aria-hidden="true">v2.23</div>
-          <div class="card-bot">
-            <h3><button class="card-open" type="button" data-work="budget" aria-haspopup="dialog">우리집 가계부<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성으로 라이브 운영 중.</p>
-            <div class="card-tags"><span class="tag">AI로 혼자 제작</span><span class="tag">라이브 운영</span><span class="tag">체험판 배포</span></div>
-            <p class="card-cta"><a class="alink" href="https://bluedaylol80.github.io/family-budget-lite/" target="_blank" rel="noopener"><span>라이트 체험판 열기<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (새 창에서 열림)</span></span></a></p>
-          </div>
-        </article>
-      </li>
-      <!-- 작은 의뢰소: 퀄리티 리부트 완료 후 여기를 켠다(hidden 제거 + 카드 작성). 미완성 화면은 내보내지 않는다. -->
-      <li hidden data-product-slot="small-request-office"></li>
-    </ul>
+    <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
+      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3>사용자 조사</h3><p>만족도 조사와 VOC에서 진짜 불편을 찾는다</p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>문제 정의</h3><p>요구를 제품 개선 과제로 정리한다</p></li>
+      <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3>제품 방향</h3><p>과제를 로드맵과 방향성으로 만든다</p></li>
+      <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3>프로토타입</h3><p>문서가 아니라 작동하는 화면으로 검증한다</p></li>
+      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>개발·운영</h3><p>마일스톤으로 실행하고 라이브로 굴린다</p></li>
+    </ol>
   </div>
 </section>
 
@@ -741,7 +748,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">01</span>
         <div class="row-body">
           <h3 class="row-title">달콤소프트</h3>
-          <p class="row-note row-note--mobile-hide">SuperStar 시리즈 12종 (K-pop IP)</p>
+          <p class="row-note row-note--mobile-hide">SuperStar 시리즈 11→7 재편 (K-pop IP)</p>
           <p class="row-sub">라이브기획팀 팀장 · 2024.10 – 2026.07</p>
         </div>
       </div></li>
@@ -818,6 +825,75 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-sub">SUN 운영팀 · 2006.04 – 2007.10</p>
         </div>
       </div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= AI PROTOTYPING ================= -->
+<section id="proto" class="sec">
+  <div class="shell px works-in">
+    <div class="center works-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>AI Prototyping</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>AI로 아이디어를 작동 화면까지</span></span></h2>
+      <p class="proto-lede" data-reveal style="--rd:200ms">AI를 문서 작성이 아니라, 아이디어를 실제로 작동하는 화면으로 검증하는 도구로 씁니다.</p>
+    </div>
+
+    <ul class="cards">
+      <li data-reveal style="--rd:0ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="deco" aria-hidden="true"></div>
+          <div class="card-meta">달콤소프트 · 업무 프로토타입</div>
+          <div class="card-wm" aria-hidden="true">시안</div>
+          <div class="card-bot">
+            <h3><a class="card-go" href="demo/deco.html" target="_blank" rel="noopener">꾸미기 이벤트 기획·와이어프레임<span class="sr-only"> 체험판 열기 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
+            <p>만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
+            <div class="card-tags"><span class="tag">VOC→기획</span><span class="tag">와이어프레임</span><span class="tag">체험판</span></div>
+            <p class="card-rights">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:90ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="ssjproto" aria-hidden="true"></div>
+          <div class="card-meta">달콤소프트 · 업무 프로토타입</div>
+          <div class="card-wm" aria-hidden="true">10주년</div>
+          <div class="card-bot">
+            <h3><a class="card-go" href="demo/ssjproto.html" target="_blank" rel="noopener">SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입<span class="sr-only"> 프로토타입 플레이 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
+            <p>기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
+            <div class="card-tags"><span class="tag">AI 프로토타입</span><span class="tag">인터랙티브 검증</span><span class="tag">플레이</span></div>
+            <p class="card-rights">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
+          </div>
+        </article>
+      </li>
+      <!-- 가계부는 Personal Products에만 둔다 (본부장 지시 2026-08-28) -->
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PERSONAL PRODUCTS ================= -->
+<section id="lab" class="sec">
+  <div class="shell px lab-in">
+    <div class="center lab-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>Personal Products</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>혼자 만들어 운영하는 것</span></span></h2>
+    </div>
+
+    <ul class="cards lab-list">
+      <li data-reveal style="--rd:0ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="budget" aria-hidden="true"></div>
+          <div class="card-meta">개인 프로덕트 · 기획 · 개발 · 운영</div>
+          <div class="card-wm" aria-hidden="true">v2.23</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="budget" aria-haspopup="dialog">우리집 가계부<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p>부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성으로 라이브 운영 중.</p>
+            <div class="card-tags"><span class="tag">AI로 혼자 제작</span><span class="tag">라이브 운영</span><span class="tag">체험판 배포</span></div>
+            <p class="card-cta"><a class="alink" href="https://bluedaylol80.github.io/family-budget-lite/" target="_blank" rel="noopener"><span>라이트 체험판 열기<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (새 창에서 열림)</span></span></a></p>
+          </div>
+        </article>
+      </li>
+      <!-- 작은 의뢰소: 퀄리티 리부트 완료 후 여기를 켠다(hidden 제거 + 카드 작성). 미완성 화면은 내보내지 않는다. -->
+      <li hidden data-product-slot="small-request-office"></li>
     </ul>
   </div>
 </section>
@@ -1066,6 +1142,16 @@ const items = [...car.querySelectorAll('.hc-item')];
 const dots = [...document.getElementById('hcDots').children];
 const live = document.getElementById('hcLive');
 let idx = 0;
+/* 타일 이미지 — 항목과 함께 회전(전주기=카오스·글로벌=린·K-POP=달콤, 카드와 동일 자산 재사용).
+   파일이 안 뜨면 기존 마크 아이콘으로 폴백. */
+const hcTile = car.querySelector('.hcard-tile');
+const TILE_IMGS = ['works/chaos.jpg', 'works/lyn.jpg', 'works/dalcom.jpg', 'works/nanakage.webp'];
+const tileReady = [];
+function paintTile(i){
+  if (hcTile && tileReady[i]){ hcTile.style.backgroundImage = 'url("' + TILE_IMGS[i] + '")'; hcTile.classList.add('has-img'); }
+  else if (hcTile){ hcTile.style.backgroundImage = ''; hcTile.classList.remove('has-img'); }
+}
+TILE_IMGS.forEach((src, i) => { const im = new Image(); im.onload = () => { tileReady[i] = true; if (i === idx) paintTile(i); }; im.src = src; });
 function setActive(el, on){
   el.classList.toggle('is-on', on);
   el.setAttribute('aria-hidden', String(!on));
@@ -1094,6 +1180,7 @@ function paint(next, dir){
     }
   });
   dots.forEach((d, i) => d.classList.toggle('on', i === next));
+  paintTile(next);
   if (live) live.textContent = [...items[next].querySelectorAll('p')].map(p => p.textContent.trim()).join(' — ');
   idx = next;
 }
@@ -1263,8 +1350,9 @@ const counters = [...document.querySelectorAll('[data-count]')];
 if (RM){
   counters.forEach(el => { el.textContent = el.dataset.count; });
 } else {
-  let last = 0;
+  let last = 0, counterScrolled = false;
   function tickCounts(){
+    if (!counterScrolled) return;
     const now = performance.now();
     if (now - last < 30) return;
     last = now;
@@ -1278,20 +1366,22 @@ if (RM){
       if (el._v !== val){ el._v = val; el.textContent = String(val); }
     });
   }
-  addEventListener('scroll', tickCounts, { passive: true });
+  addEventListener('scroll', () => { counterScrolled = true; tickCounts(); }, { passive: true });
   addEventListener('resize', tickCounts);
-  tickCounts();
 }
 
 /* ---------- work detail dialog ---------- */
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
 const WORKS = {
-  dalcom: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'SuperStar 시리즈',
-    s:[['12종','K-pop IP 타이틀']],
-    r:[['디렉터 업무','개발 관리 · 마일스톤 · 연간 계획 · 조직 운영 · 라이브서비스 개발'],
-       ['IP 협업','SM 음원 정산 자동화'],
-       ['계약·정산','QA 외주사 정산·계약 조정 · 중국 서비스 라이선스 계약 검토'],
-       ['조직 셋업·채용','기획 · QA · CS 리크루트']] },
+  dalcom: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'SuperStar 시리즈 운영 포트폴리오 및 제품 방향성',
+    s:[['11→7','운영 포트폴리오 재편']],
+    r:[['운영 포트폴리오','입사 당시 11개 프로젝트를 분석하고, 5개 서비스 종료와 SSWO 신규 론칭을 병행해 최종 7개 프로젝트의 운영 체계를 정비'],
+       ['사용자 조사','6개 타이틀 대상 한국어·영어·일본어 만족도 조사 — 사용자 요구와 불편을 제품 개선 과제로 정리'],
+       ['2026 제품 방향성','조사 결과를 바탕으로 수집·전시·커뮤니티 경험을 강화하는 상반기 방향성 제안 — 웹뷰 이벤트 재도입도 사용자 요구에서 출발'],
+       ['프로토타입','꾸미기 이벤트 기획·와이어프레임 · SuperStar JYP Nation 10주년 웹뷰 인터랙티브 프로토타입 · 사전예약 페이지 시안 — AI로 아이디어를 작동 화면으로 검증'],
+       ['개발·마일스톤','디렉터로서 개발 범위 · 우선순위 · 일정 · 마일스톤 · 협업 진행 관리'],
+       ['프로세스 개선','Notion 업무 이력 통합 · 불필요한 메일 감축 · 반복 업무 자동화 · SM 음원 정산 자동화'],
+       ['보조 경험','IP 협업 · QA 외주사 정산·계약 조정 · 중국 서비스 라이선스 검토 · 기획·QA·CS 채용·조직 운영']] },
   lyn: { m:'넥슨 코리아 · 모바일사업실 — 부팀장', t:'린',
     s:[['3위','앱스토어·구글 매출'],['183억','매출']],
     r:[['소프트런칭','호주 · 말레이시아 · 필리핀'],
