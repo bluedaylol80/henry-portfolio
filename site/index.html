@@ -381,6 +381,25 @@ img{display:block}
 .wdlg-fig figcaption{text-align:center;font-size:.75rem;line-height:1.5;color:rgba(17,17,17,.5)}
 .wdlg-cta{margin-top:2rem}
 .wdlg-cta:empty{display:none}
+/* 근거·과정 링크 — 카드 앞면이 아니라 다이얼로그 안에만 둔다(.card-open::after{inset:0} 함정). */
+.wdlg-src{margin-top:1.75rem;border-top:1px solid var(--line);padding-top:1.25rem}
+.wdlg-src[hidden]{display:none}
+.wdlg-src h4{font-size:.8125rem;font-weight:500;color:rgba(17,17,17,.5)}
+.wdlg-src ul{margin-top:.75rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.wdlg-src a{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:.4rem .8rem;font-size:.8125rem;line-height:1.2;color:rgba(17,17,17,.78);
+  transition:border-color .3s var(--e-soft),color .3s var(--e-soft)}
+.wdlg-src a .ic{font-size:.75em;opacity:.6}
+.wdlg-src a:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg)}
+@media (hover:hover) and (pointer:fine){.wdlg-src a:hover{border-color:rgba(17,17,17,.5);color:var(--fg)}}
+/* #career 행 근거 링크 — 카드가 없는 회사가 여기서 근거를 보여준다. 모바일에서도 보인다. */
+.row-links{display:flex;flex-wrap:wrap;gap:.25rem .875rem;font-size:.8125rem}
+.row-links a{display:inline-flex;align-items:center;gap:.3rem;color:rgba(17,17,17,.6);
+  text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(17,17,17,.22);
+  transition:color .3s var(--e-soft),text-decoration-color .3s var(--e-soft)}
+.row-links a .ic{font-size:.7em;opacity:.55}
+.row-links a:focus-visible{color:var(--fg);text-decoration-color:rgba(17,17,17,.55);outline-offset:6px;border-radius:4px}
+@media (hover:hover) and (pointer:fine){.row-links a:hover{color:var(--fg);text-decoration-color:rgba(17,17,17,.55)}}
 @keyframes wdlgIn{from{opacity:0;transform:translateY(14px) scale(.985)}}
 @keyframes wdlgBd{from{opacity:0}}
 .wdlg[open] .wdlg-in{animation:wdlgIn .45s var(--e-rise)}
@@ -390,6 +409,7 @@ img{display:block}
 html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 /* ---------- 연락처 창 ---------- */
 .cdlg .wdlg-in{max-width:34rem}
+.ft-acts{display:flex;flex-wrap:wrap;gap:.75rem}
 .contact-val{display:block;font-size:1.0625rem;font-weight:600;margin-bottom:.7rem;user-select:all}
 .contact-acts{display:flex;flex-wrap:wrap;gap:.5rem}
 .contact-acts .pill-in{padding:.6rem 1.05rem;font-size:.8125rem}
@@ -430,12 +450,13 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 }
 .row-note--mobile-hide{display:none}
 @media (min-width:1024px){.row-note--mobile-hide{display:block}}
-/* 회사별 임팩트 1줄 — 모바일에서도 보인다(row-note 숨김과 다르다).
+/* 회사별 임팩트 1줄 + 근거 링크 — 모바일에서도 보인다(row-note 숨김과 다르다).
    ≥1024에서 row-body가 가로 3칸이 되므로 wrap + 100%로 아랫줄에 내린다. */
 .row-impact{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.72)}
 @media (min-width:1024px){
   .row-body{flex-wrap:wrap}
-  .row-impact{width:100%;margin-top:.5rem}
+  .row-impact,.row-links{width:100%}
+  .row-impact{margin-top:.5rem}
 }
 /* 역량: 회사 목록은 메타 — 세로 배치일 때 본문과 붙어 한 덩어리로 읽히지 않게 */
 #skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.62)}
@@ -791,6 +812,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">나이트워커, 슈퍼피플</p>
           <p class="row-sub">사업팀 파트장 · 2022.02 – 2024.04</p>
           <p class="row-impact">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p>
+          <p class="row-links" data-links="wonderpeople"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
@@ -800,6 +822,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">마스터 오브 나이츠</p>
           <p class="row-sub">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
           <p class="row-impact">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</p>
+          <p class="row-links" data-links="neowiz"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
@@ -827,6 +850,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
           <p class="row-sub">모바일사업실 팀장 · 2015.07 – 2019.10</p>
           <p class="row-impact">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p>
+          <p class="row-links" data-links="nexon"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:480ms;--ry:24px"><div class="row">
@@ -836,6 +860,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">KON</p>
           <p class="row-sub">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
           <p class="row-impact">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 구축</p>
+          <p class="row-links" data-links="netmarble"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:560ms;--ry:24px"><div class="row">
@@ -845,6 +870,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">NTD · 라키온2 · 그랑에이지</p>
           <p class="row-sub">전략사업팀 사업PM · 2011.07 – 2015.02</p>
           <p class="row-impact">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p>
+          <p class="row-links" data-links="softnyx"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:640ms;--ry:24px"><div class="row">
@@ -1019,12 +1045,17 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   <div class="shell px ft-in">
     <div class="ft-cta">
       <h2 class="h2" data-lines style="--ls:100ms">
-        <span class="line" style="--i:0"><span>이력서와 경력기술서는</span></span>
-        <span class="line" style="--i:1"><span>요청 주시면 보내드립니다.</span></span>
+        <span class="line" style="--i:0"><span>이력서·경력기술서는</span></span>
+        <span class="line" style="--i:1"><span>Notion에서 바로 볼 수 있습니다.</span></span>
       </h2>
-      <a class="pill pill--light pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com" data-reveal style="--rd:200ms;--ry:12px">
-        <span class="pill-in">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
-      </a>
+      <div class="ft-acts" data-reveal style="--rd:200ms;--ry:12px">
+        <a class="pill pill--light pill--arrow pill--ur" data-notion-hub href="https://www.notion.so/limhenry/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer">
+          <span class="pill-in">이력서·경력기술서 보기<span class="sr-only"> (새 창에서 열림)</span><span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+        </a>
+        <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
+          <span class="pill-in">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
+        </a>
+      </div>
     </div>
 
     <div class="ft-cols">
@@ -1043,6 +1074,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <div class="ft-col">
         <h3>Elsewhere</h3>
         <ul>
+          <li><a class="alink" data-notion-hub href="https://www.notion.so/limhenry/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer"><span>Notion 이력서<span class="sr-only"> (새 창에서 열림)</span></span></a></li>
           <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
         </ul>
       </div>
@@ -1067,6 +1099,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
     <dl class="wdlg-rows" id="wdlgR"></dl>
+    <div class="wdlg-src" id="wdlgN" hidden></div>
   </div>
 </dialog>
 
@@ -1084,6 +1117,15 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <span class="contact-acts">
             <button class="pill pill--dark" type="button" id="copyMail"><span class="pill-in">주소 복사</span></button>
             <a class="pill pill--outline" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bluedaylol80@gmail.com" target="_blank" rel="noopener"><span class="pill-in">Gmail로 쓰기<span class="sr-only"> (새 창에서 열림)</span></span></a>
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt>이력서</dt>
+        <dd>
+          <span class="contact-val">Notion 이력 및 경력 기술서</span>
+          <span class="contact-acts">
+            <a class="pill pill--outline" data-notion-hub href="https://www.notion.so/limhenry/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer"><span class="pill-in">Notion에서 열기<span class="sr-only"> (새 창에서 열림)</span></span></a>
           </span>
         </dd>
       </div>
@@ -1434,6 +1476,43 @@ if (RM){
   addEventListener('resize', tickCounts);
 }
 
+/* ---------- Notion 근거 링크 ----------
+   공개 도메인은 여기 한 곳에만 둔다 — 데이터에는 페이지 id만 있다.
+   판정 근거: scripts/check-notion-public.mjs → docs/handover/2026-09-04_notion_public_check.json
+   🔴 팩트시트 §9-2의 링크 금지 3건은 어떤 목록에도 넣지 않는다(id는 팩트시트에만 둔다). */
+const NOTION_BASE = 'https://www.notion.so/limhenry/';
+function notionLink(label, id){
+  const a = document.createElement('a');
+  a.href = NOTION_BASE + id;
+  a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.append(label);
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'ic'); svg.setAttribute('aria-hidden', 'true');
+  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+  use.setAttribute('href', '#i-arrup');
+  svg.append(use);
+  const sr = document.createElement('span');
+  sr.className = 'sr-only'; sr.textContent = ' (새 창에서 열림)';
+  a.append(svg, sr);
+  return a;
+}
+/* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
+const CAREER_LINKS = {
+  wonderpeople: [['조직 관리 (수습 평가안)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['원더피플 x 원티드 콜라보 기획', '509a5cd4e8e44f1c907ec1cfabb87855']],
+  neowiz: [['친구 시스템 기획', '13f2864c7af74918b5a956367ddfdcb6'], ['상점 시스템 개편 기획', '7298379e8a254d63b64747242afe60ff'], ['밸런스 기획', '34f448cf443b415181d7d8fe05f2d7b0']],
+  nexon: [['주요 이슈 지표 분석', 'c2899733fed94b618af970a0796a7e6c'], ['프로젝트 별 포스트모템', '271affb46a12423bbb26dd3cdc183ae0'], ['마일스톤 협의', '9a16f26d31cf438482942ce4baa00001']],
+  netmarble: [['튜토리얼 Flow 기획', '47f569402610444e90b6944e84a2d235']],
+  softnyx: [['Focus Group Interview & Test', '32d0763c70714ce6af760a2312657da7'], ['유료화 타이틀 분석', 'cd308df4eafa4e66868de83e459fcdde'], ['2013~2014 게임 시장 현황 분석', '98d467b255b34ee1a4942ae49d12f121']],
+};
+document.querySelectorAll('#career [data-links]').forEach(el => {
+  const list = CAREER_LINKS[el.dataset.links];
+  if (!list) return;
+  el.replaceChildren(...list.slice(0, 3).map(([t, id]) => notionLink(t, id)));
+});
+/* 이력서 허브 — 숫자 섹션 CTA·푸터 Elsewhere·연락처 다이얼로그 3곳이 같은 상수를 쓴다. */
+const NOTION_HUB = NOTION_BASE + '0e48e826c73f4a7ab9c3522d7fb16ce5';
+document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HUB; });
+
 /* ---------- work detail dialog ---------- */
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
 const WORKS = {
@@ -1452,31 +1531,45 @@ const WORKS = {
     s:[['3위','앱스토어·구글 매출'],['183억','매출']],
     r:[['소프트런칭','호주 · 말레이시아 · 필리핀'],
        ['검증·리서치','FGT · 사내테스트'],
-       ['대외 활동','G-star 출전 · 유저 간담회']] },
+       ['대외 활동','G-star 출전 · 유저 간담회']],
+    n:[{t:'인게임 개선 진행', id:'09624ec9cbdb4dd9a53085f168bfcfa7'}] },
   chaos: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'카오스크로니클',
     s:[['7위','한국 앱스토어 매출'],['23위','한국 구글 매출'],['98억','미국 매출']],
     r:[['미국 성적','앱스토어 112위 · 북미 등 iOS·구글 피처드'],
        ['소프트런칭','5개국 소프트런칭 후 글로벌'],
-       ['서비스 종료 운영','2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당']] },
+       ['서비스 종료 운영','2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당']],
+    n:[{t:'초반 동선 폴리싱', id:'0fcb2233c75c4b04b5317fe2ded2fec4'},
+       {t:'BM 기획 및 제안', id:'508469dc0586497f8ce75618b142e29a'},
+       {t:'이벤트 기획', id:'aa5b9015b7c044809731b0e073012101'}] },
   nightwalker: { m:'원더피플/에이스톰 · 사업팀 — 파트장', t:'나이트워커',
     s:[['33만+','한국 신규'],['6.3만','DAU 피크'],['약 50%','D+1 리텐션 평균']],
     r:[['퍼블리싱 연동','유료 재화 구매 연동 · 쿠폰 시스템 연동 · 서버 선택창 UI/플로우 기획'],
        ['지표 → 개선 제안','주간 판매 현황을 분석해 상품을 제안하고, 라이브 지표를 분석해 허들 개선을 제안'],
        ['검증·리서치','FGT · 사내테스트'],
-       ['대외 활동','원티드 콜라보 · PR 영상']] },
+       ['대외 활동','원티드 콜라보 · PR 영상']],
+    n:[{t:'유료재화 구매 시스템 연동', id:'49043d5d2bfa44d18384126bbbd86f14'},
+       {t:'쿠폰 시스템 연동', id:'2ade8f618bb945a6b0c0f6a711133b55'},
+       {t:'서버 선택창 UI/플로우 기획', id:'581e150745124f13b3d6d3721841b1c2'},
+       {t:'프로모션 상품 기능 추가', id:'39a59de7280481888c8dff7c54446d1f'}] },
   fivestars: { m:'스카이피플 · 사업팀 — 팀장', t:'Five Stars',
     s:[['24억','매출'],['46위','한국 구글 매출'],['28만+','신규']],
     r:[['한국 성적','앱스토어 49위 · 원스토어 28위 · 사전예약 20만'],
        ['지표','DAU 피크 4.4만 · PU 1.6% · ARPPU 16만원대'],
        ['조직 셋업·채용','사업 · 운영 조직 셋팅 · 리크루트'],
        ['계약·정산','OST 제작·발매 · 더빙 외주 · 마케팅 대행 컨택'],
-       ['대외 활동','쇼케이스 · OST 발매']] },
+       ['대외 활동','쇼케이스 · OST 발매']],
+    n:[{t:'미디어 쇼케이스 시나리오 구성', id:'4c6d6bbaaee24779ba80cce602592248'},
+       {t:'초반 이탈구간 개선', id:'b14364484326425d981697677cf386ab'},
+       {t:'업데이트 현황 보고', id:'29609a7acf9046be87cdee55d11d9f30'}] },
   nanakage: { m:'넵튠 레전드 · 스튜디오 — 사업PM', t:'Shadow Seven',
     s:[['4개국','소프트런칭']],
     r:[['담당','사업PM (2019.10 ~ 2020.04)'],
-       ['지표 → 조치 → 결과','일본 성적 저조(지표) → 평점 관리 시스템 추가(조치) → 구글 평점 일본 3.29 → 글로벌 4.4(결과)'],
+       ['지표 → 조치 → 결과','일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29 → 글로벌 4.4'],
        ['소프트런칭','한국 · 일본 · 대만 · 미국 (중국 제외)'],
-       ['그랜드런칭','한국 · 미국 · 대만 — 한국 AOS 매출 173위']] },
+       ['그랜드런칭','한국 · 미국 · 대만 — 한국 AOS 매출 173위']],
+    n:[{t:'인게임 재화/BM 개선', id:'f6a1be10d1d645d48f62aa02e72198f2'},
+       {t:'소프트런칭 비교 분석', id:'8cbbe93738e54e0d99020f2f6d03822f'},
+       {t:'평점 관리 시스템 추가', id:'87c69184413f4cb78d66af21a98de32f'}] },
   // 개인 프로덕트 — v(시연 영상)·l(외부 링크)은 이 항목에만 있는 선택 필드다.
   budget: { m:'개인 프로덕트 · 기획 · 개발 · 운영', t:'우리집 가계부',
     s:[['222/222','jsdom 테스트'],['56/56','레이아웃 테스트']],
@@ -1492,6 +1585,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
   const wS = document.getElementById('wdlgS'), wR = document.getElementById('wdlgR');
   const wF = document.getElementById('wdlgF'), wL = document.getElementById('wdlgL');
+  const wN = document.getElementById('wdlgN');
   let opener = null;
   function modalLock(on){
     const h = document.documentElement;
@@ -1545,6 +1639,21 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     svg.append(use); badge.append(svg); inner.append(sr, badge); a.append(inner);
     wL.replaceChildren(a);
   }
+  /* 근거·과정 링크(선택 필드 n) — 카드당 최대 4개. 새 탭 + rel=noopener + 외부 아이콘.
+     href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다. */
+  function fillNotion(n){
+    if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
+    const h = document.createElement('h4');
+    h.textContent = '근거·과정 보기 (Notion)';
+    const ul = document.createElement('ul');
+    ul.append(...n.slice(0, 4).map(item => {
+      const li = document.createElement('li');
+      li.append(notionLink(item.t, item.id));
+      return li;
+    }));
+    wN.replaceChildren(h, ul);
+    wN.hidden = false;
+  }
   function openWork(key, btn){
     const w = WORKS[key];
     if (!w) return;
@@ -1555,6 +1664,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     fill(wR, w.r, ['dt', 'dd']);
     fillMedia(w.v);
     fillLink(w.l);
+    fillNotion(w.n);
     modalLock(true);
     wdlg.showModal();
   }

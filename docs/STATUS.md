@@ -20,7 +20,12 @@
 - **2026-09-01 숫자 섹션 교체 배포(main `cc75d1a`)**: "5배/영웅의 군단 매출 대비" → "30개/직접 참여한 프로젝트 (퍼블리싱 8종, 직접서비스 22종)". 근거=팩트시트 §1 합산(30)+본부장 진술(8/22). 인수인계=`HT_multi/…/05_website/2026-09-01_stats_project_count_handover.md`.
 - **2026-09-02 이름 옆 별 마크 제거·카드 높이 통일 배포(main `dd945f2`)**: `#i-mark` 이름 옆 3곳 제거(히어로 타일 단독 마크 유지), `.cards` grid-auto-rows:1fr+li flex+card flex:1 → 성과 6장·프로토 2장 461px 동일(라이브 실측). 인수인계=`HT_multi/…/05_website/2026-09-02_header_mark_card_height_handover.md`.
 
-- **2026-09-04 이력서 피드백 반영 WO-1 시공(`feat/feedback-en-2026-09`, 미배포)**: 히어로 경력 요약 3문장 + 핵심 역량 칩 6개(`.hero-keys`), #career 회사별 임팩트 10줄(`.row-impact`, 모바일 노출), 성과·프로토 카드·WORKS `r[]`·What I do·How I Work 능동 동사/`지표→조치→결과` 교정. 🔴 **Notion 근거 링크(WO-1 ④)는 전량 미시공** — §9-2 후보 28건(이력서 허브 포함) 실브라우저 판정 결과 **공개 0건**(전부 "페이지 찾지 못함"), 근거=`docs/handover/2026-09-04_notion_public_check.json` · 판정기=`scripts/check-notion-public.mjs`. 본부장이 Notion에서 공개 전환한 뒤 재판정해야 링크를 걸 수 있다.
+- **2026-09-04 이력서 피드백 반영 WO-1 시공 완료(`feat/feedback-en-2026-09`, 미배포)**: 히어로 경력 요약 3문장 + 핵심 역량 칩 6개(`.hero-keys`), #career 회사별 임팩트 10줄(`.row-impact`, 모바일 노출), 성과·프로토 카드·WORKS `r[]`·What I do·How I Work 능동 동사/`지표→조치→결과` 교정, **Notion 근거 링크 30개**(다이얼로그 14 + #career 12 + 허브 3곳).
+  🔴 **공개 도메인 함정**: 팩트시트 §9-2의 `cord-timpani-ea7`은 **동료 워크스페이스**다. 본부장 워크스페이스 슬러그는 `limhenry`.
+  **채택 도메인 = `https://www.notion.so/limhenry/<id>`**(R1 확정 2026-09-04) — 28/28 공개 실측(`docs/handover/2026-09-04_notion_public_check.json`). 도메인은 HTML의 `NOTION_BASE` 상수 한 곳에만 있고 데이터에는 id만 둔다.
+  🟡 **채택 도메인의 대가(실측)**: `www.notion.so/limhenry/<id>`는 `app.notion.com/p/limhenry/<id>`로 리다이렉트되고, 본문 위에 **"지금 가입해서 Notion으로 구축을 시작하세요 · 가입 또는 로그인하기" 배너**를 먼저 띄운다(본문은 정상 렌더, 블록 30개 확인). 대안 `https://limhenry.notion.site/<id>`는 같은 28/28 공개에 배너가 없다 — 되돌리려면 `NOTION_BASE` 한 줄과 정적 허브 앵커 3곳의 URL만 바꾸면 된다. `.notion.site`가 15/28로 보였던 것은 도메인 문제가 아니라 아래 판정기 버그였다.
+  🟡 **판정기 함정 2건**(`scripts/check-notion-public.mjs`에 주석): ①HTTP 200과 `document.title`은 미공개 페이지에서도 나오므로 공개 근거가 아니다 — 판정은 **본문 블록 수 + 차단 문구**로만 한다. ②연속 요청 간격이 없으면 후반부 렌더가 늦어져 공개 페이지를 오판한다(무간격 실행에서 13건 오판) — 페이지 간 1.5초를 둔다.
+  🔴 링크 금지 3건(§9-2)은 목록에 없고, id 자체도 HTML에 남기지 않는다(게시 전 grep 게이트 대상).
 
 ## 본부장 사전 질의 — 답변 완료 (2026-08-13, HQ 세션 인터뷰)
 1. 임무 = **히어로 리퀴드 리빌 부활(자체 비주얼) + 전반 폴리시**

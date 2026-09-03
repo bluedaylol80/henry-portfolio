@@ -15,7 +15,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
-const BASE = 'https://cord-timpani-ea7.notion.site/'
+const BASE = process.env.NOTION_BASE ?? 'https://www.notion.so/limhenry/'
 const OUT = process.argv[2] ?? 'docs/handover/2026-09-04_notion_public_check.json'
 
 /* 팩트시트 §9-2 표 그대로. 금지 3건(2c099a8d·36359de7·1f999a8d)은 애초에 넣지 않는다. */
@@ -78,28 +78,28 @@ for (const c of CANDIDATES) {
     await page.waitForSelector('.notion-page-content, [class*="notion-page-content"]', { timeout: 20000 }).catch(() => {})
     await sleep(1200)
     const probe = await page.evaluate(() => {
-      const t = document.querySelector('.notion-page-block, main h1, [class*="notion-page-content"] h1')
       const content = document.querySelector('.notion-page-content, [class*="notion-page-content"]')
-      const blocks = content ? content.querySelectorAll('[data-block-id], .notion-text-block, .notion-header-block, .notion-sub_header-block, .notion-bulleted_list-block, .notion-numbered_list-block, .notion-image-block, .notion-table-block, .notion-toggle-block').length : 0
+      const blocks = content ? content.querySelectorAll('[data-block-id]').length : 0
       return {
-        docTitle: (document.title || '').trim(),
-        heading: (t ? t.innerText : '').trim().slice(0, 120),
+        docTitle: (document.title || '').replace(/\s*\|\s*Notion\s*$/, '').trim(),   // www 도메인은 ' | Notion' 꼬리를 붙인다
         blocks,
         body: (document.body.innerText || '').slice(0, 4000).toLowerCase(),
       }
     })
-    row.title = probe.heading   // docTitle은 미공개 셸에서도 페이지명을 흘리므로 판정 근거로 쓰지 않는다
-    row.docTitle = probe.docTitle
+    /* 판정은 본문 블록 + 차단 문구 두 가지로만 한다.
+       제목 선택자(.notion-page-block 등)는 브레드크럼을 맞히거나 못 맞히거나 해서 타이밍에 따라 흔들린다
+       — 2026-09-04 실측에서 공개 페이지 13건을 '제목 없음'으로 오판했다. 제목은 라벨용으로만 쓴다. */
+    row.title = probe.docTitle   // 라벨 전용. 미공개 셸도 페이지명을 흘리므로 공개 근거로는 쓰지 않는다
     row.blocks = probe.blocks
     const hit = DENY.find(d => probe.body.includes(d.toLowerCase()))
     if (hit) row.reason = '차단 문구: "' + hit + '"'
-    else if (!row.title) row.reason = '제목 텍스트 없음'
     else if (!probe.blocks) row.reason = '본문 블록 0개'
     else { row.public = true; row.reason = '본문 블록 ' + probe.blocks + '개 렌더' }
   } catch (e) {
     row.reason = '로드 실패: ' + String(e.message).slice(0, 120)
   }
   await page.close()
+  await sleep(1500)   // 연속 요청 간격 — 없으면 후반부 렌더가 늦어져 오판이 난다
   results.push(row)
   console.log((row.public ? 'PUBLIC  ' : 'PRIVATE ') + c.group + ' / ' + c.label + '  — ' + row.reason)
 }
@@ -109,7 +109,7 @@ await browser.close()
 const out = {
   checkedAt: new Date().toISOString(),
   base: BASE,
-  method: '실브라우저 본문 렌더 판정(제목 + 본문 블록 존재 · not-found/권한 문구 부재)',
+  method: '실브라우저 본문 렌더 판정(본문 블록 존재 · not-found/권한 문구 부재). 제목은 라벨 전용.',
   denyListed: ['2c099a8d… SuperStar 2026 비전', '36359de7… 만족도 설문 요약', '1f999a8d… SSPH 3'],
   total: results.length,
   publicCount: results.filter(r => r.public).length,
