@@ -192,6 +192,10 @@ img{display:block}
 @media (min-width:768px){.h1{font-size:3.75rem}}
 .hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
 @media (min-width:640px){.hero-sub{font-size:1.125rem}}
+/* 핵심 역량 칩 — 텍스트 칩이지 링크가 아니다. 390에서 줄바꿈 허용, hcard와 겹치지 않는다. */
+.hero-keys{display:flex;flex-wrap:wrap;gap:.5rem;max-width:38rem}
+.hero-keys li{display:inline-flex;border:1px solid rgba(17,17,17,.16);border-radius:var(--r-pill);
+  padding:.4rem .8rem;font-size:.8125rem;line-height:1.2;color:rgba(17,17,17,.72)}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
 @media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end}}
@@ -426,6 +430,13 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 }
 .row-note--mobile-hide{display:none}
 @media (min-width:1024px){.row-note--mobile-hide{display:block}}
+/* 회사별 임팩트 1줄 — 모바일에서도 보인다(row-note 숨김과 다르다).
+   ≥1024에서 row-body가 가로 3칸이 되므로 wrap + 100%로 아랫줄에 내린다. */
+.row-impact{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.72)}
+@media (min-width:1024px){
+  .row-body{flex-wrap:wrap}
+  .row-impact{width:100%;margin-top:.5rem}
+}
 /* 역량: 회사 목록은 메타 — 세로 배치일 때 본문과 붙어 한 덩어리로 읽히지 않게 */
 #skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.62)}
 @media (min-width:1024px){#skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.72)}}
@@ -570,7 +581,16 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="line" style="--i:2"><span>프로토타입으로 실행합니다.</span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">글로벌 론칭, 라이브 운영, 사업 관리와 서비스 종료까지. 만족도 조사에서 개선 과제를 찾아 제품 방향·와이어프레임·개발 일정·운영 체계로 연결합니다.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">지표와 사용자 조사로 근거를 확인하고, 그에 맞는 개선 방향을 잡아 실행합니다. 19년·10개사에서 소프트런칭 3건(린·카오스크로니클·Shadow Seven)과 런칭부터 서비스 종료까지 전 주기 2건을 맡았고, BM·정산·계약과 조직 셋업·채용까지 사업 PM으로 다뤘습니다. AI 프로토타이핑과 GAS 자동화로 아이디어와 반복 업무를 작동하는 화면으로 옮깁니다.</p>
+
+      <ul class="hero-keys" data-reveal data-gate="ready" style="--rd:700ms" aria-label="핵심 역량">
+        <li>지표·VOC 기반 방향</li>
+        <li>글로벌 런칭·소프트런칭</li>
+        <li>라이브 운영·서비스 종료</li>
+        <li>사업 PM·BM·계약</li>
+        <li>조직 셋업·채용</li>
+        <li>AI 프로토타이핑·자동화</li>
+      </ul>
 
       <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
         <button class="pill pill--dark pill--arrow pill--r" data-scroll="works">
@@ -654,7 +674,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-wm" aria-hidden="true">11→7</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">SuperStar 시리즈 운영 포트폴리오 및 제품 방향성<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>입사 당시 11개였던 담당 프로젝트를 사업성과 운영 효율에 따라 재편했습니다. 5개 서비스의 종료와 SSWO 신규 론칭을 병행해 7개 프로젝트의 안정적인 운영 체계를 구축했습니다.</p>
+            <p>담당 11개 프로젝트의 사업성과 운영 효율을 지표로 확인해 재편 방향을 잡았습니다. 5개 서비스 종료와 SSWO 신규 론칭을 병행해 7개 프로젝트의 안정적인 운영 체계를 구축했습니다.</p>
             <div class="card-tags"><span class="tag">라이브 디렉터</span><span class="tag">VOC→제품 방향</span><span class="tag">AI 프로토타입</span><span class="tag">개발 마일스톤</span></div>
             <p class="card-rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다.</p>
           </div>
@@ -719,7 +739,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-wm" aria-hidden="true">4개국</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="nanakage" aria-haspopup="dialog">Shadow Seven<span class="sr-only"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>한국 · 일본 · 대만 · 미국 소프트런칭.</p>
+            <p>일본 저조 지표에 평점 관리 시스템을 도입해 구글 평점 3.29 → 4.4로 끌어올렸습니다. 한국 · 일본 · 대만 · 미국 소프트런칭.</p>
             <div class="card-tags"><span class="tag">사업PM</span><span class="tag">소프트런칭</span></div>
             <p class="card-rights">게임 명칭·이미지의 상표와 저작권은 넵튠 레전드에 있습니다.</p>
           </div>
@@ -738,10 +758,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     </div>
     <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
       <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3>사용자 조사</h3><p>만족도 조사와 VOC에서 진짜 불편을 찾는다</p></li>
-      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>문제 정의</h3><p>요구를 제품 개선 과제로 정리한다</p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>문제 정의</h3><p>지표와 요구를 대조해 개선 과제로 좁힌다</p></li>
       <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3>제품 방향</h3><p>과제를 로드맵과 방향성으로 만든다</p></li>
       <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3>프로토타입</h3><p>문서가 아니라 작동하는 화면으로 검증한다</p></li>
-      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>개발·운영</h3><p>마일스톤으로 실행하고 라이브로 굴린다</p></li>
+      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>개발·운영</h3><p>마일스톤으로 실행하고 결과를 지표로 되받는다</p></li>
     </ol>
   </div>
 </section>
@@ -761,6 +781,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">달콤소프트</h3>
           <p class="row-note row-note--mobile-hide">SuperStar 시리즈 11→7 재편 (K-pop IP)</p>
           <p class="row-sub">라이브기획팀 팀장 · 2024.10 – 2026.07</p>
+          <p class="row-impact">11개 → 5개 종료·SSWO 론칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
@@ -769,6 +790,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">원더피플·에이스톰</h3>
           <p class="row-note row-note--mobile-hide">나이트워커, 슈퍼피플</p>
           <p class="row-sub">사업팀 파트장 · 2022.02 – 2024.04</p>
+          <p class="row-impact">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
@@ -777,6 +799,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">네오위즈</h3>
           <p class="row-note row-note--mobile-hide">마스터 오브 나이츠</p>
           <p class="row-sub">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
+          <p class="row-impact">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
@@ -785,6 +808,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">스카이피플</h3>
           <p class="row-note row-note--mobile-hide">Five Stars</p>
           <p class="row-sub">사업팀 팀장 · 2020.07 – 2021.02</p>
+          <p class="row-impact">사업·운영 조직 셋업부터 런칭까지 주도 — 사전예약 20만·신규 28만+·매출 24억</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:320ms;--ry:24px"><div class="row">
@@ -793,6 +817,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">넵튠 레전드</h3>
           <p class="row-note row-note--mobile-hide">Shadow Seven</p>
           <p class="row-sub">스튜디오 사업PM · 2019.10 – 2020.04</p>
+          <p class="row-impact">일본 저조 지표 → 평점 관리 시스템 도입 → 구글 평점 3.29→4.4 · 4개국 소프트런칭</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:400ms;--ry:24px"><div class="row">
@@ -801,6 +826,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">넥슨 코리아</h3>
           <p class="row-note row-note--mobile-hide">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
           <p class="row-sub">모바일사업실 팀장 · 2015.07 – 2019.10</p>
+          <p class="row-impact">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:480ms;--ry:24px"><div class="row">
@@ -809,6 +835,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">넷마블 블루</h3>
           <p class="row-note row-note--mobile-hide">KON</p>
           <p class="row-sub">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
+          <p class="row-impact">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 구축</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:560ms;--ry:24px"><div class="row">
@@ -817,6 +844,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">소프트닉스</h3>
           <p class="row-note row-note--mobile-hide">NTD · 라키온2 · 그랑에이지</p>
           <p class="row-sub">전략사업팀 사업PM · 2011.07 – 2015.02</p>
+          <p class="row-impact">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:640ms;--ry:24px"><div class="row">
@@ -825,6 +853,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">NHN Service</h3>
           <p class="row-note row-note--mobile-hide">Tera 웹운영 · 아틀란티카 · R2</p>
           <p class="row-sub">한게임운영실 파트장 · 2008.05 – 2011.07</p>
+          <p class="row-impact">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</p>
         </div>
       </div></li>
       <li data-reveal style="--rd:700ms;--ry:16px"><p class="row-foot">※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</p></li>
@@ -834,6 +863,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">웹젠</h3>
           <p class="row-note row-note--mobile-hide">SUN 온라인</p>
           <p class="row-sub">SUN 운영팀 · 2006.04 – 2007.10</p>
+          <p class="row-impact">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p>
         </div>
       </div></li>
     </ul>
@@ -922,7 +952,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">01</span>
         <div class="row-body">
           <h3 class="row-title">기획</h3>
-          <p class="row-note">시스템 기획·라이브 기획. 유료 재화 구매·쿠폰 시스템 연동, 서버 선택창 UI·플로우 기획, FGT·사내테스트 운영.</p>
+          <p class="row-note">시스템·라이브 기획. 신규 시스템 10종·개편 8종을 기획하고 유료 재화 구매·쿠폰·서버 선택창 UI/플로우를 연동했습니다. FGT·사내테스트로 검증합니다.</p>
           <p class="row-sub">네오위즈 · 달콤소프트 · 에이스톰 · 원더피플</p>
         </div>
       </div></li>
@@ -930,7 +960,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">02</span>
         <div class="row-body">
           <h3 class="row-title">사업</h3>
-          <p class="row-note">사업 PM. 린·카오스크로니클·Shadow Seven 소프트런칭, G-star 출전·유저 간담회, 타사 유료화 분석, 서비스 종료 운영 2건.</p>
+          <p class="row-note">사업 PM. 린·카오스크로니클·Shadow Seven 소프트런칭을 주도하고, 타사 유료화를 분석해 상품·BM을 제안했습니다. G-star 출전·유저 간담회, 서비스 종료 2건 완수.</p>
           <p class="row-sub">소프트닉스 · 넷마블 블루 · 넥슨 코리아 · 넵튠 레전드 · 스카이피플 · 원더피플</p>
         </div>
       </div></li>
@@ -938,7 +968,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">03</span>
         <div class="row-body">
           <h3 class="row-title">운영</h3>
-          <p class="row-note">GM 업무. SUN 온라인 운영, 한게임 Tera 웹운영·아틀란티카·R2 라이브 운영.</p>
+          <p class="row-note">GM 업무. SUN 온라인·아틀란티카·R2 라이브를 운영하고, Tera 웹운영 파트와 FUN QA 4종 게임성 분석을 이끌었습니다.</p>
           <p class="row-sub">웹젠 · NHN Service (한게임)</p>
         </div>
       </div></li>
@@ -946,7 +976,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">04</span>
         <div class="row-body">
           <h3 class="row-title">디렉터</h3>
-          <p class="row-note">IP 협업·개발 관리·마일스톤·연간 계획·조직 운영·라이브서비스 개발. SM 음원 정산 자동화, 기획·QA·CS 리크루트.</p>
+          <p class="row-note">IP 협업·개발 범위·마일스톤·연간 계획을 직접 잡고 라이브서비스 개발을 이끕니다. SM 음원 정산을 자동화하고 기획·QA·CS를 채용했습니다.</p>
           <p class="row-sub">달콤소프트 · 라이브기획팀 팀장</p>
         </div>
       </div></li>
@@ -1413,8 +1443,10 @@ const WORKS = {
        ['사용자 조사','6개 타이틀 대상 한국어·영어·일본어 만족도 조사 — 사용자 요구와 불편을 제품 개선 과제로 정리'],
        ['2026 제품 방향성','조사 결과를 바탕으로 수집·전시·커뮤니티 경험을 강화하는 상반기 방향성 제안 — 웹뷰 이벤트 재도입도 사용자 요구에서 출발'],
        ['프로토타입','꾸미기 이벤트 기획·와이어프레임 · SuperStar JYP Nation 10주년 웹뷰 인터랙티브 프로토타입 · 사전예약 페이지 시안 — AI로 아이디어를 작동 화면으로 검증'],
-       ['개발·마일스톤','디렉터로서 개발 범위 · 우선순위 · 일정 · 마일스톤 · 협업 진행 관리'],
-       ['프로세스 개선','Notion 업무 이력 통합 · 불필요한 메일 감축 · 반복 업무 자동화 · SM 음원 정산 자동화'],
+       ['신규 시스템·상품','현황을 분석해 신규 시스템·상품·이벤트를 제안 · 미니게임·웹뷰 이벤트를 기획→프로토타입→개발 구현까지 조율 · 중국 판호 취득용 빌드 개편'],
+       ['개발·마일스톤','디렉터로서 개발 범위 · 우선순위 · 일정 · 마일스톤 · 협업을 직접 조율'],
+       ['자동화·프로세스','스토어 product ID 명세서 자동 반영(Google Apps Script) · 7개 프로젝트 SKU 자동화 · 메일/Slack/Notion 통합 업무현황판 · Notion 업무 이력 통합 · SM 음원 정산 자동화'],
+       ['리스크 관리','상품 어뷰징을 당일 차단하고 회수·보상을 단일 결재로 정리 · 5단계 사후 SOP 문서화'],
        ['보조 경험','IP 협업 · QA 외주사 정산·계약 조정 · 중국 서비스 라이선스 검토 · 기획·QA·CS 채용·조직 운영']] },
   lyn: { m:'넥슨 코리아 · 모바일사업실 — 부팀장', t:'린',
     s:[['3위','앱스토어·구글 매출'],['183억','매출']],
@@ -1429,6 +1461,7 @@ const WORKS = {
   nightwalker: { m:'원더피플/에이스톰 · 사업팀 — 파트장', t:'나이트워커',
     s:[['33만+','한국 신규'],['6.3만','DAU 피크'],['약 50%','D+1 리텐션 평균']],
     r:[['퍼블리싱 연동','유료 재화 구매 연동 · 쿠폰 시스템 연동 · 서버 선택창 UI/플로우 기획'],
+       ['지표 → 개선 제안','주간 판매 현황을 분석해 상품을 제안하고, 라이브 지표를 분석해 허들 개선을 제안'],
        ['검증·리서치','FGT · 사내테스트'],
        ['대외 활동','원티드 콜라보 · PR 영상']] },
   fivestars: { m:'스카이피플 · 사업팀 — 팀장', t:'Five Stars',
@@ -1441,7 +1474,9 @@ const WORKS = {
   nanakage: { m:'넵튠 레전드 · 스튜디오 — 사업PM', t:'Shadow Seven',
     s:[['4개국','소프트런칭']],
     r:[['담당','사업PM (2019.10 ~ 2020.04)'],
-       ['소프트런칭','한국 · 일본 · 대만 · 미국 (중국 제외)']] },
+       ['지표 → 조치 → 결과','일본 성적 저조(지표) → 평점 관리 시스템 추가(조치) → 구글 평점 일본 3.29 → 글로벌 4.4(결과)'],
+       ['소프트런칭','한국 · 일본 · 대만 · 미국 (중국 제외)'],
+       ['그랜드런칭','한국 · 미국 · 대만 — 한국 AOS 매출 173위']] },
   // 개인 프로덕트 — v(시연 영상)·l(외부 링크)은 이 항목에만 있는 선택 필드다.
   budget: { m:'개인 프로덕트 · 기획 · 개발 · 운영', t:'우리집 가계부',
     s:[['222/222','jsdom 테스트'],['56/56','레이아웃 테스트']],
