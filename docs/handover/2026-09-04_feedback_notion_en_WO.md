@@ -34,11 +34,15 @@
 
 판정(WO-1): 기존 하니스로 1440·390 overflowX 0 · 카드 8장 높이 동일 · 다이얼로그 7종 열림+Notion href 정확 · `git diff --stat`이 site/index.html+scripts+docs만. 게시 전 grep `36359de7|2c099a8d|1f999a8d|NPS|41,141` 0건. 커밋 1개, STATUS "지금 위치"에 1줄.
 
-## WO-2 영문판 (WO-1 커밋 후 착수)
-- 단일 파일 in-place 토글. 헤더 `.hdr-r` 맨 앞 `.lang` 버튼(라벨=반대 언어: KO일 때 "EN"). 클릭 → `html[lang]`·`localStorage.lang`·URL `?lang=en` 동기화(공유 링크용, 로드 시 URL > storage > ko). 텍스트 노드 `data-i18n="key"`, 사전은 스크립트 하단 `const I18N_EN = {...}` 한 덩어리. WORKS는 `WORKS_EN` 오버라이드(같은 키). `<title>`·meta description·og:title·aria-label·nav·푸터·연락처 다이얼로그·stat 단위(년→yrs, 억→₩B: 183억 = ₩18.3B)까지 전부. 체험판·플레이 2종은 한국어 그대로, EN 라벨에 "(Korean)".
-- 번역 원칙: 팩트시트 사실 그대로, 숫자 추가 0. 순위 "#3 grossing (App Store · Google Play, Korea)". 회사명: Dalcomsoft · Wonderpeople/Acestorm · Neowiz · Skypeople · Neptune Legend · Nexon Korea · Netmarble Blue · Softnyx · NHN Service · Webzen. 어필 축 영문: "Read the metrics, set the fix, ship it."류로 1문장 — 과장 금지.
-- 함정: h1 `data-lines` 줄 span 3개 고정 — EN도 3줄. 카운트업 `data-count` 숫자 유지. 토글 후 카드 높이 통일·헤더 줄바꿈 0(1024·1280·1440 실측). 폰트 스택 그대로.
-- 판정: 두 언어 × 1440·390 overflowX 0 · 헤더 1줄 · `?lang=en` 새로고침 유지 · 토글 후 다이얼로그 EN · 콘솔 0. 커밋 1개.
+## WO-2 영문판 (WO-1 커밋 후 착수) — 09-04 R4 벤치마크 반영해 **정적 별도 페이지** 방식으로 확정
+근거: `docs/research/2026-09-04_pm_portfolio_benchmark.md` — 리크루터에게 보낸 링크가 상대 브라우저 상태와 무관하게 항상 같은 언어로 열려야 하고, `<html lang>`은 페이지별 고정이 안전. 단 **원본은 하나**(site/index.html)여야 하므로 런타임 토글이 아니라 **빌드 스크립트가 EN 페이지를 생성**한다.
+- 구조: `site/index.html`(KO 원본)의 번역 대상 텍스트 노드·속성에 `data-i18n="key"`(속성은 `data-i18n-attr="aria-label|content|alt|title"`)를 붙이고, 사전은 **별도 파일 `site/i18n/en.json`**(key→EN). WORKS는 `WORKS_EN` 오버라이드를 같은 JSON 안 `works` 키로. R0 스크립트 `scripts/build-en.mjs`(node, 의존성 추가 없이 cheerio 등 이미 설치된 것만 — 없으면 정규식/jsdom 중 설치된 것)가 `site/en/index.html`을 생성: `<html lang="en">`, `<title>`·description·og:title·og:url·canonical(`…/henry-portfolio/en/`), 상대 경로(`works/`·`media/`·`demo/`·`og.png`·`favicon`)를 `../`로 재작성, hreflang `ko`/`en`/`x-default` 양방향(KO 원본에도 추가), 인라인 스크립트의 `WORKS`를 EN 값으로 치환. 생성물은 커밋한다(Pages는 `site/`를 그대로 배포).
+- 토글 버튼: 헤더 `.hdr-r` 맨 앞 `.lang` **링크**(KO 페이지엔 "EN"→`en/`, EN 페이지엔 "KO"→`../`). 연락처 다이얼로그·푸터에도 반대 언어 링크 1개. 런타임 자동 감지·localStorage 없음(링크가 곧 언어).
+- 범위: 보이는 텍스트 전부 + aria-label + `<title>`/meta + stat 단위(년→yrs, 억→₩B: 183억 = ₩18.3B, 98억 = ₩9.8B, 24억 = ₩2.4B) + 시계 라벨. 체험판·플레이 2종은 한국어 그대로, EN 라벨에 "(Korean)". Notion 링크 라벨 "Evidence & process (Notion, Korean)".
+- 번역 원칙: 팩트시트 사실 그대로, 숫자 추가 0. 순위 "#3 grossing (App Store · Google Play, Korea)". 회사명: Dalcomsoft · Wonderpeople/Acestorm · Neowiz · Skypeople · Neptune Legend · Nexon Korea · Netmarble Blue · Softnyx · NHN Service · Webzen. 어필 축 영문 1문장(예: "Read the metrics, set the fix, ship it.") — 과장 금지.
+- 함정: h1 `data-lines` 줄 span 3개 고정 — EN도 3줄. 카운트업 `data-count` 숫자 유지. EN 페이지도 카드 높이 통일·헤더 줄바꿈 0(1024·1280·1440 실측). 폰트 스택 그대로(Pretendard는 라틴 글리프 포함). 히어로 h1 EN 글자수는 KO보다 길어지므로 390에서 hcard 겹침 실측.
+- 유지 규칙(STATUS 함정 목록에 추가): KO 원본을 고치면 `node scripts/build-en.mjs` 재실행 후 같이 커밋. 사전에 없는 key는 빌드가 **실패**(무음 KO 잔존 금지).
+- 판정: 두 페이지 × 1440·390 overflowX 0 · 헤더 1줄 · `site/en/index.html` 안에 한글 잔존 0(체험판 라벨 "(Korean)" 예외) · 다이얼로그 7종 EN · 에셋 404 0 · 콘솔 0. 커밋 1개.
 
 ## 고삐
 - 시킨 것만. 섹션 신설·디자인 변경·리팩터 금지. 서브에이전트 상한 2. 보고는 "바꾼 것 / 못 한 것 / 실측 수치" 3단 15줄 이내.
