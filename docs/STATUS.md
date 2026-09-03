@@ -22,8 +22,8 @@
 
 - **2026-09-04 이력서 피드백 반영 WO-1 시공 완료(`feat/feedback-en-2026-09`, 미배포)**: 히어로 경력 요약 3문장 + 핵심 역량 칩 6개(`.hero-keys`), #career 회사별 임팩트 10줄(`.row-impact`, 모바일 노출), 성과·프로토 카드·WORKS `r[]`·What I do·How I Work 능동 동사/`지표→조치→결과` 교정, **Notion 근거 링크 30개**(다이얼로그 14 + #career 12 + 허브 3곳).
   🔴 **공개 도메인 함정**: 팩트시트 §9-2의 `cord-timpani-ea7`은 **동료 워크스페이스**다. 본부장 워크스페이스 슬러그는 `limhenry`.
-  **채택 도메인 = `https://www.notion.so/limhenry/<id>`**(R1 확정 2026-09-04) — 28/28 공개 실측(`docs/handover/2026-09-04_notion_public_check.json`). 도메인은 HTML의 `NOTION_BASE` 상수 한 곳에만 있고 데이터에는 id만 둔다.
-  🟡 **채택 도메인의 대가(실측)**: `www.notion.so/limhenry/<id>`는 `app.notion.com/p/limhenry/<id>`로 리다이렉트되고, 본문 위에 **"지금 가입해서 Notion으로 구축을 시작하세요 · 가입 또는 로그인하기" 배너**를 먼저 띄운다(본문은 정상 렌더, 블록 30개 확인). 대안 `https://limhenry.notion.site/<id>`는 같은 28/28 공개에 배너가 없다 — 되돌리려면 `NOTION_BASE` 한 줄과 정적 허브 앵커 3곳의 URL만 바꾸면 된다. `.notion.site`가 15/28로 보였던 것은 도메인 문제가 아니라 아래 판정기 버그였다.
+  **최종 채택 = `https://limhenry.notion.site/<id>`**(R1 확정 2026-09-04) — 28/28 공개 실측(`docs/handover/2026-09-04_notion_public_check.json`). 도메인은 HTML의 `NOTION_BASE` 상수 한 곳에만 있고 데이터에는 id만 둔다.
+  🔴 **`www.notion.so/limhenry/<id>`는 쓰지 않는다**(실측 근거): `app.notion.com/p/limhenry/<id>`로 리다이렉트되고 본문 위에 "지금 가입해서 Notion으로 구축을 시작하세요 · 가입 또는 로그인하기" 배너를 먼저 띄운다. 리크루터가 근거 링크를 눌렀을 때 가입 화면부터 보는 경로라 기각했다. `.notion.site`는 익명 브라우저에서 배너 없이 본문이 바로 뜬다(두 도메인 모두 28/28 공개).
   🟡 **판정기 함정 2건**(`scripts/check-notion-public.mjs`에 주석): ①HTTP 200과 `document.title`은 미공개 페이지에서도 나오므로 공개 근거가 아니다 — 판정은 **본문 블록 수 + 차단 문구**로만 한다. ②연속 요청 간격이 없으면 후반부 렌더가 늦어져 공개 페이지를 오판한다(무간격 실행에서 13건 오판) — 페이지 간 1.5초를 둔다.
   🔴 링크 금지 3건(§9-2)은 목록에 없고, id 자체도 HTML에 남기지 않는다(게시 전 grep 게이트 대상).
 

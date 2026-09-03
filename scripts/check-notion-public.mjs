@@ -15,7 +15,7 @@ import { mkdirSync, writeFileSync } from 'node:fs'
 import { dirname } from 'node:path'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
-const BASE = process.env.NOTION_BASE ?? 'https://www.notion.so/limhenry/'
+const BASE = process.env.NOTION_BASE ?? 'https://limhenry.notion.site/'
 const OUT = process.argv[2] ?? 'docs/handover/2026-09-04_notion_public_check.json'
 
 /* 팩트시트 §9-2 표 그대로. 금지 3건(2c099a8d·36359de7·1f999a8d)은 애초에 넣지 않는다. */
