@@ -98,7 +98,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
     })
     if (st.open && st.t) opened++
     if (st.n > 4 || st.bad > 0) badLinks++
-    if (st.n > 0 && st.hdr !== 'Evidence & process (Notion, Korean)') badLinks++
+    if (st.n > 0 && st.hdr !== 'Evidence & process (Notion · pages in Korean)') badLinks++
     if (st.n === 0 && !st.hidden) badLinks++
     nTotal += st.n
     rows.push(`${k}:${st.rows}행/n${st.n}${st.bad ? '(불량' + st.bad + ')' : ''}`)

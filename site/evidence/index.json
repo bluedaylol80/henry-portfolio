@@ -5,7 +5,12 @@
   "process": "사내테스트 빌드의 동선 검증 진행 → 액션에 따른 액션 Log화 → 육성 동선 정리 → 이탈 구간 개선 기획안 제안 → 개발팀 협의 통한 구현 진행 → 사내테스트를 통한 추가 검증 진행 → 개선 방향 추가 협의",
   "period": "2018년 10월 30일",
   "tools": "PowerPoint · Excel · Tapjoy · 프로젝트의 방향성에 따른 게임 개선안 마련",
-  "img": "09624ec9cbdb4dd9a53085f168bfcfa7.jpg"
+  "img": "09624ec9cbdb4dd9a53085f168bfcfa7.jpg",
+  "en": {
+   "title": "In-game improvements",
+   "summary": "Improvement plan for the game, aligned with the project direction",
+   "process": "Validate player flow on the internal test build → log actions per action → map the progression flow → propose a drop-off improvement plan → implement with the dev team → re-validate with an internal test → align on further direction"
+  }
  },
  "0fcb2233c75c4b04b5317fe2ded2fec4": {
   "title": "초반 동선 폴리싱",
@@ -13,7 +18,12 @@
   "process": "사내테스트 빌드의 동선 검증 진행 → 액션에 따른 액션 Log화 → 육성 동선 정리 → 이탈 구간 개선 기획안 제안 → 개발팀 협의 통한 구현 진행 → 사내테스트를 통한 추가 검증 진행 → 개선 방향 추가 협의",
   "period": "May 6, 2016 → July 1, 2016",
   "tools": "Excel · PowerPoint · Tapjoy · 프로젝트의 초반 동선과 이탈 구간을 분석하여 개선 요소 적용",
-  "img": "0fcb2233c75c4b04b5317fe2ded2fec4.jpg"
+  "img": "0fcb2233c75c4b04b5317fe2ded2fec4.jpg",
+  "en": {
+   "title": "Early-flow polishing",
+   "summary": "Analyzed the early flow and drop-off points, then applied improvements",
+   "process": "Validate player flow on the internal test build → log actions per action → map the progression flow → propose a drop-off improvement plan → implement with the dev team → re-validate with an internal test → align on further direction"
+  }
  },
  "508469dc0586497f8ce75618b142e29a": {
   "title": "BM 기획 및 제안",
@@ -21,7 +31,12 @@
   "process": "인게임 순환구조 분석 및 정리 → 레퍼런스 분석 → 재화 소모 현황 확인 → 기존 재화 가치 기준 정리 → 상품 판매 방식 및 구성품 조정 → 방향성 정립 및 신규 BM 개편안 제안",
   "period": "July 30, 2015 → September 30, 2019",
   "tools": "오픈 이후 지속적인 상품 추가와 개선 진행",
-  "img": "508469dc0586497f8ce75618b142e29a.jpg"
+  "img": "508469dc0586497f8ce75618b142e29a.jpg",
+  "en": {
+   "title": "BM design & proposal",
+   "summary": "Kept adding and improving products after launch",
+   "process": "Analyze the in-game economy loop → study references → check currency consumption → set a baseline for existing currency value → adjust product formats and bundles → set the direction and propose a new monetization plan"
+  }
  },
  "aa5b9015b7c044809731b0e073012101": {
   "title": "이벤트 기획",
@@ -29,7 +44,12 @@
   "process": "런칭 및 시즌 별 방향성 구성 → 컨셉 이벤트 기획 및 내부 검토 → 확정 이벤트 리스트업 → 상세 이벤트 기획 → 작업 노드 초안 설정 → 개발팀 or 관련 부서 협의 → 노드 수정 → 이벤트 진행 → 결과 분석",
   "period": "July 30, 2015 → September 30, 2019",
   "tools": "Excel · Tapjoy · PowerPoint · 기존 각 프로젝트에서 이벤트를 시즌 마다 기획하여 유저 플레이 지표 방어 진행",
-  "img": "aa5b9015b7c044809731b0e073012101.jpg"
+  "img": "aa5b9015b7c044809731b0e073012101.jpg",
+  "en": {
+   "title": "Event design",
+   "summary": "Designed seasonal events on each project to defend player activity metrics",
+   "process": "Set the direction for launch and each season → design concept events and review internally → list the confirmed events → detail each event → draft the work nodes → align with the dev team or related departments → revise the nodes → run the event → analyze the results"
+  }
  },
  "49043d5d2bfa44d18384126bbbd86f14": {
   "title": "유료재화 구매 시스템 연동",
@@ -37,7 +57,12 @@
   "process": "기존 재화 구매 시스템 분석 → 개선안 기획 → 퍼블리셔 피드백 수령 → 개발팀/퍼블리셔 킥오프 → 개발 태스크 생성 → 태스크 일정 조율 → QA 진행 → 폴리싱 요청 → 개발 완료",
   "period": "October 1, 2022",
   "tools": "Confluence · PowerPoint",
-  "img": "49043d5d2bfa44d18384126bbbd86f14.jpg"
+  "img": "49043d5d2bfa44d18384126bbbd86f14.jpg",
+  "en": {
+   "title": "Paid-currency purchase system integration",
+   "summary": "Replaced the paid-currency purchase system from the China service with the Korean publisher system",
+   "process": "Analyze the existing purchase system → design the change → collect publisher feedback → kick off with the dev team and publisher → create dev tasks → align the schedule → QA → request polishing → development complete"
+  }
  },
  "2ade8f618bb945a6b0c0f6a711133b55": {
   "title": "쿠폰 시스템 연동",
@@ -45,7 +70,12 @@
   "process": "퍼블리셔 시스템 기능 확인 → 쿠폰 기획안 정리 → 퍼블리셔 피드백 수령 → 개발팀/퍼블리셔 킥오프 → 개발 태스크 생성 → 태스크 일정 조율 → QA 진행 → 폴리싱 요청 → 개발 완료",
   "period": "October 1, 2022",
   "tools": "Confluence · PowerPoint",
-  "img": "2ade8f618bb945a6b0c0f6a711133b55.jpg"
+  "img": "2ade8f618bb945a6b0c0f6a711133b55.jpg",
+  "en": {
+   "title": "Coupon system integration",
+   "summary": "Defined the features needed to adopt the Korean publisher system",
+   "process": "Check the publisher system features → write up the coupon design → collect publisher feedback → kick off with the dev team and publisher → create dev tasks → align the schedule → QA → request polishing → development complete"
+  }
  },
  "581e150745124f13b3d6d3721841b1c2": {
   "title": "서버 선택창 UI/플로우 기획",
@@ -53,7 +83,12 @@
   "process": "중국 퍼블리셔 기능 확인 → 한국 퍼블리셔 시스템 기능 확인 → 서버 선택 플로우 제안 → 기술 Kick-off 진행 → Flow 기획안 정리 → 퍼블리셔 피드백 수령",
   "period": "October 1, 2022",
   "tools": "Confluence · PowerPoint",
-  "img": "581e150745124f13b3d6d3721841b1c2.jpg"
+  "img": "581e150745124f13b3d6d3721841b1c2.jpg",
+  "en": {
+   "title": "Server-select UI/flow design",
+   "summary": "Redefined the server-select flow and UI from the China SDK behavior to the Korean publisher system",
+   "process": "Check the China publisher features → check the Korean publisher system features → propose a server-select flow → run a technical kick-off → write up the flow design → collect publisher feedback"
+  }
  },
  "39a59de7280481888c8dff7c54446d1f": {
   "title": "프로모션 상품 기능 추가",
@@ -61,7 +96,12 @@
   "process": "프로모션 요청 스펙 체크 → 개선안 기획 → 퍼블리셔 피드백 수령 → 개발팀/퍼블리셔 킥오프 → 개발 태스크 생성 → UI 시안 제작 후 목업 요청 → 태스크 일정 조율 → QA 진행 → 폴리싱 요청 → 개발 완료",
   "period": "June 1, 2023",
   "tools": "Confluence",
-  "img": "39a59de7280481888c8dff7c54446d1f.jpg"
+  "img": "39a59de7280481888c8dff7c54446d1f.jpg",
+  "en": {
+   "title": "Added promotional product feature",
+   "summary": "Extended the existing gem top-up on the publisher side so it could carry promotions",
+   "process": "Check the requested promotion spec → design the change → collect publisher feedback → kick off with the dev team and publisher → create dev tasks → produce UI drafts and request mockups → align the schedule → QA → request polishing → development complete"
+  }
  },
  "f1fa5736d25f4b3798fa3849a66d5863": {
   "title": "조직 관리 (수습 평가안)",
@@ -69,7 +109,12 @@
   "process": "평가 기준 공유 → 평가 대상자와 기준 협의 → 중간 피드백 진행 → 동료 평가 진행 → 평가 내용 검토 → 평가 대상자에게 결과 공유 → 인사팀 공유 및 협의 진행",
   "period": "June 1, 2022",
   "tools": "MS-Word · 입사자에 대한 평가 기준이 없어 수습 기간 중 검증을 위한 세부 평가 방안 마련, 안정적인 On-boarding 단계 마련 · 업무 프로세스 · 평가 기준 공유 → 평가 대상자와 기준 협의  → 중간 피드백 진행 → 동료 평가 진행 → 평가 내용 검토 → 평가 대상자에게 결과 공유 → 인사팀 공유 및 협의 진행",
-  "img": "f1fa5736d25f4b3798fa3849a66d5863.jpg"
+  "img": "f1fa5736d25f4b3798fa3849a66d5863.jpg",
+  "en": {
+   "title": "Team management (probation evaluation plan)",
+   "summary": "There was no evaluation standard for new hires, so I built a detailed probation review and a stable onboarding step",
+   "process": "Share the evaluation criteria → align on them with the reviewee → give mid-point feedback → run peer review → review the results → share the outcome with the reviewee → share and align with HR"
+  }
  },
  "509a5cd4e8e44f1c907ec1cfabb87855": {
   "title": "원더피플 x 원티드 콜라보 기획",
@@ -77,7 +122,12 @@
   "process": "기획안 마련 및 업체 서칭 → 프로모션 제안서 전달(링크) → 담당자 컨택 및 조건 조율 → 일정 및 조건 상세 내용 협의 → 노출 영역의 자사 유튜브 채널 및 영상 기획(링크) → 영상물 제작 및 릴리즈(링크) → 필요 에셋 제작(링크) 및 리소스 전달 → 프로모션 페이지 및 LMS 문구 전달 → 이벤트 페이지(링크) 및 기사 노출 → 프로모션 결과 공유 * 관련 자료는 각 구간의 링크된 자료 참고",
   "period": "April 1, 2022",
   "tools": "Google Sheet · PowerPoint · MS-Word · 인력 채용을 통한 팀 빌딩의 효율을 높이기 위해 위해 개선안을 마련 하였고, 그 중 리쿠르팅 플랫폼과 프로모션 진행함",
-  "img": "509a5cd4e8e44f1c907ec1cfabb87855.jpg"
+  "img": "509a5cd4e8e44f1c907ec1cfabb87855.jpg",
+  "en": {
+   "title": "Wonderpeople x Wanted collaboration plan",
+   "summary": "Proposed ways to make team building through hiring more efficient, and ran a promotion with a recruiting platform",
+   "process": "Draft the plan and search for partners → send the promotion proposal (link) → contact the owner and align terms → agree schedule and details → plan the YouTube channel and video for the placement (link) → produce and release the video (link) → produce the assets (link) and hand over resources → hand over the promotion page and LMS copy → publish the event page (link) and press coverage → share the results * see the linked material at each step"
+  }
  },
  "4c6d6bbaaee24779ba80cce602592248": {
   "title": "미디어 쇼케이스 시나리오 구성",
@@ -85,7 +135,12 @@
   "process": "쇼케이스 일정 수립 → 관련 시나리오 기획 → 인원/장소 섭외 → 현장 리소스 제작 협의 → 프래스킷 제작 → 인원 섭외 진행 → 시나리오 문서 작성",
   "period": "July 20, 2020",
   "tools": "PowerPoint · 런칭 전 시장 기대감 형성을 목표로 오프라인 간담회를 개최 하였으며, 관련 시나리오 구성과 진행을 함께 함 · 쇼케이스 시나리오 링크 · 업무 프로세스",
-  "img": "4c6d6bbaaee24779ba80cce602592248.jpg"
+  "img": "4c6d6bbaaee24779ba80cce602592248.jpg",
+  "en": {
+   "title": "Media showcase scenario",
+   "summary": "Held an offline showcase before launch to build market anticipation, writing and running the scenario",
+   "process": "Set the showcase date → plan the scenario → book people and the venue → align on on-site production → produce the press kit → confirm the participants → write the scenario document"
+  }
  },
  "b14364484326425d981697677cf386ab": {
   "title": "초반 이탈구간 개선",
@@ -93,7 +148,12 @@
   "process": "지표 추출 → 주요 허들 파악 → 개선 레퍼런스 조사 → 개발팀 리뷰 진행",
   "period": "October 14, 2020",
   "tools": "Excel · PowerPoint · 런칭 이후 이탈 유저 케어를 위한 현황 분석 및 개발 방향성 협의를 위한 문서 · 업무 프로세스",
-  "img": "b14364484326425d981697677cf386ab.jpg"
+  "img": "b14364484326425d981697677cf386ab.jpg",
+  "en": {
+   "title": "Early drop-off improvements",
+   "summary": "Document for analyzing churned players after launch and aligning the dev direction",
+   "process": "Pull the metrics → identify the main hurdles → research improvement references → review with the dev team"
+  }
  },
  "29609a7acf9046be87cdee55d11d9f30": {
   "title": "업데이트 현황 보고",
@@ -101,7 +161,12 @@
   "process": "업데이트 내용 체크 → 지표 추출 → 지표 분석 진행 → VOC 정리 → 이후 업데이트 계획 정리 → 개발팀 리뷰 진행",
   "period": "November 17, 2020",
   "tools": "Excel · PowerPoint · 업데이트 이후 관련 보고를 통해 방향성에 대한 결과를 지표로 파악하고, 이후 대응 방안에 대한 짧은 리뷰 진행 · 업무 프로세스",
-  "img": "29609a7acf9046be87cdee55d11d9f30.jpg"
+  "img": "29609a7acf9046be87cdee55d11d9f30.jpg",
+  "en": {
+   "title": "Update status reporting",
+   "summary": "Read the outcome of each direction in the metrics after an update, with a short review of what to do next",
+   "process": "Check the update contents → pull the metrics → analyze them → organize VOC → set the next update plan → review with the dev team"
+  }
  },
  "f6a1be10d1d645d48f62aa02e72198f2": {
   "title": "인게임 재화/BM 개선",
@@ -109,7 +174,12 @@
   "process": "인게임 순환구조 분석 → 기존 매출 지표 추출 → 효율 및 성과 측정 → 레퍼런스 분석 (메달마스터즈, 킹스레이드, 파이널블레이드, 에픽세븐, 클래시로얄) → 순환 구조 개편 → 잔여 패키지 및 재화 리소스 재활용 → 방향성 정립 및 신규 BM 개편안 제안",
   "period": "November 1, 2019",
   "tools": "PowerPoint · Excel · 일본 서비스 이후 글로벌/한국 서비스를 준비하며 인게임, BM 구성을 개편함",
-  "img": "f6a1be10d1d645d48f62aa02e72198f2.jpg"
+  "img": "f6a1be10d1d645d48f62aa02e72198f2.jpg",
+  "en": {
+   "title": "In-game currency/BM improvements",
+   "summary": "Reworked the in-game economy and monetization while preparing the global and Korean service after Japan",
+   "process": "Analyze the in-game economy loop → pull existing revenue metrics → measure efficiency and performance → study references (Medal Masters, King's Raid, Final Blade, Epic Seven, Clash Royale) → rework the loop → reuse the remaining packages and currency resources → set the direction and propose a new monetization plan"
+  }
  },
  "8cbbe93738e54e0d99020f2f6d03822f": {
   "title": "소프트런칭 비교 분석",
@@ -117,7 +187,12 @@
   "process": "탭조이 및 스토어 통한 지표 추출 → 타게임 레퍼런스 수집 → 분석 진행 → 문서화 → 경영진 보고 진행",
   "period": "February 8, 2019",
   "tools": "PowerPoint · Excel · 소프트런칭 이후 관련 보고를 통해 결과를 지표로 파악하고, 타게임 대비 성과 분석 (주로 리텐션 위주) · 소프트런칭 결과 비교 분석 문서 (공유용)",
-  "img": "8cbbe93738e54e0d99020f2f6d03822f.jpg"
+  "img": "8cbbe93738e54e0d99020f2f6d03822f.jpg",
+  "en": {
+   "title": "Soft launch comparison",
+   "summary": "Read the soft launch results in the metrics and benchmarked them against other titles, mainly on retention",
+   "process": "Pull metrics from Tapjoy and the stores → collect references from other titles → analyze → document → report to management"
+  }
  },
  "87c69184413f4cb78d66af21a98de32f": {
   "title": "평점 관리 시스템 추가",
@@ -125,7 +200,12 @@
   "process": "개선점 확인 → 인게임 개편안 마련 → 개발팀 협의 → 인게임 적용",
   "period": "November 8, 2019",
   "tools": "PowerPoint · 마케팅 예산이 없는 상황에서 평점 유지를 통해 VOC 관리 및 피쳐드 조건 달성을 위한 대한 마련 필요",
-  "img": "87c69184413f4cb78d66af21a98de32f.jpg"
+  "img": "87c69184413f4cb78d66af21a98de32f.jpg",
+  "en": {
+   "title": "Added rating management system",
+   "summary": "With no marketing budget, holding the rating was the way to manage VOC and meet the featuring conditions",
+   "process": "Identify what to fix → draft the in-game change → align with the dev team → apply it in game"
+  }
  },
  "c2899733fed94b618af970a0796a7e6c": {
   "title": "주요 이슈 지표 분석",
@@ -133,7 +213,12 @@
   "process": "주요 이슈 일정 → KPI 및 Funnel 지표 추출 → 시각화 분석 진행 → 문서화",
   "period": "July 30, 2015 → September 30, 2019",
   "tools": "Excel · 프로젝트 주요 이슈에 따른 지표 추출 및 결과 분석을 통한 시사점 확인",
-  "img": "c2899733fed94b618af970a0796a7e6c.jpg"
+  "img": "c2899733fed94b618af970a0796a7e6c.jpg",
+  "en": {
+   "title": "Metric analysis of major issues",
+   "summary": "Pulled metrics around the major issues on the project and read the implications from the results",
+   "process": "Lay out the major-issue timeline → pull KPI and funnel metrics → analyze with visualizations → document"
+  }
  },
  "271affb46a12423bbb26dd3cdc183ae0": {
   "title": "프로젝트 별 포스트모템",
@@ -141,7 +226,12 @@
   "process": "서비스 현황 및 히스토리 정리 → 현황 분석 → 기획 의도와 목표 대비 결과물 확인 → Good / Bad 요소 체크 → 시사점 확인",
   "period": "July 30, 2015 → September 30, 2019",
   "tools": "PowerPoint · Excel · Tapjoy · 프로젝트 별 주요 성과와 현황, 개선사항을 지속 분석하며 이후 프로젝트의 퀄리티업을 위한 노하우 축적 진행",
-  "img": "271affb46a12423bbb26dd3cdc183ae0.jpg"
+  "img": "271affb46a12423bbb26dd3cdc183ae0.jpg",
+  "en": {
+   "title": "Postmortems by project",
+   "summary": "Kept analyzing results, status and fixes per project to build know-how for the next one",
+   "process": "Write up the service status and history → analyze it → compare the outcome against the intent and goals → mark the good and bad → draw the implications"
+  }
  },
  "9a16f26d31cf438482942ce4baa00001": {
   "title": "마일스톤 협의",
@@ -149,7 +239,12 @@
   "process": "런칭 및 시즌 별 사업 방향성 정리 → 내부 및 스튜디오 일정 현황 파악 → 외부 이슈 체크 → 일정에 따른 F/U 사항 제안 → 협의 진행 → 구체안 조율",
   "period": "July 30, 2015 → September 30, 2019",
   "tools": "PowerPoint · Excel · 서비스의 유리한 위치를 점유하기 위해 각 프로젝트 별 개발 일정과 마케팅, 외부 이슈를 체크하여 런칭 마일스톤을 조율",
-  "img": "9a16f26d31cf438482942ce4baa00001.jpg"
+  "img": "9a16f26d31cf438482942ce4baa00001.jpg",
+  "en": {
+   "title": "Milestone alignment",
+   "summary": "Aligned launch milestones across projects by checking dev schedules, marketing and external events, to take the better market slot",
+   "process": "Set the business direction for launch and each season → check internal and studio schedules → check external events → propose follow-ups against the schedule → align → settle the detailed plan"
+  }
  },
  "13f2864c7af74918b5a956367ddfdcb6": {
   "title": "친구 시스템 기획",
@@ -157,7 +252,12 @@
   "process": "레퍼런스 조사 → 기획안 정리 → 데이터 테이블 정리 → 킥오프 및 기획리뷰 → 개선 사항 적용 → 개발 태스크 생성 → 태스크 일정 조율 → QA 진행 → 폴리싱 요청 → 개발 완료",
   "period": "February 26, 2021 → October 12, 2021",
   "tools": "Confluence · PowerPoint · Excel",
-  "img": "13f2864c7af74918b5a956367ddfdcb6.jpg"
+  "img": "13f2864c7af74918b5a956367ddfdcb6.jpg",
+  "en": {
+   "title": "Friend system design",
+   "summary": "Designed the friend system as an in-game community feature",
+   "process": "Research references → write up the design → prepare the data tables → kick off and review the design → apply the revisions → create dev tasks → align the schedule → QA → request polishing → development complete"
+  }
  },
  "7298379e8a254d63b64747242afe60ff": {
   "title": "상점 시스템 개편 기획",
@@ -165,7 +265,12 @@
   "process": "기존 시스템 기능 확인 → 개선 방향 레퍼런스 조사 → 기획안 정리 (시안 포함 A/B안) → 데이터 테이블 정리 → 킥오프 및 기획리뷰 → 개선 사항 적용 → 개발 태스크 생성 → 태스크 일정 조율 → QA 진행 → 폴리싱 요청 → 개발 완료",
   "period": "February 26, 2021 → October 12, 2021",
   "tools": "Confluence · PowerPoint · Excel",
-  "img": "7298379e8a254d63b64747242afe60ff.jpg"
+  "img": "7298379e8a254d63b64747242afe60ff.jpg",
+  "en": {
+   "title": "Shop system rework design",
+   "summary": "Reworked the in-game shop system",
+   "process": "Check the existing features → research references for the direction → write up the design (A/B drafts included) → prepare the data tables → kick off and review the design → apply the revisions → create dev tasks → align the schedule → QA → request polishing → development complete"
+  }
  },
  "34f448cf443b415181d7d8fe05f2d7b0": {
   "title": "밸런스 기획",
@@ -173,7 +278,12 @@
   "process": "밸런스 정책 및 기준 마련 → 기획 방향 협의 → 시뮬레이터 제작 → 밸런스 수치 확정 → 관련 데이터 테이블 적용 → 밸런스 검증 → 폴리싱 진행 → 개발 완료",
   "period": "February 26, 2021 → October 12, 2021",
   "tools": "Confluence · Excel",
-  "img": "34f448cf443b415181d7d8fe05f2d7b0.jpg"
+  "img": "34f448cf443b415181d7d8fe05f2d7b0.jpg",
+  "en": {
+   "title": "Balance design",
+   "summary": "In-game balance design for progression, currency and combat",
+   "process": "Set the balance policy and baselines → align on the design direction → build a simulator → fix the balance numbers → apply the data tables → validate the balance → polish → development complete"
+  }
  },
  "69a7c535df97479e8e3539027b9566bd": {
   "title": "개발 단계별 달성도 회고",
@@ -181,7 +291,12 @@
   "process": "개발 마일스톤 정리 → 현황 및 히스토리 정리 → 개발 부서간 진척도 체크 → 문서화 하여 진행 상황 리뷰",
   "period": "February 26, 2021 → October 12, 2021",
   "tools": "Confluence",
-  "img": "69a7c535df97479e8e3539027b9566bd.jpg"
+  "img": "69a7c535df97479e8e3539027b9566bd.jpg",
+  "en": {
+   "title": "Retrospective on milestone attainment",
+   "summary": "Retrospectives on attainment at each dev stage, to surface progress and fixes per dev unit",
+   "process": "Lay out the dev milestones → write up status and history → check progress across dev departments → document and review the state of play"
+  }
  },
  "47f569402610444e90b6944e84a2d235": {
   "title": "튜토리얼 Flow 기획",
@@ -189,7 +304,12 @@
   "process": "타게임 레퍼런스 조사 → 육성 동선 정리 → 인게임 기획안 마련",
   "period": "May 1, 2015",
   "tools": "Excel · PowerPoint · 프로젝트의 초반 챕터의 이해도를 높이기 위한 튜토리얼 플로우 기획",
-  "img": "47f569402610444e90b6944e84a2d235.jpg"
+  "img": "47f569402610444e90b6944e84a2d235.jpg",
+  "en": {
+   "title": "Tutorial flow design",
+   "summary": "Tutorial flow designed to make the opening chapters easier to follow",
+   "process": "Research references from other titles → map the progression flow → write up the in-game design"
+  }
  },
  "32d0763c70714ce6af760a2312657da7": {
   "title": "Focus Group Interview & Test",
@@ -197,7 +317,12 @@
   "process": "설문 목표 설정 → 테스트 기획 → 설문안 도출 → 장소 섭외 및 설계 → 테스트 진행 결과 추출",
   "period": "July 30, 2011 → May 30, 2015",
   "tools": "NTD의 게임성 검증을 위한 Focus Group Interview & test 설계와 보고 진행 · 업무 프로세스 · 설문 목표 설정 → 테스트 기획 → 설문안 도출 → 장소 섭외 및 설계 → 테스트 진행 결과 추출",
-  "img": "32d0763c70714ce6af760a2312657da7.jpg"
+  "img": "32d0763c70714ce6af760a2312657da7.jpg",
+  "en": {
+   "title": "Focus Group Interview & Test",
+   "summary": "Designed and reported the Focus Group Interview & Test that validated the gameplay of NTD",
+   "process": "Set the survey goals → plan the test → draft the questionnaire → book and lay out the venue → run the test and extract the results"
+  }
  },
  "cd308df4eafa4e66868de83e459fcdde": {
   "title": "유료화 타이틀 분석",
@@ -205,7 +330,12 @@
   "process": "주요 타이틀 선정 (마비노기, D&F, → 타이틀 상세 내용 분석 (BM 시스템, 상품 , 인게임 시스템) → 주요 타이틀 유저 InterView 진행",
   "period": "January 26, 2015 → February 5, 2015",
   "tools": "프로젝트의 런칭 전 유료화 구성을 위한 지속적인 시장 분석 진행 · 업무 프로세스 · 주요 타이틀 선정 (마비노기, D&F,  → 타이틀 상세 내용 분석 (BM 시스템, 상품 , 인게임 시스템) → 주요 타이틀 유저 InterView 진행",
-  "img": "cd308df4eafa4e66868de83e459fcdde.jpg"
+  "img": "cd308df4eafa4e66868de83e459fcdde.jpg",
+  "en": {
+   "title": "Monetization analysis by title",
+   "summary": "Ongoing market analysis to shape monetization before launch",
+   "process": "Select the key titles (Mabinogi, D&F, …) → analyze each title in detail (monetization systems, products, in-game systems) → interview players of the key titles"
+  }
  },
  "98d467b255b34ee1a4942ae49d12f121": {
   "title": "2013~2014 게임 시장 현황 분석",
@@ -213,6 +343,11 @@
   "process": "장르 별 주요 지표 추출 → 상위 게임 주요 지표 추출 → 동종 장르 런칭 마일스톤 일정 확인 → 상위 게임 서비스 이슈 체크 → 내부 현황 보고 진행",
   "period": "January 26, 2015 → February 5, 2015",
   "tools": "프로젝트의 런칭 전 포지셔닝을 위한 지속적인 시장 분석 진행 · 업무 프로세스 · 장르 별 주요 지표 추출 → 상위 게임 주요 지표 추출 → 동종 장르 런칭 마일스톤 일정 확인 → 상위 게임 서비스 이슈 체크 → 내부 현황 보고 진행",
-  "img": "98d467b255b34ee1a4942ae49d12f121.jpg"
+  "img": "98d467b255b34ee1a4942ae49d12f121.jpg",
+  "en": {
+   "title": "2013–2014 game market analysis",
+   "summary": "Ongoing market analysis to position the project before launch",
+   "process": "Pull the key metrics by genre → pull the key metrics of the top games → check launch milestones in the same genre → check service issues among the top games → report internally"
+  }
  }
 }

@@ -22,7 +22,7 @@
  * Usage: node scripts/build-evidence.mjs
  */
 import puppeteer from 'puppeteer-core'
-import { readFileSync, writeFileSync, mkdirSync, statSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, statSync, existsSync } from 'node:fs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'https://limhenry.notion.site/'
@@ -49,6 +49,9 @@ const browser = await puppeteer.launch({
 })
 
 const index = {}
+/* 기존 index.json — 사람이 쓴 en 번역을 재캡처가 지우지 않도록 머지 원본으로 읽어 둔다. */
+const PREV = existsSync(OUT_DIR + '/index.json')
+  ? JSON.parse(readFileSync(OUT_DIR + '/index.json', 'utf8')) : {}
 let done = 0
 for (const t of targets) {
   const page = await browser.newPage()
@@ -159,6 +162,8 @@ for (const t of targets) {
           summary: info.summary, process: info.process,
           period: info.period, tools: info.tools,
           img: t.id + '.jpg',
+          // en은 사람이 쓴 번역이다 — 재캡처가 지우지 않도록 기존 index.json에서 그대로 옮긴다
+          ...(PREV[t.id] && PREV[t.id].en ? { en: PREV[t.id].en } : {}),
         }
         console.log(`OK  ${t.group} / ${t.label} — ${bytes}B @${width} · 요약 ${info.summary.length}자 · 체인 ${info.process.length}자`)
         break

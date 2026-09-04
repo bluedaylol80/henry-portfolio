@@ -1777,13 +1777,17 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   /* i18n-region: evidence */
   const EVIDENCE_BASE = '../evidence/';
   function clip(t, max){ return t.length > max ? t.slice(0, max - 1) + '…' : t; }
+  /* EN 페이지에서는 index.json의 en 필드로 그린다(없으면 KO 폴백).
+     이미지·링크는 언어와 무관하게 같은 것을 쓴다 — 캡처는 한국어 Notion 화면이다. */
+  const EV_EN = document.documentElement.lang === 'en';
   function evCard(item, meta){
     if (!meta) return null;
+    const L = (EV_EN && meta.en) ? meta.en : meta;
     const a = document.createElement('a');
     a.className = 'ev-card';
     a.href = NOTION_BASE + item.id;
     a.target = '_blank'; a.rel = 'noopener noreferrer';
-    const title = meta.title || item.t;
+    const title = L.title || item.t;
     a.setAttribute('aria-label', title + ' — open in Notion (new window)');
     const thumb = document.createElement('span');
     thumb.className = 'ev-thumb';
@@ -1796,14 +1800,14 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const t = document.createElement('span');
     t.className = 'ev-t'; t.textContent = title;
     body.append(t);
-    if (meta.summary){
+    if (L.summary){
       const sm = document.createElement('span');
-      sm.className = 'ev-s'; sm.textContent = clip(meta.summary, 80);
+      sm.className = 'ev-s'; sm.textContent = clip(L.summary, 80);
       body.append(sm);
     }
-    if (meta.process){
+    if (L.process){
       const pr = document.createElement('span');
-      pr.className = 'ev-p'; pr.textContent = clip(meta.process, 90);
+      pr.className = 'ev-p'; pr.textContent = clip(L.process, 90);
       body.append(pr);
     }
     const go = document.createElement('span');
@@ -1823,7 +1827,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const token = ++dlgToken;
     if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
     const h = document.createElement('h4');
-    h.textContent = 'Evidence & process (Notion, Korean)';
+    h.textContent = 'Evidence & process (Notion · pages in Korean)';
     wN.replaceChildren(h, chipList(n));
     wN.hidden = false;
     loadEvidence().then(ev => {
