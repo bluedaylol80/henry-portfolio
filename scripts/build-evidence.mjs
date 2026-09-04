@@ -6,7 +6,11 @@
  *     1200×750 한 컷이 그대로 카드 썸네일이 된다.
  *
  * 입력: docs/handover/2026-09-04_notion_public_check.json 의 공개 항목(허브 제외 27건)
- * 출력: site/evidence/<id>.jpg (JPEG q70, ≤60KB) · site/evidence/index.json
+ * 출력: site/evidence/<id>.jpg (820x512 JPEG q70, ≤60KB) · site/evidence/index.json
+ *
+ * 폭 820 = Notion 본문 열이 화면을 꽉 채우는 폭이다(1200이면 좌우 여백이 카드의 3분의 1을 먹는다).
+ * 페이지 커버 이미지는 숨긴다 — 포스트모템 커버처럼 인물 사진이 들어간 페이지가 있고,
+ * 카드가 보여줄 것은 제목·속성·요약이지 표지가 아니다.
  *
  * 🔴 금지 id 3건(2c099a8d·36359de7·1f999a8d)은 입력 JSON에 애초에 없다 — 여기서도 하드 차단한다.
  * 🟡 본문 미렌더는 무음으로 넘기지 않는다(exit 1). 재실행하면 같은 결과가 나온다.
@@ -23,6 +27,7 @@ const OUT_DIR = 'site/evidence'
 const HUB = '0e48e826c73f4a7ab9c3522d7fb16ce5'      // 이력서 허브는 근거 카드가 아니다
 const DENY = ['2c099a8d', '36359de7', '1f999a8d']    // 팩트시트 §9-2 링크 금지
 const MAX_BYTES = 60 * 1024
+const SHOT_W = 820, SHOT_H = 512      // 카드 썸네일 원본 — 페이지 상단만 자른다
 const LABELS = ['태그', '참여 기간', '프로젝트', '활용 Tool', '관련 링크']
 
 const sleep = ms => new Promise(r => setTimeout(r, ms))
@@ -44,9 +49,9 @@ let done = 0
 for (const t of targets) {
   const page = await browser.newPage()
   try {
-    for (const width of [1200, 960]) {
-      await page.setViewport({ width, height: Math.round(width * 750 / 1200), deviceScaleFactor: 1 })
-      if (width === 1200) {
+    for (const width of [SHOT_W, 720]) {
+      await page.setViewport({ width, height: SHOT_H + 200, deviceScaleFactor: 1 })
+      if (width === SHOT_W) {
         /* 🔴 Notion은 연속 요청에 429를 준다 — 429는 빈 셸이라 '본문 미렌더'와 구분되지 않는다.
            상태코드를 보고 지수 백오프로 다시 받는다(무음 실패 금지). */
         for (let attempt = 0; ; attempt++) {
@@ -105,13 +110,18 @@ for (const t of targets) {
       await page.evaluate(() => {
         const bar = document.querySelector('.notion-topbar')
         if (bar) bar.style.display = 'none'     // 상단 툴바(브레드크럼·가입 버튼)는 카드에 필요 없다
+        // 🔴 커버 이미지 제거 — 인물 사진이 든 페이지가 있고, 카드가 보여줄 것은 제목·속성·요약이다
+        document.querySelectorAll('.notion-page-cover, [class*="page-cover"], [class*="pageCover"]')
+          .forEach(el => { el.style.display = 'none' })
+        window.scrollTo(0, 0)
       })
-      await sleep(300)
+      await sleep(400)
       const file = OUT_DIR + '/' + t.id + '.jpg'
-      await page.screenshot({ path: file, type: 'jpeg', quality: 70 })
+      await page.screenshot({ path: file, type: 'jpeg', quality: 70,
+        clip: { x: 0, y: 0, width, height: Math.round(SHOT_H * width / SHOT_W) } })
       const bytes = statSync(file).size
-      if (bytes <= MAX_BYTES || width === 960) {
-        if (bytes > MAX_BYTES) fail('960폭 재캡처에도 ' + bytes + 'B로 상한 초과: ' + t.id)
+      if (bytes <= MAX_BYTES || width === 720) {
+        if (bytes > MAX_BYTES) fail('720폭 재캡처에도 ' + bytes + 'B로 상한 초과: ' + t.id)
         index[t.id] = {
           title: info.title || t.title || t.label,
           summary: info.summary, process: info.process,
@@ -121,7 +131,7 @@ for (const t of targets) {
         console.log(`OK  ${t.group} / ${t.label} — ${bytes}B @${width} · 요약 ${info.summary.length}자 · 체인 ${info.process.length}자`)
         break
       }
-      console.log(`... ${t.id} ${bytes}B > 상한 — 960폭 재캡처`)
+      console.log(`... ${t.id} ${bytes}B > 상한 — 720폭 재캡처`)
     }
   } finally {
     await page.close()
