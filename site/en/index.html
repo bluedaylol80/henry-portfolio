@@ -685,7 +685,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="line" style="--i:2"><span>ship the prototype.</span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">I find what to fix in metrics and user research and ship it. 19 years, 10 companies: 3 soft launches, 2 <span class="nb">launch-to-sunset</span> runs, business PM for monetization and contracts.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">I use metrics and user research to find what needs fixing, set the direction, and ship. 19 years, 10 companies: 3 soft launches, 2 <span class="nb">launch-to-sunset</span> runs, and business PM.</p>
 
       <ul class="hero-keys" data-reveal data-gate="ready" style="--rd:700ms" aria-label="Core strengths">
         <li>Metrics- and VOC-led direction</li>
@@ -886,7 +886,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">Dalcomsoft</h3>
           <p class="row-note row-note--mobile-hide">SuperStar series reshaped 11 → 7 (K-pop IP)</p>
           <p class="row-sub">Team Lead, Live Game Design · <span class="nb">2024.10 – 2026.07</span></p>
-          <p class="row-impact">Reshaped 11 titles to 7: retired 5, launched SSWO, and automated SKUs for the 7 with GAS</p>
+          <p class="row-impact">Reshaped 11 titles to 7: retired 5, launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
@@ -1614,7 +1614,7 @@ const WORKS = {
     s:[['11→7','Portfolio reshaped']],
     r:[['Live portfolio','Audited the 11 projects I inherited and reshaped the portfolio: retired 5 services, launched SSWO, and rebuilt the operating model for the remaining 7'],
        ['User research','Satisfaction survey across 6 titles in Korean, English and Japanese — turned user needs and pain points into product improvement tasks'],
-       ['2026 product direction','Proposed an H1 direction from survey findings — stronger collection, display and community features; webview events returned by user demand.'],
+       ['2026 product direction','Proposed an H1 product direction based on survey findings — stronger collection, display and community features; reintroduced webview events requested by users.'],
        ['Prototype','Decoration event design and wireframe · SuperStar JYP Nation 10th anniversary webview prototype · pre-registration page draft — ideas validated as working screens with AI'],
        ['New systems & products','Analyzed the live state to propose new systems, products and events · drove minigames and webview events from design → prototype → implementation · reworked the build for a China license'],
        ['Development & milestones','As director, owned dev scope · priorities · schedule · milestones · collaboration'],
@@ -1776,7 +1776,17 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   }
   /* i18n-region: evidence */
   const EVIDENCE_BASE = '../evidence/';
-  function clip(t, max){ return t.length > max ? t.slice(0, max - 1) + '…' : t; }
+  /* EN은 단어 중간에서 끊으면 "progre…"처럼 읽힌다 — 마지막 공백 경계에서 자른다.
+     KO는 어절 사이에 공백이 드물어 글자 수 그대로 자르는 편이 덜 잘린다. */
+  function clip(t, max){
+    if (t.length <= max) return t;
+    let cut = t.slice(0, max - 1);
+    if (EV_EN){
+      const at = cut.lastIndexOf(' ');
+      if (at > max * 0.6) cut = cut.slice(0, at);
+    }
+    return cut.replace(/[\s·→,;:]+$/, '') + '…';
+  }
   /* EN 페이지에서는 index.json의 en 필드로 그린다(없으면 KO 폴백).
      이미지·링크는 언어와 무관하게 같은 것을 쓴다 — 캡처는 한국어 Notion 화면이다. */
   const EV_EN = document.documentElement.lang === 'en';
