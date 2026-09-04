@@ -9,8 +9,12 @@
  * 출력: site/evidence/<id>.jpg (820x512 JPEG q70, ≤60KB) · site/evidence/index.json
  *
  * 폭 820 = Notion 본문 열이 화면을 꽉 채우는 폭이다(1200이면 좌우 여백이 카드의 3분의 1을 먹는다).
- * 페이지 커버 이미지는 숨긴다 — 포스트모템 커버처럼 인물 사진이 들어간 페이지가 있고,
- * 카드가 보여줄 것은 제목·속성·요약이지 표지가 아니다.
+ *
+ * 🔴 커버 제거는 클래스 선택자로 하지 않는다 — `.notion-page-cover` 류가 안 먹어서
+ *    포스트모템 페이지에 연단 인물 사진이 그대로 실렸다(본부장 09-05 지적).
+ *    대신 (a) 제목보다 위에 있는 이미지성 요소를 클래스와 무관하게 전부 숨기고,
+ *    (b) 크롭 기준을 좌표 0이 아니라 **제목 요소**로 잡는다 — clip.y = 제목top - 72.
+ *    커버가 있든 없든 제목·속성·💡 요약이 프레임에 들어온다.
  *
  * 🔴 금지 id 3건(2c099a8d·36359de7·1f999a8d)은 입력 JSON에 애초에 없다 — 여기서도 하드 차단한다.
  * 🟡 본문 미렌더는 무음으로 넘기지 않는다(exit 1). 재실행하면 같은 결과가 나온다.
@@ -107,18 +111,46 @@ for (const t of targets) {
         }
       }, LABELS)
       if (!info.blocks) fail('본문이 렌더되지 않았다: ' + t.id + ' (' + t.label + ')')
-      await page.evaluate(() => {
+      /* 제목 기준 크롭 — 커버가 있든 없든 제목·속성·요약이 프레임에 들어오게 한다.
+         반환값 top 은 페이지(문서) 좌표라 그대로 screenshot clip 에 넣을 수 있다. */
+      const clipTop = await page.evaluate(() => {
         const bar = document.querySelector('.notion-topbar')
         if (bar) bar.style.display = 'none'     // 상단 툴바(브레드크럼·가입 버튼)는 카드에 필요 없다
-        // 🔴 커버 이미지 제거 — 인물 사진이 든 페이지가 있고, 카드가 보여줄 것은 제목·속성·요약이다
-        document.querySelectorAll('.notion-page-cover, [class*="page-cover"], [class*="pageCover"]')
-          .forEach(el => { el.style.display = 'none' })
-        window.scrollTo(0, 0)
+        const findTitle = () => {
+          const h1 = document.querySelector('.notion-page-block h1, .notion-title, h1')
+          if (h1 && h1.getBoundingClientRect().height) return h1
+          const want = (document.title || '').replace(/\s*\|\s*Notion\s*$/, '').trim()
+          if (!want) return null
+          return [...document.querySelectorAll('div,span,h1,h2')]
+            .find(e => e.children.length === 0 && e.textContent.trim() === want) || null
+        }
+        const title = findTitle()
+        if (!title) return null
+        // 제목이 화면 위쪽(72px)에 오게 스크롤 — Notion은 window가 아니라 내부 스크롤러를 쓴다.
+        // scrollIntoView 로 컨테이너를 가리지 않고 옮긴 뒤, 그 스크롤러를 72px 되감아 여백을 남긴다.
+        title.scrollIntoView({ block: 'start' })
+        let sc = title.parentElement
+        while (sc && sc.scrollHeight <= sc.clientHeight + 1) sc = sc.parentElement
+        if (sc) sc.scrollTop = Math.max(0, sc.scrollTop - 72)
+        else window.scrollBy(0, -72)
+        const tTop = title.getBoundingClientRect().top
+        // 🔴 클래스 이름에 기대지 않는다 — 제목보다 위에 있는 이미지성 요소는 전부 커버로 본다.
+        for (const el of document.querySelectorAll('img, div, span, figure')) {
+          const r = el.getBoundingClientRect()
+          if (!r.height || r.bottom > tTop) continue
+          const isImg = el.tagName === 'IMG' ||
+            getComputedStyle(el).backgroundImage.includes('url(')
+          if (isImg) el.style.visibility = 'hidden'
+        }
+        // 되감기가 먹었으면 tTop 이 이미 72 근처다 — 남은 오차만 clip 으로 보정한다.
+        const top = title.getBoundingClientRect().top + (window.scrollY || 0)
+        return Math.max(0, Math.round(top - 72))
       })
+      if (clipTop === null) fail('제목 요소를 찾지 못했다: ' + t.id + ' (' + t.label + ')')
       await sleep(400)
       const file = OUT_DIR + '/' + t.id + '.jpg'
       await page.screenshot({ path: file, type: 'jpeg', quality: 70,
-        clip: { x: 0, y: 0, width, height: Math.round(SHOT_H * width / SHOT_W) } })
+        clip: { x: 0, y: clipTop, width, height: Math.round(SHOT_H * width / SHOT_W) } })
       const bytes = statSync(file).size
       if (bytes <= MAX_BYTES || width === 720) {
         if (bytes > MAX_BYTES) fail('720폭 재캡처에도 ' + bytes + 'B로 상한 초과: ' + t.id)
