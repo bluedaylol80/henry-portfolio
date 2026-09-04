@@ -245,8 +245,16 @@ img{display:block}
 .hero-status .right{display:inline-flex;align-items:center;gap:.5rem}
 
 /* ---------- band ---------- */
-.band ul{display:flex;flex-direction:column;gap:.75rem;padding-block:2.5rem}
+.band-eb{padding-top:2.5rem}
+.band ul{display:flex;flex-direction:column;gap:.75rem;padding-block:1rem 2.5rem}
 @media (min-width:640px){.band ul{flex-direction:row;gap:1rem}}
+/* 390에서는 캡슐 4개가 나란히 서서 버튼처럼 읽힌다(Codex R2) —
+   화살표 캡슐을 접고 캡슐 사이에 작은 화살표만 남겨 순서로 읽히게 한다. 데스크톱은 그대로. */
+@media (max-width:639.98px){
+  .band li:nth-child(3){display:none}
+  .band li:not(:last-child)::after{content:"↓";display:block;margin-top:.75rem;text-align:center;
+    font-size:1rem;line-height:1;color:rgba(17,17,17,.4)}
+}
 .band li{flex:1}
 .band .tile{display:grid;place-items:center;height:6rem;border-radius:var(--r-pill);font-size:1.5rem;font-weight:500;letter-spacing:-.01em;
   transition:transform .38s var(--e-hover)}
@@ -283,16 +291,16 @@ img{display:block}
   opacity:0;transition:opacity .7s var(--e-soft)}
 .card.has-shot .card-shot{opacity:1}
 .card.has-shot .card-wm{color:rgba(255,255,255,.2)}
-.card-shot::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(10,10,10,.5) 0%,rgba(10,10,10,.84) 56%,rgba(10,10,10,.95) 100%)}
+.card-shot::after{content:"";position:absolute;inset:0;   /* R2 2R: 대비 부족 → .5/.84/.95 → .62/.9/.98 */
+  background:linear-gradient(180deg,rgba(10,10,10,.62) 0%,rgba(10,10,10,.9) 56%,rgba(10,10,10,.98) 100%)}
 .card-meta,.card-wm,.card-bot{position:relative;z-index:1}
-.card-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.66)}
+.card-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.85)}  /* 흰 사진 최악조건 4.62:1 (AA) */
 .card-wm{flex:1;display:grid;place-items:center;padding-block:1.5rem 2.25rem;pointer-events:none;user-select:none;
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
 .card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
 @media (min-width:640px){.card-bot h3{font-size:1.875rem}}
-.card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.55)}
+.card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.72)}
 .card-tags{margin-top:1.25rem;display:flex;flex-wrap:wrap;gap:.5rem}
 .card-rights{margin-top:1rem;font-size:.6875rem;line-height:1.5;color:rgba(255,255,255,.5)}  /* R2 감리: .34=3:1 미달 → .5=4.7:1 */
 /* 앞면 외부 링크 — 카드 전체 클릭 영역(.card-open::after)보다 위로 올려야 상세창에 먹히지 않는다.
@@ -365,10 +373,14 @@ img{display:block}
 .wdlg-meta{padding-right:3rem;font-size:.75rem;letter-spacing:.02em;color:rgba(17,17,17,.55)}
 .wdlg-t{margin-top:.5rem;font-size:1.75rem;font-weight:500;letter-spacing:-.015em}
 @media (min-width:640px){.wdlg-t{font-size:2rem}}
-.wdlg-st{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:1.25rem 2.5rem}
-.wdlg-st div{display:flex;flex-direction:column;gap:.375rem}
-.wdlg-st b{font-size:1.75rem;font-weight:600;letter-spacing:-.02em;line-height:1}
-.wdlg-st span{font-size:.8125rem;color:rgba(17,17,17,.55)}
+/* 390에서 수치가 세로로 쌓이면 근거 카드가 첫 화면 밖으로 밀린다(Codex R2) — 3열 컴팩트 그리드로 접는다. */
+.wdlg-st{margin-top:1.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.875rem .75rem}
+@media (min-width:640px){.wdlg-st{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:1.25rem 2.5rem}}
+.wdlg-st div{display:flex;flex-direction:column;gap:.3rem;min-width:0}
+.wdlg-st b{font-size:1.375rem;font-weight:600;letter-spacing:-.02em;line-height:1}
+@media (min-width:640px){.wdlg-st b{font-size:1.75rem}}
+.wdlg-st span{font-size:.75rem;line-height:1.35;color:rgba(17,17,17,.55)}
+@media (min-width:640px){.wdlg-st span{font-size:.8125rem}}
 .wdlg-rows{margin-top:2rem;border-top:1px solid var(--line)}
 .wdlg-rows>div{display:flex;flex-direction:column;gap:.375rem;border-bottom:1px solid var(--line);padding-block:1rem}
 .wdlg-rows>div:last-child{border-bottom:0;padding-bottom:0}
@@ -707,7 +719,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 </section>
 
 <!-- ================= BAND ================= -->
-<section class="sec band" data-i18n-attr="aria-label" aria-label="라이브 서비스 사이클">
+<section class="sec band" aria-labelledby="bandLbl">
+  <div class="shell px"><p class="eyebrow band-eb" id="bandLbl" data-reveal data-i18n="라이브-서비스-사이클">라이브 서비스 사이클</p></div>
   <ul class="shell px">
     <li data-reveal style="--rd:0ms;--ry:28px"><div class="tile tile--light">Launch</div></li>
     <li data-reveal style="--rd:120ms;--ry:28px"><div class="tile tile--accent">Operate</div></li>
