@@ -395,14 +395,40 @@ img{display:block}
 .wdlg-src a .ic{font-size:.75em;opacity:.6}
 .wdlg-src a:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg)}
 @media (hover:hover) and (pointer:fine){.wdlg-src a:hover{border-color:rgba(17,17,17,.5);color:var(--fg)}}
+/* 근거 카드 — 칩 대신 Notion 페이지 상단 캡처를 보여준다(본부장 09-04: "Notion으로 가는 구조").
+   index.json 로드 실패(파일 프로토콜·오프라인)면 위의 칩 목록이 그대로 남는다. */
+.wdlg-src .ev-grid{margin-top:.875rem;display:grid;grid-template-columns:1fr;gap:.75rem}
+@media (min-width:640px){.wdlg-src .ev-grid{grid-template-columns:1fr 1fr}}
+/* 🔴 같은 컨테이너의 칩 규칙 `.wdlg-src a`(0,1,1)가 `.ev-card`(0,1,0)를 이긴다 —
+   캡슐 라운드·인라인 패딩이 카드에 걸려 타원으로 그려졌다. 카드 규칙도 `.wdlg-src`로 받아야 한다. */
+.wdlg-src .ev-card{display:flex;flex-direction:column;gap:0;padding:0;border:1px solid var(--line);
+  border-radius:var(--r-card-sm);overflow:hidden;background:var(--bg);color:var(--fg);
+  transition:border-color .3s var(--e-soft),box-shadow .3s var(--e-soft),transform .38s var(--e-soft)}
+@media (hover:hover) and (pointer:fine){
+  .wdlg-src .ev-card:hover{border-color:rgba(17,17,17,.3);box-shadow:0 12px 30px rgba(17,17,17,.12);transform:translateY(-2px)}
+}
+.wdlg-src .ev-card:focus-visible{border-color:rgba(17,17,17,.3);box-shadow:0 12px 30px rgba(17,17,17,.12);
+  outline:2px solid var(--fg);outline-offset:3px}
+.ev-thumb{display:block;aspect-ratio:16/10;overflow:hidden;background:var(--surface);border-bottom:1px solid var(--line)}
+.ev-thumb img{display:block;width:100%;height:100%;object-fit:cover;object-position:top center}
+.ev-body{display:flex;flex-direction:column;gap:.3rem;padding:.875rem 1rem 1rem}
+.ev-t{font-size:.875rem;font-weight:600;line-height:1.35}
+.ev-s{font-size:.8125rem;line-height:1.5;color:rgba(17,17,17,.62)}
+.ev-p{font-size:.75rem;line-height:1.45;color:rgba(17,17,17,.45)}
+.ev-go{margin-top:.375rem;align-self:flex-end;display:inline-flex;align-items:center;gap:.3rem;
+  font-size:.75rem;color:rgba(17,17,17,.6)}
+.wdlg-src .ev-card .ic{font-size:.8em;opacity:.6}
+@media (prefers-reduced-motion:reduce){.wdlg-src .ev-card{transition:none}.wdlg-src .ev-card:hover{transform:none}}
 /* #career 행 근거 링크 — 카드가 없는 회사가 여기서 근거를 보여준다. 모바일에서도 보인다. */
-.row-links{display:flex;flex-wrap:wrap;gap:.25rem .875rem;font-size:.8125rem}
-.row-links a{display:inline-flex;align-items:center;gap:.3rem;color:rgba(17,17,17,.6);
-  text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(17,17,17,.22);
-  transition:color .3s var(--e-soft),text-decoration-color .3s var(--e-soft)}
-.row-links a .ic{font-size:.7em;opacity:.55}
-.row-links a:focus-visible{color:var(--fg);text-decoration-color:rgba(17,17,17,.55);outline-offset:6px;border-radius:4px}
-@media (hover:hover) and (pointer:fine){.row-links a:hover{color:var(--fg);text-decoration-color:rgba(17,17,17,.55)}}
+.row-evb{font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,17,17,.42)}
+.row-links{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.8125rem}
+/* 밑줄 텍스트로는 링크인지 안 읽힌다(본부장 09-04) — 다이얼로그 근거 칩과 같은 테두리 칩으로 통일. */
+.row-links a{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:.35rem .75rem;line-height:1.2;color:rgba(17,17,17,.72);
+  transition:border-color .3s var(--e-soft),color .3s var(--e-soft),background-color .3s var(--e-soft)}
+.row-links a .ic{font-size:.75em;opacity:.6}
+.row-links a:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg);outline-offset:3px;border-radius:var(--r-pill)}
+@media (hover:hover) and (pointer:fine){.row-links a:hover{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg)}}
 @keyframes wdlgIn{from{opacity:0;transform:translateY(14px) scale(.985)}}
 @keyframes wdlgBd{from{opacity:0}}
 .wdlg[open] .wdlg-in{animation:wdlgIn .45s var(--e-rise)}
@@ -464,8 +490,9 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 .row-impact{font-size:.925rem;font-weight:500;line-height:1.5;color:var(--fg)}
 @media (min-width:1024px){
   .row-body{flex-wrap:wrap}
-  .row-impact,.row-links{width:100%}
+  .row-impact,.row-links,.row-evb{width:100%}
   .row-impact{margin-top:.5rem}
+  .row-evb{margin-top:.75rem}
 }
 /* 역량: 회사 목록은 메타 — 세로 배치일 때 본문과 붙어 한 덩어리로 읽히지 않게 */
 #skills .row-sub{font-size:.875rem;color:rgba(17,17,17,.62)}
@@ -822,6 +849,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide" data-i18n="나이트워커-슈퍼피플">나이트워커, 슈퍼피플</p>
           <p class="row-sub" data-i18n="사업팀-파트장-2022-02">사업팀 파트장 · 2022.02 – 2024.04</p>
           <p class="row-impact" data-i18n="나이트워커-신규-33만-DAU">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="wonderpeople"></p>
         </div>
       </div></li>
@@ -832,6 +860,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide" data-i18n="마스터-오브-나이츠">마스터 오브 나이츠</p>
           <p class="row-sub" data-i18n="스노우볼-스튜디오-기획-팀장">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
           <p class="row-impact" data-i18n="신규-시스템-10종-개편">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="neowiz"></p>
         </div>
       </div></li>
@@ -860,6 +889,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide" data-i18n="린-런닝맨-히어로즈-드래곤네스트2">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
           <p class="row-sub" data-i18n="모바일사업실-팀장-2015-07">모바일사업실 팀장 · 2015.07 – 2019.10</p>
           <p class="row-impact" data-i18n="린-매출-183억-양대">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="nexon"></p>
         </div>
       </div></li>
@@ -870,6 +900,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide">KON</p>
           <p class="row-sub" data-i18n="KON-스튜디오-사업PM-2015">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
           <p class="row-impact" data-i18n="KON-튜토리얼-플로우-기획">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="netmarble"></p>
         </div>
       </div></li>
@@ -880,6 +911,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-note row-note--mobile-hide" data-i18n="NTD-라키온2-그랑에이지">NTD · 라키온2 · 그랑에이지</p>
           <p class="row-sub" data-i18n="전략사업팀-사업PM-2011-07">전략사업팀 사업PM · 2011.07 – 2015.02</p>
           <p class="row-impact" data-i18n="NTD-사내테스트-2-FGI">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="softnyx"></p>
         </div>
       </div></li>
@@ -1652,20 +1684,92 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     svg.append(use); badge.append(svg); inner.append(sr, badge); a.append(inner);
     wL.replaceChildren(a);
   }
-  /* 근거·과정 링크(선택 필드 n) — 카드당 최대 4개. 새 탭 + rel=noopener + 외부 아이콘.
-     href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다. */
-  function fillNotion(n){
-    if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
-    const h = document.createElement('h4');
-    h.textContent = '근거·과정 보기 (Notion)';
+  /* 근거·과정(선택 필드 n) — 카드당 최대 4개. 새 탭 + rel=noopener noreferrer + 외부 아이콘.
+     href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
+     기본은 Notion 페이지 상단 캡처를 쓴 근거 카드이고, evidence/index.json을 못 받으면 칩 목록이 남는다
+     (file:// 로 열었을 때가 그 경우다 — 판정 프로브가 여기에 해당한다). */
+  let evCache = null, evTried = false, dlgToken = 0;
+  function loadEvidence(){
+    if (evTried) return Promise.resolve(evCache);
+    evTried = true;
+    /* file:// 은 CORS로 무조건 막힌다 — 실패시키면 콘솔에 오류만 남으므로 아예 부르지 않는다(칩 폴백). */
+    if (typeof fetch !== 'function' || location.protocol === 'file:') return Promise.resolve(null);
+    return fetch(EVIDENCE_BASE + 'index.json')
+      .then(r => r.ok ? r.json() : null)
+      .then(j => { evCache = j; return j; })
+      .catch(() => null);
+  }
+  function chipList(n){
     const ul = document.createElement('ul');
     ul.append(...n.slice(0, 4).map(item => {
       const li = document.createElement('li');
       li.append(notionLink(item.t, item.id));
       return li;
     }));
-    wN.replaceChildren(h, ul);
+    return ul;
+  }
+  /* i18n-region: evidence */
+  const EVIDENCE_BASE = 'evidence/';
+  function clip(t, max){ return t.length > max ? t.slice(0, max - 1) + '…' : t; }
+  function evCard(item, meta){
+    if (!meta) return null;
+    const a = document.createElement('a');
+    a.className = 'ev-card';
+    a.href = NOTION_BASE + item.id;
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
+    const title = meta.title || item.t;
+    a.setAttribute('aria-label', title + ' — Notion에서 열기 (새 창)');
+    const thumb = document.createElement('span');
+    thumb.className = 'ev-thumb';
+    const img = document.createElement('img');
+    img.src = EVIDENCE_BASE + meta.img;   // 상세창을 열 때 처음 만든다 — 그 전에는 요청이 없다
+    img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+    thumb.append(img);
+    const body = document.createElement('span');
+    body.className = 'ev-body';
+    const t = document.createElement('span');
+    t.className = 'ev-t'; t.textContent = title;
+    body.append(t);
+    if (meta.summary){
+      const sm = document.createElement('span');
+      sm.className = 'ev-s'; sm.textContent = clip(meta.summary, 80);
+      body.append(sm);
+    }
+    if (meta.process){
+      const pr = document.createElement('span');
+      pr.className = 'ev-p'; pr.textContent = clip(meta.process, 90);
+      body.append(pr);
+    }
+    const go = document.createElement('span');
+    go.className = 'ev-go';
+    go.append('Notion에서 보기');
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'ic'); svg.setAttribute('aria-hidden', 'true');
+    const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+    use.setAttribute('href', '#i-arrup');
+    svg.append(use); go.append(svg);
+    body.append(go);
+    a.append(thumb, body);
+    return a;
+  }
+  /* /i18n-region */
+  function fillNotion(n){
+    const token = ++dlgToken;
+    if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
+    const h = document.createElement('h4');
+    h.textContent = '근거·과정 보기 (Notion)';
+    wN.replaceChildren(h, chipList(n));
     wN.hidden = false;
+    loadEvidence().then(ev => {
+      if (!ev || token !== dlgToken) return;   // 다른 카드를 여는 사이 늦게 도착한 응답은 버린다
+      const want = n.slice(0, 4);
+      const cards = want.map(item => evCard(item, ev[item.id])).filter(Boolean);
+      if (cards.length !== want.length) return;   // 하나라도 근거가 없으면 칩을 그대로 둔다
+      const grid = document.createElement('div');
+      grid.className = 'ev-grid';
+      grid.append(...cards);
+      wN.replaceChildren(h, grid);
+    });
   }
   function openWork(key, btn){
     const w = WORKS[key];

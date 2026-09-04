@@ -188,7 +188,8 @@
     "Gmail로-쓰기": "Gmail로 쓰기",
     "이력서": "이력서",
     "Notion-이력-및-경력": "Notion 이력 및 경력 기술서",
-    "Notion에서-열기": "Notion에서 열기"
+    "Notion에서-열기": "Notion에서 열기",
+    "근거-과정-Notion": "근거·과정 (Notion)"
   },
   "strings": {
     "본문-바로가기": "Skip to content",
@@ -372,7 +373,8 @@
     "Gmail로-쓰기": "Write in Gmail",
     "이력서": "Resume",
     "Notion-이력-및-경력": "Notion resume & career history",
-    "Notion에서-열기": "Open in Notion"
+    "Notion에서-열기": "Open in Notion",
+    "근거-과정-Notion": "Evidence (Notion, KO)"
   },
   "attrs": {
     "맨 위로": "Back to top",
@@ -490,6 +492,8 @@
     "우리집 가계부 폰 화면 시연": "Our Household Budget phone demo",
     "가상 데이터로 촬영한 시연 — 실제 가계 수치가 아닙니다.": "Demo recorded with dummy data — not real household figures.",
     " (새 창에서 열림)": " (opens in a new window)",
-    "Focus Group Interview & Test": "Focus Group Interview & Test (KO)"
+    "Focus Group Interview & Test": "Focus Group Interview & Test (KO)",
+    " — Notion에서 열기 (새 창)": " — open in Notion (new window)",
+    "Notion에서 보기": "Open in Notion (KO)"
   }
 }

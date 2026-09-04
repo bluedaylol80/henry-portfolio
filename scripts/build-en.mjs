@@ -166,6 +166,8 @@ function translateRegion(region) {
 for (const start of ['const CAREER_LINKS = {', 'const WORKS = {']) {
   html = replaceInRegion(html, start, NL + '};', translateRegion)
 }
+// 근거 카드 생성기는 블록 스코프가 아니라 주석 마커로 범위를 못 박는다
+html = replaceInRegion(html, '/* i18n-region: evidence */', '/* /i18n-region */', translateRegion)
 // 블록 밖 단독 라인: 등장 횟수를 못 박고 그 자리에서만 치환한다
 for (const [line, times] of [["h.textContent = '근거·과정 보기 (Notion)';", 1],
                              ["showToast('이메일 주소를 복사했습니다 — bluedaylol80@gmail.com');", 1],
@@ -181,12 +183,12 @@ for (const [line, times] of [["h.textContent = '근거·과정 보기 (Notion)';
 
 /* ---------- 4. 상대 경로 → ../ (en/ 하위로 한 단계 들어간다) ---------- */
 for (const attr of ['href="', 'src="', 'content="']) {
-  for (const p of ['works/', 'media/', 'demo/', 'og.png', 'favicon']) {
+  for (const p of ['works/', 'media/', 'demo/', 'evidence/', 'og.png', 'favicon']) {
     html = html.split(attr + p).join(attr + '../' + p)
   }
 }
 for (const q of ["'", '"']) {
-  for (const p of ['works/', 'media/']) html = html.split(q + p).join(q + '../' + p)
+  for (const p of ['works/', 'media/', 'evidence/']) html = html.split(q + p).join(q + '../' + p)
 }
 html = html.split('../../').join('../')
 
