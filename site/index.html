@@ -461,7 +461,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 @media (min-width:1024px){.row-note--mobile-hide{display:block}}
 /* 회사별 임팩트 1줄 + 근거 링크 — 모바일에서도 보인다(row-note 숨김과 다르다).
    ≥1024에서 row-body가 가로 3칸이 되므로 wrap + 100%로 아랫줄에 내린다. */
-.row-impact{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.72)}
+.row-impact{font-size:.925rem;font-weight:500;line-height:1.5;color:var(--fg)}
 @media (min-width:1024px){
   .row-body{flex-wrap:wrap}
   .row-impact,.row-links{width:100%}
@@ -612,7 +612,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="line" style="--i:2"><span data-i18n="프로토타입으로-실행합니다">프로토타입으로 실행합니다.</span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms" data-i18n="지표와-사용자-조사로-근거를">지표와 사용자 조사로 근거를 확인하고, 그에 맞는 개선 방향을 잡아 실행합니다. 19년·10개사에서 소프트런칭 3건(린·카오스크로니클·Shadow Seven)과 런칭부터 서비스 종료까지 전 주기 2건을 맡았고, BM·정산·계약과 조직 셋업·채용까지 사업 PM으로 다뤘습니다. AI 프로토타이핑과 GAS 자동화로 아이디어와 반복 업무를 작동하는 화면으로 옮깁니다.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms" data-i18n="지표와-사용자-조사로-근거를">지표와 사용자 조사로 근거를 확인하고, 그에 맞는 개선 방향을 잡아 실행합니다. 19년·10개사 — 소프트런칭 3건, 런칭부터 종료까지 전 주기 2건, BM·계약·조직 셋업까지 사업 PM으로 맡았습니다.</p>
 
       <ul class="hero-keys" data-reveal data-gate="ready" style="--rd:700ms" data-i18n-attr="aria-label" aria-label="핵심 역량">
         <li data-i18n="지표-VOC-기반-방향">지표·VOC 기반 방향</li>
@@ -1106,11 +1106,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <p class="wdlg-meta" id="wdlgM"></p>
     <h3 class="wdlg-t" id="wdlgT"></h3>
     <div class="wdlg-st" id="wdlgS"></div>
+    <!-- 근거 링크는 상세 행보다 위 — 첫 화면에서 근거가 보여야 한다 -->
+    <div class="wdlg-src" id="wdlgN" hidden></div>
     <!-- 외부 링크는 시연 영상 위에 둔다 — 아래에 두면 긴 패널에서 접히는 순간 보이지 않는다 -->
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
     <dl class="wdlg-rows" id="wdlgR"></dl>
-    <div class="wdlg-src" id="wdlgN" hidden></div>
   </div>
 </dialog>
 
