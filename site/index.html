@@ -198,11 +198,13 @@ img{display:block}
 @media (min-width:640px){.h1{font-size:3rem}}
 @media (min-width:768px){.h1{font-size:3.75rem}}
 .hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
+@media (max-width:480px){.hero-sub{font-size:.9375rem;line-height:1.58}}
 @media (min-width:640px){.hero-sub{font-size:1.125rem}}
 /* 핵심 역량 칩 — 텍스트 칩이지 링크가 아니다. 390에서 줄바꿈 허용, hcard와 겹치지 않는다. */
 .hero-keys{display:flex;flex-wrap:wrap;gap:.5rem;max-width:38rem}
 .hero-keys li{display:inline-flex;border:1px solid rgba(17,17,17,.16);border-radius:var(--r-pill);
   padding:.4rem .8rem;font-size:.8125rem;line-height:1.2;color:rgba(17,17,17,.72)}
+@media (max-width:480px){.hero-keys{gap:.375rem}.hero-keys li{padding:.3rem .65rem;font-size:.75rem}}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
 @media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end}}
@@ -234,10 +236,10 @@ img{display:block}
 
 .partners{width:100%;max-width:24rem}
 @media (min-width:1024px){.partners{width:20rem}}
-.partners-lb{margin-bottom:.75rem;font-size:.75rem;font-weight:500;color:rgba(17,17,17,.45)}
+.partners-lb{margin-bottom:.75rem;font-size:.75rem;font-weight:500;color:rgba(17,17,17,.62)}
 @media (min-width:1024px){.partners-lb{text-align:right}}
 .partners ul{display:grid;grid-template-columns:repeat(2,1fr);column-gap:1rem;row-gap:.75rem}
-.partners li>span{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:rgba(17,17,17,.7);opacity:.75;
+.partners li>span{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:rgba(17,17,17,.68);
   transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
 .partners .ic{font-size:.875rem;color:rgba(17,17,17,.4)}
 @media (hover:hover) and (pointer:fine){.partners li:hover>span{transform:translateY(-2px);opacity:1}}
@@ -257,9 +259,12 @@ img{display:block}
 @media (max-width:639.98px){
   .band li:nth-child(3){display:none}
   .band li:not(:last-child)::after{content:"↓";display:block;margin-top:.75rem;text-align:center;
-    font-size:1rem;line-height:1;color:rgba(17,17,17,.4)}
+    font-size:1rem;line-height:1;color:rgba(17,17,17,.55)}
+  .tile--ghost{background:rgba(241,240,238,.75);color:rgba(17,17,17,.62)}
 }
 .band li{flex:1}
+/* 데스크톱 3번째 타일은 단계가 아니라 연결자다 — 폭을 줄여 단계 4개로 읽히지 않게 한다. */
+@media (min-width:640px){.band li:nth-child(3){flex:0 0 4.5rem}}
 .band .tile{display:grid;place-items:center;height:6rem;border-radius:var(--r-pill);font-size:1.5rem;font-weight:500;letter-spacing:-.01em;
   transition:transform .38s var(--e-hover)}
 @media (min-width:640px){.band .tile{height:10rem;font-size:2.25rem}}
@@ -294,14 +299,20 @@ img{display:block}
 .card-shot{position:absolute;inset:0;z-index:0;background-position:center;background-size:cover;
   opacity:0;transition:opacity .7s var(--e-soft)}
 .card.has-shot .card-shot{opacity:1}
-.card.has-shot .card-wm{color:rgba(255,255,255,.2)}
+.card.has-shot .card-wm{color:rgba(255,255,255,.34);text-shadow:0 2px 12px rgba(0,0,0,.35)}
 .card-shot::after{content:"";position:absolute;inset:0;   /* R2 2R: 대비 부족 → .5/.84/.95 → .62/.9/.98 */
   background:linear-gradient(180deg,rgba(10,10,10,.62) 0%,rgba(10,10,10,.9) 56%,rgba(10,10,10,.98) 100%)}
 .card-meta,.card-wm,.card-bot{position:relative;z-index:1}
 .card-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(255,255,255,.85)}  /* 흰 사진 최악조건 4.62:1 (AA) */
+/* --long = EN에서 두 단어가 되는 값(Shadow Seven "4 markets") — 접히면 카드 리듬이 깨진다.
+   한 줄로 묶고 모바일에서만 폰트를 줄여 카드 폭 안에 세운다.
+   nowrap을 .card-wm 전체에 걸면 "10th anniv."가 1fr 열을 넓혀 390 가로 스크롤이 생긴다(실측 +61px). */
+.nb{white-space:nowrap}
 .card-wm{flex:1;display:grid;place-items:center;padding-block:1.5rem 2.25rem;pointer-events:none;user-select:none;
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
+.card-wm--long{white-space:nowrap}
+@media (max-width:639.98px){.card-wm--long{font-size:clamp(3rem,15vw,4rem)}}
 .card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
 @media (min-width:640px){.card-bot h3{font-size:1.875rem}}
 .card-bot p{margin-top:.5rem;max-width:28rem;font-size:.875rem;line-height:1.55;color:rgba(255,255,255,.72)}
@@ -368,6 +379,12 @@ img{display:block}
   border-radius:var(--r-card);background:var(--bg);color:var(--fg);box-shadow:0 24px 60px rgba(17,17,17,.2)}
 .wdlg::backdrop{background:rgba(10,10,10,.55)}
 .wdlg-in{position:relative;overflow-y:auto;max-height:inherit;padding:2rem 1.5rem 2.25rem}
+/* 스크롤 힌트 — 아래에 더 있다는 표시. 끝까지 내리면 JS가 .at-end를 걸어 지운다. */
+.wdlg-in::after{content:"";display:block;position:sticky;bottom:0;height:24px;margin-top:-24px;
+  background:linear-gradient(to bottom,rgba(255,255,255,0),var(--bg));pointer-events:none;
+  transition:opacity .25s var(--e-soft)}
+.wdlg-in.at-end::after{opacity:0}
+@media (prefers-reduced-motion:reduce){.wdlg-in::after{transition:none}}
 @media (min-width:640px){.wdlg-in{padding:2.5rem}}
 .wdlg-x{position:absolute;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
   border-radius:var(--r-pill);background:var(--surface);font-size:1rem;
@@ -414,7 +431,11 @@ img{display:block}
 /* 근거 카드 — 칩 대신 Notion 페이지 상단 캡처를 보여준다(본부장 09-04: "Notion으로 가는 구조").
    index.json 로드 실패(파일 프로토콜·오프라인)면 위의 칩 목록이 그대로 남는다. */
 .wdlg-src .ev-grid{margin-top:.875rem;display:grid;grid-template-columns:1fr;gap:.75rem}
-@media (min-width:640px){.wdlg-src .ev-grid{grid-template-columns:1fr 1fr}}
+@media (min-width:640px){
+  .wdlg-src .ev-grid{grid-template-columns:1fr 1fr}
+  /* 홀수 개일 때 마지막 카드가 왼쪽에 혼자 남아 열이 기운다 — 가운데로 세운다. */
+  .wdlg-src .ev-grid .ev-card:last-child:nth-child(odd){grid-column:1/-1;max-width:50%;justify-self:center}
+}
 /* 🔴 같은 컨테이너의 칩 규칙 `.wdlg-src a`(0,1,1)가 `.ev-card`(0,1,0)를 이긴다 —
    캡슐 라운드·인라인 패딩이 카드에 걸려 타원으로 그려졌다. 카드 규칙도 `.wdlg-src`로 받아야 한다. */
 .wdlg-src .ev-card{display:flex;flex-direction:column;gap:0;padding:0;border:1px solid var(--line);
@@ -430,13 +451,14 @@ img{display:block}
 .ev-body{display:flex;flex-direction:column;gap:.3rem;padding:.875rem 1rem 1rem}
 .ev-t{font-size:.875rem;font-weight:600;line-height:1.35}
 .ev-s{font-size:.8125rem;line-height:1.5;color:rgba(17,17,17,.62)}
-.ev-p{font-size:.75rem;line-height:1.45;color:rgba(17,17,17,.45)}
+.ev-p{font-size:.75rem;line-height:1.45;color:rgba(17,17,17,.7)}
+@media (max-width:639.98px){.ev-p{font-size:.8125rem}}
 .ev-go{margin-top:.375rem;align-self:flex-end;display:inline-flex;align-items:center;gap:.3rem;
   font-size:.75rem;color:rgba(17,17,17,.6)}
 .wdlg-src .ev-card .ic{font-size:.8em;opacity:.6}
 @media (prefers-reduced-motion:reduce){.wdlg-src .ev-card{transition:none}.wdlg-src .ev-card:hover{transform:none}}
 /* #career 행 근거 링크 — 카드가 없는 회사가 여기서 근거를 보여준다. 모바일에서도 보인다. */
-.row-evb{font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,17,17,.42)}
+.row-evb{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(17,17,17,.62)}
 .row-links{display:flex;flex-wrap:wrap;gap:.5rem;font-size:.8125rem}
 /* 밑줄 텍스트로는 링크인지 안 읽힌다(본부장 09-04) — 다이얼로그 근거 칩과 같은 테두리 칩으로 통일. */
 .row-links a{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
@@ -819,7 +841,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <article class="card">
           <div class="card-shot" data-shot="nanakage" aria-hidden="true"></div>
           <div class="card-meta" data-i18n="넵튠-레전드-사업PM">넵튠 레전드 — 사업PM</div>
-          <div class="card-wm" aria-hidden="true" data-i18n="4개국">4개국</div>
+          <div class="card-wm card-wm--long" aria-hidden="true" data-i18n="4개국">4개국</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="nanakage" aria-haspopup="dialog">Shadow Seven<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p data-i18n="일본-저조-지표에-평점">일본 성적이 저조해 평점 관리 시스템을 추가했습니다. 구글 평점 일본 3.29 → 글로벌 4.4. 한국 · 일본 · 대만 · 미국 소프트런칭.</p>
@@ -863,7 +885,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="달콤소프트">달콤소프트</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="SuperStar-시리즈-11-7">SuperStar 시리즈 11→7 재편 (K-pop IP)</p>
-          <p class="row-sub" data-i18n="라이브기획팀-팀장-2024-10">라이브기획팀 팀장 · 2024.10 – 2026.07</p>
+          <p class="row-sub" data-i18n="라이브기획팀-팀장-2024-10">라이브기획팀 팀장 · <span class="nb">2024.10 – 2026.07</span></p>
           <p class="row-impact" data-i18n="11개-5개-종료-SSWO">11개 → 5개 종료·SSWO 론칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</p>
         </div>
       </div></li>
@@ -872,8 +894,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="원더피플-에이스톰">원더피플·에이스톰</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="나이트워커-슈퍼피플">나이트워커, 슈퍼피플</p>
-          <p class="row-sub" data-i18n="사업팀-파트장-2022-02">사업팀 파트장 · 2022.02 – 2024.04</p>
-          <p class="row-impact" data-i18n="나이트워커-신규-33만-DAU">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p>
+          <p class="row-sub" data-i18n="사업팀-파트장-2022-02">사업팀 파트장 · <span class="nb">2022.02 – 2024.04</span></p>
+          <p class="row-impact" data-i18n="나이트워커-신규-33만-DAU">나이트워커 <span class="nb">신규 33만+</span>·<span class="nb">DAU 6.3만</span>·<span class="nb">D+1 약 50%</span> / 슈퍼피플 중국 <span class="nb">신규 56만+</span></p>
           <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="wonderpeople"></p>
         </div>
@@ -883,7 +905,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="네오위즈">네오위즈</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="마스터-오브-나이츠">마스터 오브 나이츠</p>
-          <p class="row-sub" data-i18n="스노우볼-스튜디오-기획-팀장">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p>
+          <p class="row-sub" data-i18n="스노우볼-스튜디오-기획-팀장">스노우볼 스튜디오 기획 팀장 · <span class="nb">2021.02 – 2021.10</span></p>
           <p class="row-impact" data-i18n="신규-시스템-10종-개편">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</p>
           <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="neowiz"></p>
@@ -894,7 +916,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="스카이피플">스카이피플</h3>
           <p class="row-note row-note--mobile-hide">Five Stars</p>
-          <p class="row-sub" data-i18n="사업팀-팀장-2020-07">사업팀 팀장 · 2020.07 – 2021.02</p>
+          <p class="row-sub" data-i18n="사업팀-팀장-2020-07">사업팀 팀장 · <span class="nb">2020.07 – 2021.02</span></p>
           <p class="row-impact" data-i18n="사업-운영-조직-셋업부터">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 20만·신규 28만+·매출 24억</p>
         </div>
       </div></li>
@@ -903,7 +925,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="넵튠-레전드">넵튠 레전드</h3>
           <p class="row-note row-note--mobile-hide">Shadow Seven</p>
-          <p class="row-sub" data-i18n="스튜디오-사업PM-2019-10">스튜디오 사업PM · 2019.10 – 2020.04</p>
+          <p class="row-sub" data-i18n="스튜디오-사업PM-2019-10">스튜디오 사업PM · <span class="nb">2019.10 – 2020.04</span></p>
           <p class="row-impact" data-i18n="일본-저조-지표-평점">일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29→글로벌 4.4 · 4개국 소프트런칭</p>
         </div>
       </div></li>
@@ -912,7 +934,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="넥슨-코리아">넥슨 코리아</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="린-런닝맨-히어로즈-드래곤네스트2">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
-          <p class="row-sub" data-i18n="모바일사업실-팀장-2015-07">모바일사업실 팀장 · 2015.07 – 2019.10</p>
+          <p class="row-sub" data-i18n="모바일사업실-팀장-2015-07">모바일사업실 팀장 · <span class="nb">2015.07 – 2019.10</span></p>
           <p class="row-impact" data-i18n="린-매출-183억-양대">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p>
           <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="nexon"></p>
@@ -923,7 +945,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="넷마블-블루">넷마블 블루</h3>
           <p class="row-note row-note--mobile-hide">KON</p>
-          <p class="row-sub" data-i18n="KON-스튜디오-사업PM-2015">KON 스튜디오 사업PM · 2015.03 – 2015.07</p>
+          <p class="row-sub" data-i18n="KON-스튜디오-사업PM-2015">KON 스튜디오 사업PM · <span class="nb">2015.03 – 2015.07</span></p>
           <p class="row-impact" data-i18n="KON-튜토리얼-플로우-기획">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</p>
           <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="netmarble"></p>
@@ -934,7 +956,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="소프트닉스">소프트닉스</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="NTD-라키온2-그랑에이지">NTD · 라키온2 · 그랑에이지</p>
-          <p class="row-sub" data-i18n="전략사업팀-사업PM-2011-07">전략사업팀 사업PM · 2011.07 – 2015.02</p>
+          <p class="row-sub" data-i18n="전략사업팀-사업PM-2011-07">전략사업팀 사업PM · <span class="nb">2011.07 – 2015.02</span></p>
           <p class="row-impact" data-i18n="NTD-사내테스트-2-FGI">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p>
           <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
           <p class="row-links" data-links="softnyx"></p>
@@ -945,17 +967,17 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">NHN Service</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="Tera-웹운영-아틀란티카-R2">Tera 웹운영 · 아틀란티카 · R2</p>
-          <p class="row-sub" data-i18n="한게임운영실-파트장-2008-05">한게임운영실 파트장 · 2008.05 – 2011.07</p>
-          <p class="row-impact" data-i18n="Tera-웹운영-파트-관리">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</p>
+          <p class="row-sub" data-i18n="한게임운영실-파트장-2008-05">한게임운영실 파트장 · <span class="nb">2008.05 – 2011.07</span></p>
+          <p class="row-impact" data-i18n="Tera-웹운영-파트-관리">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, <span class="nb">아틀란티카·R2 라이브 운영</span></p>
         </div>
       </div></li>
-      <li data-reveal style="--rd:700ms;--ry:16px"><p class="row-foot" data-i18n="2007-10-2008-05">※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</p></li>
+      <li data-reveal style="--rd:700ms;--ry:16px"><p class="row-foot" data-i18n="2007-10-2008-05">※ <span class="nb">2007.10 – 2008.05</span> 학업 복학 (강남대학교 <span class="nb">컴퓨터공학, 2009 졸업</span>)</p></li>
       <li class="row-li" data-reveal style="--rd:760ms;--ry:24px"><div class="row">
         <span class="row-i">10</span>
         <div class="row-body">
           <h3 class="row-title" data-i18n="웹젠">웹젠</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="SUN-온라인">SUN 온라인</p>
-          <p class="row-sub" data-i18n="SUN-운영팀-2006-04">SUN 운영팀 · 2006.04 – 2007.10</p>
+          <p class="row-sub" data-i18n="SUN-운영팀-2006-04">SUN 운영팀 · <span class="nb">2006.04 – 2007.10</span></p>
           <p class="row-impact" data-i18n="SUN-온라인-런칭-라이브">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p>
         </div>
       </div></li>
@@ -1652,6 +1674,23 @@ const WORKS = {
         cap:'가상 데이터로 촬영한 시연 — 실제 가계 수치가 아닙니다.' },
     l:{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'라이트 체험판 열기' } }
 };
+/* 스크롤 힌트 — 패널이 끝까지 내려가면 하단 그라데이션을 지운다(CSS .at-end). */
+document.querySelectorAll('.wdlg-in').forEach(el => {
+  const sync = () => {
+    const atEnd = el.scrollHeight - el.clientHeight - el.scrollTop <= 2;
+    el.classList.toggle('at-end', atEnd);
+  };
+  el.addEventListener('scroll', sync, { passive: true });
+  el.addEventListener('load', sync, true);   // 썸네일이 늦게 뜨면 높이가 바뀐다(캡처 단계로 받는다)
+  addEventListener('resize', sync);
+  const dlg = el.closest('dialog') || el;
+  dlg.addEventListener('close', sync);
+  // 내용 교체(childList)와 dialog[open] 토글(attributes) 양쪽에서 다시 재야 한다 —
+  // 닫혀 있는 동안은 scrollHeight가 0이라 열리는 순간의 측정이 정본이다.
+  new MutationObserver(sync).observe(dlg, { attributes: true, childList: true, subtree: true });
+  sync();
+});
+
 const wdlg = document.getElementById('wdlg');
 if (wdlg && typeof wdlg.showModal === 'function'){
   const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
