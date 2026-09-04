@@ -1779,12 +1779,15 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   }
   /* i18n-region: evidence */
   const EVIDENCE_BASE = 'evidence/';
-  /* EN은 단어 중간에서 끊으면 "progre…"처럼 읽힌다 — 마지막 공백 경계에서 자른다.
+  /* 과정문은 "A → B → C" 단계 체인이다. EN은 마지막으로 완결된 단계 경계에서 끊는다 —
+     단어(또는 관사·전치사) 중간에서 끊으면 "map the…"처럼 읽힌다. 한 단계도 못 담으면 공백 경계로 물러선다.
      KO는 어절 사이에 공백이 드물어 글자 수 그대로 자르는 편이 덜 잘린다. */
   function clip(t, max){
     if (t.length <= max) return t;
     let cut = t.slice(0, max - 1);
     if (EV_EN){
+      const step = cut.lastIndexOf(' → ');
+      if (step > 0) return cut.slice(0, step) + ' → …';
       const at = cut.lastIndexOf(' ');
       if (at > max * 0.6) cut = cut.slice(0, at);
     }
