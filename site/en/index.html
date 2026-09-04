@@ -375,16 +375,18 @@ img{display:block}
   rgba(10,10,10,.74) 0%,rgba(10,10,10,.86) 46%,rgba(10,10,10,.95) 100%)}
 
 /* 성과 상세 다이얼로그 (네이티브 dialog — Esc·포커스 가둠은 브라우저가 처리) */
-.wdlg{border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
+.wdlg{position:relative;overflow:hidden;border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
   border-radius:var(--r-card);background:var(--bg);color:var(--fg);box-shadow:0 24px 60px rgba(17,17,17,.2)}
 .wdlg::backdrop{background:rgba(10,10,10,.55)}
-.wdlg-in{position:relative;overflow-y:auto;max-height:inherit;padding:2rem 1.5rem 2.25rem}
-/* 스크롤 힌트 — 아래에 더 있다는 표시. 끝까지 내리면 JS가 .at-end를 걸어 지운다. */
-.wdlg-in::after{content:"";display:block;position:sticky;bottom:0;height:24px;margin-top:-24px;
+.wdlg-in{position:relative;overflow-y:auto;max-height:inherit;padding:2rem 1.5rem 2rem}
+/* 스크롤 힌트 — 아래에 더 있다는 표시. 끝까지 내리면 JS가 .at-end를 걸어 지운다.
+   🔴 sticky ::after를 스크롤 콘텐츠 안에 두면 본문 중간에 흰 띠로 보이고 390에서 마지막 줄이
+   둥근 모서리에 잘린다(R4). 페이드는 스크롤 박스 밖(다이얼로그 래퍼)에 절대배치한다. */
+.wdlg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;
   background:linear-gradient(to bottom,rgba(255,255,255,0),var(--bg));pointer-events:none;
   transition:opacity .25s var(--e-soft)}
-.wdlg-in.at-end::after{opacity:0}
-@media (prefers-reduced-motion:reduce){.wdlg-in::after{transition:none}}
+.wdlg.at-end::after{opacity:0}
+@media (prefers-reduced-motion:reduce){.wdlg::after{transition:none}}
 @media (min-width:640px){.wdlg-in{padding:2.5rem}}
 .wdlg-x{position:absolute;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
   border-radius:var(--r-pill);background:var(--surface);font-size:1rem;
@@ -895,7 +897,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <h3 class="row-title">Wonderpeople · Acestorm</h3>
           <p class="row-note row-note--mobile-hide">Night Walker, Super People</p>
           <p class="row-sub">Part Lead, Business Team · <span class="nb">2022.02 – 2024.04</span></p>
-          <p class="row-impact">Night Walker <span class="nb">330K+ new users</span> · <span class="nb">DAU 63K</span> · <span class="nb">D+1 ~50%</span> / Super People China <span class="nb">560K+ new users</span></p>
+          <p class="row-impact">Night Walker <span class="nb">330K+ new users ·</span> <span class="nb">DAU 63K · D+1 ~50%</span> / Super People China <span class="nb">560K+ new users</span></p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="wonderpeople"></p>
         </div>
@@ -1676,18 +1678,19 @@ const WORKS = {
 };
 /* 스크롤 힌트 — 패널이 끝까지 내려가면 하단 그라데이션을 지운다(CSS .at-end). */
 document.querySelectorAll('.wdlg-in').forEach(el => {
+  const dlg = el.closest('dialog') || el;
   const sync = () => {
     const atEnd = el.scrollHeight - el.clientHeight - el.scrollTop <= 2;
-    el.classList.toggle('at-end', atEnd);
+    dlg.classList.toggle('at-end', atEnd);
   };
   el.addEventListener('scroll', sync, { passive: true });
   el.addEventListener('load', sync, true);   // 썸네일이 늦게 뜨면 높이가 바뀐다(캡처 단계로 받는다)
   addEventListener('resize', sync);
-  const dlg = el.closest('dialog') || el;
   dlg.addEventListener('close', sync);
-  // 내용 교체(childList)와 dialog[open] 토글(attributes) 양쪽에서 다시 재야 한다 —
+  // 내용 교체(childList)와 dialog[open] 토글 양쪽에서 다시 재야 한다 —
   // 닫혀 있는 동안은 scrollHeight가 0이라 열리는 순간의 측정이 정본이다.
-  new MutationObserver(sync).observe(dlg, { attributes: true, childList: true, subtree: true });
+  // attributeFilter가 없으면 sync가 다는 .at-end 클래스를 자기가 다시 관측한다.
+  new MutationObserver(sync).observe(dlg, { attributeFilter: ['open'], childList: true, subtree: true });
   sync();
 });
 
