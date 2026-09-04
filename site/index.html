@@ -170,6 +170,10 @@ img{display:block}
 /* 보색 에코 — 리빌된 잉크 자리에서만 보이는 장식 복제본(원본 DOM 텍스트는 불변) */
 /* 숨김은 display로 — visibility는 클론 안 .hc-item.is-on{visibility:visible}에 뚫린다 */
 .hero-echo{position:absolute;inset:0;z-index:21;pointer-events:none;display:none;
+  /* 🔴 에코에 자기 바닥이 있어야 한다 — 없으면 밝은 글자가 "잉크로 어두워진 배경"에
+     직접 얹혀, 마스크가 중간 농도인 구간에서 글자와 배경이 같은 중간 회색이 된다.
+     바닥을 함께 두면 둘이 같은 마스크로 흐려져 글자가 항상 바닥보다 밝다. */
+  background:rgba(20,18,16,.92);
   -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
 .hero-echo,.hero-echo *{color:#f4f1eb !important;border-color:rgba(244,241,235,.3) !important;
   box-shadow:none !important;transition:none !important;animation:none !important;
@@ -549,6 +553,14 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;font-size:.75rem;color:rgba(255,255,255,.66);text-align:center}
 @media (min-width:640px){.ft-legal{flex-direction:row;text-align:left}}
 .ft-wm{position:absolute;inset-inline:0;bottom:-1.5rem;z-index:0;color:rgba(255,255,255,.05)}
+/* 푸터는 검정 바탕이다 — 아웃라인 pill의 기본값(--fg 검정 글자·--line 밝은 테두리)이
+   그대로 얹히면 글자가 배경에 묻힌다(본부장 09-05). 푸터 안에서만 반전한다. */
+.ft .pill--outline .pill-in{border-color:rgba(255,255,255,.45);color:#fff}
+.ft .pill--outline .pill-badge{background:#fff;color:var(--ink)}
+@media (hover:hover) and (pointer:fine){
+  .ft .pill--outline:hover .pill-in{border-color:#fff}
+}
+.ft .pill--outline:focus-visible .pill-in{border-color:#fff}
 
 /* ---------- loader ---------- */
 .loader{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
@@ -754,7 +766,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:90ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="lyn" aria-hidden="true"></div>
-          <div class="card-meta" data-i18n="넥슨-부팀장">넥슨 — 부팀장</div>
+          <div class="card-meta" data-i18n="넥슨-팀장">넥슨 — 팀장</div>
           <div class="card-wm" aria-hidden="true" data-i18n="183억">183억</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="lyn" aria-haspopup="dialog" data-i18n="린">린<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
@@ -1433,7 +1445,9 @@ if (!RM && FINE && 'ResizeObserver' in window){
   }).observe(hcSlot, { subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
   /* 마스크는 잉크 캔버스에서 직접 뽑는다 — 궤적을 따로 모델링하면 실제 농도와 어긋나
      (옅어진 자리에 밝은 글자가 남아 원본보다 안 읽히는 증상). 축소본이라 읽기 비용이 작다. */
-  const MW = 80, MH = 60, KLO = .48, KHI = .72;
+  /* 무릎: 잉크가 배경을 어둡게 만들기 시작하는 지점에 맞춘다(.48/.72는 너무 늦어
+     잉크는 어두운데 에코는 아직 꺼진 "머디 밴드"가 생겼다 — 본부장 09-05 호버 가독 지적). */
+  const MW = 80, MH = 60, KLO = .12, KHI = .26;
   const mc = document.createElement('canvas');
   mc.width = MW; mc.height = MH;
   const mctx = mc.getContext('2d', { willReadFrequently: true });
@@ -1585,7 +1599,7 @@ const WORKS = {
        ['자동화·프로세스','스토어 product ID 명세서 자동 반영(Google Apps Script) · 7개 프로젝트 SKU 자동화 · 메일/Slack/Notion 통합 업무현황판 · Notion 업무 이력 통합 · SM 음원 정산 자동화'],
        ['리스크 관리','상품 어뷰징을 당일 차단하고 회수·보상을 단일 결재로 정리 · 5단계 사후 SOP 문서화'],
        ['보조 경험','IP 협업 · QA 외주사 정산·계약 조정 · 중국 서비스 라이선스 검토 · 기획·QA·CS 채용·조직 운영']] },
-  lyn: { m:'넥슨 코리아 · 모바일사업실 — 부팀장', t:'린',
+  lyn: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'린',
     s:[['3위','앱스토어·구글 매출'],['183억','매출']],
     r:[['소프트런칭','호주 · 말레이시아 · 필리핀'],
        ['검증·리서치','FGT · 사내테스트'],
