@@ -13,7 +13,8 @@
  * 의존성 추가 없음 — 설치된 HTML 파서가 없어 문자열 처리로만 한다.
  * Usage: node scripts/build-en.mjs
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
+import { join } from 'node:path'
 
 const SRC = 'site/index.html'
 const DICT = 'site/i18n/en.json'
@@ -80,33 +81,102 @@ for (;;) {
 const unused = Object.keys(dict.strings).filter((k) => !usedKeys.has(k))
 if (unused.length) fail('사전에만 있고 원본에 안 쓰인 key ' + unused.length + '개: ' + unused.slice(0, 5).join(', '))
 
-/* ---------- 2. 속성·메타·타이틀: 값 전체가 일치할 때만 ---------- */
-for (const ko of Object.keys(dict.attrs)) {
-  const before = html
-  html = html.split('"' + ko + '"').join('"' + dict.attrs[ko] + '"')
-  html = html.split('>' + ko + '</title>').join('>' + dict.attrs[ko] + '</title>')
-  if (html === before) fail('속성/메타 원문을 못 찾았다: ' + JSON.stringify(ko.slice(0, 40)))
+/* ---------- 2. 속성: data-i18n-attr 마커가 붙은 요소의 여는 태그 안에서만 ---------- */
+const AMARK = ' data-i18n-attr="'
+const attrUsed = new Set()
+let attrReplaced = 0
+function lookupAttr(v) {
+  if (dict.attrs[v] !== undefined) { attrUsed.add(v); return dict.attrs[v] }
+  for (const k of Object.keys(dict.ko)) {
+    if (dict.ko[k] === v) { if (dict.strings[k] === undefined) fail('ko는 있는데 strings가 없다: key="' + k + '"'); return dict.strings[k] }
+  }
+  return undefined
+}
+for (;;) {
+  const at = html.indexOf(AMARK)
+  if (at < 0) break
+  const qEnd = html.indexOf('"', at + AMARK.length)
+  if (qEnd < 0) fail('data-i18n-attr 마커가 닫히지 않았다')
+  const names = html.slice(at + AMARK.length, qEnd).split('|')
+  // 마커 자체를 결과물에서 떼어낸다
+  html = html.slice(0, at) + html.slice(qEnd + 1)
+  const lt = html.lastIndexOf('<', at)
+  const gt = html.indexOf('>', at)
+  if (lt < 0 || gt < 0) fail('data-i18n-attr 요소의 여는 태그 범위를 못 찾았다')
+  let tag = html.slice(lt, gt + 1)
+  for (const name of names) {
+    const tok = ' ' + name + '="'
+    const ai = tag.indexOf(tok)
+    if (ai < 0) fail('요소에 속성이 없다: ' + name + ' — ' + JSON.stringify(tag.slice(0, 60)))
+    const vs = ai + tok.length
+    const ve = tag.indexOf('"', vs)
+    if (ve < 0) fail('속성값이 닫히지 않았다: ' + name)
+    const v = tag.slice(vs, ve)
+    const en = lookupAttr(v)
+    if (en === undefined) fail('속성 번역을 사전에서 못 찾았다: ' + name + '=' + JSON.stringify(v.slice(0, 40)))
+    tag = tag.slice(0, vs) + en + tag.slice(ve)
+    attrReplaced++
+  }
+  html = html.slice(0, lt) + tag + html.slice(gt + 1)
+}
+// <title>은 속성이 아니라 요소 텍스트 — 별도로 처리한다
+{
+  const m = html.match(/<title>([\s\S]*?)<\/title>/)
+  if (!m) fail('<title>을 못 찾았다')
+  const en = dict.attrs[m[1]]
+  if (en === undefined) fail('title 번역이 사전(attrs)에 없다: ' + JSON.stringify(m[1].slice(0, 40)))
+  attrUsed.add(m[1])
+  html = html.split(m[0]).join('<title>' + en + '</title>')
+  attrReplaced++
+}
+{
+  const un = Object.keys(dict.attrs).filter((k) => !attrUsed.has(k))
+  if (un.length) fail('사전(attrs)에만 있고 원본에 안 쓰인 key ' + un.length + '개: ' + un.slice(0, 5).map((s) => JSON.stringify(s.slice(0, 30))).join(', '))
 }
 
-/* ---------- 2-b. 같은 문장이 텍스트와 속성에 함께 쓰인 경우 ----------
-   추출 때 문자열 단위로 중복을 없앴기 때문에 aria-label 쪽이 사전의 attrs가 아니라 strings에 들어간다.
-   속성값 전체가 정확히 일치할 때만 바꾼다(부분일치 금지). */
-for (const key of Object.keys(dict.ko)) {
-  html = html.split('"' + dict.ko[key] + '"').join('"' + dict.strings[key] + '"')
-}
-
-/* ---------- 3. 인라인 스크립트 리터럴 (WORKS · CAREER_LINKS · UI 문구) ---------- */
+/* ---------- 3. 인라인 스크립트 리터럴: 블록 스코프 안에서만 ---------- */
 const esc = (s) => s.split(BS).join(BS + BS).split("'").join(BS + "'")
-for (const ko of Object.keys(dict.script)) {
-  const before = html
-  html = html.split("'" + ko + "'").join("'" + esc(dict.script[ko]) + "'")
-  if (html === before) fail('스크립트 리터럴을 못 찾았다: ' + JSON.stringify(ko.slice(0, 40)))
+const scriptUsed = new Set()
+let scriptReplaced = 0
+function replaceInRegion(src, startMarker, endMarker, fn) {
+  const a = src.indexOf(startMarker)
+  if (a < 0) fail('스크립트 블록 시작을 못 찾았다: ' + JSON.stringify(startMarker))
+  const b = src.indexOf(endMarker, a + startMarker.length)
+  if (b < 0) fail('스크립트 블록 끝을 못 찾았다: ' + JSON.stringify(endMarker) + ' (시작=' + JSON.stringify(startMarker) + ')')
+  const to = b + endMarker.length
+  return src.slice(0, a) + fn(src.slice(a, to)) + src.slice(to)
 }
-
-/* ---------- 3-b. 같은 문장이 마크업과 스크립트에 함께 쓰인 경우 ----------
-   2-b와 같은 이유(문자열 단위 중복 제거). WORKS 안의 '사용자 조사'·'린' 같은 값이 여기서 처리된다. */
-for (const key of Object.keys(dict.ko)) {
-  html = html.split("'" + dict.ko[key] + "'").join("'" + esc(dict.strings[key]) + "'")
+function translateRegion(region) {
+  let out = region
+  for (const ko of Object.keys(dict.script)) {
+    const lit = "'" + ko + "'"
+    if (out.indexOf(lit) < 0) continue
+    out = out.split(lit).join("'" + esc(dict.script[ko]) + "'")
+    scriptUsed.add(ko); scriptReplaced++
+  }
+  // 같은 문장이 마크업과 스크립트에 함께 쓰인 경우(사전 추출 시 문자열 단위 중복 제거)
+  for (const key of Object.keys(dict.ko)) {
+    const lit = "'" + dict.ko[key] + "'"
+    if (out.indexOf(lit) < 0) continue
+    out = out.split(lit).join("'" + esc(dict.strings[key]) + "'")
+    scriptReplaced++
+  }
+  return out
+}
+for (const start of ['const CAREER_LINKS = {', 'const WORKS = {']) {
+  html = replaceInRegion(html, start, NL + '};', translateRegion)
+}
+// 블록 밖 단독 라인: 등장 횟수를 못 박고 그 자리에서만 치환한다
+for (const [line, times] of [["h.textContent = '근거·과정 보기 (Notion)';", 1],
+                             ["showToast('이메일 주소를 복사했습니다 — bluedaylol80@gmail.com');", 1],
+                             ["sr.textContent = ' (새 창에서 열림)';", 2]]) {
+  const n = html.split(line).length - 1
+  if (n !== times) fail('스크립트 단독 라인 등장 횟수가 ' + times + '이 아니라 ' + n + ': ' + JSON.stringify(line.slice(0, 50)))
+  html = html.split(line).join(translateRegion(line))
+}
+{
+  const un = Object.keys(dict.script).filter((k) => !scriptUsed.has(k))
+  if (un.length) fail('사전(script)에만 있고 원본에 안 쓰인 key ' + un.length + '개: ' + un.slice(0, 5).map((s) => JSON.stringify(s.slice(0, 30))).join(', '))
 }
 
 /* ---------- 4. 상대 경로 → ../ (en/ 하위로 한 단계 들어간다) ---------- */
@@ -120,15 +190,38 @@ for (const q of ["'", '"']) {
 }
 html = html.split('../../').join('../')
 
-/* ---------- 5. lang · canonical · og:url · 언어 링크 ---------- */
-html = html.split('<html lang="ko"').join('<html lang="' + dict.page.lang + '"')
+/* ---------- 4-b. 로컬 상대경로 자산 존재 검사 (알려진 결손은 예외) ---------- */
+const KNOWN_MISSING = ['../works/nanakage-thumb.webp', '../works/nanakage-1.webp']
+{
+  const refs = new Set()
+  for (const m of html.matchAll(/(?:src|href)="(\.\.\/[^"]+)"/g)) refs.add(m[1])
+  for (const m of html.matchAll(/'(\.\.\/(?:works|media|demo)\/[^']+)'/g)) refs.add(m[1])
+  const missing = [...refs].filter((r) => {
+    const clean = r.split('#')[0].split('?')[0]
+    if (!clean) return false
+    return !existsSync(join(OUT_DIR, clean))
+  })
+  const unexpected = missing.filter((r) => KNOWN_MISSING.indexOf(r) < 0)
+  if (unexpected.length) fail('결과물이 없는 로컬 자산을 참조한다 ' + unexpected.length + '건: ' + unexpected.slice(0, 8).join(', '))
+  console.log('  자산 참조 ' + refs.size + '건 · 결손 ' + missing.length + '건(알려진 예외)')
+}
+
+/* ---------- 5. lang · canonical · og:url · 언어 링크 (건수 단언) ---------- */
+function swap(marker, to) {
+  const n = html.split(marker).length - 1
+  if (n === 0) fail('치환 대상을 못 찾았다(0건): ' + JSON.stringify(marker.slice(0, 60)))
+  html = html.split(marker).join(to)
+  return n
+}
+swap('<html lang="ko"', '<html lang="' + dict.page.lang + '"')
 html = html.split('href="' + dict.page.koUrl + '" rel="canonical"').join('')
-html = html.split('rel="canonical" href="' + dict.page.koUrl + '"').join('rel="canonical" href="' + dict.page.canonical + '"')
-html = html.split('property="og:url" content="' + dict.page.koUrl + '"').join('property="og:url" content="' + dict.page.ogUrl + '"')
-// 언어 전환 링크: KO 페이지는 en/ 으로, EN 페이지는 ../ 로
-html = html.split('data-lang-link href="en/" hreflang="en"').join('data-lang-link href="../" hreflang="ko"')
-html = html.split('>EN<').join('>KO<')
-html = html.split('>English<').join('>Korean<')
+swap('rel="canonical" href="' + dict.page.koUrl + '"', 'rel="canonical" href="' + dict.page.canonical + '"')
+swap('property="og:url" content="' + dict.page.koUrl + '"', 'property="og:url" content="' + dict.page.ogUrl + '"')
+const langLinks = swap('data-lang-link href="en/" hreflang="en"', 'data-lang-link href="../" hreflang="ko"')
+swap('>EN<', '>KO<')
+swap('>English<', '>Korean<')
+swap('aria-label="Switch to English"', 'aria-label="한국어로 전환"')
+console.log('  언어 전환 링크 ' + langLinks + '곳')
 
 /* ---------- 6. 게이트: 한글 잔존 0 ----------
    주석(HTML·CSS·JS)은 화면에 안 나오고 원본 설명이라 그대로 둔다 — 검사에서만 뺀다.
@@ -147,7 +240,10 @@ function stripComments(s) {
     return i >= 0 && line.slice(0, i).indexOf(':') < 0 ? line.slice(0, i) : line
   }).join(NL)
 }
-const leftovers = [...stripComments(html).matchAll(/[가-힣][^<>"']{0,40}/g)].map((m) => m[0])
+// EN 페이지가 의도적으로 갖는 한국어 문구(언어 전환 안내·(Korean) 라벨)는 검사에서 뺀다
+const ALLOW_KO = ['한국어로 전환']
+const leftovers = [...stripComments(html).matchAll(/[가-힣][^<>"']{0,40}/g)]
+  .map((m) => m[0]).filter((t) => !ALLOW_KO.some((a) => t.indexOf(a) === 0))
 if (leftovers.length) {
   fail('EN 결과물에 한글이 ' + leftovers.length + '건 남았다:' + NL + '  ' +
        [...new Set(leftovers)].slice(0, 12).map((s) => JSON.stringify(s)).join(NL + '  '))
@@ -156,4 +252,4 @@ if (leftovers.length) {
 mkdirSync(OUT_DIR, { recursive: true })
 writeFileSync(OUT, html, 'utf8')
 console.log('생성: ' + OUT)
-console.log('  텍스트 ' + replaced + '곳 · 속성 ' + Object.keys(dict.attrs).length + '건 · 스크립트 ' + Object.keys(dict.script).length + '건 · 한글 잔존 0')
+console.log('  텍스트 ' + replaced + '곳 · 속성 ' + attrReplaced + '건 · 스크립트 ' + scriptReplaced + '건 · 한글 잔존 0')

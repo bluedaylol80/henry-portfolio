@@ -20,7 +20,7 @@
 - **2026-09-01 숫자 섹션 교체 배포(main `cc75d1a`)**: "5배/영웅의 군단 매출 대비" → "30개/직접 참여한 프로젝트 (퍼블리싱 8종, 직접서비스 22종)". 근거=팩트시트 §1 합산(30)+본부장 진술(8/22). 인수인계=`HT_multi/…/05_website/2026-09-01_stats_project_count_handover.md`.
 - **2026-09-02 이름 옆 별 마크 제거·카드 높이 통일 배포(main `dd945f2`)**: `#i-mark` 이름 옆 3곳 제거(히어로 타일 단독 마크 유지), `.cards` grid-auto-rows:1fr+li flex+card flex:1 → 성과 6장·프로토 2장 461px 동일(라이브 실측). 인수인계=`HT_multi/…/05_website/2026-09-02_header_mark_card_height_handover.md`.
 
-- **2026-09-04 이력서 피드백 반영 WO-1 시공 완료(`feat/feedback-en-2026-09`, 미배포)**: 히어로 경력 요약 3문장 + 핵심 역량 칩 6개(`.hero-keys`), #career 회사별 임팩트 10줄(`.row-impact`, 모바일 노출), 성과·프로토 카드·WORKS `r[]`·What I do·How I Work 능동 동사/`지표→조치→결과` 교정, **Notion 근거 링크 30개**(다이얼로그 14 + #career 12 + 허브 3곳).
+- **2026-09-04 이력서 피드백 반영 WO-1 시공 완료(`feat/feedback-en-2026-09`, 미배포)**: 히어로 경력 요약 3문장 + 핵심 역량 칩 6개(`.hero-keys`), #career 회사별 임팩트 10줄(`.row-impact`, 모바일 노출), 성과·프로토 카드·WORKS `r[]`·What I do·How I Work 능동 동사/`지표→조치→결과` 교정, **Notion 근거 링크 29개**(다이얼로그 14 + #career 12 + 허브 3곳).
   🔴 **공개 도메인 함정**: 팩트시트 §9-2의 `cord-timpani-ea7`은 **동료 워크스페이스**다. 본부장 워크스페이스 슬러그는 `limhenry`.
   **최종 채택 = `https://limhenry.notion.site/<id>`**(R1 확정 2026-09-04) — 28/28 공개 실측(`docs/handover/2026-09-04_notion_public_check.json`). 도메인은 HTML의 `NOTION_BASE` 상수 한 곳에만 있고 데이터에는 id만 둔다.
   🔴 **`www.notion.so/limhenry/<id>`는 쓰지 않는다**(실측 근거): `app.notion.com/p/limhenry/<id>`로 리다이렉트되고 본문 위에 "지금 가입해서 Notion으로 구축을 시작하세요 · 가입 또는 로그인하기" 배너를 먼저 띄운다. 리크루터가 근거 링크를 눌렀을 때 가입 화면부터 보는 경로라 기각했다. `.notion.site`는 익명 브라우저에서 배너 없이 본문이 바로 뜬다(두 도메인 모두 28/28 공개).
@@ -30,6 +30,7 @@
 - **2026-09-04 WO-2 영문판(`feat/feedback-en-2026-09`, 미배포)**: 정적 별도 페이지 방식. KO 정본 `site/index.html`에 `data-i18n` 209곳 표시 + 사전 `site/i18n/en.json`(strings 182 · attrs 10 · script 103) + 생성기 `scripts/build-en.mjs` → `site/en/index.html` 생성·커밋. hreflang ko/en/x-default 양방향, 헤더 `.lang` 링크(KO→`en/`, EN→`../`)와 푸터 언어 링크, 상대경로 `../` 재작성. 런타임 감지·localStorage 없음 — 링크가 곧 언어다.
   실측: KO·EN × 1440·390 가로 넘침 0 · 헤더 1줄(1024·1280·1440, 겹침 0) · EN 화면 한글 0 · 다이얼로그 7종 EN(근거 링크 14개) · HTTP 왕복 KO→`/en/`→KO 정상 · 404는 기존 nanakage 2건뿐. 판정기 `loop/probe-en-2026-09-04.mjs` 33건·`loop/probe-wo1-2026-09-04.mjs` 25건 전부 통과.
 
+- **2026-09-04 WO-3 Codex R2 감리 반영 완료(`feat/feedback-en-2026-09`, 미배포)**: 27건 중 24 반영·3 기각(nanakage 404 기존 수용·저장소 내 금지 id 감사기록·Live Director 통용어). 핵심: EN 183억=₩18.3B(카운트업 제외)·평점 "일본 3.29→글로벌 4.4" 범위 명시·"주도"→"담당" 완화·B7 연동/기획 분리·빌더 data-i18n-attr 위치 한정+치환 단언+로컬 파일 검사·연락처 창 언어 링크·.lang aria-label. 시공: Opus→Sonnet 순차 한도 소진, 잔여 1자 초과 2줄은 R1이 축약. 프로브 KO 25/25·EN 33/33.
 ## 본부장 사전 질의 — 답변 완료 (2026-08-13, HQ 세션 인터뷰)
 1. 임무 = **히어로 리퀴드 리빌 부활(자체 비주얼) + 전반 폴리시**
 2. 기준 = 이터레이션 내 눈판정 통과 → 최종 합격은 본부장 실화면(PC+폰) 판정. 배포는 본부장 결재 전용.
@@ -361,6 +362,7 @@
 - 🔴 **번역 대상은 `data-i18n="key"`로 표시한다.** 표시가 없으면 번역되지 않고, 사전에 key가 없거나 요소 안에서 KO 원문을 못 찾으면 **빌드가 실패한다**(무음 KO 잔존 금지). 새 문구를 넣을 때는 `data-i18n`과 `en.json`의 `ko`·`strings`를 같이 채운다.
 - 🟡 **같은 문장을 텍스트와 속성(또는 인라인 스크립트)에 함께 쓰면** 사전에 한 번만 들어간다. 빌드의 2-b·3-b 단계가 남은 자리를 훑어 처리하므로 그 두 단계를 지우지 말 것.
 - 🟡 **EN 카드 워터마크에 긴 단어를 넣지 말 것.** 390에서 `.cards`가 `grid-template-columns:1fr`(=`minmax(auto,1fr)`)이라 **가장 긴 단어의 min-content가 그리드 칸을 밀어** 페이지 전체가 가로로 넘친다. 실측: 72px에서 "countries"=349px > 가용 299px → 가로 넘침 12px. "4 countries"를 "4 markets"로 줄여 해소했다. 워터마크 EN은 한 단어 7자 이하.
+- 🟡 **금지 id(2c099a8d·36359de7·1f999a8d) 게이트 범위 = `site/index.html`·`site/en/index.html` 두 파일만.** 판정 스크립트·JSON·발주서의 감사 기록에는 남는다(Codex R2 #27, R1 기각).
 - 🟡 **한글 잔존 게이트는 주석을 제외하고 센다.** CSS·JS 주석의 한국어 설명은 화면에 안 나오므로 남긴다. "화면에 보이는 한글 0"은 `loop/probe-en-2026-09-04.mjs`가 브라우저 렌더 텍스트로 따로 실측한다.
 - main push = 39초 뒤 실사이트 발행. 루프는 loop-v23 브랜치 전용, push 금지.
 - 🔴 **회당 제한은 40분**(08-13 20→40 상향). 큰 작업 1건이 20분에 잘려 **2회 연속 시간초과로 루프가 죽었다**.
