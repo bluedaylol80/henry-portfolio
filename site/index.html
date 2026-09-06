@@ -383,7 +383,11 @@ html[lang="ko"] .clock-t{order:4}
   rgba(10,10,10,.74) 0%,rgba(10,10,10,.86) 46%,rgba(10,10,10,.95) 100%)}
 
 /* 성과 상세 다이얼로그 (네이티브 dialog — Esc·포커스 가둠은 브라우저가 처리) */
-.wdlg{position:relative;overflow:hidden;border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
+/* 🔴 모달 다이얼로그에 position을 직접 주지 말 것. UA의 dialog:modal{position:fixed}를 덮으면
+   계산값이 absolute가 되어 다이얼로그가 문서 흐름에 앉고, showModal()의 포커스 스크롤이
+   배경을 그 자리까지 끌어올린다 — 카드 클릭 시 scrollY 1788 → 0(실측, 390은 닫아도 복귀 안 됨).
+   ::after 페이드는 UA가 이미 준 fixed를 컨테이닝 블록으로 쓰므로 relative 선언이 필요 없다. */
+.wdlg{overflow:hidden;border:0;padding:0;margin:auto;width:min(40rem,calc(100vw - 2.5rem));max-height:min(85vh,52rem);
   border-radius:var(--r-card);background:var(--bg);color:var(--fg);box-shadow:0 24px 60px rgba(17,17,17,.2)}
 .wdlg::backdrop{background:rgba(10,10,10,.55)}
 .wdlg-in{position:relative;overflow-y:auto;max-height:inherit;padding:2rem 1.5rem 2rem}
@@ -1912,7 +1916,9 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   // Esc는 브라우저가 처리 — close 이벤트에 잠금 해제·포커스 복귀를 한곳으로 모은다
   wdlg.addEventListener('close', () => {
     modalLock(false);
-    if (opener && document.contains(opener)) opener.focus();
+    // 여는 곳으로 포커스를 돌리되 스크롤은 건드리지 않는다 — 헤더(absolute top:0)에서 연 경우
+    // 기본 focus()가 배경을 문서 맨 위로 끌어올린다(실측 2399 → 0).
+    if (opener && document.contains(opener)) opener.focus({ preventScroll: true });
     opener = null;
   });
 
@@ -1934,7 +1940,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     cdlg.addEventListener('click', (e) => { if (e.target === cdlg) cdlg.close(); });
     cdlg.addEventListener('close', () => {
       modalLock(false);
-      if (copener && document.contains(copener)) copener.focus();
+      if (copener && document.contains(copener)) copener.focus({ preventScroll: true });
       copener = null;
     });
     document.getElementById('copyMail').addEventListener('click', () => {
