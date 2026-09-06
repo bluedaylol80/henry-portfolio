@@ -337,7 +337,10 @@ html[lang="ko"] .clock-t{order:4}
 }
 .card-cta .alink:focus-visible>span{opacity:1;text-decoration-color:rgba(255,255,255,.7)}
 .card-cta .alink:focus-visible .ic{transform:translate(2px,-2px)}
-/* 카드 전체가 클릭 대상 — 링은 제목 버튼에만 걸려 둥근 카드에 각진 사각형이 그려지지 않는다 */
+/* 제목 버튼의 ::after는 position:relative인 .card-bot 안에 갇혀 카드 아래쪽만 덮는다(실측:
+   1440에서 7장 중 6장이 카드 중앙 클릭으로 안 열렸다). 카드 전체 클릭은 JS 위임이 맡고,
+   여기 링은 제목 버튼에만 걸어 둥근 카드에 각진 사각형이 그려지지 않게 둔다. */
+.card--clickable{cursor:pointer}
 .card-open,.card-go{display:inline-flex;align-items:center;gap:.5rem;text-align:left;letter-spacing:inherit}
 .card-open::after,.card-go::after{content:"";position:absolute;inset:0;border-radius:var(--r-card)}
 .card-open .ic,.card-go .ic{font-size:.6em;opacity:.5;transition:transform .38s var(--e-hover),opacity .3s var(--e-soft)}
@@ -362,7 +365,7 @@ html[lang="ko"] .clock-t{order:4}
 @media (max-width:639px){.method-flow{grid-template-columns:1fr}}
 
 /* ---------- proto ---------- */
-.proto-lede{margin-top:1rem;font-size:.9375rem;color:rgba(17,17,17,.72)}
+.proto-lede,.works-lede{margin-top:1rem;font-size:.9375rem;color:rgba(17,17,17,.72)}
 
 /* ---------- 개인 프로덕트 ----------
    회사 성과(#works)와 절대 섞지 않는다 — 별도 섹션·별도 제목·별도 리스트.
@@ -775,7 +778,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   <div class="shell px works-in">
     <div class="center works-hd">
       <p class="eyebrow eyebrow--ring" data-reveal>Selected Results</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>Projects with measurable results</span></span></h2>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>Key references per project, proven by numbers</span></span></h2>
+      <p class="works-lede" data-reveal style="--rd:200ms">Click a card to see the results.</p>
     </div>
 
     <ul class="cards">
@@ -1887,6 +1891,20 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   }
   document.querySelectorAll('.card-open').forEach(btn => {
     btn.addEventListener('click', () => openWork(btn.dataset.work, btn));
+    /* 카드 어디를 눌러도 같은 상세창을 연다 — 제목 버튼만 눌러야 열리는 건 알아채기 어렵다.
+       버튼은 키보드·스크린리더 진입점으로 그대로 둔다(.card-go 카드는 대상이 아니다). */
+    const card = btn.closest('.card');
+    if (!card) return;
+    card.classList.add('card--clickable');
+    let down = null;
+    card.addEventListener('pointerdown', (e) => { down = { x: e.clientX, y: e.clientY }; });
+    card.addEventListener('click', (e) => {
+      const d = down; down = null;
+      if (!d) return;                                   // 누르기가 이 카드에서 시작하지 않았다
+      if (Math.abs(e.clientX - d.x) > 6 || Math.abs(e.clientY - d.y) > 6) return;   // 텍스트 드래그
+      if (e.target.closest('a,button')) return;         // 링크·제목 버튼은 자기 동작이 먼저다
+      openWork(btn.dataset.work, btn);
+    });
   });
   document.getElementById('wdlgX').addEventListener('click', () => wdlg.close());
   // 바깥 클릭 = dialog 요소 자체(패널은 .wdlg-in)를 맞힌 경우

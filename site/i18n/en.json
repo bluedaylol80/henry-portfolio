@@ -40,7 +40,7 @@
     "원더피플": "원더피플",
     "스카이피플": "스카이피플",
     "웹젠-2006-달콤소프트-2026": "웹젠 2006 → 달콤소프트 2026",
-    "숫자로-증명한-프로젝트": "숫자로 증명한 프로젝트",
+    "숫자로-증명한-프로젝트-별-대표": "숫자로 증명한 프로젝트 별 대표 레퍼런스",
     "달콤소프트-라이브기획팀-팀장": "달콤소프트 · 라이브기획팀 — 팀장",
     "SuperStar-시리즈-운영-포트폴리오": "SuperStar 시리즈 운영 포트폴리오 및 제품 방향성",
     "상세-보기": "상세 보기",
@@ -190,7 +190,8 @@
     "Notion에서-열기": "Notion에서 열기",
     "근거-과정-Notion": "근거·과정 (Notion)",
     "라이브-서비스-사이클": "라이브 서비스 사이클",
-    "현지-시각": "현지 시각"
+    "현지-시각": "현지 시각",
+    "대표적인-성과는-카드를-클릭하여": "대표적인 성과는 카드를 클릭하여 확인하세요"
   },
   "strings": {
     "본문-바로가기": "Skip to content",
@@ -226,7 +227,7 @@
     "원더피플": "Wonderpeople",
     "스카이피플": "Skypeople",
     "웹젠-2006-달콤소프트-2026": "Webzen 2006 → Dalcomsoft 2026",
-    "숫자로-증명한-프로젝트": "Projects with measurable results",
+    "숫자로-증명한-프로젝트-별-대표": "Key references per project, proven by numbers",
     "달콤소프트-라이브기획팀-팀장": "Dalcomsoft · Live Game Design Team — Team Lead",
     "SuperStar-시리즈-운영-포트폴리오": "SuperStar series live portfolio & product direction",
     "상세-보기": "View details",
@@ -376,7 +377,8 @@
     "Notion에서-열기": "Open in Notion",
     "근거-과정-Notion": "Evidence (Notion, KO)",
     "라이브-서비스-사이클": "Live service cycle",
-    "현지-시각": "Local time"
+    "현지-시각": "Local time",
+    "대표적인-성과는-카드를-클릭하여": "Click a card to see the results."
   },
   "attrs": {
     "맨 위로": "Back to top",
