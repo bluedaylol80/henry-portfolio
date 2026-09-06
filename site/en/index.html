@@ -143,6 +143,11 @@ img{display:block}
 .clock-t{min-width:3.5rem;font-variant-numeric:tabular-nums;font-weight:500;color:var(--fg)}
 .clock-sep{color:rgba(17,17,17,.3)}
 .clock-d{font-weight:500}
+/* KO는 "현지 시각 · 2026년 9월 7일 · 오전 4:10" 순서다 — 마크업은 하나이므로 순서만 뒤집는다. */
+html[lang="ko"] .clock-lb{order:1}
+html[lang="ko"] .clock-d{order:2}
+html[lang="ko"] .clock-sep{order:3}
+html[lang="ko"] .clock-t{order:4}
 .chip{border:1px solid rgba(230,229,226,.8);background:rgba(255,255,255,.4);backdrop-filter:blur(4px);
   border-radius:var(--r-control);display:inline-flex;transition:background-color .3s var(--e-soft)}
 .chip>span{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;font-size:.75rem;font-weight:500;letter-spacing:.02em;
@@ -761,7 +766,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <li data-reveal style="--rd:0ms;--ry:28px"><div class="tile tile--light">Launch</div></li>
     <li data-reveal style="--rd:120ms;--ry:28px"><div class="tile tile--accent">Operate</div></li>
     <li data-reveal style="--rd:240ms;--ry:28px"><div class="tile tile--dark"><svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></div></li>
-    <li data-reveal style="--rd:360ms;--ry:28px"><div class="tile tile--ghost">Handover</div></li>
+    <li data-reveal style="--rd:360ms;--ry:28px"><div class="tile tile--ghost">Sunset</div></li>
   </ul>
 </section>
 
@@ -1327,8 +1332,17 @@ function revealGated(){ gated.forEach(el => el.classList.add('is-in')); }
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const elTime = document.getElementById('clockTime');
 const elDate = document.getElementById('clockDate');
+/* KO 페이지만 한국어 표기다 — EN 사본은 lang="en"이라 그대로 영문 형식을 쓴다. */
+const KO_CLOCK = document.documentElement.lang === 'ko';
+const koTime = KO_CLOCK && new Intl.DateTimeFormat('ko-KR', { hour: 'numeric', minute: '2-digit', hour12: true });
+const koDate = KO_CLOCK && new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
 function tickClock(){
   const d = new Date();
+  if (KO_CLOCK){
+    elTime.textContent = koTime.format(d);
+    elDate.textContent = koDate.format(d);
+    return;
+  }
   const h = d.getHours(), m = d.getMinutes();
   elTime.textContent = (h % 12 || 12) + ':' + String(m).padStart(2, '0') + (h < 12 ? 'am' : 'pm');
   elDate.textContent = d.getDate() + ' ' + MONTHS[d.getMonth()] + ', ' + d.getFullYear();
