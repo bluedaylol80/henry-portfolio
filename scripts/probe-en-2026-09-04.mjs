@@ -62,7 +62,8 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   ck(`${name} 역량 칩 6개`, m.chipCount === 6, `${m.chipCount}개 · ${m.chipRows}줄`)
   ck(`${name} 칩↔hcard 겹침 0`, m.overlap === false || m.overlap === null, String(m.overlap))
   ck(`${name} 임팩트 10줄 전부 노출`, m.impactCount === 10 && m.impactVisible === 10, `${m.impactVisible}/${m.impactCount} · 최장 ${m.impactMax}자`)
-  ck(`${name} h1 3줄 유지(에코 복제로 DOM은 6)`, m.h1Lines === 6, String(m.h1Lines))
+  // 에코 복제층을 걷어내(WO-14) DOM의 .line은 원본 3줄뿐이다 — 목적(h1 3줄 유지)은 그대로다
+  ck(`${name} h1 3줄 유지`, m.h1Lines === 3, String(m.h1Lines))
   ck(`${name} target=_blank noopener 전수`, m.blanks === 0, `${m.blanks}건 누락`)
   const rlTotal = m.rowLinks.reduce((a, r) => a + r.n, 0)
   ck(`${name} #career 근거 링크 5행·회사당 ≤3·전부 노출`,

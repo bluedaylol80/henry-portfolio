@@ -125,7 +125,9 @@ img{display:block}
 .alink:focus-visible{outline-offset:8px;border-radius:5px}
 
 /* ---------- header ---------- */
-.hdr{position:absolute;inset-inline:0;top:0;z-index:50}
+/* z-index를 주면 스태킹 컨텍스트가 생기고, 그 안의 difference 블렌드는 헤더 밖(=잉크)을 못 본다.
+   헤더는 z-index 없이 두고 히어로를 z-index:-1로 내려서 위에 오게 한다. */
+.hdr{position:absolute;inset-inline:0;top:0}
 .hdr-in{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding-block:1.25rem}
 @media (min-width:640px){.hdr-in{padding-block:1.5rem}}
 .brand{display:inline-flex}
@@ -166,33 +168,44 @@ html[lang="ko"] .clock-t{order:4}
 .chip:focus-visible>span{transform:scale(1.05)}
 
 /* ---------- hero ---------- */
-.hero{position:relative;isolation:isolate;overflow:hidden;border-radius:0 0 var(--r-card) var(--r-card);background:var(--hero-to)}
+.hero{position:relative;z-index:-1;isolation:isolate;overflow:hidden;border-radius:0 0 var(--r-card) var(--r-card);background:var(--hero-to)}
 .hero-bg{position:absolute;inset:0;z-index:0;background:linear-gradient(to bottom,var(--hero-from) 0%,#e2e1de 42%,var(--hero-to) 100%)}
 .hero-noise{position:absolute;inset:0;z-index:0;opacity:.04;pointer-events:none;background-size:180px 180px;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E")}
 /* canvas=대체요소: w/h 필수 (STATUS 함정) */
 .hero-fx{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-/* 보색 에코 — 리빌된 잉크 자리에서만 보이는 장식 복제본(원본 DOM 텍스트는 불변) */
-/* 숨김은 display로 — visibility는 클론 안 .hc-item.is-on{visibility:visible}에 뚫린다 */
-.hero-echo{position:absolute;inset:0;z-index:21;pointer-events:none;display:none;
-  /* 🔴 에코에 자기 바닥이 있어야 한다 — 없으면 밝은 글자가 "잉크로 어두워진 배경"에
-     직접 얹혀, 마스크가 중간 농도인 구간에서 글자와 배경이 같은 중간 회색이 된다.
-     바닥을 함께 두면 둘이 같은 마스크로 흐려져 글자가 항상 바닥보다 밝다. */
-  background:rgba(20,18,16,.92);
-  -webkit-mask-size:100% 100%;mask-size:100% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-.hero-echo,.hero-echo *{color:#f4f1eb !important;border-color:rgba(244,241,235,.3) !important;
-  box-shadow:none !important;transition:none !important;animation:none !important;
-  opacity:1 !important;transform:none !important}
-.hero-echo .hcard,.hero-echo .hcard-panel{background:rgba(244,241,235,.08) !important;backdrop-filter:none !important}
-.hero-echo .hcard-tile,.hero-echo .pill--dark .pill-in{background:rgba(244,241,235,.14) !important}
-.hero-echo .pill--outline .pill-in{background:transparent !important}
-/* currentColor는 use에서 풀림 (STATUS 함정) */
-.hero-echo .ic,.hero-echo .ic *{color:var(--accent-from) !important}
-.hero-echo .pill-badge{background:#f4f1eb !important;color:#141210 !important}
-.hero-echo .pill-badge .ic,.hero-echo .pill-badge .ic *{color:inherit !important}
-.hero-wm{position:absolute;inset-inline:0;bottom:7rem;z-index:1;color:rgba(255,255,255,.5)}
+/* ---------- 잉크 위 글자 가독 (difference 블렌드) ----------
+   복제층(에코)+마스크는 걷어냈다. 대신 잉크가 덮는 글자를 흰색 difference로 뒤집는다.
+   값 보존 규칙: 알파는 그대로 두고 색만 흰색으로 바꾸면 밝은 배경에서의 결과값이 거의 같다
+   (rgba(17,17,17,α) 위 밝은 바닥 ≈ difference로 뒤집은 rgba(255,255,255,α)).
+   잉크가 덮이면 같은 규칙이 자동으로 밝은 글자를 만든다 — 상태 계산도, rAF도 없다.
+   전제: 블렌드 요소의 가장 가까운 스태킹 컨텍스트가 잉크 캔버스를 품어야 한다(위 z-index 정리).
+   제외: 검정 CTA 필·LIVE OPS 카드·HENRY LIM 워터마크(불투명하거나 이미 대비가 선다). */
+.hdr .brand>span,.hdr .nav-b>span,.hdr .lang,
+.hero .eyebrow,.hero .h1 .line>span,.hero .hero-sub,.hero .hero-keys li,
+.hero .partners-lb,.hero .partners li>span,
+.hero .cta-row .pill--outline .pill-in{mix-blend-mode:difference}
+/* 불투명 검정 글자(#111)는 순백 대신 #eaeaea로 뒤집는다 — 밝은 바닥에서 difference 결과가
+   원래 #111에 거의 그대로 떨어진다(순백이면 살짝 밝아진다). 잉크 위 밝기는 그대로. */
+.hdr .brand>span,.hdr .nav-b>span{color:#eaeaea}
+/* 시계·연락 칩은 블렌드 대상이 아니다 — 반투명 흰 바닥이 잉크 위에서 중간톤이 되는데
+   difference는 중간톤에서 대비가 무너진다(블렌드 적용 시 실측 1.47:1). 바닥 불투명도를 올려
+   잉크가 깔려도 바닥이 밝게 남게 하면 원래 글자색 그대로 읽힌다. */
+.hdr .clock,.hdr .chip{background:rgba(255,255,255,.92)}
+.hdr .lang{color:rgba(255,255,255,.72);border-color:rgba(255,255,255,.18)}
+.hero .eyebrow{color:rgba(255,255,255,.7)}
+.hero .h1 .line>span{color:#eaeaea}
+.hero .hero-sub{color:rgba(255,255,255,.72)}
+.hero .hero-keys li{color:rgba(255,255,255,.72);border-color:rgba(255,255,255,.16)}
+.hero .partners-lb{color:rgba(255,255,255,.62)}
+.hero .partners li>span{color:rgba(255,255,255,.68)}
+.hero .partners .ic{color:rgba(255,255,255,.4)}
+.hero .cta-row .pill--outline .pill-in{color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.18)}
+/* 배지는 블렌드 그룹 안이라 따로 뺄 수 없다 — 뒤집힌 뒤 원래대로 보이도록 색을 미리 뒤집어 둔다 */
+.hero .cta-row .pill--outline .pill-badge{background:#fff;color:#0a0a0a}
+.hero-wm{position:absolute;inset-inline:0;bottom:7rem;z-index:0;color:rgba(255,255,255,.5)}
 @media (max-width:1023px){.hero-wm{bottom:3rem}}
-.hero-grid{position:relative;z-index:20;display:flex;flex-direction:column;gap:2rem;padding-block:7rem 5rem}
+.hero-grid{position:relative;display:flex;flex-direction:column;gap:2rem;padding-block:7rem 5rem}
 @media (max-width:1023px){.hero-grid{padding-bottom:9rem}}
 @media (min-width:1024px){
   .hero-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:2.5rem;padding-block:9rem 7rem;min-height:100vh;min-height:100lvh}
@@ -249,7 +262,7 @@ html[lang="ko"] .clock-t{order:4}
 .partners .ic{font-size:.875rem;color:rgba(17,17,17,.4)}
 @media (hover:hover) and (pointer:fine){.partners li:hover>span{transform:translateY(-2px);opacity:1}}
 
-.hero-status{position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:.75rem;
+.hero-status{position:relative;display:flex;align-items:center;justify-content:space-between;gap:.75rem;
   border-top:1px solid rgba(17,17,17,.1);padding-block:1.25rem;font-size:.75rem;font-weight:500;letter-spacing:.02em;color:rgba(17,17,17,.6)}
 .hero-status .mid{display:none}
 @media (min-width:640px){.hero-status .mid{display:block}}
@@ -649,7 +662,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 </div>
 
 <!-- ================= HEADER ================= -->
-<header class="hdr" data-reveal data-gate="ready" style="--rd:150ms;--ry:-14px">
+<!-- 헤더는 리빌에서 뺀다 — data-reveal의 transform/opacity가 스태킹 컨텍스트를 만들어
+     그동안 difference 블렌드가 헤더 밖을 못 본다(로고 대비 1.01:1이 약 500ms 지속, 실측).
+     로더가 z-index 120으로 화면을 덮고 있다가 걷히므로 등장 자체는 그대로 부드럽다. -->
+<header class="hdr">
   <div class="shell px hdr-in">
     <button class="brand" data-scroll="home" data-i18n-attr="aria-label" aria-label="맨 위로">
       <span>Henry Lim</span>
@@ -1436,8 +1452,11 @@ if (!RM && FINE && 'ResizeObserver' in window){
   brush.width = brush.height = DIAM;
   const bctx = brush.getContext('2d');
   const grad = bctx.createRadialGradient(R, R, 0, R, R, R);
+  /* 붓 가장자리 — difference 블렌드는 중간 농도에서 대비가 무너진다(글자와 바닥이 같은 중간 회색).
+     원래 스톱(.55/.82)은 대비 <3:1 띠가 19px였다. .92까지 꽉 채우고 마지막 8%만 페더링해 6px로 줄인다.
+     안쪽 결(물결 스트로크)과 움직임은 그대로다. */
   grad.addColorStop(0, 'rgba(255,255,255,1)');
-  grad.addColorStop(.55, 'rgba(255,255,255,.82)');
+  grad.addColorStop(.92, 'rgba(255,255,255,1)');
   grad.addColorStop(1, 'rgba(255,255,255,0)');
   let W = 0, H = 0;
   function paintCover(){
@@ -1464,61 +1483,6 @@ if (!RM && FINE && 'ResizeObserver' in window){
     }
     cctx.globalAlpha = 1;
   }
-  /* 보색 에코: 캔버스는 CSS 마스크가 못 읽으므로 같은 붓 점 배열로 SVG stroke 마스크를 만든다 */
-  const echo = document.createElement('div');
-  echo.className = 'hero-echo';
-  echo.setAttribute('aria-hidden', 'true');
-  echo.setAttribute('inert', '');
-  hero.appendChild(echo);
-  let echoRaf = 0;
-  function buildEcho(){
-    echo.textContent = '';
-    hero.querySelectorAll(':scope > .shell').forEach((src) => {
-      const c = src.cloneNode(true);
-      c.removeAttribute('id');
-      c.querySelectorAll('[id]').forEach((n) => n.removeAttribute('id'));
-      c.classList.add('is-in');
-      c.querySelectorAll('[data-reveal],[data-lines]').forEach((n) => n.classList.add('is-in'));
-      c.style.cssText = 'position:absolute;margin:0;left:' + src.offsetLeft + 'px;top:' + src.offsetTop +
-        'px;width:' + src.offsetWidth + 'px;height:' + src.offsetHeight + 'px';
-      echo.appendChild(c);
-    });
-  }
-  const hcSlot = hero.querySelector('.hc-slot');
-  if (hcSlot) new MutationObserver(() => {
-    if (echoRaf) return;
-    echoRaf = requestAnimationFrame(() => { echoRaf = 0; buildEcho(); });
-  }).observe(hcSlot, { subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
-  /* 마스크는 잉크 캔버스에서 직접 뽑는다 — 궤적을 따로 모델링하면 실제 농도와 어긋나
-     (옅어진 자리에 밝은 글자가 남아 원본보다 안 읽히는 증상). 축소본이라 읽기 비용이 작다. */
-  /* 무릎: 잉크가 배경을 어둡게 만들기 시작하는 지점에 맞춘다(.48/.72는 너무 늦어
-     잉크는 어두운데 에코는 아직 꺼진 "머디 밴드"가 생겼다 — 본부장 09-05 호버 가독 지적). */
-  const MW = 80, MH = 60, KLO = .12, KHI = .26;
-  const mc = document.createElement('canvas');
-  mc.width = MW; mc.height = MH;
-  const mctx = mc.getContext('2d', { willReadFrequently: true });
-  let echoOn = false;
-  function paintMask(){
-    mctx.clearRect(0, 0, MW, MH);
-    mctx.drawImage(fx, 0, 0, MW, MH);
-    const im = mctx.getImageData(0, 0, MW, MH), d = im.data;
-    let on = false;
-    for (let i = 0; i < d.length; i += 4){
-      const a = d[i + 3] / 255;
-      // 무릎: 잉크가 옅으면(≤.48) 원본 어두운 글자가 그대로 읽히므로 에코를 띄우지 않는다
-      const v = a <= KLO ? 0 : a >= KHI ? 255 : ((a - KLO) / (KHI - KLO) * 255) | 0;
-      d[i] = d[i + 1] = d[i + 2] = 255; d[i + 3] = v;
-      if (v) on = true;
-    }
-    if (!on){
-      if (echoOn){ echoOn = false; echo.style.display = 'none'; }
-      return;
-    }
-    mctx.putImageData(im, 0, 0);
-    const u = 'url(' + mc.toDataURL() + ')';
-    echo.style.webkitMaskImage = u; echo.style.maskImage = u;
-    if (!echoOn){ echoOn = true; echo.style.display = 'block'; }
-  }
   function measure(){
     const r = hero.getBoundingClientRect();
     W = Math.max(1, Math.round(r.width * DPR));
@@ -1526,7 +1490,6 @@ if (!RM && FINE && 'ResizeObserver' in window){
     fx.width = W; fx.height = H;
     cover.width = W; cover.height = H;
     paintCover();
-    buildEcho();
   }
   measure();
   new ResizeObserver(measure).observe(hero);
@@ -1553,7 +1516,6 @@ if (!RM && FINE && 'ResizeObserver' in window){
     ctx.fillRect(0, 0, W, H);
     if (drawing){ for (const p of pts) stamp(p[0], p[1]); pts.length = 0; }
     else if (idle === 120) ctx.clearRect(0, 0, W, H);
-    paintMask();
   }
   addEventListener('pointermove', (e) => {
     const r = fx.getBoundingClientRect();
