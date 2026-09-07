@@ -1831,7 +1831,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const token = ++dlgToken;
     if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
     const h = document.createElement('h4');
-    h.textContent = 'Evidence & process (Notion · pages in Korean)';
+    h.textContent = 'Key cases (Notion · pages in Korean)';
     wN.replaceChildren(h, chipList(n));
     wN.hidden = false;
     loadEvidence().then(ev => {

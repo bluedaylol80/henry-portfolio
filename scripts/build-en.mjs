@@ -169,7 +169,7 @@ for (const start of ['const CAREER_LINKS = {', 'const WORKS = {']) {
 // 근거 카드 생성기는 블록 스코프가 아니라 주석 마커로 범위를 못 박는다
 html = replaceInRegion(html, '/* i18n-region: evidence */', '/* /i18n-region */', translateRegion)
 // 블록 밖 단독 라인: 등장 횟수를 못 박고 그 자리에서만 치환한다
-for (const [line, times] of [["h.textContent = '근거·과정 보기 (Notion)';", 1],
+for (const [line, times] of [["h.textContent = '주요 사례 (Notion)';", 1],
                              ["showToast('이메일 주소를 복사했습니다 — bluedaylol80@gmail.com');", 1],
                              ["sr.textContent = ' (새 창에서 열림)';", 2]]) {
   const n = html.split(line).length - 1
