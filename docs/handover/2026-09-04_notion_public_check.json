@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-09-03T17:25:59.653Z",
+  "checkedAt": "2026-09-08T00:00:00.000Z",
   "base": "https://limhenry.notion.site/",
   "method": "실브라우저 본문 렌더 판정(본문 블록 존재 · not-found/권한 문구 부재). 제목은 라벨 전용.",
   "denyListed": [
@@ -7,8 +7,8 @@
     "36359de7… 만족도 설문 요약",
     "1f999a8d… SSPH 3"
   ],
-  "total": 28,
-  "publicCount": 28,
+  "total": 33,
+  "publicCount": 33,
   "results": [
     {
       "group": "허브",
@@ -317,6 +317,61 @@
       "reason": "본문 블록 23개 렌더",
       "status": 200,
       "blocks": 23
+    },
+    {
+      "group": "달콤소프트",
+      "label": "사용자 조사 기반 이벤트 복귀",
+      "id": "3d559de7280481dba20ee12a62cb7d69",
+      "url": "https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69",
+      "public": true,
+      "title": "사용자 조사 기반 이벤트 복귀",
+      "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
+      "status": 200,
+      "blocks": 11
+    },
+    {
+      "group": "달콤소프트",
+      "label": "정기 상품 정책 개편 제안",
+      "id": "3d559de728048112b3c9ec7998d34e14",
+      "url": "https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14",
+      "public": true,
+      "title": "정기 상품 정책 개편 제안",
+      "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
+      "status": 200,
+      "blocks": 11
+    },
+    {
+      "group": "달콤소프트",
+      "label": "조직 재편과 기획·QA·CS 통합 운영",
+      "id": "3d559de72804813fac33d543e20c1a0a",
+      "url": "https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a",
+      "public": true,
+      "title": "조직 재편과 기획·QA·CS 통합 운영",
+      "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
+      "status": 200,
+      "blocks": 11
+    },
+    {
+      "group": "린",
+      "label": "소프트런칭 지표 기반 출시 전 개선",
+      "id": "3d559de72804810faa75ca85ef0a25a0",
+      "url": "https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0",
+      "public": true,
+      "title": "소프트런칭 지표 기반 출시 전 개선",
+      "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
+      "status": 200,
+      "blocks": 11
+    },
+    {
+      "group": "나이트워커",
+      "label": "퍼블리셔 규격 시스템 재정의",
+      "id": "3d559de72804819f9a88c951cbc10f9a",
+      "url": "https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a",
+      "public": true,
+      "title": "퍼블리셔 규격 시스템 재정의",
+      "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
+      "status": 200,
+      "blocks": 11
     }
   ]
 }
