@@ -221,6 +221,8 @@ swap('rel="canonical" href="' + dict.page.koUrl + '"', 'rel="canonical" href="' 
 swap('property="og:url" content="' + dict.page.koUrl + '"', 'property="og:url" content="' + dict.page.ogUrl + '"')
 const langLinks = swap('data-lang-link href="en/" hreflang="en"', 'data-lang-link href="../" hreflang="ko"')
 swap('>EN<', '>KO<')
+// 포트폴리오 PDF — 헤드 alternate·연락처 창·푸터 세 곳을 EN 파일로 한 번에 바꾼다
+swap('henry-lim-portfolio-ko.pdf', '../henry-lim-portfolio-en.pdf')
 swap('>English<', '>Korean<')
 swap('aria-label="Switch to English"', 'aria-label="한국어로 전환"')
 console.log('  언어 전환 링크 ' + langLinks + '곳')

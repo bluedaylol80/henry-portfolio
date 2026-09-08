@@ -45,7 +45,9 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
       })),
       hub: [...document.querySelectorAll('[data-notion-hub]')].map(a => a.href),
       lang: document.documentElement.lang,
-      hreflang: [...document.querySelectorAll('link[rel=alternate]')].map(l => l.hreflang + '=' + l.getAttribute('href')),
+      // hreflang이 붙은 대체 링크만 센다 — PDF alternate(type=application/pdf)는 hreflang이 없다
+      hreflang: [...document.querySelectorAll('link[rel=alternate][hreflang]')].map(l => l.hreflang + '=' + l.getAttribute('href')),
+      pdfAlt: (document.querySelector('link[rel=alternate][type="application/pdf"]') || {}).getAttribute?.('href') || '',
       langLink: [...document.querySelectorAll('a.lang')].map(a => a.textContent.trim() + '->' + a.getAttribute('href')),
       visibleHangul: (document.body.innerText.match(/[가-힣]+/g) || []).slice(0, 8),
       headerRows: new Set([...document.querySelectorAll('.nav li')].map(li => Math.round(li.getBoundingClientRect().top))).size,
@@ -74,6 +76,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   ck(`${name} hreflang 3종`, m.hreflang.length === 3, m.hreflang.join(' '))
   ck(`${name} 언어 링크 KO->../`, m.langLink.join('') === 'KO->../', m.langLink.join(''))
   ck(`${name} 헤더 1줄`, m.headerRows === 1, m.headerRows + '줄')
+  ck(`${name} PDF alternate = EN 파일`, m.pdfAlt === '../henry-lim-portfolio-en.pdf', m.pdfAlt)
   ck(`${name} 허브 링크 3곳 동일 URL`,
      m.hub.length === 3 && new Set(m.hub).size === 1 && m.hub[0].endsWith('0e48e826c73f4a7ab9c3522d7fb16ce5'),
      `${m.hub.length}곳 · ${[...new Set(m.hub)].join(',')}`)

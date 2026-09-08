@@ -232,7 +232,8 @@
     "AI로-인터랙티브-프로토타입을": "AI로 인터랙티브 프로토타입을 직접 만들었습니다.",
     "실제-출시-2026-05": "실제 출시 — 2026년 5월.",
     "포트폴리오-PDF": "포트폴리오 PDF",
-    "준비-중입니다": "준비 중입니다"
+    "A4-인쇄용-요약본": "A4 인쇄용 요약본",
+    "PDF-열기": "PDF 열기"
   },
   "strings": {
     "본문-바로가기": "Skip to content",
@@ -460,7 +461,8 @@
     "AI로-인터랙티브-프로토타입을": "I built the interactive prototype myself with AI.",
     "실제-출시-2026-05": "Shipped — May 2026.",
     "포트폴리오-PDF": "Portfolio PDF",
-    "준비-중입니다": "Coming soon"
+    "A4-인쇄용-요약본": "A4 print summary",
+    "PDF-열기": "Open the PDF"
   },
   "attrs": {
     "맨 위로": "Back to top",

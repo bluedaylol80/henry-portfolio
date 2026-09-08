@@ -50,12 +50,13 @@ for (const [lang,url] of [['ko','http://127.0.0.1:8787/'],['en','http://127.0.0.
         skillChips: document.querySelectorAll('#skills .row-case').length,
         methodChips: document.querySelectorAll('#method .row-case').length,
         demoNotes: [...document.querySelectorAll('#proto .demo-note')].map(d=>d.querySelectorAll('p').length),
-        pdfSlots: [...document.querySelectorAll('[data-pdf-slot]')].map(e=>e.getClientRects().length===0),
+        pdfSlots: [...document.querySelectorAll('[data-pdf-slot] a')].map(a=>a.getAttribute('href')),
       }))
       ck(`${lang} 역량 4분류`, x.skills.length===4, x.skills.join(' / '))
       ck(`${lang} 역량 칩 7 · 업무 방식 칩 5`, x.skillChips===7 && x.methodChips===5, `${x.skillChips} / ${x.methodChips}`)
       ck(`${lang} 체험판 안내 4줄 × 2장`, x.demoNotes.length===2 && x.demoNotes.every(v=>v===4), JSON.stringify(x.demoNotes))
-      ck(`${lang} 포트폴리오 PDF 자리 2곳 hidden`, x.pdfSlots.length===2 && x.pdfSlots.every(Boolean), JSON.stringify(x.pdfSlots))
+      const wantPdf = lang === 'ko' ? 'henry-lim-portfolio-ko.pdf' : '../henry-lim-portfolio-en.pdf'
+      ck(`${lang} 포트폴리오 PDF 링크 2곳`, x.pdfSlots.length===2 && x.pdfSlots.every(h=>h===wantPdf), JSON.stringify(x.pdfSlots))
       await p.evaluate(()=>document.querySelector('#method .row-case[data-open-work]').scrollIntoView({block:'center'}))
       await sleep(700)
       const g2 = await p.evaluate(()=>{ const r=document.querySelector('#method .row-case[data-open-work]').getBoundingClientRect()
