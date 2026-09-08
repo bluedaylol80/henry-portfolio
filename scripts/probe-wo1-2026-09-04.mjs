@@ -50,7 +50,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   // #works(6장)와 #proto(2장)는 별개 그리드다. 1440은 두 그리드가 같은 높이로 떨어지지만
   // 390은 HEAD(dd945f2)에서도 530/561로 갈린다 — 회귀 판정은 HEAD 기준선과 대조한다.
   // WO-17 재기준선: 달콤 카드 카피 축약(성과 6장)·체험판 안내 4줄 추가(프로토 2장)로 높이가 바뀌었다
-  const BASE = { '1440': '425/603', '390': '553/922' }   // WO-19: 체험판 안내 바탕·워터마크 축소로 프로토 카드 높이 변경
+  const BASE = { '1440': '425/635', '390': '553/963' }   // WO-20: 프로토 카드 본문에 불투명 바탕(패딩) 추가
   ck(`${name} 카드 8장 높이 = HEAD 기준선`, m.cards.length === 8 && m.cardSet.join('/') === BASE[name],
      `${m.cards.length}장 ${m.cardSet.join('/')}px (HEAD ${BASE[name]}px)`)
   ck(`${name} 역량 칩 5개`, m.chipCount === 5, `${m.chipCount}개 · ${m.chipRows}줄`)

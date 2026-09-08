@@ -352,10 +352,10 @@
  },
  "3d559de7280481dba20ee12a62cb7d69": {
   "title": "사용자 조사 기반 이벤트 복귀",
-  "summary": "만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끓고 갔다",
+  "summary": "만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끌고 갔다",
   "process": "웹뷰 이벤트 복귀 요구 확인 → 미니게임 먼저·웹뷰 확장 순서 선택 → 기획서·AI 프로토타입 제작 → 미니게임·꾸미기·10주년 웹뷰 출시",
   "period": "November 1, 2025 → May 23, 2026",
-  "tools": "notion · 만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끓고 갔다",
+  "tools": "notion",
   "img": "3d559de7280481dba20ee12a62cb7d69.jpg",
   "en": {
    "title": "From user research to shipped events",
@@ -365,15 +365,15 @@
  },
  "3d559de728048112b3c9ec7998d34e14": {
   "title": "정기 상품 정책 개편 제안",
-  "summary": "고효율 상품 무제한 판매로 흔들린 형평성을 판매 횟수 제한으로 정리했다",
-  "process": "R팩 무제한 판매로 형평성 흔들림 → 판매 횟수 제한·하위 상품 무제한 선택 → 단계별 완화·RP 카드팩 확대 제안 → 실서비스 상점 반영",
+  "summary": "판매 제한과 확률형 카드팩으로 상품 구성을 바꿔 실서비스 상점에 적용했다",
+  "process": "그룹별 순차 적용 2025-07 하순~09 중순 → 적용 뒤 R팩 제외 의견 검토 → 판매 제한·확률형 카드팩 구성 → 2026-05 정책 문서화",
   "period": "July 1, 2025 → May 31, 2026",
-  "tools": "notion · 고효율 상품 무제한 판매로 흔들린 형평성을 판매 횟수 제한으로 정리했다",
+  "tools": "notion",
   "img": "3d559de728048112b3c9ec7998d34e14.jpg",
   "en": {
    "title": "Recurring product policy rework",
-   "summary": "An uncapped high-yield pack unbalanced the lineup; a purchase cap settled it",
-   "process": "Uncapped pack broke the balance → chose a purchase cap → staged easing → live in the store"
+   "summary": "Changed the lineup to a purchase cap and a probability card pack, applied in the live store",
+   "process": "Rolled out 07–09 2025 → R pack reviewed after → cap and card pack → documented 2026-05"
   }
  },
  "3d559de72804813fac33d543e20c1a0a": {
@@ -405,14 +405,14 @@
  "3d559de72804819f9a88c951cbc10f9a": {
   "title": "퍼블리셔 규격 시스템 재정의",
   "summary": "중국 서비스 결제·서버 흐름을 퍼블리셔 정책 기준으로 다시 정의했다",
-  "process": "중국 규격을 한국에 못 쓰는 문제 → 퍼블리셔 정책·API 문서 기준 선택 → 구매·쿠폰·서버 선택 기획 작성 → 2023-01 출시 후 프로모션 기능 추가",
+  "process": "중국 규격을 한국에 못 쓰는 문제 → 퍼블리셔 정책 기준 선택 → 유료 재화·쿠폰 라이브 적용, 서버 선택 기반 작업 완료 → 출시 후 프로모션 추가",
   "period": "February 1, 2022 → April 30, 2024",
-  "tools": "notion · 중국 서비스 결제·서버 흐름을 퍼블리셔 정책 기준으로 다시 정의했다",
+  "tools": "notion",
   "img": "3d559de72804819f9a88c951cbc10f9a.jpg",
   "en": {
    "title": "Redefining the systems to publisher spec",
    "summary": "Redefined the China payment and server flows against the publisher policy",
-   "process": "China spec unfit for Korea → publisher policy baseline → 3 designs → launched 2023-01"
+   "process": "Unfit for Korea → payments, coupons live → server select groundwork done → promotion later"
   }
  }
 }

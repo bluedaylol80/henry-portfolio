@@ -333,8 +333,10 @@ html[lang="ko"] .clock-t{order:4}
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
 /* 프로토타입 카드의 워터마크는 사진 위 장식이라 한 단계 작게 — 실제 화면보다 커 보였다(Codex R6) */
-#proto .card-wm{font-size:3.25rem}
+#proto .card-wm{font-size:2.25rem}
 @media (min-width:640px){#proto .card-wm{font-size:4.25rem}}
+/* 배경 사진의 금색 선·글자가 제목·소개 뒤로 비친다 — 텍스트 블록에 불투명 바탕을 깐다(Codex R7) */
+#proto .card-bot{border-radius:var(--r-control);background:rgba(10,10,10,.82);padding:1rem}
 .card-wm--long{white-space:nowrap}
 @media (max-width:639.98px){.card-wm--long{font-size:clamp(3rem,15vw,4rem)}}
 .card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
@@ -391,7 +393,7 @@ html[lang="ko"] .clock-t{order:4}
 .case-t .ic{margin-top:.4em}
 .case-steps{display:flex;flex-direction:column;gap:.5rem}
 .case-steps>div{display:grid;grid-template-columns:3rem 1fr;gap:.625rem;align-items:baseline}
-.case-steps dt{font-size:.75rem;font-weight:600;letter-spacing:.02em;color:rgba(17,17,17,.62)}
+.case-steps dt{font-size:.8125rem;font-weight:600;letter-spacing:.02em;color:rgba(17,17,17,.62)}
 .case-steps dd{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.78)}
 .case-bot{margin-top:auto;display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.25rem}
 .case-state{display:inline-flex;border-radius:var(--r-pill);background:var(--ink);color:#fff;
@@ -876,7 +878,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:0ms;--ry:32px">
         <article class="case">
           <p class="case-meta">Dalcomsoft · Live Game Design Team — Team Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog">Turned the survey request for webview events into shipped minigames and webview events<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog">Shipped the events users asked for, minigames first<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The satisfaction survey asked for the old webview events back</dd></div>
               <div><dt>Decision</dt><dd>Ship in-game minigames first, then extend to webview</dd></div>
@@ -889,7 +891,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:90ms;--ry:32px">
         <article class="case">
           <p class="case-meta">Nexon Korea · Mobile Business Division — Team Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case2" aria-haspopup="dialog">Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case2" aria-haspopup="dialog">Turned soft launch metrics into three pre-launch fixes<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The soft launch showed product mix, currency and early drop-off issues</dd></div>
               <div><dt>Decision</dt><dd>Framed product, currency and early flow as fixes to close before launch</dd></div>
@@ -902,7 +904,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:180ms;--ry:32px">
         <article class="case">
           <p class="case-meta">Wonderpeople/Acestorm · Business Team — Part Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case3" aria-haspopup="dialog">Redefined the payment and server-select flows of the China service to the Korean publisher spec<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case3" aria-haspopup="dialog">Rebuilt payment and server flows to the publisher spec<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The China service payment and server flows had to fit Korea</dd></div>
               <div><dt>Decision</dt><dd>Redefined them against the publisher policy and API docs</dd></div>
@@ -1250,7 +1252,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">03</span>
         <div class="row-body">
           <h3 class="row-title">Team & hiring</h3>
-          <p class="row-note">Hiring, team structure and who owns what. At Dalcomsoft I restructured three teams of 22 into two teams of 13 while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
+          <p class="row-note">Hiring, team structure and who owns what. At Dalcomsoft I restructured 22 people across three teams into 13 across two while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
           <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — restructuring (in the Dalcomsoft detail, "Also from the same period")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog">Work — Skypeople org setup</button></p>
         </div>
       </div></li>
@@ -1755,8 +1757,8 @@ const WORKS = {
        ['Result & status','Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.'],
        ['Evidence','Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)']],
     x:{ s:'Also from the same period — 2 supporting cases',
-        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. I proposed capping how often it could be bought while leaving the lower tiers uncapped, along with easing the cap in stages and widening the RP card pack rollout. The reworked lineup went live in the store group by group from late July to mid-September 2025.'],
-           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring three teams of 22 into two teams of 13. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.']] },
+        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup went live in the store group by group from late July to mid-September 2025 (IVE switched 2025-08-05), and after it shipped I reviewed the purchase-cap direction in the August 2025 note "R pack exclusion". It was documented in May 2026 as the weekly recurring product policy.'],
+           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.']] },
     n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
        {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
        {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
