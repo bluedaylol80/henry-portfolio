@@ -225,6 +225,8 @@ html[lang="ko"] .clock-t{order:4}
   padding:.4rem .8rem;font-size:.8125rem;line-height:1.2;color:rgba(17,17,17,.72)}
 @media (max-width:480px){.hero-keys{gap:.375rem}.hero-keys li{padding:.3rem .65rem;font-size:.75rem}}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
+.hero-pdf{margin-top:-.75rem;font-size:.8125rem}
+.hero-pdf .alink>span{gap:.35rem;align-items:center;opacity:.75}
 .hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
 @media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end}}
 .hero .pill--outline .pill-in{border-color:rgba(17,17,17,.18)}
@@ -330,6 +332,9 @@ html[lang="ko"] .clock-t{order:4}
 .card-wm{flex:1;display:grid;place-items:center;padding-block:1.5rem 2.25rem;pointer-events:none;user-select:none;
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
+/* 프로토타입 카드의 워터마크는 사진 위 장식이라 한 단계 작게 — 실제 화면보다 커 보였다(Codex R6) */
+#proto .card-wm{font-size:3.25rem}
+@media (min-width:640px){#proto .card-wm{font-size:4.25rem}}
 .card-wm--long{white-space:nowrap}
 @media (max-width:639.98px){.card-wm--long{font-size:clamp(3rem,15vw,4rem)}}
 .card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
@@ -385,12 +390,13 @@ html[lang="ko"] .clock-t{order:4}
 .case-t .card-open{align-items:flex-start}
 .case-t .ic{margin-top:.4em}
 .case-steps{display:flex;flex-direction:column;gap:.5rem}
-.case-steps>div{display:grid;grid-template-columns:2.75rem 1fr;gap:.625rem;align-items:baseline}
-.case-steps dt{font-size:.6875rem;font-weight:500;letter-spacing:.03em;color:rgba(17,17,17,.45)}
+.case-steps>div{display:grid;grid-template-columns:3rem 1fr;gap:.625rem;align-items:baseline}
+.case-steps dt{font-size:.75rem;font-weight:600;letter-spacing:.02em;color:rgba(17,17,17,.62)}
 .case-steps dd{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.78)}
 .case-bot{margin-top:auto;display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.25rem}
 .case-state{display:inline-flex;border-radius:var(--r-pill);background:var(--ink);color:#fff;
   padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
+.cases-go{margin-top:2rem;text-align:center;font-size:.875rem}
 .case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
   padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
 /* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
@@ -399,7 +405,7 @@ html[lang="ko"] .clock-t{order:4}
 .wdlg-more summary{cursor:pointer;font-size:.8125rem;font-weight:500;color:rgba(17,17,17,.6);list-style:none}
 .wdlg-more summary::-webkit-details-marker{display:none}
 .wdlg-more summary::before{content:"+ ";color:rgba(17,17,17,.4)}
-.wdlg-more[open] summary::before{content:"2 "}
+.wdlg-more[open] summary::before{content:"− "}
 .wdlg-more dl{margin-top:1rem;display:flex;flex-direction:column;gap:1rem}
 .wdlg-more dt{font-size:.8125rem;font-weight:500}
 .wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
@@ -414,8 +420,13 @@ html[lang="ko"] .clock-t{order:4}
 .row-case:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg);outline-offset:3px}
 @media (hover:hover) and (pointer:fine){.row-case:hover{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg)}}
 /* 체험판 안내 4줄 */
-.demo-note{margin-top:1rem;display:flex;flex-direction:column;gap:.35rem;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.66)}
-.demo-note b{font-weight:500;color:rgba(255,255,255,.85)}
+/* 배경 사진의 글자·선이 안내 뒤로 비쳐 읽기 어려웠다(Codex R6) — 불투명 바탕을 깐다.
+   항목명과 설명은 열을 맞춰 긴 문단으로 읽히지 않게 하고, 390에서는 항목명을 독립 행으로 내린다. */
+.demo-note{margin-top:1rem;border-radius:var(--r-control);background:rgba(10,10,10,.82);padding:.75rem .875rem;
+  display:grid;gap:.45rem .75rem;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.78)}
+@media (min-width:640px){.demo-note{grid-template-columns:5.5rem 1fr}.demo-note p{display:contents}}
+.demo-note b{font-weight:600;color:#fff}
+@media (max-width:639.98px){.demo-note b{display:block}}
 
 /* ---------- method ---------- */
 .method-in{padding-block:2.5rem 5rem}
@@ -465,8 +476,9 @@ html[lang="ko"] .clock-t{order:4}
 .wdlg.at-end::after{opacity:0}
 @media (prefers-reduced-motion:reduce){.wdlg::after{transition:none}}
 @media (min-width:640px){.wdlg-in{padding:2.5rem}}
-.wdlg-x{position:absolute;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
-  border-radius:var(--r-pill);background:var(--surface);font-size:1rem;
+/* 닫기 버튼은 스크롤 패널 밖(다이얼로그 직계)에 둔다 — 안에 두면 스크롤과 함께 밀려 사라진다(Codex R6) */
+.wdlg-x{position:absolute;z-index:2;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
+  border-radius:var(--r-pill);background:var(--bg);box-shadow:0 0 0 1px var(--line);font-size:1rem;
   transition:transform .38s var(--e-hover),background-color .3s var(--e-soft)}
 .wdlg-x:focus-visible{background:var(--surface-2);transform:scale(1.06)}
 @media (hover:hover) and (pointer:fine){.wdlg-x:hover{background:var(--surface-2);transform:scale(1.06)}}
@@ -474,6 +486,7 @@ html[lang="ko"] .clock-t{order:4}
 .wdlg-t{margin-top:.5rem;font-size:1.75rem;font-weight:500;letter-spacing:-.015em}
 @media (min-width:640px){.wdlg-t{font-size:2rem}}
 /* 390에서 수치가 세로로 쌓이면 근거 카드가 첫 화면 밖으로 밀린다(Codex R2) — 3열 컴팩트 그리드로 접는다. */
+.wdlg-st[hidden]{display:none}   /* 클래스의 display가 UA의 [hidden]을 이긴다 */
 .wdlg-st{margin-top:1.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.875rem .75rem}
 @media (min-width:640px){.wdlg-st{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:1.25rem 2.5rem}}
 .wdlg-st div{display:flex;flex-direction:column;gap:.3rem;min-width:0}
@@ -743,12 +756,13 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
       <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
         <button class="pill pill--dark pill--arrow pill--r" data-scroll="cases">
-          <span class="pill-in" data-i18n="성과-보기">성과 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
+          <span class="pill-in" data-i18n="대표-사례-보기">대표 사례 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
         </button>
         <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
           <span class="pill-in" data-i18n="연락처-확인하기">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
         </a>
       </div>
+      <p class="hero-pdf" data-reveal data-gate="ready" style="--rd:800ms"><a class="alink" href="henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener"><span data-i18n="포트폴리오-PDF">포트폴리오 PDF<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></p>
     </div>
 
     <div class="hero-r">
@@ -899,6 +913,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         </article>
       </li>
     </ul>
+    <p class="cases-go" data-reveal style="--rd:280ms"><button class="alink" type="button" data-scroll="proto"><span data-i18n="체험판-바로가기">체험판 바로가기<svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></span></button></p>
   </div>
 </section>
 
@@ -1013,7 +1028,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <h3><a class="card-go" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="꾸미기-이벤트-기획-와이어프레임">꾸미기 이벤트 기획·와이어프레임<span class="sr-only" data-i18n="체험판-열기-새-창에서"> 체험판 열기 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p data-i18n="만족도-조사에서-나온-수집">만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
                         <div class="demo-note">
-              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="주차를-바꾸고-보상-잠금">주차를 바꾸고 보상 잠금 상태를 비교해 보세요.</span></p>
+              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="꾸미기-화면에서-아이템을">꾸미기 화면에서 아이템을 고르고 배치해 보세요.</span></p>
               <p><b data-i18n="설계-목적">설계 목적</b> <span data-i18n="개발-전-협의용으로-화면">개발 전 협의용으로 화면 흐름을 먼저 맞추려고 만들었습니다.</span></p>
               <p><b data-i18n="본인-역할">본인 역할</b> <span data-i18n="기획서-초안-작성과-프로토타입">기획서 초안 작성과 프로토타입 제작을 직접 했습니다.</span></p>
               <p><b data-i18n="출시-여부">출시 여부</b> <span data-i18n="실제-이벤트는-2026-04-30">실제 이벤트는 2026-04-30~05-23 출시.</span></p>
@@ -1032,7 +1047,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <h3><a class="card-go" href="demo/ssjproto.html" target="_blank" rel="noopener" data-i18n="SuperStar-JYP-Nation-10주년">SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입<span class="sr-only" data-i18n="프로토타입-플레이-새-창에서"> 프로토타입 플레이 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p data-i18n="기획서-대신-실제로-작동하는">기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
                         <div class="demo-note">
-              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="주차별-미션-보상-수령">주차별 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</span></p>
+              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="주차를-바꾸고-보상-잠금">주차를 바꾸고 보상 잠금 상태를 비교한 뒤, 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</span></p>
               <p><b data-i18n="설계-목적">설계 목적</b> <span data-i18n="기획서-대신-작동하는-웹뷰로">기획서 대신 작동하는 웹뷰로 흐름을 검증하려고 만들었습니다.</span></p>
               <p><b data-i18n="본인-역할">본인 역할</b> <span data-i18n="AI로-인터랙티브-프로토타입을">AI로 인터랙티브 프로토타입을 직접 만들었습니다.</span></p>
               <p><b data-i18n="출시-여부">출시 여부</b> <span data-i18n="실제-출시-2026-05">실제 출시 — 2026년 5월.</span></p>
@@ -1333,25 +1348,26 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
 <!-- ================= WORK DETAIL ================= -->
 <dialog id="wdlg" class="wdlg" aria-labelledby="wdlgT">
+  <button class="wdlg-x" id="wdlgX" type="button" data-i18n-attr="aria-label" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
   <div class="wdlg-in" data-lenis-prevent>
-    <button class="wdlg-x" id="wdlgX" type="button" data-i18n-attr="aria-label" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
     <p class="wdlg-meta" id="wdlgM"></p>
     <h3 class="wdlg-t" id="wdlgT"></h3>
-    <div class="wdlg-st" id="wdlgS"></div>
-    <!-- 근거 링크는 상세 행보다 위 — 첫 화면에서 근거가 보여야 한다 -->
-    <div class="wdlg-src" id="wdlgN" hidden></div>
+    <div class="wdlg-st" id="wdlgS" hidden></div>
     <!-- 외부 링크는 시연 영상 위에 둔다 — 아래에 두면 긴 패널에서 접히는 순간 보이지 않는다 -->
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
+    <!-- 읽는 순서 = 본문(판단·행동·결과) → 대표 근거 → 보조 사례.
+         근거를 앞에 두면 핵심 판단을 늦게 만나게 된다(Codex R6). -->
     <dl class="wdlg-rows" id="wdlgR"></dl>
+    <div class="wdlg-src" id="wdlgN" hidden></div>
     <details class="wdlg-more" id="wdlgMore" hidden></details>
   </div>
 </dialog>
 
 <!-- ================= CONTACT ================= -->
 <dialog id="cdlg" class="wdlg cdlg" aria-labelledby="cdlgT">
+  <button class="wdlg-x" id="cdlgX" type="button" data-i18n-attr="aria-label" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
   <div class="wdlg-in" data-lenis-prevent>
-    <button class="wdlg-x" id="cdlgX" type="button" data-i18n-attr="aria-label" aria-label="닫기"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
     <p class="wdlg-meta">Contact</p>
     <h3 class="wdlg-t" id="cdlgT" data-i18n="연락처">연락처</h3>
     <dl class="wdlg-rows contact-rows">
@@ -1872,6 +1888,8 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     }
   }
   function fill(parent, list, tags){
+    // 빈 목록이면 칸 자체를 접는다 — 사례 상세창은 성과 수치가 없어 빈 여백이 본문을 밀어냈다(Codex R6)
+    parent.hidden = !list.length;
     parent.replaceChildren(...list.map(([a, b]) => {
       const box = document.createElement('div');
       const x = document.createElement(tags[0]), y = document.createElement(tags[1]);
@@ -1970,6 +1988,8 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const img = document.createElement('img');
     img.src = EVIDENCE_BASE + meta.img;   // 상세창을 열 때 처음 만든다 — 그 전에는 요청이 없다
     img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+    // 썸네일이 안 뜨면 빈 칸을 남기지 않고 제목·요약만 보여준다(Codex R6)
+    img.addEventListener('error', () => { thumb.remove() });
     thumb.append(img);
     const body = document.createElement('span');
     body.className = 'ev-body';
