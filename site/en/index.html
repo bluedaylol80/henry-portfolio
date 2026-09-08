@@ -403,6 +403,19 @@ html[lang="ko"] .clock-t{order:4}
 .wdlg-more dt{font-size:.8125rem;font-weight:500}
 .wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
 
+/* 대표 사례로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
+   .card-open을 쓰지 않는 이유: 그 ::after{inset:0}가 가까운 위치지정 조상을 통째로 덮는다. */
+.row-cases{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;font-size:.8125rem}
+.row-case{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:.35rem .75rem;color:rgba(17,17,17,.62);background:transparent;
+  transition:border-color .3s var(--e-soft),color .3s var(--e-soft),background-color .3s var(--e-soft)}
+.row-case .ic{font-size:.75em;opacity:.6}
+.row-case:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg);outline-offset:3px}
+@media (hover:hover) and (pointer:fine){.row-case:hover{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg)}}
+/* 체험판 안내 4줄 */
+.demo-note{margin-top:1rem;display:flex;flex-direction:column;gap:.35rem;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.66)}
+.demo-note b{font-weight:500;color:rgba(255,255,255,.85)}
+
 /* ---------- method ---------- */
 .method-in{padding-block:2.5rem 5rem}
 @media (min-width:1024px){.method-in{padding-bottom:7rem}}
@@ -998,6 +1011,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-bot">
             <h3><a class="card-go" href="../demo/deco.html" target="_blank" rel="noopener">Decoration event design & wireframe<span class="sr-only"> Open the demo in Korean (opens in a new window)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p>Turned collection and display requests from the satisfaction survey into a decoration event design and wireframe. Open the card for the demo (Korean).</p>
+                        <div class="demo-note">
+              <p><b>How to try it</b> <span>Switch the week and compare the reward lock states.</span></p>
+              <p><b>Why it was built</b> <span>Built to settle the screen flow before development started.</span></p>
+              <p><b>My part</b> <span>I wrote the brief myself and built the prototype.</span></p>
+              <p><b>Shipped?</b> <span>The event shipped 2026-04-30 to 05-23.</span></p>
+            </div>
             <div class="card-tags"><span class="tag">VOC → design</span><span class="tag">Wireframe</span><span class="tag">Demo</span></div>
             <p class="card-rights">Public screens are a summary with internal details removed.</p>
           </div>
@@ -1011,6 +1030,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-bot">
             <h3><a class="card-go" href="../demo/ssjproto.html" target="_blank" rel="noopener">SuperStar JYP Nation 10th anniversary webview event prototype<span class="sr-only"> Play the prototype in Korean (opens in a new window)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p>Validated on a working webview instead of a spec — I built the clickable prototype myself with AI, covering weekly missions, reward claims and the entry flow. Open the card to play it (Korean).</p>
+                        <div class="demo-note">
+              <p><b>How to try it</b> <span>Try it in order: weekly missions → claim rewards → entry flow.</span></p>
+              <p><b>Why it was built</b> <span>Built to validate the flow on a working webview instead of a spec.</span></p>
+              <p><b>My part</b> <span>I built the interactive prototype myself with AI.</span></p>
+              <p><b>Shipped?</b> <span>Shipped — May 2026.</span></p>
+            </div>
             <div class="card-tags"><span class="tag">AI prototype</span><span class="tag">Interactive validation</span><span class="tag">Play</span></div>
             <p class="card-rights">Public screens are a summary with internal details removed.</p>
           </div>
@@ -1029,11 +1054,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>How I solve problems</span></span></h2>
     </div>
     <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
-      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3>User research</h3><p>Find the real pain points in surveys and VOC</p></li>
-      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>Problem definition</h3><p>Turn evidence into focused actions</p></li>
-      <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3>Product direction</h3><p>Translate actions into a roadmap and direction</p></li>
-      <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3>Prototype</h3><p>Validate with working screens, not documents</p></li>
-      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>Build & operate</h3><p>Ship against milestones, measure the outcome</p></li>
+      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3>User research</h3><p>Find the real pain points in surveys and VOC</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — from user research to shipped events</button></p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>Problem definition</h3><p>Turn evidence into focused actions</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre-launch fixes</button></p></li>
+      <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3>Product direction</h3><p>Translate actions into a roadmap and direction</p><p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog">Work — SuperStar 2026 product direction</button></p></li>
+      <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3>Prototype</h3><p>Validate with working screens, not documents</p><p class="row-cases"><a class="row-case" href="../demo/deco.html" target="_blank" rel="noopener">Demo — decoration event<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (opens in a new window)</span></a></p></li>
+      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>Build & operate</h3><p>Ship against milestones, measure the outcome</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog">Case — redefining the systems to publisher spec</button></p></li>
     </ol>
   </div>
 </section>
@@ -1192,33 +1217,33 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li class="row-li" data-reveal style="--rd:0ms;--ry:24px"><div class="row">
         <span class="row-i">01</span>
         <div class="row-body">
-          <h3 class="row-title">Game Design</h3>
-          <p class="row-note">System and live game design. Designed 10 new systems and 8 reworks, and integrated paid-currency purchase and the coupon system. Designed the server-select UI/flow and validated it through FGTs and internal tests.</p>
-          <p class="row-sub">Neowiz · Dalcomsoft · Acestorm · Wonderpeople</p>
+          <h3 class="row-title">Product decisions & milestones</h3>
+          <p class="row-note">Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — from user research to shipped events</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre-launch fixes</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
         <span class="row-i">02</span>
         <div class="row-body">
-          <h3 class="row-title">Business</h3>
-          <p class="row-note">Business PM. Ran the soft launches of Lyn, Chaos Chronicle and Shadow Seven. Competitor monetization analysis, product and BM proposals, G-star exhibits and user meetups, and 2 service sunsets closed out.</p>
-          <p class="row-sub">Softnyx · Netmarble Blue · Nexon Korea · Neptune Legend · Skypeople · Wonderpeople</p>
+          <h3 class="row-title">Launch & live ops</h3>
+          <p class="row-note">Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog">Case — redefining the systems to publisher spec</button><button class="row-case" type="button" data-open-work="chaos" aria-haspopup="dialog">Work — Chaos Chronicle sunset ops</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
         <span class="row-i">03</span>
         <div class="row-body">
-          <h3 class="row-title">Operations</h3>
-          <p class="row-note">GM work. Ran live ops for SUN Online, Atlantica and R2, and led the Tera web ops part and FUN QA gameplay analysis on 4 titles.</p>
-          <p class="row-sub">Webzen · NHN Service (Hangame)</p>
+          <h3 class="row-title">Team & hiring</h3>
+          <p class="row-note">Hiring, team structure and who owns what. At Dalcomsoft I restructured three teams of 22 into two teams of 13 while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — restructuring (in the Dalcomsoft detail, "Also from the same period")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog">Work — Skypeople org setup</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
         <span class="row-i">04</span>
         <div class="row-body">
-          <h3 class="row-title">Director</h3>
-          <p class="row-note">I led IP collaboration, dev scope, milestones and the annual plan, and led live-service development. Automated SM music settlement and hired game designers, QA and CS staff.</p>
-          <p class="row-sub">Dalcomsoft · Live Game Design Team, Team Lead</p>
+          <h3 class="row-title">Operational standards</h3>
+          <p class="row-note">Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog">Work — SKU automation and the abuse SOP</button></p>
         </div>
       </div></li>
     </ul>
@@ -1290,6 +1315,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <h3>Elsewhere</h3>
         <ul>
           <li><a class="alink" data-notion-hub href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer"><span>Notion resume<span class="sr-only"> (opens in a new window)</span></span></a></li>
+          <li hidden data-pdf-slot><span class="alink"><span>Portfolio PDF</span></span></li>
           <li><a class="alink" data-lang-link href="../" hreflang="ko"><span>Korean</span></a></li>
           <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
         </ul>
@@ -1337,6 +1363,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <a class="pill pill--outline" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bluedaylol80@gmail.com" target="_blank" rel="noopener"><span class="pill-in">Write in Gmail<span class="sr-only"> (opens in a new window)</span></span></a>
           </span>
         </dd>
+      </div>
+      <div hidden data-pdf-slot>
+        <dt>Portfolio PDF</dt>
+        <dd><span class="contact-val">Coming soon</span></dd>
       </div>
       <div>
         <dt>Resume</dt>
@@ -2011,6 +2041,10 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     modalLock(true);
     wdlg.showModal();
   }
+  /* 사례·성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
+  document.querySelectorAll('[data-open-work]').forEach(b => {
+    b.addEventListener('click', () => openWork(b.dataset.openWork, b));
+  });
   document.querySelectorAll('.card-open').forEach(btn => {
     btn.addEventListener('click', () => openWork(btn.dataset.work, btn));
     /* 카드 어디를 눌러도 같은 상세창을 연다 — 제목 버튼만 눌러야 열리는 건 알아채기 어렵다.

@@ -403,6 +403,19 @@ html[lang="ko"] .clock-t{order:4}
 .wdlg-more dt{font-size:.8125rem;font-weight:500}
 .wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
 
+/* 대표 사례로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
+   .card-open을 쓰지 않는 이유: 그 ::after{inset:0}가 가까운 위치지정 조상을 통째로 덮는다. */
+.row-cases{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;font-size:.8125rem}
+.row-case{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
+  border-radius:var(--r-pill);padding:.35rem .75rem;color:rgba(17,17,17,.62);background:transparent;
+  transition:border-color .3s var(--e-soft),color .3s var(--e-soft),background-color .3s var(--e-soft)}
+.row-case .ic{font-size:.75em;opacity:.6}
+.row-case:focus-visible{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg);outline-offset:3px}
+@media (hover:hover) and (pointer:fine){.row-case:hover{border-color:rgba(17,17,17,.5);color:var(--fg);background:var(--bg)}}
+/* 체험판 안내 4줄 */
+.demo-note{margin-top:1rem;display:flex;flex-direction:column;gap:.35rem;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.66)}
+.demo-note b{font-weight:500;color:rgba(255,255,255,.85)}
+
 /* ---------- method ---------- */
 .method-in{padding-block:2.5rem 5rem}
 @media (min-width:1024px){.method-in{padding-bottom:7rem}}
@@ -998,6 +1011,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-bot">
             <h3><a class="card-go" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="꾸미기-이벤트-기획-와이어프레임">꾸미기 이벤트 기획·와이어프레임<span class="sr-only" data-i18n="체험판-열기-새-창에서"> 체험판 열기 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p data-i18n="만족도-조사에서-나온-수집">만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
+                        <div class="demo-note">
+              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="주차를-바꾸고-보상-잠금">주차를 바꾸고 보상 잠금 상태를 비교해 보세요.</span></p>
+              <p><b data-i18n="설계-목적">설계 목적</b> <span data-i18n="개발-전-협의용으로-화면">개발 전 협의용으로 화면 흐름을 먼저 맞추려고 만들었습니다.</span></p>
+              <p><b data-i18n="본인-역할">본인 역할</b> <span data-i18n="기획서-초안-작성과-프로토타입">기획서 초안 작성과 프로토타입 제작을 직접 했습니다.</span></p>
+              <p><b data-i18n="출시-여부">출시 여부</b> <span data-i18n="실제-이벤트는-2026-04-30">실제 이벤트는 2026-04-30~05-23 출시.</span></p>
+            </div>
             <div class="card-tags"><span class="tag" data-i18n="VOC-기획">VOC→기획</span><span class="tag" data-i18n="와이어프레임">와이어프레임</span><span class="tag" data-i18n="체험판">체험판</span></div>
             <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
           </div>
@@ -1011,6 +1030,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-bot">
             <h3><a class="card-go" href="demo/ssjproto.html" target="_blank" rel="noopener" data-i18n="SuperStar-JYP-Nation-10주년">SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입<span class="sr-only" data-i18n="프로토타입-플레이-새-창에서"> 프로토타입 플레이 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
             <p data-i18n="기획서-대신-실제로-작동하는">기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
+                        <div class="demo-note">
+              <p><b data-i18n="체험-순서">체험 순서</b> <span data-i18n="주차별-미션-보상-수령">주차별 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</span></p>
+              <p><b data-i18n="설계-목적">설계 목적</b> <span data-i18n="기획서-대신-작동하는-웹뷰로">기획서 대신 작동하는 웹뷰로 흐름을 검증하려고 만들었습니다.</span></p>
+              <p><b data-i18n="본인-역할">본인 역할</b> <span data-i18n="AI로-인터랙티브-프로토타입을">AI로 인터랙티브 프로토타입을 직접 만들었습니다.</span></p>
+              <p><b data-i18n="출시-여부">출시 여부</b> <span data-i18n="실제-출시-2026-05">실제 출시 — 2026년 5월.</span></p>
+            </div>
             <div class="card-tags"><span class="tag" data-i18n="AI-프로토타입">AI 프로토타입</span><span class="tag" data-i18n="인터랙티브-검증">인터랙티브 검증</span><span class="tag" data-i18n="플레이">플레이</span></div>
             <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
           </div>
@@ -1029,11 +1054,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="문제를-해결하는-방식">문제를 해결하는 방식</span></span></h2>
     </div>
     <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
-      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3 data-i18n="사용자-조사">사용자 조사</h3><p data-i18n="만족도-조사와-VOC에서-진짜">만족도 조사와 VOC에서 진짜 불편을 찾는다</p></li>
-      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3 data-i18n="문제-정의">문제 정의</h3><p data-i18n="지표와-요구를-대조해-개선">지표와 요구를 대조해 개선 과제로 좁힌다</p></li>
-      <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3 data-i18n="제품-방향">제품 방향</h3><p data-i18n="과제를-로드맵과-방향성으로-만든다">과제를 로드맵과 방향성으로 만든다</p></li>
-      <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3 data-i18n="프로토타입">프로토타입</h3><p data-i18n="문서가-아니라-작동하는-화면으로">문서가 아니라 작동하는 화면으로 검증한다</p></li>
-      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3 data-i18n="개발-운영">개발·운영</h3><p data-i18n="마일스톤으로-실행하고-결과를-지표로">마일스톤으로 실행하고 결과를 지표로 되받는다</p></li>
+      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3 data-i18n="사용자-조사">사용자 조사</h3><p data-i18n="만족도-조사와-VOC에서-진짜">만족도 조사와 VOC에서 진짜 불편을 찾는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-사용자-조사-기반-이벤트">사례 — 사용자 조사 기반 이벤트 복귀</button></p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3 data-i18n="문제-정의">문제 정의</h3><p data-i18n="지표와-요구를-대조해-개선">지표와 요구를 대조해 개선 과제로 좁힌다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="사례-소프트런칭-지표-개선">사례 — 소프트런칭 지표 → 개선 과제</button></p></li>
+      <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3 data-i18n="제품-방향">제품 방향</h3><p data-i18n="과제를-로드맵과-방향성으로-만든다">과제를 로드맵과 방향성으로 만든다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog" data-i18n="성과-SuperStar-2026-방향성">성과 — SuperStar 2026 방향성 제안</button></p></li>
+      <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3 data-i18n="프로토타입">프로토타입</h3><p data-i18n="문서가-아니라-작동하는-화면으로">문서가 아니라 작동하는 화면으로 검증한다</p><p class="row-cases"><a class="row-case" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="체험판-꾸미기-이벤트">체험판 — 꾸미기 이벤트<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></a></p></li>
+      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3 data-i18n="개발-운영">개발·운영</h3><p data-i18n="마일스톤으로-실행하고-결과를-지표로">마일스톤으로 실행하고 결과를 지표로 되받는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="사례-퍼블리셔-규격-시스템">사례 — 퍼블리셔 규격 시스템 재정의</button></p></li>
     </ol>
   </div>
 </section>
@@ -1192,33 +1217,33 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li class="row-li" data-reveal style="--rd:0ms;--ry:24px"><div class="row">
         <span class="row-i">01</span>
         <div class="row-body">
-          <h3 class="row-title" data-i18n="기획">기획</h3>
-          <p class="row-note" data-i18n="시스템-라이브-기획-신규">시스템·라이브 기획. 신규 시스템 10종·개편 8종을 기획하고 유료 재화 구매·쿠폰 시스템을 연동했습니다. 서버 선택창 UI/플로우를 기획하고 FGT·사내테스트로 검증합니다.</p>
-          <p class="row-sub" data-i18n="네오위즈-달콤소프트-에이스톰-원더피플">네오위즈 · 달콤소프트 · 에이스톰 · 원더피플</p>
+          <h3 class="row-title" data-i18n="제품-판단-마일스톤">제품 판단·마일스톤</h3>
+          <p class="row-note" data-i18n="조사-지표로-무엇을-만들지">조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤을 재조립해 실행까지 끌고 가는 디렉터·PM 역할입니다. 런칭 전 마일스톤 재조립과 코디네이션을 포함합니다.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-사용자-조사-기반-이벤트">사례 — 사용자 조사 기반 이벤트 복귀</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="사례-소프트런칭-지표-개선">사례 — 소프트런칭 지표 → 개선 과제</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
         <span class="row-i">02</span>
         <div class="row-body">
-          <h3 class="row-title" data-i18n="사업">사업</h3>
-          <p class="row-note" data-i18n="사업-PM-린-카오스크로니클">사업 PM. 린·카오스크로니클·Shadow Seven 소프트런칭을 담당했습니다. 타사 유료화 분석, 상품·BM 제안, G-star 출전·유저 간담회, 서비스 종료 2건 완수.</p>
-          <p class="row-sub" data-i18n="소프트닉스-넷마블-블루-넥슨">소프트닉스 · 넷마블 블루 · 넥슨 코리아 · 넵튠 레전드 · 스카이피플 · 원더피플</p>
+          <h3 class="row-title" data-i18n="출시-라이브-실행">출시·라이브 실행</h3>
+          <p class="row-note" data-i18n="소프트런칭-런칭-라이브-운영">소프트런칭·런칭·라이브 운영·서비스 종료를 실제로 돌린 일입니다. 린·카오스크로니클·Shadow Seven 소프트런칭, 나이트워커 퍼블리싱 연동, 서비스 종료 5개의 잔여 이슈까지 맡았습니다.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="사례-퍼블리셔-규격-시스템">사례 — 퍼블리셔 규격 시스템 재정의</button><button class="row-case" type="button" data-open-work="chaos" aria-haspopup="dialog" data-i18n="성과-카오스크로니클-종료-운영">성과 — 카오스크로니클 종료 운영</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
         <span class="row-i">03</span>
         <div class="row-body">
-          <h3 class="row-title" data-i18n="운영">운영</h3>
-          <p class="row-note" data-i18n="GM-업무-SUN-온라인">GM 업무. SUN 온라인·아틀란티카·R2 라이브를 운영하고, Tera 웹운영 파트와 FUN QA 4종 게임성 분석을 이끌었습니다.</p>
-          <p class="row-sub" data-i18n="웹젠-NHN-Service-한게임">웹젠 · NHN Service (한게임)</p>
+          <h3 class="row-title" data-i18n="조직-인력-운영">조직·인력 운영</h3>
+          <p class="row-note" data-i18n="채용-팀-구조-담당-배치">채용·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 22명을 두 조직 13명으로 재편하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 셋업했습니다.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-조직-재편-함께-보기">사례 — 조직 재편(달콤 상세창 "함께 보기")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog" data-i18n="성과-스카이피플-조직-셋업">성과 — 스카이피플 조직 셋업</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
         <span class="row-i">04</span>
         <div class="row-body">
-          <h3 class="row-title" data-i18n="디렉터">디렉터</h3>
-          <p class="row-note" data-i18n="IP-협업-개발-범위">IP 협업·개발 범위·마일스톤·연간 계획을 직접 잡고 라이브서비스 개발을 이끕니다. SM 음원 정산을 자동화하고 기획·QA·CS를 채용했습니다.</p>
-          <p class="row-sub" data-i18n="달콤소프트-라이브기획팀-팀장-2">달콤소프트 · 라이브기획팀 팀장</p>
+          <h3 class="row-title" data-i18n="운영-표준화">운영 표준화</h3>
+          <p class="row-note" data-i18n="반복-업무를-규칙-자동화로">반복 업무를 규칙·자동화로 만든 일입니다. Google Apps Script로 7개 프로젝트 SKU를 자동화했고, 상품 어뷰징 사후 대응 SOP와 Notion 업무 이력 통합을 문서로 남겼습니다.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog" data-i18n="성과-SKU-자동화-어뷰징-SOP">성과 — SKU 자동화·어뷰징 SOP</button></p>
         </div>
       </div></li>
     </ul>
@@ -1290,6 +1315,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <h3>Elsewhere</h3>
         <ul>
           <li><a class="alink" data-notion-hub href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer"><span data-i18n="Notion-이력서">Notion 이력서<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></li>
+          <li hidden data-pdf-slot><span class="alink"><span data-i18n="포트폴리오-PDF">포트폴리오 PDF</span></span></li>
           <li><a class="alink" data-lang-link href="en/" hreflang="en"><span>English</span></a></li>
           <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
         </ul>
@@ -1337,6 +1363,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <a class="pill pill--outline" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=bluedaylol80@gmail.com" target="_blank" rel="noopener"><span class="pill-in" data-i18n="Gmail로-쓰기">Gmail로 쓰기<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a>
           </span>
         </dd>
+      </div>
+      <div hidden data-pdf-slot>
+        <dt data-i18n="포트폴리오-PDF">포트폴리오 PDF</dt>
+        <dd><span class="contact-val" data-i18n="준비-중입니다">준비 중입니다</span></dd>
       </div>
       <div>
         <dt data-i18n="이력서">이력서</dt>
@@ -2011,6 +2041,10 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     modalLock(true);
     wdlg.showModal();
   }
+  /* 사례·성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
+  document.querySelectorAll('[data-open-work]').forEach(b => {
+    b.addEventListener('click', () => openWork(b.dataset.openWork, b));
+  });
   document.querySelectorAll('.card-open').forEach(btn => {
     btn.addEventListener('click', () => openWork(btn.dataset.work, btn));
     /* 카드 어디를 눌러도 같은 상세창을 연다 — 제목 버튼만 눌러야 열리는 건 알아채기 어렵다.

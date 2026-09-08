@@ -396,7 +396,7 @@
   .cal-cell.future { background: rgba(255,255,255,0.08); opacity: 0.5; }
   .cal-cell.milestone { background: rgba(255,193,7,0.5); }
 
-  /* v2.7: 출석부 슬롯 하이라이트 애니메이션 */
+  /* 출석부 슬롯 하이라이트 애니메이션 */
   @keyframes pulse {
     0%, 100% { box-shadow: 0 0 4px rgba(33,150,243,0.4); }
     50% { box-shadow: 0 0 12px rgba(33,150,243,0.8); }
@@ -529,7 +529,7 @@
 <body>
 <div class="container">
   <h1>꾸미기 이벤트 시스템 Wireframe</h1>
-  <p class="subtitle">SUPERSTAR STAYC · unchild Decoration Event v2.8 — Slack 피드백 반영</p>
+  <p class="subtitle">SUPERSTAR STAYC · unchild Decoration Event</p>
 
   <div class="controls">
     <button onclick="toggleDark()" id="darkBtn">Toggle Dark Mode</button>
@@ -874,7 +874,7 @@
           <div id="preview-default" class="preview-state" style="background:rgba(255,255,255,0.08);border-radius:14px;padding:16px;text-align:center;color:white;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed rgba(255,255,255,0.2);">
             <div style="font-size:40px;margin-bottom:8px;opacity:0.3;">🃏</div>
             <div style="font-size:11px;font-weight:600;opacity:0.6;">오른쪽에서 카드를 선택하세요</div>
-            <div style="font-size:8px;opacity:0.3;margin-top:4px;">v2.7: 디폴트 = 빈카드 이미지 + 안내 텍스트</div>
+            
           </div>
 
           
@@ -937,7 +937,7 @@
 
       
       <div class="card mt-8">
-        <div class="card-title">카드 선택 — 보유 전체 카드 (v2.4 구조 개편)</div>
+        <div class="card-title">카드 선택 — 보유 전체 카드</div>
 
         
         <div style="display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;">
@@ -1622,7 +1622,7 @@
         • 각 유저의 대표 카드 + 적용 중 테두리가 리스트에 표시<br>
         • 구간 보상은 이벤트 종료 시 일괄 지급<br>
         • 이벤트 종료 전까지 순위 변동 가능<br>
-        • 🆕 보상 = 한정테마 기반 (v2.7): Top1 한정테마+프로필+배경, Top2~10 한정테마+배경, Top50 한정테마(런칭한정), 전체 한정테마
+        • 보상 = 한정테마 기반: Top1 한정테마+프로필+배경, Top2~10 한정테마+배경, Top50 한정테마(런칭한정), 전체 한정테마
       </div>
 
       
@@ -1810,7 +1810,7 @@
         
       </div>
 
-      <div style="color:white;font-size:12px;font-weight:700;margin:8px 0;">📦 보상 수령 (v2.7: 한정테마 기반)</div>
+      <div style="color:white;font-size:12px;font-weight:700;margin:8px 0;">📦 보상 수령 — 한정테마 기반</div>
       <div style="text-align:center;">
         <div class="reward-item"><div class="r-icon">🃏</div>한정<br>테마</div>
         <div class="reward-item"><div class="r-icon">💎</div>뱃지<br>"찐팬"</div>
@@ -1882,7 +1882,7 @@
 </div>
 
 <script>
-  // v2.7: 통합 도감 탭 전환
+  // 통합 도감 탭 전환
   function switchCodexTab(tab) {
     // 모든 패널 숨기기
     document.querySelectorAll('.codex-content').forEach(p => p.style.display = 'none');
@@ -1924,7 +1924,7 @@
     }
   }
 
-  // v2.5: 미션 탭별 화면 분리
+  // 미션 탭별 화면 분리
   function switchMissionTab(tab) {
     // 탭 활성화
     document.querySelectorAll('#mission-tabs .tab').forEach(t => t.classList.remove('active'));
@@ -1992,7 +1992,7 @@
     });
   });
 
-  // Preview state toggle (v2.3 — 미리보기 영역 출력 규칙)
+  // Preview state toggle — 미리보기 영역 출력 규칙
   document.querySelectorAll('.preview-state-btn').forEach(btn => {
     btn.addEventListener('click', function() {
       document.querySelectorAll('.preview-state-btn').forEach(b => b.classList.remove('active'));
