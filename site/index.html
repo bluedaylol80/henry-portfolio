@@ -365,6 +365,44 @@ html[lang="ko"] .clock-t{order:4}
   .cards li:hover .card-open .ic,.cards li:hover .card-go .ic{transform:translate(2px,-2px);opacity:1}
 }
 
+/* ---------- 대표 사례 (#cases) ----------
+   성과 카드(사진 워터마크·큰 숫자)와 구분되는 종이 카드 톤 — 사례는 숫자가 아니라 서사다. */
+.cases-in{padding-block:2.5rem 4.5rem}
+@media (min-width:1024px){.cases-in{padding-bottom:6rem}}
+.cases{display:grid;grid-template-columns:1fr;gap:1.25rem}
+@media (min-width:1024px){.cases{grid-template-columns:repeat(3,1fr);gap:1.5rem}}
+.cases>li{display:flex}
+.case{position:relative;flex:1;display:flex;flex-direction:column;gap:.875rem;
+  border:1px solid var(--line);border-radius:var(--r-card);background:var(--surface);padding:1.75rem 1.5rem;
+  transition:transform .45s var(--e-hover),box-shadow .45s var(--e-soft),border-color .3s var(--e-soft)}
+@media (hover:hover) and (pointer:fine){
+  .cases li:hover .case{transform:translateY(-4px);box-shadow:0 16px 40px rgba(17,17,17,.09);border-color:rgba(17,17,17,.22)}
+  .cases li:hover .case-t .ic{transform:translate(2px,-2px);opacity:1}
+}
+.case-meta{font-size:.75rem;letter-spacing:.02em;color:rgba(17,17,17,.55)}
+.case-t{font-size:1.0625rem;font-weight:600;line-height:1.45;letter-spacing:-.01em}
+.case-t .card-open{align-items:flex-start}
+.case-t .ic{margin-top:.4em}
+.case-steps{display:flex;flex-direction:column;gap:.5rem}
+.case-steps>div{display:grid;grid-template-columns:2.75rem 1fr;gap:.625rem;align-items:baseline}
+.case-steps dt{font-size:.6875rem;font-weight:500;letter-spacing:.03em;color:rgba(17,17,17,.45)}
+.case-steps dd{font-size:.875rem;line-height:1.5;color:rgba(17,17,17,.78)}
+.case-bot{margin-top:auto;display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.25rem}
+.case-state{display:inline-flex;border-radius:var(--r-pill);background:var(--ink);color:#fff;
+  padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
+.case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
+  padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
+/* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
+.wdlg-more{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem}
+.wdlg-more[hidden]{display:none}
+.wdlg-more summary{cursor:pointer;font-size:.8125rem;font-weight:500;color:rgba(17,17,17,.6);list-style:none}
+.wdlg-more summary::-webkit-details-marker{display:none}
+.wdlg-more summary::before{content:"+ ";color:rgba(17,17,17,.4)}
+.wdlg-more[open] summary::before{content:"2 "}
+.wdlg-more dl{margin-top:1rem;display:flex;flex-direction:column;gap:1rem}
+.wdlg-more dt{font-size:.8125rem;font-weight:500}
+.wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
+
 /* ---------- method ---------- */
 .method-in{padding-block:2.5rem 5rem}
 @media (min-width:1024px){.method-in{padding-bottom:7rem}}
@@ -691,7 +729,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       </ul>
 
       <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
-        <button class="pill pill--dark pill--arrow pill--r" data-scroll="works">
+        <button class="pill pill--dark pill--arrow pill--r" data-scroll="cases">
           <span class="pill-in" data-i18n="성과-보기">성과 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
         </button>
         <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
@@ -761,6 +799,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <nav class="nav" data-i18n-attr="aria-label" aria-label="주요 메뉴">
         <ul>
           <li><button class="nav-b" data-scroll="home" aria-current="page"><span>Home</span></button></li>
+          <li><button class="nav-b" data-scroll="cases"><span data-i18n="사례">사례</span></button></li>
           <li><button class="nav-b" data-scroll="works"><span data-i18n="성과">성과</span></button></li>
           <li><button class="nav-b" data-scroll="career"><span data-i18n="경력">경력</span></button></li>
           <li><button class="nav-b" data-scroll="lab"><span data-i18n="개인">개인</span></button></li>
@@ -795,6 +834,59 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <li data-reveal style="--rd:240ms;--ry:28px"><div class="tile tile--dark"><svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></div></li>
     <li data-reveal style="--rd:360ms;--ry:28px"><div class="tile tile--ghost">Sunset</div></li>
   </ul>
+</section>
+
+<!-- ================= CASES ================= -->
+<section id="cases" class="sec">
+  <div class="shell px cases-in">
+    <div class="center works-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>Selected Cases</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="회사가-달라도-같은-방식으로">회사가 달라도 같은 방식으로 — 대표 사례 3</span></span></h2>
+      <p class="works-lede" data-reveal style="--rd:200ms" data-i18n="문제-판단-행동-결과-순서로">문제 → 판단 → 행동 → 결과 순서로 씁니다. 카드를 누르면 근거까지 보입니다.</p>
+    </div>
+
+    <ul class="cases">
+      <li data-reveal style="--rd:0ms;--ry:32px">
+        <article class="case">
+          <p class="case-meta" data-i18n="달콤소프트-라이브기획팀-팀장">달콤소프트 · 라이브기획팀 — 팀장</p>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog" data-i18n="만족도-조사의-웹뷰-이벤트">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <dl class="case-steps">
+              <div><dt data-i18n="문제">문제</dt><dd data-i18n="만족도-조사에서-예전-웹뷰">만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다</dd></div>
+              <div><dt data-i18n="판단">판단</dt><dd data-i18n="인게임-미니게임을-먼저-적용하고">인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다</dd></div>
+              <div><dt data-i18n="행동">행동</dt><dd data-i18n="꾸미기-이벤트-기획서를-쓰고">꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다</dd></div>
+              <div><dt data-i18n="결과">결과</dt><dd data-i18n="미니게임-꾸미기-10주년-웹뷰">미니게임·꾸미기·10주년 웹뷰 이벤트가 실제 출시됐다</dd></div>
+          </dl>
+          <p class="case-bot"><span class="case-state" data-i18n="실제-출시">실제 출시</span><span class="case-tag" data-i18n="제품-판단-마일스톤">제품 판단·마일스톤</span></p>
+        </article>
+      </li>
+      <li data-reveal style="--rd:90ms;--ry:32px">
+        <article class="case">
+          <p class="case-meta" data-i18n="넥슨-코리아-모바일사업실-팀장">넥슨 코리아 · 모바일사업실 — 팀장</p>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case2" aria-haspopup="dialog" data-i18n="3개국-소프트런칭-지표로-상품">3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시로<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <dl class="case-steps">
+              <div><dt data-i18n="문제">문제</dt><dd data-i18n="소프트런칭에서-상품-구성-재화">소프트런칭에서 상품 구성·재화 소비·초반 이탈을 확인했다</dd></div>
+              <div><dt data-i18n="판단">판단</dt><dd data-i18n="상품-재화-초반-동선을">상품·재화·초반 동선을 출시 전 개선 과제로 정리했다</dd></div>
+              <div><dt data-i18n="행동">행동</dt><dd data-i18n="FGT와-사내테스트를-이끌고">FGT와 사내테스트를 이끌고 결과를 개발 요구로 정리했다</dd></div>
+              <div><dt data-i18n="결과">결과</dt><dd data-i18n="개선-3건이-그랜드런칭-빌드에">개선 3건이 그랜드런칭 빌드에 반영됐다</dd></div>
+          </dl>
+          <p class="case-bot"><span class="case-state" data-i18n="프로젝트-실제-출시">프로젝트 실제 출시</span><span class="case-tag" data-i18n="출시-라이브-실행">출시·라이브 실행</span></p>
+        </article>
+      </li>
+      <li data-reveal style="--rd:180ms;--ry:32px">
+        <article class="case">
+          <p class="case-meta" data-i18n="원더피플-에이스톰-사업팀-파트장">원더피플/에이스톰 · 사업팀 — 파트장</p>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case3" aria-haspopup="dialog" data-i18n="중국-서비스의-결제-서버">중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <dl class="case-steps">
+              <div><dt data-i18n="문제">문제</dt><dd data-i18n="중국-서비스의-결제-서버-흐름을">중국 서비스의 결제·서버 선택 흐름을 한국에 맞춰야 했다</dd></div>
+              <div><dt data-i18n="판단">판단</dt><dd data-i18n="퍼블리셔-정책과-API-문서를">퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다</dd></div>
+              <div><dt data-i18n="행동">행동</dt><dd data-i18n="구매-쿠폰-서버-선택-UI">구매·쿠폰·서버 선택 UI/플로우 기획을 쓰고 협의했다</dd></div>
+              <div><dt data-i18n="결과">결과</dt><dd data-i18n="유료-재화-쿠폰이-라이브-적용되고">유료 재화·쿠폰이 라이브 적용되고 2023-01 한국 런칭</dd></div>
+          </dl>
+          <p class="case-bot"><span class="case-state" data-i18n="프로젝트-실제-출시">프로젝트 실제 출시</span><span class="case-tag" data-i18n="출시-라이브-실행">출시·라이브 실행</span></p>
+        </article>
+      </li>
+    </ul>
+  </div>
 </section>
 
 <!-- ================= WORKS ================= -->
@@ -885,6 +977,47 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </div>
         </article>
       </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= AI PROTOTYPING ================= -->
+<section id="proto" class="sec">
+  <div class="shell px works-in">
+    <div class="center works-hd">
+      <p class="eyebrow eyebrow--ring" data-reveal>AI Prototyping</p>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="AI로-아이디어를-작동-화면까지">AI로 아이디어를 작동 화면까지</span></span></h2>
+      <p class="proto-lede" data-reveal style="--rd:200ms" data-i18n="AI를-문서-작성이-아니라">AI를 문서 작성이 아니라, 아이디어를 실제로 작동하는 화면으로 검증하는 도구로 씁니다.</p>
+    </div>
+
+    <ul class="cards">
+      <li data-reveal style="--rd:0ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="deco" aria-hidden="true"></div>
+          <div class="card-meta" data-i18n="달콤소프트-업무-프로토타입">달콤소프트 · 업무 프로토타입</div>
+          <div class="card-wm" aria-hidden="true" data-i18n="시안">시안</div>
+          <div class="card-bot">
+            <h3><a class="card-go" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="꾸미기-이벤트-기획-와이어프레임">꾸미기 이벤트 기획·와이어프레임<span class="sr-only" data-i18n="체험판-열기-새-창에서"> 체험판 열기 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
+            <p data-i18n="만족도-조사에서-나온-수집">만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
+            <div class="card-tags"><span class="tag" data-i18n="VOC-기획">VOC→기획</span><span class="tag" data-i18n="와이어프레임">와이어프레임</span><span class="tag" data-i18n="체험판">체험판</span></div>
+            <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:90ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="ssjproto" aria-hidden="true"></div>
+          <div class="card-meta" data-i18n="달콤소프트-업무-프로토타입">달콤소프트 · 업무 프로토타입</div>
+          <div class="card-wm" aria-hidden="true" data-i18n="10주년">10주년</div>
+          <div class="card-bot">
+            <h3><a class="card-go" href="demo/ssjproto.html" target="_blank" rel="noopener" data-i18n="SuperStar-JYP-Nation-10주년">SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입<span class="sr-only" data-i18n="프로토타입-플레이-새-창에서"> 프로토타입 플레이 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
+            <p data-i18n="기획서-대신-실제로-작동하는">기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
+            <div class="card-tags"><span class="tag" data-i18n="AI-프로토타입">AI 프로토타입</span><span class="tag" data-i18n="인터랙티브-검증">인터랙티브 검증</span><span class="tag" data-i18n="플레이">플레이</span></div>
+            <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
+          </div>
+        </article>
+      </li>
+      <!-- 가계부는 Personal Products에만 둔다 (본부장 지시 2026-08-28) -->
     </ul>
   </div>
 </section>
@@ -1016,47 +1149,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <p class="row-impact" data-i18n="SUN-온라인-런칭-라이브">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p>
         </div>
       </div></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ================= AI PROTOTYPING ================= -->
-<section id="proto" class="sec">
-  <div class="shell px works-in">
-    <div class="center works-hd">
-      <p class="eyebrow eyebrow--ring" data-reveal>AI Prototyping</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="AI로-아이디어를-작동-화면까지">AI로 아이디어를 작동 화면까지</span></span></h2>
-      <p class="proto-lede" data-reveal style="--rd:200ms" data-i18n="AI를-문서-작성이-아니라">AI를 문서 작성이 아니라, 아이디어를 실제로 작동하는 화면으로 검증하는 도구로 씁니다.</p>
-    </div>
-
-    <ul class="cards">
-      <li data-reveal style="--rd:0ms;--ry:48px">
-        <article class="card">
-          <div class="card-shot" data-shot="deco" aria-hidden="true"></div>
-          <div class="card-meta" data-i18n="달콤소프트-업무-프로토타입">달콤소프트 · 업무 프로토타입</div>
-          <div class="card-wm" aria-hidden="true" data-i18n="시안">시안</div>
-          <div class="card-bot">
-            <h3><a class="card-go" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="꾸미기-이벤트-기획-와이어프레임">꾸미기 이벤트 기획·와이어프레임<span class="sr-only" data-i18n="체험판-열기-새-창에서"> 체험판 열기 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
-            <p data-i18n="만족도-조사에서-나온-수집">만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
-            <div class="card-tags"><span class="tag" data-i18n="VOC-기획">VOC→기획</span><span class="tag" data-i18n="와이어프레임">와이어프레임</span><span class="tag" data-i18n="체험판">체험판</span></div>
-            <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
-          </div>
-        </article>
-      </li>
-      <li data-reveal style="--rd:90ms;--ry:48px">
-        <article class="card">
-          <div class="card-shot" data-shot="ssjproto" aria-hidden="true"></div>
-          <div class="card-meta" data-i18n="달콤소프트-업무-프로토타입">달콤소프트 · 업무 프로토타입</div>
-          <div class="card-wm" aria-hidden="true" data-i18n="10주년">10주년</div>
-          <div class="card-bot">
-            <h3><a class="card-go" href="demo/ssjproto.html" target="_blank" rel="noopener" data-i18n="SuperStar-JYP-Nation-10주년">SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입<span class="sr-only" data-i18n="프로토타입-플레이-새-창에서"> 프로토타입 플레이 (새 창에서 열림)</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></a></h3>
-            <p data-i18n="기획서-대신-실제로-작동하는">기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
-            <div class="card-tags"><span class="tag" data-i18n="AI-프로토타입">AI 프로토타입</span><span class="tag" data-i18n="인터랙티브-검증">인터랙티브 검증</span><span class="tag" data-i18n="플레이">플레이</span></div>
-            <p class="card-rights" data-i18n="공개-화면은-내부-정보를">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
-          </div>
-        </article>
-      </li>
-      <!-- 가계부는 Personal Products에만 둔다 (본부장 지시 2026-08-28) -->
     </ul>
   </div>
 </section>
@@ -1226,6 +1318,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
     <dl class="wdlg-rows" id="wdlgR"></dl>
+    <details class="wdlg-more" id="wdlgMore" hidden></details>
   </div>
 </dialog>
 
@@ -1600,6 +1693,44 @@ document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HU
 /* ---------- work detail dialog ---------- */
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
 const WORKS = {
+  /* 대표 사례 3 — 원고 v0.5 공개 문안 그대로. 사례는 숫자가 아니라 서사라 s[]는 비운다. */
+  case1: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다',
+    s:[],
+    r:[['기간·역할','재직 2024.10 – 2026.07 · 라이브기획팀 팀장(라이브 디렉터) · 사건 기간 2025.11 조사 → 2026.05 출시'],
+       ['문제','2025년 11월 6개 타이틀(한·영·일) 만족도 조사에서 IP 만족도는 높았고, 예전에 있던 웹뷰 이벤트의 복귀 요구가 나왔다. 이를 이벤트 개선 과제로 다뤘다.'],
+       ['판단','먼저 인게임 미니게임을 준비·적용하고, 이후 웹뷰 이벤트로 확장하는 순서로 갔다.'],
+       ['본인 행동','미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025-12, v2 2026-01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다. 이어서 SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입을 제작했다.'],
+       ['결과·상태','실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.'],
+       ['증거','Notion 「만족도 설문 관련 요약」 · Notion 「decoration_event」 · 체험판 2종(꾸미기 프로토 · SSJ 10주년 웹뷰)']],
+    x:{ s:'함께 보기 — 같은 기간의 보조 사례 2건',
+        r:[['정기 상품 정책 개편 제안','고효율 상품이 무제한으로 팔리며 상품 간 형평성이 흔들렸다. R팩 판매 횟수를 제한하고 하위 상품을 무제한으로 두는 방향을 제안했고, 단계별 제한 완화와 RP 카드팩 대상 그룹 확대를 함께 제안했다. 개편된 상품 구성이 2025년 7월 말부터 9월 중순까지 그룹별로 실서비스 상점에 반영됐다.'],
+           ['조직 재편과 기획·QA·CS 통합 운영','타이틀이 11개에서 7개로 바뀌는 시기에 세 조직 22명을 두 조직 13명으로 재편하는 안을 제안했다. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해, 재편된 구조로 7개 타이틀을 2026년 7월까지 운영했다.']] },
+    n:[{t:'사용자 조사 기반 이벤트 복귀', id:'3d559de7280481dba20ee12a62cb7d69'},
+       {t:'정기 상품 정책 개편 제안', id:'3d559de728048112b3c9ec7998d34e14'},
+       {t:'조직 재편과 기획·QA·CS 통합 운영', id:'3d559de72804813fac33d543e20c1a0a'}] },
+  case2: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다',
+    s:[],
+    r:[['기간·역할','넥슨 코리아 모바일사업실 팀장(재직 2015.07 – 2019.10) · 린 사업 PM 참여 2017.02 – 2019 (개발사 협업, 빌드 코디네이션)'],
+       ['문제','개발사가 만드는 빌드를 출시 조건에 맞추려면 사용자 테스트와 시장 지표를 개발 요구로 바꿔야 했다. 소프트런칭(호주·말레이시아·필리핀, 2019.01~02)에서 상품 구성 불균형, 유료 다이아 소비 침체, 초반 이탈 문제를 확인했다.'],
+       ['판단','상품 구성 · 재화 순환 · 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 사례를 벤치마킹해 방향을 잡았다.'],
+       ['본인 행동','FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품·재화·초반 동선 개선안을 정리하고 개발사와 조율했다.'],
+       ['결과·상태','프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.'],
+       ['증거','Notion 「인게임 개선 제안」 · 소프트런칭 지표보고(사업팀, 비공개) · FGT 만족도 데이터·사내테스트 결과보고(사업팀, 비공개)']],
+    n:[{t:'소프트런칭 지표 기반 출시 전 개선', id:'3d559de72804810faa75ca85ef0a25a0'},
+       {t:'인게임 개선 진행', id:'09624ec9cbdb4dd9a53085f168bfcfa7'}] },
+  case3: { m:'원더피플/에이스톰 · 사업팀 — 파트장', t:'중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의하다',
+    s:[],
+    r:[['기간·역할','2022.02 – 2024.04 · 원더피플/에이스톰 사업팀 파트장 · 나이트워커 한국 서비스(퍼블리셔 넥슨) 사업·퍼블리싱 연동'],
+       ['문제','중국 서비스의 유료 재화 구매 시스템과 SDK 기반 서버 선택 흐름을 한국 서비스에 맞게 변경해야 했다. 퍼블리셔의 결제·쿠폰·서버 정책에 맞는 시스템 정의가 필요했다.'],
+       ['판단','퍼블리셔 정책과 내부 API 문서를 기준으로 삼아, 유료 재화 구매·쿠폰·서버 선택 세 시스템의 UI/UX와 이용 흐름을 한국 규격으로 다시 정의했다.'],
+       ['본인 행동','유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다. 런칭 후 주간 판매 현황을 분석해 상품을 제안하고 라이브 지표로 허들 개선을 제안했다.'],
+       ['결과·상태','프로젝트 실제 출시(2023-01-26 한국 런칭). 유료 재화·쿠폰 기능은 라이브 적용이 기록돼 있고, 서버 선택은 기반 작업 완료 상태로 문서화돼 있다. 프로젝트 전체 성과는 한국 서비스 신규 유저 33만+이며 본인 기여는 연동·상품·허들 제안 범위다.'],
+       ['증거','Notion 「유료재화 구매 시스템 연동」 「쿠폰 시스템 연동」 「서버 선택창 UI/플로우 기획」 「프로모션 상품 기능 추가」']],
+    n:[{t:'퍼블리셔 규격 시스템 재정의', id:'3d559de72804819f9a88c951cbc10f9a'},
+       {t:'유료재화 구매 시스템 연동', id:'49043d5d2bfa44d18384126bbbd86f14'},
+       {t:'쿠폰 시스템 연동', id:'2ade8f618bb945a6b0c0f6a711133b55'},
+       {t:'서버 선택창 UI/플로우 기획', id:'581e150745124f13b3d6d3721841b1c2'},
+       {t:'프로모션 상품 기능 추가', id:'39a59de7280481888c8dff7c54446d1f'}] },
   dalcom: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'SuperStar 시리즈 운영 포트폴리오 및 제품 방향성',
     s:[['11→7','운영 포트폴리오 재편']],
     r:[['운영 포트폴리오','입사 당시 11개 프로젝트를 분석하고, 5개 서비스 종료와 SSWO 신규 론칭을 병행해 최종 7개 프로젝트의 운영 체계를 정비'],
@@ -1750,6 +1881,8 @@ if (wdlg && typeof wdlg.showModal === 'function'){
      href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
      기본은 Notion 페이지 상단 캡처를 쓴 근거 카드이고, evidence/index.json을 못 받으면 칩 목록이 남는다
      (file:// 로 열었을 때가 그 경우다 — 판정 프로브가 여기에 해당한다). */
+  /* 카드 상한 — 나이트워커가 대표 사례 포함 5장이라 4로는 한 장이 화면에서 밀린다(WO-17). */
+  const EV_MAX = 6;
   let evCache = null, evTried = false, dlgToken = 0;
   function loadEvidence(){
     if (evTried) return Promise.resolve(evCache);
@@ -1763,7 +1896,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   }
   function chipList(n){
     const ul = document.createElement('ul');
-    ul.append(...n.slice(0, 4).map(item => {
+    ul.append(...n.slice(0, EV_MAX).map(item => {
       const li = document.createElement('li');
       li.append(notionLink(item.t, item.id));
       return li;
@@ -1832,6 +1965,21 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     return a;
   }
   /* /i18n-region */
+  /* "함께 보기" — 대표 사례 상세창의 보조 사례 접힘 블록(선택 필드 x) */
+  const wX = document.getElementById('wdlgMore');
+  function fillMore(x){
+    if (!x){ wX.replaceChildren(); wX.hidden = true; wX.open = false; return; }
+    const sum = document.createElement('summary');
+    sum.textContent = x.s;
+    const dl = document.createElement('dl');
+    for (const [a, b] of x.r){
+      const dt = document.createElement('dt'); dt.textContent = a;
+      const dd = document.createElement('dd'); dd.textContent = b;
+      dl.append(dt, dd);
+    }
+    wX.replaceChildren(sum, dl);
+    wX.hidden = false; wX.open = false;
+  }
   function fillNotion(n){
     const token = ++dlgToken;
     if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
@@ -1841,7 +1989,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     wN.hidden = false;
     loadEvidence().then(ev => {
       if (!ev || token !== dlgToken) return;   // 다른 카드를 여는 사이 늦게 도착한 응답은 버린다
-      const want = n.slice(0, 4);
+      const want = n.slice(0, EV_MAX);
       const cards = want.map(item => evCard(item, ev[item.id])).filter(Boolean);
       if (cards.length !== want.length) return;   // 하나라도 근거가 없으면 칩을 그대로 둔다
       const grid = document.createElement('div');
@@ -1860,6 +2008,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     fill(wR, w.r, ['dt', 'dd']);
     fillMedia(w.v);
     fillLink(w.l);
+    fillMore(w.x);
     fillNotion(w.n);
     modalLock(true);
     wdlg.showModal();
@@ -1868,7 +2017,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     btn.addEventListener('click', () => openWork(btn.dataset.work, btn));
     /* 카드 어디를 눌러도 같은 상세창을 연다 — 제목 버튼만 눌러야 열리는 건 알아채기 어렵다.
        버튼은 키보드·스크린리더 진입점으로 그대로 둔다(.card-go 카드는 대상이 아니다). */
-    const card = btn.closest('.card');
+    const card = btn.closest('.card, .case');
     if (!card) return;
     card.classList.add('card--clickable');
     let down = null;
