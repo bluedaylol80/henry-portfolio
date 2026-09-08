@@ -62,8 +62,18 @@ for (const lang of ['ko', 'en']) {
   const page = await browser.newPage()
   await page.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
   await page.evaluate(() => document.fonts.ready)   // 웹폰트가 뜨기 전에 구우면 자간이 흐트러진다
+  const font = await page.evaluate(() => document.fonts.check('1rem Pretendard'))
+  if (!font) fail(lang + ' Pretendard가 로드되지 않았다 — 폴백 폰트로 구우면 줄바꿈이 달라진다')
+  await page.evaluate(() => Promise.all([...document.images].filter(i => !i.complete)
+    .map(i => new Promise(r => { i.onload = i.onerror = r }))))
   await sleep(900)
-  await page.pdf({ path: OUT[lang], format: 'A4', printBackground: true, preferCSSPageSize: true })
+  /* 쪽 번호는 puppeteer의 머리말/꼬리말로 넣는다 — Chrome은 @page의 여백 상자를 지원하지 않는다.
+     그래서 preferCSSPageSize 대신 여기서 A4 여백을 준다(꼬리말 자리 18mm). */
+  await page.pdf({ path: OUT[lang], format: 'A4', printBackground: true,
+    displayHeaderFooter: true, headerTemplate: '<span></span>',
+    footerTemplate: '<div style="width:100%;text-align:center;font-size:8pt;color:#8d8d8d;font-family:sans-serif">'
+      + '<span class="pageNumber"></span> / <span class="totalPages"></span></div>',
+    margin: { top: '16mm', right: '16mm', bottom: '18mm', left: '16mm' } })
   const bytes = statSync(OUT[lang]).size
   if (bytes > MAX_BYTES) fail(OUT[lang] + ' 크기 초과: ' + Math.round(bytes / 1024) + 'KB > 3MB')
   console.log('생성: ' + OUT[lang] + ' — ' + Math.round(bytes / 1024) + 'KB')

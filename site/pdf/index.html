@@ -5,70 +5,84 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Henry Lim — 포트폴리오</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<!-- dynamic-subset은 unicode-range로 폰트를 잘게 쪼갠다 — 그러면 "19년"이 두 런으로 갈라져
+     PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 인쇄물은 통짜 가변 폰트를 쓴다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
-@page{size:A4 portrait;margin:16mm}
+@page{size:A4 portrait}
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--fg:#111;--muted:#5b5b5b;--line:#e6e5e2;--surface:#f6f5f3;--ink:#0a0a0a}
-html{font-size:10.5pt}
-body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.55;
+html{font-size:11pt}
+/* 한국어는 어절 단위로 끊는다 — 기본 줄바꿈은 '실행/으로'처럼 낱말을 쪼갠다(Codex R6) */
+body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.6;
+  word-break:keep-all;
   -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-section{break-before:page;padding-top:2mm}
+/* 쪽 나눔: 섹션은 새 쪽에서 시작하고, 카드·표·행·근거 그림은 쪼개지 않는다 */
+section{break-before:page;break-inside:auto}
 section:first-of-type{break-before:auto}
-h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.25}
-.eyebrow{font-size:8.5pt;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.sec-h{font-size:15pt;margin:0 0 4mm}
-.sec-h+.lede{margin:-2mm 0 5mm;color:var(--muted);font-size:9.5pt}
-/* 표지 */
-.cover{display:flex;flex-direction:column;justify-content:center;min-height:245mm}
-.cover .name{font-size:30pt;font-weight:600;letter-spacing:-.02em}
-.cover .role{margin-top:2mm;font-size:11pt;color:var(--muted)}
-.cover .head{margin-top:14mm;font-size:20pt;font-weight:600;line-height:1.3;max-width:150mm}
-.cover .contact{margin-top:18mm;display:flex;flex-direction:column;gap:1.5mm;font-size:9.5pt;color:var(--muted)}
-.cover .contact b{font-weight:500;color:var(--fg);display:inline-block;min-width:22mm}
-.cover .issued{margin-top:10mm;font-size:8.5pt;color:var(--muted)}
+table,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.3;break-after:avoid}
+a{color:inherit;text-decoration:none}
+.eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sec-h{font-size:1.5rem;margin:0 0 4mm}
+.sec-h+.lede{margin:-2mm 0 5mm;color:var(--muted);font-size:.95rem}
+/* 표지 — 절대배치·flex 정렬을 쓰지 않는다. 텍스트 추출 순서가 DOM 순서와 어긋난다(Codex R6) */
+.cover{padding-top:60mm}
+.cover .name{font-size:2.9rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.cover .role{margin-top:2mm;font-size:1.05rem;color:var(--muted)}
+.cover .head{margin-top:14mm;font-size:1.75rem;font-weight:600;line-height:1.35;max-width:150mm}
+.cover .contact{margin-top:18mm;font-size:.95rem;color:var(--muted)}
+.cover .contact p{margin-top:1.5mm}
+.cover .contact b{font-weight:500;color:var(--fg);display:inline-block;min-width:26mm}
+.cover .issued{margin-top:10mm;font-size:.85rem;color:var(--muted)}
 /* 표 */
-table{width:100%;border-collapse:collapse;font-size:9.5pt}
-th,td{border-top:.4pt solid var(--line);padding:2.2mm 0;vertical-align:top;text-align:left}
-th{width:26mm;font-weight:500;color:var(--muted);padding-right:4mm}
+table{width:100%;border-collapse:collapse;font-size:.95rem;table-layout:fixed}
+th,td{border-top:.4pt solid var(--line);padding:2.4mm 3mm 2.4mm 0;vertical-align:top;text-align:left}
+th{font-weight:500;color:var(--muted)}
 tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
-.tl th{width:auto}
-.tl thead th{border-top:0;font-size:8.5pt;letter-spacing:.04em;color:var(--muted)}
-.tl td.n{white-space:nowrap;color:var(--muted);font-size:9pt}
-.tl td.k{white-space:nowrap;font-weight:500;text-align:right}
+.kv col:first-child{width:28mm}
+.tl col:nth-child(1){width:46mm}
+.tl col:nth-child(2){width:auto}
+.tl col:nth-child(3){width:24mm}
+.tl thead th{border-top:0;font-size:.8rem;letter-spacing:.04em;color:var(--muted)}
+.tl td{padding-right:4mm}
+.tl td.k{text-align:right;font-weight:500;padding-right:0}
+.tl .sub{display:block;color:var(--muted);font-size:.85rem;margin-top:.8mm}
+.tl .impact{display:block;color:#333;font-size:.88rem;margin-top:1.2mm}
 /* 사례 */
-.case-h{font-size:13pt;line-height:1.35;max-width:150mm}
-.case-meta{font-size:9pt;color:var(--muted);margin-bottom:1.5mm}
-.pills{margin:3mm 0 4mm;display:flex;gap:2mm;flex-wrap:wrap}
-.pill{border-radius:99px;padding:1mm 3mm;font-size:8.5pt;line-height:1.4}
+.case-h{font-size:1.3rem;line-height:1.35;max-width:150mm}
+.case-meta{font-size:.9rem;color:var(--muted);margin-bottom:1.5mm}
+.pills{margin:3mm 0 4mm}
+.pill{display:inline-block;border-radius:99px;padding:1mm 3mm;font-size:.8rem;line-height:1.5;margin-right:2mm}
 .pill--dark{background:var(--ink);color:#fff}
 .pill--line{border:.4pt solid #bdbcb9;color:var(--muted)}
-.more{margin-top:5mm;border-top:.4pt solid var(--line);padding-top:3mm}
-.more h4{font-size:9.5pt;color:var(--muted);margin-bottom:2mm}
-.more dt{font-size:9.5pt;font-weight:500;margin-top:2.5mm}
-.more dd{font-size:9pt;color:#333;line-height:1.5}
-/* 근거 카드 */
-.ev{margin-top:5mm;display:grid;grid-template-columns:1fr 1fr;gap:3mm}
+.more{margin-top:4mm;border-top:.4pt solid var(--line);padding-top:3mm}
+.more h4{font-size:.95rem;color:var(--muted);margin-bottom:2mm}
+.more dt{font-size:.95rem;font-weight:500;margin-top:2.5mm}
+.more dd{font-size:.9rem;color:#333}
+/* 근거 카드 — 그림과 설명이 갈라지지 않게 통째로 묶는다 */
+.ev{margin-top:4mm;display:grid;grid-template-columns:1fr 1fr;gap:3mm;break-inside:avoid}
 .ev figure{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ev img{display:block;width:100%;height:auto}
-.ev figcaption{padding:2mm 2.5mm;font-size:8pt;line-height:1.45}
+.ev img{display:block;width:100%;height:32mm;object-fit:cover;object-position:top}
+.ev figcaption{padding:2mm 2.5mm;font-size:.82rem;line-height:1.45}
 .ev figcaption b{display:block;font-weight:500}
-.ev figcaption span{color:var(--muted);word-break:break-all}
+.ev figcaption .go{color:var(--muted);text-decoration:underline}
 /* 카드형 */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
 .card{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden}
 .card img{display:block;width:100%;height:auto}
 .card .in{padding:3mm}
-.card h3{font-size:11pt}
-.card p{margin-top:1.5mm;font-size:9pt;color:#333}
-.note{margin-top:2.5mm;font-size:8.5pt;line-height:1.5}
+.card h3{font-size:1.05rem}
+.card p{margin-top:1.5mm;font-size:.9rem;color:#333}
+.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5}
+.note p{margin-top:1mm}
 .note b{font-weight:500}
-.note .u{color:var(--muted);word-break:break-all}
-.rights{margin-top:2.5mm;font-size:7.5pt;color:var(--muted)}
+.note .go{color:var(--muted);text-decoration:underline}
+.rights{margin-top:2.5mm;font-size:.75rem;color:var(--muted)}
 .stats{margin-top:5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
-.stats b{display:block;font-size:15pt;font-weight:600}
-.stats span{font-size:8.5pt;color:var(--muted)}
-.foot{margin-top:6mm;font-size:8.5pt;color:var(--muted)}
+.stats b{display:block;font-size:1.5rem;font-weight:600}
+.stats span{font-size:.85rem;color:var(--muted)}
+.foot{margin-top:6mm;font-size:.85rem;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -79,9 +93,9 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
   <p class="role">게임 라이브서비스 PM·디렉터 · 19년</p>
   <p class="head">사용자 요구를 제품 방향으로, 개발 우선순위를 실행으로 연결합니다.</p>
   <div class="contact">
-    <p><b>이메일</b> bluedaylol80@gmail.com</p>
-    <p><b>사이트</b> https://bluedaylol80.github.io/henry-portfolio/</p>
-    <p><b>Notion 이력</b> https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</p>
+    <p><b>이메일</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
+    <p><b>사이트</b> <a href="https://bluedaylol80.github.io/henry-portfolio/">https://bluedaylol80.github.io/henry-portfolio/</a></p>
+    <p><b>Notion 이력</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion 이력 ↗</a></p>
   </div>
   <p class="issued">발행일 2026-09-08</p>
 </section>
@@ -90,63 +104,64 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
   <p class="eyebrow">한 줄 요약과 역량 4분류</p>
   <h2 class="sec-h">회사가 달라도 같은 방식으로 — 대표 사례 3</h2>
   <p class="lede">PC·모바일 게임의 글로벌 출시와 라이브 운영을 경험한 19년 경력의 PM입니다. 사용자 조사와 운영 지표를 제품 방향·개발 우선순위로 연결하고, 디렉터 역할로 개발 마일스톤과 기획·사업·운영 협업을 조율했습니다. 최근에는 AI로 이벤트 프로토타입을 만들고 반복 업무를 자동화했습니다.</p>
-  <table><tr><th>제품 판단·마일스톤</th><td>조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤을 재조립해 실행까지 끌고 가는 디렉터·PM 역할입니다. 런칭 전 마일스톤 재조립과 코디네이션을 포함합니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 사용자 조사 기반 이벤트 복귀 · 사례 — 소프트런칭 지표 → 개선 과제</span></td></tr><tr><th>출시·라이브 실행</th><td>소프트런칭·런칭·라이브 운영·서비스 종료를 실제로 돌린 일입니다. 린·카오스크로니클·Shadow Seven 소프트런칭, 나이트워커 퍼블리싱 연동, 서비스 종료 5개의 잔여 이슈까지 맡았습니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 퍼블리셔 규격 시스템 재정의 · 성과 — 카오스크로니클 종료 운영</span></td></tr><tr><th>조직·인력 운영</th><td>채용·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 22명을 두 조직 13명으로 재편하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 셋업했습니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 조직 재편(달콤 상세창 "함께 보기") · 성과 — 스카이피플 조직 셋업</span></td></tr><tr><th>운영 표준화</th><td>반복 업무를 규칙·자동화로 만든 일입니다. Google Apps Script로 7개 프로젝트 SKU를 자동화했고, 상품 어뷰징 사후 대응 SOP와 Notion 업무 이력 통합을 문서로 남겼습니다.<br><span style="color:var(--muted);font-size:9pt">성과 — SKU 자동화·어뷰징 SOP</span></td></tr></table>
+  <table class="kv"><colgroup><col><col></colgroup><tr><th>제품 판단·마일스톤</th><td>조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤을 재조립해 실행까지 끌고 가는 디렉터·PM 역할입니다. 런칭 전 마일스톤 재조립과 코디네이션을 포함합니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 사용자 조사 기반 이벤트 복귀 · 사례 — 소프트런칭 지표 → 개선 과제</span></td></tr><tr><th>출시·라이브 실행</th><td>소프트런칭·런칭·라이브 운영·서비스 종료를 실제로 돌린 일입니다. 린·카오스크로니클·Shadow Seven 소프트런칭, 나이트워커 퍼블리싱 연동, 서비스 종료 5개의 잔여 이슈까지 맡았습니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 퍼블리셔 규격 시스템 재정의 · 성과 — 카오스크로니클 종료 운영</span></td></tr><tr><th>조직·인력 운영</th><td>채용·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 22명을 두 조직 13명으로 재편하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 셋업했습니다.<br><span style="color:var(--muted);font-size:9pt">사례 — 조직 재편(달콤 상세창 "함께 보기") · 성과 — 스카이피플 조직 셋업</span></td></tr><tr><th>운영 표준화</th><td>반복 업무를 규칙·자동화로 만든 일입니다. Google Apps Script로 7개 프로젝트 SKU를 자동화했고, 상품 어뷰징 사후 대응 SOP와 Notion 업무 이력 통합을 문서로 남겼습니다.<br><span style="color:var(--muted);font-size:9pt">성과 — SKU 자동화·어뷰징 SOP</span></td></tr></table>
   <div class="stats"><div><b>19년</b><span>총 경력 (이력서 기준)</span></div><div><b>10개</b><span>함께한 회사</span></div><div><b>183억</b><span>린 매출 (앱스토어·구글 3위)</span></div><div><b>30개</b><span>직접 참여한 프로젝트 (퍼블리싱 8종, 직접서비스 22종)</span></div></div>
 </section>
 
 <section>
   <p class="eyebrow">포트폴리오 · 제품 판단·마일스톤</p>
   <p class="case-meta">달콤소프트 · 라이브기획팀 — 팀장</p>
-  <h2 class="case-h">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다</h2>
+  <h2 class="case-h">만족도 조사 요구를 실제 출시로</h2>
   <p class="pills"><span class="pill pill--dark">실제 출시</span><span class="pill pill--line">제품 판단·마일스톤</span></p>
-  <table><tr><th>기간·역할</th><td>재직 2024.10 – 2026.07 · 라이브기획팀 팀장(라이브 디렉터) · 사건 기간 2025.11 조사 → 2026.05 출시</td></tr><tr><th>문제</th><td>2025년 11월 6개 타이틀(한·영·일) 만족도 조사에서 IP 만족도는 높았고, 예전에 있던 웹뷰 이벤트의 복귀 요구가 나왔다. 이를 이벤트 개선 과제로 다뤘다.</td></tr><tr><th>판단</th><td>먼저 인게임 미니게임을 준비·적용하고, 이후 웹뷰 이벤트로 확장하는 순서로 갔다.</td></tr><tr><th>본인 행동</th><td>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025-12, v2 2026-01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다. 이어서 SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입을 제작했다.</td></tr><tr><th>결과·상태</th><td>실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.</td></tr><tr><th>증거</th><td>Notion 「만족도 설문 관련 요약」 · Notion 「decoration_event」 · 체험판 2종(꾸미기 프로토 · SSJ 10주년 웹뷰)</td></tr></table>
+  <table class="kv"><colgroup><col><col></colgroup><tr><th>한 줄 요약</th><td>만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다</td></tr><tr><th>기간·역할</th><td>재직 2024.10 – 2026.07 · 라이브기획팀 팀장(라이브 디렉터) · 사건 기간 2025.11 조사 → 2026.05 출시</td></tr><tr><th>문제</th><td>2025년 11월 6개 타이틀(한·영·일) 만족도 조사에서 IP 만족도는 높았고, 예전에 있던 웹뷰 이벤트의 복귀 요구가 나왔다. 이를 이벤트 개선 과제로 다뤘다.</td></tr><tr><th>판단</th><td>먼저 인게임 미니게임을 준비·적용하고, 이후 웹뷰 이벤트로 확장하는 순서로 갔다.</td></tr><tr><th>본인 행동</th><td>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025-12, v2 2026-01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다. 이어서 SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입을 제작했다.</td></tr><tr><th>결과·상태</th><td>실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.</td></tr><tr><th>증거</th><td>Notion 「만족도 설문 관련 요약」 · Notion 「decoration_event」 · 체험판 2종(꾸미기 프로토 · SSJ 10주년 웹뷰)</td></tr></table>
   <div class="more"><h4>함께 보기 — 같은 기간의 보조 사례 2건</h4><dl><dt>정기 상품 정책 개편 제안</dt><dd>고효율 상품이 무제한으로 팔리며 상품 간 형평성이 흔들렸다. R팩 판매 횟수를 제한하고 하위 상품을 무제한으로 두는 방향을 제안했고, 단계별 제한 완화와 RP 카드팩 대상 그룹 확대를 함께 제안했다. 개편된 상품 구성이 2025년 7월 말부터 9월 중순까지 그룹별로 실서비스 상점에 반영됐다.</dd><dt>조직 재편과 기획·QA·CS 통합 운영</dt><dd>타이틀이 11개에서 7개로 바뀌는 시기에 세 조직 22명을 두 조직 13명으로 재편하는 안을 제안했다. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해, 재편된 구조로 7개 타이틀을 2026년 7월까지 운영했다.</dd></dl></div>
-  <div class="ev"><figure><img src="../evidence/3d559de7280481dba20ee12a62cb7d69.jpg" alt=""><figcaption><b>사용자 조사 기반 이벤트 복귀</b><span>https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69</span></figcaption></figure><figure><img src="../evidence/3d559de728048112b3c9ec7998d34e14.jpg" alt=""><figcaption><b>정기 상품 정책 개편 제안</b><span>https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14</span></figcaption></figure><figure><img src="../evidence/3d559de72804813fac33d543e20c1a0a.jpg" alt=""><figcaption><b>조직 재편과 기획·QA·CS 통합 운영</b><span>https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a</span></figcaption></figure></div>
+  <div class="ev"><figure><img src="../evidence/3d559de7280481dba20ee12a62cb7d69.jpg" alt=""><figcaption><b>사용자 조사 기반 이벤트 복귀</b><a class="go" href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69">Notion에서 보기 ↗</a></figcaption></figure><figure><img src="../evidence/3d559de728048112b3c9ec7998d34e14.jpg" alt=""><figcaption><b>정기 상품 정책 개편 제안</b><a class="go" href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14">Notion에서 보기 ↗</a></figcaption></figure></div><p class="foot">전체 근거는 사이트 상세창에서 볼 수 있습니다 — 총 3</p>
 </section>
 <section>
   <p class="eyebrow">포트폴리오 · 출시·라이브 실행</p>
   <p class="case-meta">넥슨 코리아 · 모바일사업실 — 팀장</p>
-  <h2 class="case-h">3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다</h2>
+  <h2 class="case-h">소프트런칭 지표를 출시 전 개선으로</h2>
   <p class="pills"><span class="pill pill--dark">프로젝트 실제 출시</span><span class="pill pill--line">출시·라이브 실행</span></p>
-  <table><tr><th>기간·역할</th><td>넥슨 코리아 모바일사업실 팀장(재직 2015.07 – 2019.10) · 린 사업 PM 참여 2017.02 – 2019 (개발사 협업, 빌드 코디네이션)</td></tr><tr><th>문제</th><td>개발사가 만드는 빌드를 출시 조건에 맞추려면 사용자 테스트와 시장 지표를 개발 요구로 바꿔야 했다. 소프트런칭(호주·말레이시아·필리핀, 2019.01~02)에서 상품 구성 불균형, 유료 다이아 소비 침체, 초반 이탈 문제를 확인했다.</td></tr><tr><th>판단</th><td>상품 구성 · 재화 순환 · 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 사례를 벤치마킹해 방향을 잡았다.</td></tr><tr><th>본인 행동</th><td>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품·재화·초반 동선 개선안을 정리하고 개발사와 조율했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.</td></tr><tr><th>증거</th><td>Notion 「인게임 개선 제안」 · 소프트런칭 지표보고(사업팀, 비공개) · FGT 만족도 데이터·사내테스트 결과보고(사업팀, 비공개)</td></tr></table>
+  <table class="kv"><colgroup><col><col></colgroup><tr><th>한 줄 요약</th><td>3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다</td></tr><tr><th>기간·역할</th><td>넥슨 코리아 모바일사업실 팀장(재직 2015.07 – 2019.10) · 린 사업 PM 참여 2017.02 – 2019 (개발사 협업, 빌드 코디네이션)</td></tr><tr><th>문제</th><td>개발사가 만드는 빌드를 출시 조건에 맞추려면 사용자 테스트와 시장 지표를 개발 요구로 바꿔야 했다. 소프트런칭(호주·말레이시아·필리핀, 2019.01~02)에서 상품 구성 불균형, 유료 다이아 소비 침체, 초반 이탈 문제를 확인했다.</td></tr><tr><th>판단</th><td>상품 구성 · 재화 순환 · 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 사례를 벤치마킹해 방향을 잡았다.</td></tr><tr><th>본인 행동</th><td>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품·재화·초반 동선 개선안을 정리하고 개발사와 조율했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.</td></tr><tr><th>증거</th><td>Notion 「인게임 개선 제안」 · 소프트런칭 지표보고(사업팀, 비공개) · FGT 만족도 데이터·사내테스트 결과보고(사업팀, 비공개)</td></tr></table>
   
-  <div class="ev"><figure><img src="../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt=""><figcaption><b>소프트런칭 지표 기반 출시 전 개선</b><span>https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0</span></figcaption></figure><figure><img src="../evidence/09624ec9cbdb4dd9a53085f168bfcfa7.jpg" alt=""><figcaption><b>인게임 개선 진행</b><span>https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7</span></figcaption></figure></div>
+  <div class="ev"><figure><img src="../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt=""><figcaption><b>소프트런칭 지표 기반 출시 전 개선</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Notion에서 보기 ↗</a></figcaption></figure><figure><img src="../evidence/09624ec9cbdb4dd9a53085f168bfcfa7.jpg" alt=""><figcaption><b>인게임 개선 진행</b><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">Notion에서 보기 ↗</a></figcaption></figure></div>
 </section>
 <section>
   <p class="eyebrow">포트폴리오 · 출시·라이브 실행</p>
   <p class="case-meta">원더피플/에이스톰 · 사업팀 — 파트장</p>
-  <h2 class="case-h">중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의하다</h2>
+  <h2 class="case-h">중국 서비스 흐름을 한국 규격으로</h2>
   <p class="pills"><span class="pill pill--dark">프로젝트 실제 출시</span><span class="pill pill--line">출시·라이브 실행</span></p>
-  <table><tr><th>기간·역할</th><td>2022.02 – 2024.04 · 원더피플/에이스톰 사업팀 파트장 · 나이트워커 한국 서비스(퍼블리셔 넥슨) 사업·퍼블리싱 연동</td></tr><tr><th>문제</th><td>중국 서비스의 유료 재화 구매 시스템과 SDK 기반 서버 선택 흐름을 한국 서비스에 맞게 변경해야 했다. 퍼블리셔의 결제·쿠폰·서버 정책에 맞는 시스템 정의가 필요했다.</td></tr><tr><th>판단</th><td>퍼블리셔 정책과 내부 API 문서를 기준으로 삼아, 유료 재화 구매·쿠폰·서버 선택 세 시스템의 UI/UX와 이용 흐름을 한국 규격으로 다시 정의했다.</td></tr><tr><th>본인 행동</th><td>유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다. 런칭 후 주간 판매 현황을 분석해 상품을 제안하고 라이브 지표로 허들 개선을 제안했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2023-01-26 한국 런칭). 유료 재화·쿠폰 기능은 라이브 적용이 기록돼 있고, 서버 선택은 기반 작업 완료 상태로 문서화돼 있다. 프로젝트 전체 성과는 한국 서비스 신규 유저 33만+이며 본인 기여는 연동·상품·허들 제안 범위다.</td></tr><tr><th>증거</th><td>Notion 「유료재화 구매 시스템 연동」 「쿠폰 시스템 연동」 「서버 선택창 UI/플로우 기획」 「프로모션 상품 기능 추가」</td></tr></table>
+  <table class="kv"><colgroup><col><col></colgroup><tr><th>한 줄 요약</th><td>중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의하다</td></tr><tr><th>기간·역할</th><td>2022.02 – 2024.04 · 원더피플/에이스톰 사업팀 파트장 · 나이트워커 한국 서비스(퍼블리셔 넥슨) 사업·퍼블리싱 연동</td></tr><tr><th>문제</th><td>중국 서비스의 유료 재화 구매 시스템과 SDK 기반 서버 선택 흐름을 한국 서비스에 맞게 변경해야 했다. 퍼블리셔의 결제·쿠폰·서버 정책에 맞는 시스템 정의가 필요했다.</td></tr><tr><th>판단</th><td>퍼블리셔 정책과 내부 API 문서를 기준으로 삼아, 유료 재화 구매·쿠폰·서버 선택 세 시스템의 UI/UX와 이용 흐름을 한국 규격으로 다시 정의했다.</td></tr><tr><th>본인 행동</th><td>유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다. 런칭 후 주간 판매 현황을 분석해 상품을 제안하고 라이브 지표로 허들 개선을 제안했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2023-01-26 한국 런칭). 유료 재화·쿠폰 기능은 라이브 적용이 기록돼 있고, 서버 선택은 기반 작업 완료 상태로 문서화돼 있다. 프로젝트 전체 성과는 한국 서비스 신규 유저 33만+이며 본인 기여는 연동·상품·허들 제안 범위다.</td></tr><tr><th>증거</th><td>Notion 「유료재화 구매 시스템 연동」 「쿠폰 시스템 연동」 「서버 선택창 UI/플로우 기획」 「프로모션 상품 기능 추가」</td></tr></table>
   
-  <div class="ev"><figure><img src="../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt=""><figcaption><b>퍼블리셔 규격 시스템 재정의</b><span>https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a</span></figcaption></figure><figure><img src="../evidence/49043d5d2bfa44d18384126bbbd86f14.jpg" alt=""><figcaption><b>유료재화 구매 시스템 연동</b><span>https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14</span></figcaption></figure><figure><img src="../evidence/2ade8f618bb945a6b0c0f6a711133b55.jpg" alt=""><figcaption><b>쿠폰 시스템 연동</b><span>https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55</span></figcaption></figure></div>
+  <div class="ev"><figure><img src="../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt=""><figcaption><b>퍼블리셔 규격 시스템 재정의</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">Notion에서 보기 ↗</a></figcaption></figure><figure><img src="../evidence/49043d5d2bfa44d18384126bbbd86f14.jpg" alt=""><figcaption><b>유료재화 구매 시스템 연동</b><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">Notion에서 보기 ↗</a></figcaption></figure></div><p class="foot">전체 근거는 사이트 상세창에서 볼 수 있습니다 — 총 5</p>
 </section>
 
 <section>
   <p class="eyebrow">프로젝트 타임라인</p>
   <h2 class="sec-h">10개 회사, 19년의 기록</h2>
   <table class="tl">
+    <colgroup><col><col><col></colgroup>
     <thead><tr><th>회사</th><th>소속·직위·기간</th><th style="text-align:right">대표 지표</th></tr></thead>
-    <tbody><tr><td><b>달콤소프트</b><br><span style="color:var(--muted);font-size:9pt">SuperStar 시리즈 11→7 재편 (K-pop IP)</span></td>
-      <td class="n">라이브기획팀 팀장 · 2024.10 – 2026.07<br><span style="color:#333">11개 → 5개 종료·SSWO 론칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</span></td>
-      <td class="k">11→7</td></tr><tr><td><b>원더피플·에이스톰</b><br><span style="color:var(--muted);font-size:9pt">나이트워커, 슈퍼피플</span></td>
-      <td class="n">사업팀 파트장 · 2022.02 – 2024.04<br><span style="color:#333">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</span></td>
-      <td class="k">33만+</td></tr><tr><td><b>네오위즈</b><br><span style="color:var(--muted);font-size:9pt">마스터 오브 나이츠</span></td>
-      <td class="n">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10<br><span style="color:#333">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</span></td>
-      <td class="k"></td></tr><tr><td><b>스카이피플</b><br><span style="color:var(--muted);font-size:9pt">Five Stars</span></td>
-      <td class="n">사업팀 팀장 · 2020.07 – 2021.02<br><span style="color:#333">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 20만·신규 28만+·매출 24억</span></td>
-      <td class="k">24억</td></tr><tr><td><b>넵튠 레전드</b><br><span style="color:var(--muted);font-size:9pt">Shadow Seven</span></td>
-      <td class="n">스튜디오 사업PM · 2019.10 – 2020.04<br><span style="color:#333">일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29→글로벌 4.4 · 7개국 소프트런칭</span></td>
-      <td class="k">7개국</td></tr><tr><td><b>넥슨 코리아</b><br><span style="color:var(--muted);font-size:9pt">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</span></td>
-      <td class="n">모바일사업실 팀장 · 2015.07 – 2019.10<br><span style="color:#333">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</span></td>
-      <td class="k">183억</td></tr><tr><td><b>넷마블 블루</b><br><span style="color:var(--muted);font-size:9pt">KON</span></td>
-      <td class="n">KON 스튜디오 사업PM · 2015.03 – 2015.07<br><span style="color:#333">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</span></td>
-      <td class="k"></td></tr><tr><td><b>소프트닉스</b><br><span style="color:var(--muted);font-size:9pt">NTD · 라키온2 · 그랑에이지</span></td>
-      <td class="n">전략사업팀 사업PM · 2011.07 – 2015.02<br><span style="color:#333">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</span></td>
-      <td class="k"></td></tr><tr><td><b>NHN Service</b><br><span style="color:var(--muted);font-size:9pt">Tera 웹운영 · 아틀란티카 · R2</span></td>
-      <td class="n">한게임운영실 파트장 · 2008.05 – 2011.07<br><span style="color:#333">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</span></td>
-      <td class="k"></td></tr><tr><td><b>웹젠</b><br><span style="color:var(--muted);font-size:9pt">SUN 온라인</span></td>
-      <td class="n">SUN 운영팀 · 2006.04 – 2007.10<br><span style="color:#333">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</span></td>
+    <tbody><tr><td><b>달콤소프트</b><span class="sub">SuperStar 시리즈 11→7 재편 (K-pop IP)</span></td>
+      <td>라이브기획팀 팀장 · 2024.10 – 2026.07<span class="impact">11개 → 5개 종료·SSWO 론칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</span></td>
+      <td class="k">11→7</td></tr><tr><td><b>원더피플·에이스톰</b><span class="sub">나이트워커, 슈퍼피플</span></td>
+      <td>사업팀 파트장 · 2022.02 – 2024.04<span class="impact">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</span></td>
+      <td class="k">33만+</td></tr><tr><td><b>네오위즈</b><span class="sub">마스터 오브 나이츠</span></td>
+      <td>스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10<span class="impact">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</span></td>
+      <td class="k"></td></tr><tr><td><b>스카이피플</b><span class="sub">Five Stars</span></td>
+      <td>사업팀 팀장 · 2020.07 – 2021.02<span class="impact">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 20만·신규 28만+·매출 24억</span></td>
+      <td class="k">24억</td></tr><tr><td><b>넵튠 레전드</b><span class="sub">Shadow Seven</span></td>
+      <td>스튜디오 사업PM · 2019.10 – 2020.04<span class="impact">일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29→글로벌 4.4 · 7개국 소프트런칭</span></td>
+      <td class="k">7개국</td></tr><tr><td><b>넥슨 코리아</b><span class="sub">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</span></td>
+      <td>모바일사업실 팀장 · 2015.07 – 2019.10<span class="impact">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</span></td>
+      <td class="k">183억</td></tr><tr><td><b>넷마블 블루</b><span class="sub">KON</span></td>
+      <td>KON 스튜디오 사업PM · 2015.03 – 2015.07<span class="impact">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</span></td>
+      <td class="k"></td></tr><tr><td><b>소프트닉스</b><span class="sub">NTD · 라키온2 · 그랑에이지</span></td>
+      <td>전략사업팀 사업PM · 2011.07 – 2015.02<span class="impact">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</span></td>
+      <td class="k"></td></tr><tr><td><b>NHN Service</b><span class="sub">Tera 웹운영 · 아틀란티카 · R2</span></td>
+      <td>한게임운영실 파트장 · 2008.05 – 2011.07<span class="impact">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</span></td>
+      <td class="k"></td></tr><tr><td><b>웹젠</b><span class="sub">SUN 온라인</span></td>
+      <td>SUN 운영팀 · 2006.04 – 2007.10<span class="impact">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</span></td>
       <td class="k"></td></tr></tbody>
   </table>
   <p class="foot">※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</p>
@@ -160,18 +175,18 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
       <div class="in">
         <p class="eyebrow">달콤소프트 · 업무 프로토타입</p>
         <h3>꾸미기 이벤트 기획·와이어프레임 체험판 열기</h3>
-        <p>만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 카드를 누르면 체험판이 열립니다.</p>
-        <div class="note"><p><b>체험 순서</b> 주차를 바꾸고 보상 잠금 상태를 비교해 보세요.</p><p><b>설계 목적</b> 개발 전 협의용으로 화면 흐름을 먼저 맞추려고 만들었습니다.</p><p><b>본인 역할</b> 기획서 초안 작성과 프로토타입 제작을 직접 했습니다.</p><p><b>출시 여부</b> 실제 이벤트는 2026-04-30~05-23 출시.</p>
-          <p class="u">체험판 — https://bluedaylol80.github.io/henry-portfolio/demo/deco.html</p></div>
+        <p>만족도 조사에서 나온 수집·전시 요구를 꾸미기 이벤트 기획과 와이어프레임으로 구체화했습니다. 아래 링크를 열면 체험판이 열립니다.</p>
+        <div class="note"><p><b>체험 순서</b> 꾸미기 화면에서 아이템을 고르고 배치해 보세요.</p><p><b>설계 목적</b> 개발 전 협의용으로 화면 흐름을 먼저 맞추려고 만들었습니다.</p><p><b>본인 역할</b> 기획서 초안 작성과 프로토타입 제작을 직접 했습니다.</p><p><b>출시 여부</b> 실제 이벤트는 2026-04-30~05-23 출시.</p>
+          <p><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/demo/deco.html">체험판 ↗</a></p></div>
         <p class="rights">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
       </div></div>
     <div class="card"><img src="../works/ssjproto.jpg" alt="">
       <div class="in">
         <p class="eyebrow">달콤소프트 · 업무 프로토타입</p>
         <h3>SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입 프로토타입 플레이</h3>
-        <p>기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 카드를 누르면 직접 플레이할 수 있습니다.</p>
-        <div class="note"><p><b>체험 순서</b> 주차별 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</p><p><b>설계 목적</b> 기획서 대신 작동하는 웹뷰로 흐름을 검증하려고 만들었습니다.</p><p><b>본인 역할</b> AI로 인터랙티브 프로토타입을 직접 만들었습니다.</p><p><b>출시 여부</b> 실제 출시 — 2026년 5월.</p>
-          <p class="u">체험판 — https://bluedaylol80.github.io/henry-portfolio/demo/ssjproto.html</p></div>
+        <p>기획서 대신 실제로 작동하는 웹뷰 화면으로 검증했습니다 — 주차별 미션, 보상 수령, 응모 흐름까지 클릭되는 인터랙티브 프로토타입을 AI로 직접 만들었습니다. 아래 링크를 열면 직접 플레이할 수 있습니다.</p>
+        <div class="note"><p><b>체험 순서</b> 주차를 바꾸고 보상 잠금 상태를 비교한 뒤, 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</p><p><b>설계 목적</b> 기획서 대신 작동하는 웹뷰로 흐름을 검증하려고 만들었습니다.</p><p><b>본인 역할</b> AI로 인터랙티브 프로토타입을 직접 만들었습니다.</p><p><b>출시 여부</b> 실제 출시 — 2026년 5월.</p>
+          <p><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/demo/ssjproto.html">체험판 ↗</a></p></div>
         <p class="rights">공개 화면은 내부 정보를 제거한 요약본입니다.</p>
       </div></div></div>
   <p class="foot"><b>우리집 가계부</b> — 부부 2인이 매일 쓰는 가계부 웹앱. Google Apps Script + 단일 HTML 구성으로 라이브 운영 중.</p>
@@ -181,9 +196,9 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
   <p class="eyebrow">연락</p>
   <h2 class="sec-h">Henry Lim</h2>
   <table>
-    <tr><th>이메일</th><td>bluedaylol80@gmail.com</td></tr>
-    <tr><th>사이트</th><td>https://bluedaylol80.github.io/henry-portfolio/</td></tr>
-    <tr><th>Notion 이력</th><td>https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</td></tr>
+    <tr><th>이메일</th><td><a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></td></tr>
+    <tr><th>사이트</th><td><a href="https://bluedaylol80.github.io/henry-portfolio/">https://bluedaylol80.github.io/henry-portfolio/</a></td></tr>
+    <tr><th>Notion 이력</th><td><a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</a></td></tr>
   </table>
   <p class="foot">이 문서는 사이트에서 자동 생성됐습니다. 발행일 2026-09-08</p>
   <p class="foot">© 2026 Henry Lim (임현택) 본 사이트의 모든 수치는 공개 이력서 기준입니다.</p>
