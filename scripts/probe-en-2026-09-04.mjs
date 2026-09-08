@@ -59,7 +59,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   const uniform = new Set(works6).size === 1 && new Set(proto2).size === 1
   ck(`${name} 카드 높이 그리드별 균일`, m.cards.length === 8 && uniform,
      `성과 ${[...new Set(works6)].join('/')}px · 프로토 ${[...new Set(proto2)].join('/')}px`)
-  ck(`${name} 역량 칩 6개`, m.chipCount === 6, `${m.chipCount}개 · ${m.chipRows}줄`)
+  ck(`${name} 역량 칩 5개`, m.chipCount === 5, `${m.chipCount}개 · ${m.chipRows}줄`)
   ck(`${name} 칩↔hcard 겹침 0`, m.overlap === false || m.overlap === null, String(m.overlap))
   ck(`${name} 임팩트 10줄 전부 노출`, m.impactCount === 10 && m.impactVisible === 10, `${m.impactVisible}/${m.impactCount} · 최장 ${m.impactMax}자`)
   // 에코 복제층을 걷어내(WO-14) DOM의 .line은 원본 3줄뿐이다 — 목적(h1 3줄 유지)은 그대로다
@@ -80,7 +80,8 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   console.log(`  (${name} hero-sub ${m.subLen}자)`)
 
   // 다이얼로그 7종
-  const keys = ['dalcom', 'lyn', 'chaos', 'nightwalker', 'fivestars', 'nanakage', 'budget']
+  // WO-17: 대표 사례 3종이 같은 .wdlg를 쓴다 — 판정 대상에 함께 넣는다
+  const keys = ['case1', 'case2', 'case3', 'dalcom', 'lyn', 'chaos', 'nightwalker', 'fivestars', 'nanakage', 'budget']
   let opened = 0, rows = [], badLinks = 0, nTotal = 0
   for (const k of keys) {
     await page.evaluate(k => document.querySelector(`.card-open[data-work="${k}"]`)?.click(), k)
@@ -98,7 +99,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
       }
     })
     if (st.open && st.t) opened++
-    if (st.n > 4 || st.bad > 0) badLinks++
+    if (st.n > 6 || st.bad > 0) badLinks++   // 카드 상한 6(WO-17)
     if (st.n > 0 && st.hdr !== 'Key cases (Notion · pages in Korean)') badLinks++
     if (st.n === 0 && !st.hidden) badLinks++
     nTotal += st.n
@@ -106,8 +107,8 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
     await page.keyboard.press('Escape')
     await sleep(320)
   }
-  ck(`${name} 다이얼로그 7종 열림`, opened === 7, `${opened}/7 · ${rows.join(' ')}`)
-  ck(`${name} 다이얼로그 근거 링크 18개·규격 전건`, nTotal === 18 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
+  ck(`${name} 다이얼로그 10종 열림`, opened === 10, `${opened}/10 · ${rows.join(' ')}`)
+  ck(`${name} 다이얼로그 근거 링크 29개·규격 전건`, nTotal === 29 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
   await page.close()
 }
 await browser.close()

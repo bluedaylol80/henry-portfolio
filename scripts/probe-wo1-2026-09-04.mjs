@@ -49,10 +49,11 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   ck(`${name} overflowX=0`, m.overflowX === 0, String(m.overflowX))
   // #works(6장)와 #proto(2장)는 별개 그리드다. 1440은 두 그리드가 같은 높이로 떨어지지만
   // 390은 HEAD(dd945f2)에서도 530/561로 갈린다 — 회귀 판정은 HEAD 기준선과 대조한다.
-  const BASE = { '1440': '461', '390': '530/561' }
+  // WO-17 재기준선: 달콤 카드 카피 축약(성과 6장)·체험판 안내 4줄 추가(프로토 2장)로 높이가 바뀌었다
+  const BASE = { '1440': '425/612', '390': '553/795' }
   ck(`${name} 카드 8장 높이 = HEAD 기준선`, m.cards.length === 8 && m.cardSet.join('/') === BASE[name],
      `${m.cards.length}장 ${m.cardSet.join('/')}px (HEAD ${BASE[name]}px)`)
-  ck(`${name} 역량 칩 6개`, m.chipCount === 6, `${m.chipCount}개 · ${m.chipRows}줄`)
+  ck(`${name} 역량 칩 5개`, m.chipCount === 5, `${m.chipCount}개 · ${m.chipRows}줄`)
   ck(`${name} 칩↔hcard 겹침 0`, m.overlap === false || m.overlap === null, String(m.overlap))
   ck(`${name} 임팩트 10줄 전부 노출`, m.impactCount === 10 && m.impactVisible === 10, `${m.impactVisible}/${m.impactCount} · 최장 ${m.impactMax}자`)
   ck(`${name} 임팩트 ≤60자`, m.impactMax <= 60, `${m.impactMax}자`)
@@ -69,7 +70,8 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
   console.log(`  (${name} hero-sub ${m.subLen}자)`)
 
   // 다이얼로그 7종
-  const keys = ['dalcom', 'lyn', 'chaos', 'nightwalker', 'fivestars', 'nanakage', 'budget']
+  // WO-17: 대표 사례 3종이 같은 .wdlg를 쓴다 — 판정 대상에 함께 넣는다
+  const keys = ['case1', 'case2', 'case3', 'dalcom', 'lyn', 'chaos', 'nightwalker', 'fivestars', 'nanakage', 'budget']
   let opened = 0, rows = [], badLinks = 0, nTotal = 0
   for (const k of keys) {
     await page.evaluate(k => document.querySelector(`.card-open[data-work="${k}"]`)?.click(), k)
@@ -87,7 +89,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
       }
     })
     if (st.open && st.t) opened++
-    if (st.n > 4 || st.bad > 0) badLinks++
+    if (st.n > 6 || st.bad > 0) badLinks++   // 카드 상한 6(WO-17)
     if (st.n > 0 && st.hdr !== '주요 사례 (Notion)') badLinks++
     if (st.n === 0 && !st.hidden) badLinks++
     nTotal += st.n
@@ -95,8 +97,8 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
     await page.keyboard.press('Escape')
     await sleep(320)
   }
-  ck(`${name} 다이얼로그 7종 열림`, opened === 7, `${opened}/7 · ${rows.join(' ')}`)
-  ck(`${name} 다이얼로그 근거 링크 18개·규격 전건`, nTotal === 18 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
+  ck(`${name} 다이얼로그 10종 열림`, opened === 10, `${opened}/10 · ${rows.join(' ')}`)
+  ck(`${name} 다이얼로그 근거 링크 29개·규격 전건`, nTotal === 29 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
   await page.close()
 }
 await browser.close()
