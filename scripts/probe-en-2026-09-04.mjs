@@ -107,7 +107,7 @@ for (const [name, w, h] of [['1440', 1440, 900], ['390', 390, 844]]) {
     await sleep(320)
   }
   ck(`${name} 다이얼로그 7종 열림`, opened === 7, `${opened}/7 · ${rows.join(' ')}`)
-  ck(`${name} 다이얼로그 근거 링크 14개·규격 전건`, nTotal === 14 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
+  ck(`${name} 다이얼로그 근거 링크 18개·규격 전건`, nTotal === 18 && badLinks === 0, `${nTotal}개 · 불량 ${badLinks}`)
   await page.close()
 }
 await browser.close()

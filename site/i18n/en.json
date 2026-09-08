@@ -496,6 +496,11 @@
     " (새 창에서 열림)": " (opens in a new window)",
     "Focus Group Interview & Test": "Focus Group Interview & Test (KO)",
     " — Notion에서 열기 (새 창)": " — open in Notion (new window)",
-    "Notion에서 보기": "Open in Notion (KO)"
+    "Notion에서 보기": "Open in Notion (KO)",
+    "사용자 조사 기반 이벤트 복귀": "From user research to shipped events (KO)",
+    "정기 상품 정책 개편 제안": "Recurring product policy rework (KO)",
+    "조직 재편과 기획·QA·CS 통합 운영": "Restructuring with design, QA and CS under one lead (KO)",
+    "소프트런칭 지표 기반 출시 전 개선": "Soft launch metrics into pre-launch fixes (KO)",
+    "퍼블리셔 규격 시스템 재정의": "Redefining the systems to publisher spec (KO)"
   }
 }
