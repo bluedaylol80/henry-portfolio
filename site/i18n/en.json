@@ -428,13 +428,13 @@
     "사용자-요구를": "Turn user needs",
     "제품-방향으로-개발-우선순위를": "into product direction, <span class=\"nb\">and dev priorities</span>",
     "실행으로-연결합니다": "into shipped work.",
-    "PC-모바일-게임의-글로벌": "19 years in PC and mobile games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and ran the dev milestones as a director. Lately I prototype events with AI and automate routine work.",
+    "PC-모바일-게임의-글로벌": "19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.",
     "조직-인력-운영": "Team & hiring",
     "운영-표준화": "Operational standards",
     "7개국": "7 markets",
     "Shadow-Seven-7개국-소프트런칭": "Shadow Seven — soft launch in 7 markets.",
     "멀티-타이틀-라이브-운영과": "Multi-title live operations and user-led product work",
-    "담당-타이틀이-11개에서-7개로": "Managed live game design and the dev milestones while the titles I owned went from 11 to 7. Turned the satisfaction survey into the 2026 product direction and into webview and decoration event prototypes — both prototypes shipped.",
+    "담당-타이틀이-11개에서-7개로": "Managed live game design and the dev milestones while the titles I owned went from 11 to 7. Turned the satisfaction survey into the 2026 product direction and into webview and decoration event prototypes — the events developed from these prototypes shipped.",
     "사례-사용자-조사-기반-이벤트": "Case — from user research to shipped events",
     "사례-소프트런칭-지표-개선": "Case — soft launch metrics → pre-launch fixes",
     "성과-SuperStar-2026-방향성": "Work — SuperStar 2026 product direction",
@@ -607,7 +607,7 @@
     "만족도 조사에서 나온 웹뷰 이벤트 복귀 요구를 인게임 미니게임 → 꾸미기 이벤트 → 10주년 웹뷰 이벤트 출시로 연결 — 카드 아래 대표 사례에서 전체 과정을 볼 수 있다": "Connected the survey request for webview events to shipped in-game minigames → the decoration event → the 10th anniversary webview event. The full story is in the cases section above.",
     "입사 당시 11개 프로젝트를 분석하고, 5개 서비스 종료와 SSWO 신규 론칭을 병행해 최종 7개 프로젝트를 운영": "Audited the 11 projects I inherited, ran 5 sunsets alongside the new SSWO launch, and operated the final 7",
     "6개 타이틀 대상 한국어·영어·일본어 만족도 조사 — 사용자 요구와 불편을 제품 개선 과제로 정리하고 2026 상반기 방향성을 제안": "Satisfaction survey across 6 titles in Korean, English and Japanese — turned user needs and pain points into product improvement tasks and proposed the H1 2026 direction",
-    "꾸미기 이벤트 기획·와이어프레임 · SuperStar JYP Nation 10주년 웹뷰 인터랙티브 프로토타입 — 두 프로토타입 모두 실제 출시로 이어짐": "Decoration event design and wireframe · SuperStar JYP Nation 10th anniversary interactive webview prototype — both prototypes shipped",
+    "꾸미기 이벤트 기획·와이어프레임 · SuperStar JYP Nation 10주년 웹뷰 인터랙티브 프로토타입 — 두 프로토타입 모두 실제 출시로 이어짐": "Decoration event design and wireframe · SuperStar JYP Nation 10th anniversary interactive webview prototype — the events developed from these prototypes shipped",
     "스토어 product ID 명세서 자동 반영(Google Apps Script) · 7개 프로젝트 SKU 자동화 · 메일/Slack/Notion 통합 업무현황판 · SM 음원 정산 자동화": "Auto-synced store product ID specs (Google Apps Script) · SKU automation across 7 projects · unified mail/Slack/Notion work dashboard · automated SM music settlement",
     "내 역할": "My role",
     "넥슨 모바일사업실 사업팀장으로 FGT·사내테스트를 이끌고 개발사 빌드 개선을 조율했다": "As business team lead in Nexon's mobile business division I ran the FGT and the internal test and coordinated build improvements with the developer",
@@ -615,6 +615,10 @@
     "소프트런칭 지표를 상품·재화·초반 동선 개선 3건으로 정리했고, 세 건 모두 그랜드런칭 빌드에 반영됐다": "I framed the soft launch metrics as three fixes — product, currency and early flow — and all three landed in the grand launch build",
     "7개국": "7 markets",
     "인도네시아 · 홍콩 · 필리핀 · 말레이시아 · 싱가폴 · 태국 · 마카오 (7개국)": "Indonesia · Hong Kong · the Philippines · Malaysia · Singapore · Thailand · Macau (7 markets)",
-    "2020-02-20 한국 · 미국 · 대만 — 한국 AOS 매출 173위": "2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea"
+    "2020-02-20 한국 · 미국 · 대만 — 한국 AOS 매출 173위": "2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea",
+    "한 줄 요약": "In one line",
+    "만족도 조사 요구를 실제 출시로": "From survey request to shipped events",
+    "소프트런칭 지표를 출시 전 개선으로": "Soft launch metrics into pre-launch fixes",
+    "중국 서비스 흐름을 한국 규격으로": "China service flows to the Korean spec"
   }
 }

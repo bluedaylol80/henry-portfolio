@@ -104,7 +104,8 @@ async function scrape(lang) {
   }
   await browser.close()
   if (base.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + base.cases.length)
-  for (const c of base.cases) if (c.rows.length !== 6) fail('사례 상세 6항목이 아니다: ' + c.title + ' ' + c.rows.length)
+  // 한 줄 요약 + 6항목 = 7행(WO-19 13). 항목이 줄면 원고와 어긋난 것이라 실패시킨다.
+  for (const c of base.cases) if (c.rows.length < 7) fail('사례 상세 행이 모자란다: ' + c.title + ' ' + c.rows.length)
   return base
 }
 

@@ -352,67 +352,67 @@
  },
  "3d559de7280481dba20ee12a62cb7d69": {
   "title": "사용자 조사 기반 이벤트 복귀",
-  "summary": "만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다",
-  "process": "만족도 조사에서 웹뷰 이벤트 복귀 요구 확인 → 미니게임 먼저, 웹뷰 확장 순서로 판단 → 꾸미기 이벤트 기획서·AI 프로토타입 제작 → 개발 일정에 맞춰 핵심 기능만 남김 → 미니게임·꾸미기·웹뷰 이벤트 실제 출시",
+  "summary": "만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끓고 갔다",
+  "process": "웹뷰 이벤트 복귀 요구 확인 → 미니게임 먼저·웹뷰 확장 순서 선택 → 기획서·AI 프로토타입 제작 → 미니게임·꾸미기·10주년 웹뷰 출시",
   "period": "November 1, 2025 → May 23, 2026",
-  "tools": "notion",
+  "tools": "notion · 만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끓고 갔다",
   "img": "3d559de7280481dba20ee12a62cb7d69.jpg",
   "en": {
    "title": "From user research to shipped events",
-   "summary": "Turned the satisfaction survey's request to bring webview events back into shipped in-game minigames and webview events",
-   "process": "Confirmed the request to bring webview events back in the satisfaction survey → decided to ship minigames first and extend to webview after → wrote the decoration event brief and built a working AI prototype → cut the scope to core features to fit the dev schedule → minigames, the decoration event and the webview event all shipped"
+   "summary": "Took the survey request for webview events and shipped it, minigames first",
+   "process": "Request confirmed → minigames first, webview next → brief + AI prototype → all shipped"
   }
  },
  "3d559de728048112b3c9ec7998d34e14": {
   "title": "정기 상품 정책 개편 제안",
-  "summary": "상품 실데이터를 검토해 정기 상품 정책을 개편하다",
-  "process": "고효율 상품 무제한 판매로 형평성 흔들림 → R팩 판매 횟수 제한 방향 제안 → 단계별 제한 완화·RP 카드팩 확대 제안 → 시즈널 패키지 배치 방식 정리 → 개편 상품 구성이 실서비스 상점 반영",
+  "summary": "고효율 상품 무제한 판매로 흔들린 형평성을 판매 횟수 제한으로 정리했다",
+  "process": "R팩 무제한 판매로 형평성 흔들림 → 판매 횟수 제한·하위 상품 무제한 선택 → 단계별 완화·RP 카드팩 확대 제안 → 실서비스 상점 반영",
   "period": "July 1, 2025 → May 31, 2026",
-  "tools": "notion",
+  "tools": "notion · 고효율 상품 무제한 판매로 흔들린 형평성을 판매 횟수 제한으로 정리했다",
   "img": "3d559de728048112b3c9ec7998d34e14.jpg",
   "en": {
    "title": "Recurring product policy rework",
-   "summary": "Reviewed live product data and reworked the recurring product policy",
-   "process": "Unlimited sales of a high-yield pack unbalanced the lineup → proposed capping how often the R pack could be bought → proposed easing the cap in stages and widening the RP card pack rollout → set out how seasonal packages are placed across the month → the reworked lineup went live in the store"
+   "summary": "An uncapped high-yield pack unbalanced the lineup; a purchase cap settled it",
+   "process": "Uncapped pack broke the balance → chose a purchase cap → staged easing → live in the store"
   }
  },
  "3d559de72804813fac33d543e20c1a0a": {
   "title": "조직 재편과 기획·QA·CS 통합 운영",
-  "summary": "세 조직 22명을 두 조직 13명으로 재편하고 QA 팀장을 겸임하며 7개 타이틀을 운영하다",
-  "process": "타이틀 11→7 재편기에 세 조직 유지 부담 → 두 조직 재편·라이브와 QA 페어 구성 제안 → 재편 실행과 기획·QA·CS 채용 담당 → QA 파트 운영안·리더 R&R 초안 작성 → 재편 구조로 7개 타이틀 2026.07까지 운영",
+  "summary": "타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다",
+  "process": "11→7 재편기에 세 조직 유지 부담 → 두 조직·라이브와 QA 페어 선택 → 재편 실행과 채용·운영안 작성 → 7개 타이틀 2026.07까지 운영",
   "period": "March 1, 2025 → July 31, 2026",
-  "tools": "notion",
+  "tools": "notion · 타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다",
   "img": "3d559de72804813fac33d543e20c1a0a.jpg",
   "en": {
    "title": "Restructuring with design, QA and CS under one lead",
-   "summary": "Restructured three teams of 22 into two teams of 13, took the QA lead role as well, and kept 7 titles running",
-   "process": "Holding three teams was a burden while titles went from 11 to 7 → proposed two teams with a live and QA pair per project → ran the restructuring and owned game design, QA and CS hiring → wrote the QA part operating plan and the team lead R&R draft → ran 7 titles on the new structure through July 2026"
+   "summary": "Cut three teams to two as the titles shrank, and took on QA as well",
+   "process": "Three teams too many at 11 → 7 → chose two teams with live/QA pairs → 7 titles to 2026.07"
   }
  },
  "3d559de72804810faa75ca85ef0a25a0": {
   "title": "소프트런칭 지표 기반 출시 전 개선",
-  "summary": "3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다",
-  "process": "소프트런칭에서 상품·재화·초반 이탈 확인 → 세 축을 출시 전 개선 과제로 정리 → FGT·사내테스트 리드, 결과를 개발 요구로 → 개선안을 개발사와 조율·적용 여부 추적 → 개선 3건 그랜드런칭 빌드 반영",
-  "period": "February 1, 2017 → December 31, 2019",
-  "tools": "notion",
+  "summary": "소프트런칭에서 드러난 상품·재화·초반 이탈을 출시 전 개선 3건으로 좁혔다",
+  "process": "2018 FGT·사내테스트로 검증 → 2019 소프트런칭에서 상품·재화·이탈 확인 → 출시 전 개선 과제 3건 선택 → 그랜드런칭 빌드 반영",
+  "period": "February 1, 2017 → October 31, 2019",
+  "tools": "notion · 소프트런칭에서 드러난 상품·재화·초반 이탈을 출시 전 개선 3건으로 좁혔다",
   "img": "3d559de72804810faa75ca85ef0a25a0.jpg",
   "en": {
    "title": "Soft launch metrics into pre-launch fixes",
-   "summary": "Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch",
-   "process": "Found product mix, currency and early drop-off issues in the soft launch → framed the three as improvement tasks to close before launch → led the FGT and the internal test and turned results into dev requests → aligned the fixes with the developer and tracked adoption → 3 fixes landed in the grand launch build"
+   "summary": "Narrowed what the soft launch exposed into three fixes to close before launch",
+   "process": "2018 tests → 2019 soft launch exposed 3 gaps → fixes chosen → in the grand launch build"
   }
  },
  "3d559de72804819f9a88c951cbc10f9a": {
   "title": "퍼블리셔 규격 시스템 재정의",
-  "summary": "중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의하다",
-  "process": "중국 서비스 결제·서버 흐름을 한국에 맞춰야 → 퍼블리셔 정책·API 문서를 기준으로 삼음 → 구매·쿠폰·서버 선택 UI/플로우 기획 작성 → 퍼블리셔·개발과 협의, 프로모션 기능 추가 → 유료 재화·쿠폰 라이브 적용, 2023-01 런칭",
+  "summary": "중국 서비스 결제·서버 흐름을 퍼블리셔 정책 기준으로 다시 정의했다",
+  "process": "중국 규격을 한국에 못 쓰는 문제 → 퍼블리셔 정책·API 문서 기준 선택 → 구매·쿠폰·서버 선택 기획 작성 → 2023-01 출시 후 프로모션 기능 추가",
   "period": "February 1, 2022 → April 30, 2024",
-  "tools": "notion",
+  "tools": "notion · 중국 서비스 결제·서버 흐름을 퍼블리셔 정책 기준으로 다시 정의했다",
   "img": "3d559de72804819f9a88c951cbc10f9a.jpg",
   "en": {
    "title": "Redefining the systems to publisher spec",
-   "summary": "Redefined the payment and server-select flows of the China service to the Korean publisher spec",
-   "process": "The China service payment and server flows had to fit Korea → took the publisher policy and API docs as the baseline → wrote the purchase, coupon and server-select UI/flow designs → aligned with the publisher and dev team, added a promotion feature → paid currency and coupons live, launched in January 2023"
+   "summary": "Redefined the China payment and server flows against the publisher policy",
+   "process": "China spec unfit for Korea → publisher policy baseline → 3 designs → launched 2023-01"
   }
  }
 }
