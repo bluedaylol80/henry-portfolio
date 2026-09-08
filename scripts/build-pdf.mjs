@@ -1,74 +1,72 @@
 /**
- * v21 P5 — 지원용 PDF 발췌 생성기 (SDD §2).
+ * 포트폴리오 PDF 빌더 — site/pdf/ 인쇄 페이지 → site/henry-lim-portfolio-{ko,en}.pdf
  *
- * 국내 지원 서류의 표준은 여전히 **PDF 한 장**이다. 그래서 사이트의 `/brief`
- * (3분 요약)를 그대로 인쇄해 PDF로 만들어 `public/` 에 커밋한다. 사이트가 곧
- * 원천이므로 **문구가 두 벌로 갈라지지 않는다** — 콘텐츠를 고치면 이 스크립트를
- * 다시 돌리는 것으로 끝난다.
+ * v21 React /brief 전용 빌더를 폐기하고 다시 썼다(WO-18). 인쇄 페이지는 scripts/build-print.mjs가
+ * 사이트 DOM에서 조립하므로 문구는 한 벌뿐이다. 여기서는 그 페이지를 A4로 굽기만 한다.
  *
- * 종이 룩은 `@media print`(src/index.css)가 만든다: 어두운 관제실 → 밝은 문서.
- * 채용 담당자가 실제로 출력할 수 있어야 하기 때문이다.
+ * 텍스트 원천 검사: 인쇄 페이지의 대표 사례 6항목이 사이트 상세창 데이터와 같은지 확인하고,
+ * 다르면 굽지 않고 실패한다(문구가 두 벌로 갈라지는 것을 여기서 막는다).
  *
- * Usage: node scripts/build-pdf.mjs [baseUrl] [lang]
- *   npm run preview 를 먼저 띄워 둘 것(4173).
+ * 사전 준비: python -m http.server 8787 --bind 127.0.0.1 --directory site
+ * Usage: node scripts/build-pdf.mjs
  */
 import puppeteer from 'puppeteer-core'
-import { mkdirSync, statSync, readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { dirname } from 'node:path'
+import { statSync } from 'node:fs'
 
-const BASE = (process.argv[2] ?? 'http://localhost:4173/henry-portfolio/').replace(/\/$/, '')
-const LANG = process.argv[3] ?? 'ko'
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
-const OUT = `public/brief/henry-lim-brief-${LANG}.pdf`
+const BASE = 'http://127.0.0.1:8787'
+const MAX_BYTES = 3 * 1024 * 1024
+const OUT = { ko: 'site/henry-lim-portfolio-ko.pdf', en: 'site/henry-lim-portfolio-en.pdf' }
+const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
+const sleep = ms => new Promise(r => setTimeout(r, ms))
+const norm = s => s.replace(/\s+/g, ' ').trim()
 
-mkdirSync(dirname(OUT), { recursive: true })
-const browser = await puppeteer.launch({ executablePath: CHROME, headless: true })
-const page = await browser.newPage()
-const errors = []
-page.on('console', (m) => m.type() === 'error' && errors.push(m.text()))
-page.on('pageerror', (e) => errors.push(String(e)))
+const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox'] })
 
-await page.evaluateOnNewDocument((l) => localStorage.setItem('henry.lang', l), LANG)
-await page.setViewport({ width: 1100, height: 1400, deviceScaleFactor: 2 })
-await page.goto(BASE + '/brief', { waitUntil: 'networkidle2', timeout: 60000 })
-// 프리로더가 걷히고 리빌(framer)이 끝나야 본문이 불투명해진다.
-await new Promise((r) => setTimeout(r, 6000))
-
-// 인쇄 스타일을 적용한 상태로 렌더 — 화면 미디어로 뽑으면 어두운 배경이 그대로 인쇄된다.
-await page.emulateMediaType('print')
-await new Promise((r) => setTimeout(r, 500))
-
-// 인쇄 스타일이 실제로 먹었는지 확인(먹지 않으면 어두운 PDF가 조용히 나온다).
-const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor)
-const light = /rgb\(255,\s*255,\s*255\)/.test(bg)
-
-await page.pdf({
-  path: OUT,
-  format: 'A4',
-  printBackground: false,
-  margin: { top: '14mm', bottom: '16mm', left: '14mm', right: '14mm' },
-})
-await browser.close()
-
-const kb = statSync(OUT).size / 1024
-
-/**
- * 매니페스트 — 화면에 "언제 만든 PDF인지"를 손으로 적지 않기 위해서다.
- * (카운터 스냅샷과 같은 원칙: 날짜·크기는 만든 쪽이 기록한다.)
- */
-const MANIFEST = 'src/content/briefPdf.json'
-const prev = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, 'utf8')) : { files: {} }
-// 현지 날짜로 찍는다 — toISOString()은 UTC라 한국 새벽에는 어제 날짜가 박힌다.
-const now = new Date()
-const stamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
-const manifest = {
-  $comment: '자동 생성 — scripts/build-pdf.mjs. 직접 수정하지 마세요.',
-  generatedOn: stamp,
-  files: { ...prev.files, [LANG]: { path: OUT.replace(/^public\//, ''), kb: Math.round(kb), generatedOn: stamp } },
+/* 1. 원천 검사 — 사이트 상세창 6항목 vs 인쇄 페이지 표 */
+for (const lang of ['ko', 'en']) {
+  const site = await browser.newPage()
+  await site.goto(lang === 'ko' ? BASE + '/' : BASE + '/en/', { waitUntil: 'networkidle2', timeout: 60000 })
+  await site.waitForFunction(() => !document.getElementById('loader'), { timeout: 15000 }).catch(() => {})
+  await sleep(1800)
+  const fromSite = []
+  for (const k of ['case1', 'case2', 'case3']) {
+    await site.evaluate(k => document.querySelector(`.card-open[data-work="${k}"]`).click(), k)
+    await sleep(1400)
+    fromSite.push(await site.evaluate(() =>
+      [...document.querySelectorAll('#wdlgR > div')].map(d =>
+        d.querySelector('dt').textContent.replace(/\s+/g, ' ').trim() + '\u0001' +
+        d.querySelector('dd').textContent.replace(/\s+/g, ' ').trim())))
+    await site.keyboard.press('Escape'); await sleep(400)
+  }
+  await site.close()
+  const print = await browser.newPage()
+  await print.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
+  await sleep(600)
+  const fromPrint = await print.evaluate(() =>
+    [...document.querySelectorAll('section')].filter(s => s.querySelector('.case-h')).map(s =>
+      [...s.querySelectorAll('table:first-of-type tr')].map(tr =>
+        tr.querySelector('th').textContent.replace(/\s+/g, ' ').trim() + '\u0001' +
+        tr.querySelector('td').textContent.replace(/\s+/g, ' ').trim())))
+  await print.close()
+  if (fromPrint.length !== 3) fail(lang + ' 인쇄 페이지 사례가 3장이 아니다: ' + fromPrint.length)
+  for (let i = 0; i < 3; i++) {
+    const a = fromSite[i].map(norm).join('\u0002'), b = fromPrint[i].map(norm).join('\u0002')
+    if (a !== b) fail(lang + ' 사례 ' + (i + 1) + ' 텍스트가 사이트와 다르다\n  사이트: ' + a.slice(0, 160) + '\n  인쇄  : ' + b.slice(0, 160))
+  }
+  console.log('원천 일치 ' + lang + ': 사례 3건 × 6항목')
 }
-writeFileSync(MANIFEST, JSON.stringify(manifest, null, 2) + '\n')
 
-console.log(`[build-pdf] → ${OUT}  ${kb.toFixed(0)} KB`)
-console.log(`  인쇄 스타일 적용: ${light ? 'OK (흰 바탕)' : `⚠ 실패 — body 배경이 ${bg}`}`)
-if (errors.length) console.log(`  콘솔 오류 ${errors.length}건: ${errors.slice(0, 3).join(' | ')}`)
-if (!light) process.exit(1)
+/* 2. PDF 출력 */
+for (const lang of ['ko', 'en']) {
+  const page = await browser.newPage()
+  await page.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
+  await page.evaluate(() => document.fonts.ready)   // 웹폰트가 뜨기 전에 구우면 자간이 흐트러진다
+  await sleep(900)
+  await page.pdf({ path: OUT[lang], format: 'A4', printBackground: true, preferCSSPageSize: true })
+  const bytes = statSync(OUT[lang]).size
+  if (bytes > MAX_BYTES) fail(OUT[lang] + ' 크기 초과: ' + Math.round(bytes / 1024) + 'KB > 3MB')
+  console.log('생성: ' + OUT[lang] + ' — ' + Math.round(bytes / 1024) + 'KB')
+  await page.close()
+}
+await browser.close()
