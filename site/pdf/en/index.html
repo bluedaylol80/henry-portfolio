@@ -6,8 +6,10 @@
 <title>Henry Lim — Portfolio</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <!-- dynamic-subset은 unicode-range로 폰트를 잘게 쪼갠다 — 그러면 "19년"이 두 런으로 갈라져
-     PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 인쇄물은 통짜 가변 폰트를 쓴다. -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+     PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 그래서 통짜 폰트를 쓴다.
+     가변(variable)도 안 된다 — Chrome은 가변 폰트를 PDF에 Type3 윤곽선으로 구워서 글꼴 이름이
+     남지 않고 파일이 두 배로 불어난다(Codex R7). 무게별 정적 폰트라야 /BaseFont로 내장된다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 @page{size:A4 portrait}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -20,7 +22,10 @@ body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);
 /* 쪽 나눔: 섹션은 새 쪽에서 시작하고, 카드·표·행·근거 그림은 쪼개지 않는다 */
 section{break-before:page;break-inside:auto}
 section:first-of-type{break-before:auto}
-table,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
+/* 연락만으로 한 쪽을 쓰지 않는다 — 앞 섹션에 이어 붙이고 쪼개지지만 않게 한다(Codex R7) */
+section:last-of-type{break-before:auto;break-inside:avoid;margin-top:12mm}
+.kv,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
+.eyebrow,.sec-h,.lede{break-after:avoid}
 h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.3;break-after:avoid}
 a{color:inherit;text-decoration:none}
 .eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -56,33 +61,47 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
 .pill{display:inline-block;border-radius:99px;padding:1mm 3mm;font-size:.8rem;line-height:1.5;margin-right:2mm}
 .pill--dark{background:var(--ink);color:#fff}
 .pill--line{border:.4pt solid #bdbcb9;color:var(--muted)}
-.more{margin-top:4mm;border-top:.4pt solid var(--line);padding-top:3mm}
+.more{margin-top:3mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
 .more h4{font-size:.95rem;color:var(--muted);margin-bottom:2mm}
-.more dt{font-size:.95rem;font-weight:500;margin-top:2.5mm}
+.more dt{font-size:.95rem;font-weight:500;margin-top:2mm}
 .more dd{font-size:.9rem;color:#333}
 /* 근거 카드 — 그림과 설명이 갈라지지 않게 통째로 묶는다 */
-.ev{margin-top:4mm;display:grid;grid-template-columns:1fr 1fr;gap:3mm;break-inside:avoid}
+.ev{margin-top:3mm;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:3mm;break-inside:avoid}
 .ev figure{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ev img{display:block;width:100%;height:32mm;object-fit:cover;object-position:top}
+.ev img{display:block;width:100%;height:26mm;object-fit:cover;object-position:top}
 .ev figcaption{padding:2mm 2.5mm;font-size:.82rem;line-height:1.45}
 .ev figcaption b{display:block;font-weight:500}
 .ev figcaption .go{color:var(--muted);text-decoration:underline}
 /* 카드형 */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
 .card{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden}
-.card img{display:block;width:100%;height:auto}
+.card img{display:block;width:100%;height:42mm;object-fit:cover;object-position:center}
 .card .in{padding:3mm}
 .card h3{font-size:1.05rem}
 .card p{margin-top:1.5mm;font-size:.9rem;color:#333}
-.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5}
-.note p{margin-top:1mm}
-.note b{font-weight:500}
+.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5;display:grid;grid-template-columns:20mm 1fr;gap:1.2mm 3mm}
+.note p{display:contents}
+.note b{font-weight:600}
 .note .go{color:var(--muted);text-decoration:underline}
 .rights{margin-top:2.5mm;font-size:.75rem;color:var(--muted)}
 .stats{margin-top:5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
 .stats b{display:block;font-size:1.5rem;font-weight:600}
 .stats span{font-size:.85rem;color:var(--muted)}
 .foot{margin-top:6mm;font-size:.85rem;color:var(--muted)}
+.foot b{font-weight:600;color:var(--fg);margin-right:1mm}
+.foot .go{color:var(--muted);text-decoration:underline}
+.contact-end{margin-top:10mm;border-top:.4pt solid var(--line);padding-top:4mm}
+.contact-line{margin-top:2mm;font-size:.95rem}
+.contact-line b{display:inline-block;min-width:26mm;font-weight:600}
+.contact-end .foot{margin-top:2.5mm}
+
+.tl{font-size:.86rem}
+.tl col:nth-child(1){width:42mm}
+.tl col:nth-child(3){width:22mm}
+.tl th,.tl td{padding:1.5mm 3mm 1.5mm 0;line-height:1.42}
+.tl td{padding-right:3mm}
+.tl .sub{font-size:.78rem;margin-top:.3mm;line-height:1.35}
+.tl .impact{font-size:.8rem;margin-top:.6mm;line-height:1.38}
 </style>
 </head>
 <body>
@@ -97,14 +116,14 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
     <p><b>Site</b> <a href="https://bluedaylol80.github.io/henry-portfolio/en/">https://bluedaylol80.github.io/henry-portfolio/en/</a></p>
     <p><b>Notion resume</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion resume ↗</a></p>
   </div>
-  <p class="issued">Issued 2026-09-08</p>
+  <p class="issued">Issued 2026-09-09</p>
 </section>
 
 <section>
   <p class="eyebrow">Summary and the four areas</p>
   <h2 class="sec-h">Same method, three companies — three cases</h2>
   <p class="lede">19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.</p>
-  <table class="kv"><colgroup><col><col></colgroup><tr><th>Product decisions &amp; milestones</th><td>Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.<br><span style="color:var(--muted);font-size:9pt">Case — from user research to shipped events · Case — soft launch metrics → pre-launch fixes</span></td></tr><tr><th>Launch &amp; live ops</th><td>Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.<br><span style="color:var(--muted);font-size:9pt">Case — redefining the systems to publisher spec · Work — Chaos Chronicle sunset ops</span></td></tr><tr><th>Team &amp; hiring</th><td>Hiring, team structure and who owns what. At Dalcomsoft I restructured three teams of 22 into two teams of 13 while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.<br><span style="color:var(--muted);font-size:9pt">Case — restructuring (in the Dalcomsoft detail, "Also from the same period") · Work — Skypeople org setup</span></td></tr><tr><th>Operational standards</th><td>Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.<br><span style="color:var(--muted);font-size:9pt">Work — SKU automation and the abuse SOP</span></td></tr></table>
+  <table class="kv"><colgroup><col><col></colgroup><tr><th>Product decisions &amp; milestones</th><td>Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.<br><span style="color:var(--muted);font-size:9pt">Case — from user research to shipped events · Case — soft launch metrics → pre-launch fixes</span></td></tr><tr><th>Launch &amp; live ops</th><td>Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.<br><span style="color:var(--muted);font-size:9pt">Case — redefining the systems to publisher spec · Work — Chaos Chronicle sunset ops</span></td></tr><tr><th>Team &amp; hiring</th><td>Hiring, team structure and who owns what. At Dalcomsoft I restructured 22 people across three teams into 13 across two while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.<br><span style="color:var(--muted);font-size:9pt">Case — restructuring (in the Dalcomsoft detail, "Also from the same period") · Work — Skypeople org setup</span></td></tr><tr><th>Operational standards</th><td>Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.<br><span style="color:var(--muted);font-size:9pt">Work — SKU automation and the abuse SOP</span></td></tr></table>
   <div class="stats"><div><b>19 years</b><span>Total experience (per resume)</span></div><div><b>10</b><span>Companies</span></div><div><b>₩18.3B</b><span>Lyn revenue (#3 grossing, App Store · Google Play)</span></div><div><b>30</b><span>Projects — 8 published, 22 operated</span></div></div>
 </section>
 
@@ -114,8 +133,8 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
   <h2 class="case-h">From survey request to shipped events</h2>
   <p class="pills"><span class="pill pill--dark">Shipped</span><span class="pill pill--line">Product decisions &amp; milestones</span></p>
   <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned the survey request for webview events into shipped in-game minigames and webview events</td></tr><tr><th>Period &amp; role</th><td>Employed 2024.10 – 2026.07 · Team Lead, Live Game Design (live director) · case period: survey 2025.11 → launch 2026.05</td></tr><tr><th>Problem</th><td>In the November 2025 satisfaction survey across 6 titles (Korean, English, Japanese), IP satisfaction was high and players asked for the old webview events back. I took that on as an event improvement task.</td></tr><tr><th>Decision</th><td>The order was to prepare and ship in-game minigames first, then extend to webview events.</td></tr><tr><th>What I did</th><td>Minigames v1 and v2 rolled out title by title (v1 2025-12, v2 2026-01). For the decoration event timed to a new group launch I wrote the brief myself and built a working AI prototype for the pre-development review, then set the scope down to core features to fit the dev schedule. After that I built the SuperStar JYP Nation 10th anniversary webview event prototype.</td></tr><tr><th>Result &amp; status</th><td>Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.</td></tr><tr><th>Evidence</th><td>Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)</td></tr></table>
-  <div class="more"><h4>Also from the same period — 2 supporting cases</h4><dl><dt>Recurring product policy rework (KO)</dt><dd>A high-yield pack sold without a cap and unbalanced the lineup. I proposed capping how often it could be bought while leaving the lower tiers uncapped, along with easing the cap in stages and widening the RP card pack rollout. The reworked lineup went live in the store group by group from late July to mid-September 2025.</dd><dt>Restructuring with design, QA and CS under one lead (KO)</dt><dd>While titles went from 11 to 7 I proposed restructuring three teams of 22 into two teams of 13. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.</dd></dl></div>
-  <div class="ev"><figure><img src="../../evidence/3d559de7280481dba20ee12a62cb7d69.jpg" alt=""><figcaption><b>From user research to shipped events</b><a class="go" href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69">Open in Notion ↗</a></figcaption></figure><figure><img src="../../evidence/3d559de728048112b3c9ec7998d34e14.jpg" alt=""><figcaption><b>Recurring product policy rework</b><a class="go" href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14">Open in Notion ↗</a></figcaption></figure></div><p class="foot">All evidence is in the site detail view — total 3</p>
+  <div class="more"><h4>Also from the same period — 2 supporting cases</h4><dl><dt>Recurring product policy rework (KO)</dt><dd>A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup went live in the store group by group from late July to mid-September 2025 (IVE switched 2025-08-05), and after it shipped I reviewed the purchase-cap direction in the August 2025 note "R pack exclusion". It was documented in May 2026 as the weekly recurring product policy.</dd><dt>Restructuring with design, QA and CS under one lead (KO)</dt><dd>While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.</dd></dl></div>
+  <p class="foot"><b>Evidence</b> <a class="go" href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69">From user research to shipped events ↗</a> · <a class="go" href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14">Recurring product policy rework ↗</a> · <a class="go" href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a">Restructuring with design, QA and CS under one lead ↗</a></p>
 </section>
 <section>
   <p class="eyebrow">Portfolio · Launch &amp; live ops</p>
@@ -174,34 +193,31 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
     <div class="card"><img src="../../works/deco.jpg" alt="">
       <div class="in">
         <p class="eyebrow">Dalcomsoft · work prototypes</p>
-        <h3>Decoration event design &amp; wireframe Open the demo in Korean</h3>
+        <h3>Decoration event design &amp; wireframe</h3>
         <p>Turned collection and display requests from the satisfaction survey into a decoration event design and wireframe. Open the link below for the demo (Korean).</p>
         <div class="note"><p><b>How to try it</b> Pick items on the decoration screen and place them.</p><p><b>Why it was built</b> Built to settle the screen flow before development started.</p><p><b>My part</b> I wrote the brief myself and built the prototype.</p><p><b>Shipped?</b> The event shipped 2026-04-30 to 05-23.</p>
-          <p><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/deco.html">Demo ↗</a></p></div>
+          <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/deco.html">Open ↗</a></p></div>
         <p class="rights">Public screens are a summary with internal details removed.</p>
       </div></div>
     <div class="card"><img src="../../works/ssjproto.jpg" alt="">
       <div class="in">
         <p class="eyebrow">Dalcomsoft · work prototypes</p>
-        <h3>SuperStar JYP Nation 10th anniversary webview event prototype Play the prototype in Korean</h3>
+        <h3>SuperStar JYP Nation 10th anniversary webview event prototype</h3>
         <p>Validated on a working webview instead of a spec — I built the clickable prototype myself with AI, covering weekly missions, reward claims and the entry flow. Open the link below to play it (Korean).</p>
         <div class="note"><p><b>How to try it</b> Switch the week and compare the reward lock states, then follow missions → claim rewards → entry flow.</p><p><b>Why it was built</b> Built to validate the flow on a working webview instead of a spec.</p><p><b>My part</b> I built the interactive prototype myself with AI.</p><p><b>Shipped?</b> Shipped — May 2026.</p>
-          <p><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/ssjproto.html">Demo ↗</a></p></div>
+          <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/ssjproto.html">Open ↗</a></p></div>
         <p class="rights">Public screens are a summary with internal details removed.</p>
       </div></div></div>
   <p class="foot"><b>Our Household Budget</b> — A budget web app the two of us use every day. Built on Google Apps Script + a single HTML file, running live.</p>
 </section>
 
-<section>
+<section class="contact-end">
   <p class="eyebrow">Contact</p>
-  <h2 class="sec-h">Henry Lim</h2>
-  <table>
-    <tr><th>Email</th><td><a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></td></tr>
-    <tr><th>Site</th><td><a href="https://bluedaylol80.github.io/henry-portfolio/en/">https://bluedaylol80.github.io/henry-portfolio/en/</a></td></tr>
-    <tr><th>Notion resume</th><td><a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</a></td></tr>
-  </table>
-  <p class="foot">This document is generated from the site. Issued 2026-09-08</p>
-  <p class="foot">© 2026 Henry Lim All figures on this site come from my public resume.</p>
+  <p class="contact-line"><b>Henry Lim</b>
+    <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a> ·
+    <a href="https://bluedaylol80.github.io/henry-portfolio/en/">Site ↗</a> ·
+    <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion resume ↗</a></p>
+  <p class="foot">This document is generated from the site. Issued 2026-09-09 · © 2026 Henry Lim · All figures on this site come from my public resume.</p>
 </section>
 
 </body>

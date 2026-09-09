@@ -147,6 +147,14 @@ for (const t of targets) {
         }
         // 되감기가 먹었으면 tTop 이 이미 72 근처다 — 남은 오차만 clip 으로 보정한다.
         const top = title.getBoundingClientRect().top + (window.scrollY || 0)
+        /* 🔴 제목·속성만 담으면 카드가 "무슨 페이지인지"만 보여주고 판단·결과는 안 보인다(Codex R7).
+           💡 요약 콜아웃이 있으면 거기서 24px 위를 기준으로 잘라 요약 + ✅ 업무 프로세스가 프레임에 들어오게 한다.
+           제목은 카드가 텍스트로 따로 쓰므로 그림에서 빠져도 잃는 정보가 없다. */
+        const callout = document.querySelector('.notion-callout-block')
+        if (callout){
+          const cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
+          if (cTop > top) return Math.max(0, Math.round(cTop - 24))
+        }
         return Math.max(0, Math.round(top - 72))
       })
       if (clipTop === null) fail('제목 요소를 찾지 못했다: ' + t.id + ' (' + t.label + ')')

@@ -62,8 +62,14 @@ for (const lang of ['ko', 'en']) {
   const page = await browser.newPage()
   await page.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
   await page.evaluate(() => document.fonts.ready)   // 웹폰트가 뜨기 전에 구우면 자간이 흐트러진다
-  const font = await page.evaluate(() => document.fonts.check('1rem Pretendard'))
-  if (!font) fail(lang + ' Pretendard가 로드되지 않았다 — 폴백 폰트로 구우면 줄바꿈이 달라진다')
+  /* fonts.check는 폴백으로도 그릴 수 있으면 true를 준다 — 등록된 이름을 직접 확인한다.
+     이름이 정확히 'Pretendard'여야 한다. 'Pretendard Variable'을 부르면 Chrome이 가변 글꼴을
+     Type3 윤곽선으로 구워 PDF에 글꼴이 내장되지 않고 파일이 두 배가 된다(Codex R7 PDF04). */
+  const fam = await page.evaluate(() => [...document.fonts].map(f => f.family.replace(/^['"]|['"]$/g, '')))
+  if (!fam.includes('Pretendard')) fail(lang + " 정적 Pretendard가 로드되지 않았다: " + fam.join(','))
+  if (fam.some(f => /Variable/.test(f))) fail(lang + ' 가변 Pretendard가 섞였다(Type3로 구워진다): ' + fam.join(','))
+  const used = await page.evaluate(() => getComputedStyle(document.body).fontFamily)
+  if (used.split(',')[0].replace(/^['"]|['"]$/g, '') !== 'Pretendard') fail(lang + ' 본문 글꼴이 Pretendard가 아니다: ' + used)
   await page.evaluate(() => Promise.all([...document.images].filter(i => !i.complete)
     .map(i => new Promise(r => { i.onload = i.onerror = r }))))
   await sleep(900)

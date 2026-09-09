@@ -75,7 +75,9 @@ async function scrape(lang) {
       protoLede: t(document.querySelector('#proto .proto-lede')),
       proto: all('#proto .card', c => ({
         meta: t(c.querySelector('.card-meta')),
-        title: t(c.querySelector('.card-bot h3')).replace(/\s*\((새 창에서 열림|opens in a new window)\)\s*$/, ''),
+        title: (() => { const h = c.querySelector('.card-bot h3').cloneNode(true)
+          h.querySelectorAll('.sr-only').forEach(n => n.remove())   // '체험판 열기 (새 창에서 열림)'이 제목에 섞였다
+          return t(h) })(),
         href: c.querySelector('.card-go').getAttribute('href'),
         summary: t(c.querySelector('.card-bot > p')),
         note: [...c.querySelectorAll('.demo-note p')].map(p => [t(p.querySelector('b')), t(p.querySelector('span'))]),
@@ -130,7 +132,10 @@ body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);
 /* 쪽 나눔: 섹션은 새 쪽에서 시작하고, 카드·표·행·근거 그림은 쪼개지 않는다 */
 section{break-before:page;break-inside:auto}
 section:first-of-type{break-before:auto}
-table,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
+/* 연락만으로 한 쪽을 쓰지 않는다 — 앞 섹션에 이어 붙이고 쪼개지지만 않게 한다(Codex R7) */
+section:last-of-type{break-before:auto;break-inside:avoid;margin-top:12mm}
+.kv,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
+.eyebrow,.sec-h,.lede{break-after:avoid}
 h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.3;break-after:avoid}
 a{color:inherit;text-decoration:none}
 .eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -166,44 +171,61 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
 .pill{display:inline-block;border-radius:99px;padding:1mm 3mm;font-size:.8rem;line-height:1.5;margin-right:2mm}
 .pill--dark{background:var(--ink);color:#fff}
 .pill--line{border:.4pt solid #bdbcb9;color:var(--muted)}
-.more{margin-top:4mm;border-top:.4pt solid var(--line);padding-top:3mm}
+.more{margin-top:3mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
 .more h4{font-size:.95rem;color:var(--muted);margin-bottom:2mm}
-.more dt{font-size:.95rem;font-weight:500;margin-top:2.5mm}
+.more dt{font-size:.95rem;font-weight:500;margin-top:2mm}
 .more dd{font-size:.9rem;color:#333}
 /* 근거 카드 — 그림과 설명이 갈라지지 않게 통째로 묶는다 */
-.ev{margin-top:4mm;display:grid;grid-template-columns:1fr 1fr;gap:3mm;break-inside:avoid}
+.ev{margin-top:3mm;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:3mm;break-inside:avoid}
 .ev figure{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ev img{display:block;width:100%;height:32mm;object-fit:cover;object-position:top}
+.ev img{display:block;width:100%;height:26mm;object-fit:cover;object-position:top}
 .ev figcaption{padding:2mm 2.5mm;font-size:.82rem;line-height:1.45}
 .ev figcaption b{display:block;font-weight:500}
 .ev figcaption .go{color:var(--muted);text-decoration:underline}
 /* 카드형 */
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
 .card{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden}
-.card img{display:block;width:100%;height:auto}
+.card img{display:block;width:100%;height:42mm;object-fit:cover;object-position:center}
 .card .in{padding:3mm}
 .card h3{font-size:1.05rem}
 .card p{margin-top:1.5mm;font-size:.9rem;color:#333}
-.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5}
-.note p{margin-top:1mm}
-.note b{font-weight:500}
+.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5;display:grid;grid-template-columns:20mm 1fr;gap:1.2mm 3mm}
+.note p{display:contents}
+.note b{font-weight:600}
 .note .go{color:var(--muted);text-decoration:underline}
 .rights{margin-top:2.5mm;font-size:.75rem;color:var(--muted)}
 .stats{margin-top:5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
 .stats b{display:block;font-size:1.5rem;font-weight:600}
 .stats span{font-size:.85rem;color:var(--muted)}
 .foot{margin-top:6mm;font-size:.85rem;color:var(--muted)}
+.foot b{font-weight:600;color:var(--fg);margin-right:1mm}
+.foot .go{color:var(--muted);text-decoration:underline}
+.contact-end{margin-top:10mm;border-top:.4pt solid var(--line);padding-top:4mm}
+.contact-line{margin-top:2mm;font-size:.95rem}
+.contact-line b{display:inline-block;min-width:26mm;font-weight:600}
+.contact-end .foot{margin-top:2.5mm}
+`
+
+/* EN 타임라인만 조인다 — 영어 문장이 길어 10행이 한 쪽을 넘겼다(Codex R7 PDF04). KO는 그대로 한 쪽에 든다. */
+const TL_EN = `
+.tl{font-size:.86rem}
+.tl col:nth-child(1){width:42mm}
+.tl col:nth-child(3){width:22mm}
+.tl th,.tl td{padding:1.5mm 3mm 1.5mm 0;line-height:1.42}
+.tl td{padding-right:3mm}
+.tl .sub{font-size:.78rem;margin-top:.3mm;line-height:1.35}
+.tl .impact{font-size:.8rem;margin-top:.6mm;line-height:1.38}
 `
 
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
   ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', notion:'Notion 이력',
         evMore:'전체 근거는 사이트 상세창에서 볼 수 있습니다 — 총', timeline:'프로젝트 타임라인', tlCompany:'회사', tlTitle:'대표 타이틀', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
-        contact:'연락', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
+        contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', numbers:'숫자로 남은 기록' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
         evMore:'All evidence is in the site detail view — total', timeline:'Project timeline', tlCompany:'Company', tlTitle:'Titles', tlPeriod:'Team, role, period', tlKpi:'Headline number',
-        contact:'Contact', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
+        contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
         summary:'Summary and the four areas', numbers:'The record in numbers' },
 }
 const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원더피플', 3], ['Wonderpeople', 3],
@@ -213,6 +235,7 @@ function render(lang, d) {
   const l = L[lang]
   /* EN 인쇄 페이지는 site/pdf/en/ 아래라 자산 경로가 한 단계 더 올라간다 */
   const UP = lang === 'en' ? '../../' : '../'
+  /* 사례 1건 = 1쪽. 보조 사례(함께 보기)가 붙는 쪽은 그림 자리가 없어 근거 링크 줄로 대신한다(Codex R7). */
   const evFig = (c) => c.ev.slice(0, 2).map(e => {
     const id = e.href.replace(/^.*\//, '')
     const m = EV[id]
@@ -229,7 +252,9 @@ function render(lang, d) {
   <p class="pills"><span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span></p>
   <table class="kv"><colgroup><col><col></colgroup>${c.rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(pr(v))}</td></tr>`).join('')}</table>
   ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}
-  ${c.ev.length ? `<div class="ev">${evFig(c)}</div>${c.ev.length > 2 ? `<p class="foot">${esc(l.evMore)} ${c.ev.length}</p>` : ''}` : ''}
+  ${c.ev.length ? (c.more
+    ? `<p class="foot"><b>${esc(l.evidence)}</b> ${c.ev.map(e => `<a class="go" href="${esc(e.href)}">${esc(e.title)} ↗</a>`).join(' · ')}</p>`
+    : `<div class="ev">${evFig(c)}</div>${c.ev.length > 2 ? `<p class="foot">${esc(l.evMore)} ${c.ev.length}</p>` : ''}`) : ''}
 </section>`
   const kpiFor = (company) => {
     const hit = KPI_OF.find(([k]) => company.includes(k))
@@ -242,9 +267,11 @@ function render(lang, d) {
         <h3>${esc(p.title)}</h3>
         <p>${esc(pr(p.summary))}</p>
         <div class="note">${p.note.map(([k, v]) => `<p><b>${esc(k)}</b> ${esc(pr(v))}</p>`).join('')}
-          <p><a class="go" href="${esc(SITE[lang] + p.href)}">${esc(l.demo)} ↗</a></p></div>
+          <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(SITE[lang] + p.href)}">${esc(l.open)} ↗</a></p></div>
         <p class="rights">${esc(p.rights)}</p>
       </div></div>`).join('')
+  /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
+  const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   return `<!doctype html>
 <html lang="${lang}">
 <head>
@@ -253,9 +280,11 @@ function render(lang, d) {
 <title>${esc(d.brand)} — ${esc(l.doc)}</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <!-- dynamic-subset은 unicode-range로 폰트를 잘게 쪼갠다 — 그러면 "19년"이 두 런으로 갈라져
-     PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 인쇄물은 통짜 가변 폰트를 쓴다. -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
-<style>${CSS}</style>
+     PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 그래서 통짜 폰트를 쓴다.
+     가변(variable)도 안 된다 — Chrome은 가변 폰트를 PDF에 Type3 윤곽선으로 구워서 글꼴 이름이
+     남지 않고 파일이 두 배로 불어난다(Codex R7). 무게별 정적 폰트라야 /BaseFont로 내장된다. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>${CSS}${lang === 'en' ? TL_EN : ''}</style>
 </head>
 <body>
 
@@ -301,16 +330,13 @@ ${d.cases.map(caseSec).join('')}
   ${d.lab ? `<p class="foot"><b>${esc(d.lab.title)}</b> — ${esc(d.lab.summary)}</p>` : ''}
 </section>
 
-<section>
+<section class="contact-end">
   <p class="eyebrow">${esc(l.contact)}</p>
-  <h2 class="sec-h">${esc(d.brand)}</h2>
-  <table>
-    <tr><th>${esc(l.email)}</th><td><a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></td></tr>
-    <tr><th>${esc(l.site)}</th><td><a href="${esc(SITE[lang])}">${esc(SITE[lang])}</a></td></tr>
-    <tr><th>${esc(l.notion)}</th><td><a href="${esc(HUB)}">${esc(HUB)}</a></td></tr>
-  </table>
-  <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY}</p>
-  <p class="foot">${esc(d.legal)}</p>
+  <p class="contact-line"><b>${esc(d.brand)}</b>
+    <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a> ·
+    <a href="${esc(SITE[lang])}">${esc(l.site)} ↗</a> ·
+    <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
+  <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
 </section>
 
 </body>
