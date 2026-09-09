@@ -219,6 +219,17 @@ const TL_EN = `
 .tl .impact{font-size:.8rem;margin-top:.6mm;line-height:1.38}
 `
 
+/* EN 사례 1만 조인다 — 행 2개(결정 범위·미룬 것)가 늘어 보조 사례가 다음 쪽으로 밀렸다(WO-23).
+   본문 행은 그대로 두고 보조 사례 블록과 근거 링크 줄만 좁힌다. */
+const CASE1_EN = `
+.case--more .kv th,.case--more .kv td{padding-top:1.5mm;padding-bottom:1.5mm;line-height:1.48}
+.case--more .more{margin-top:2.5mm;padding-top:2mm}
+.case--more .more h4{font-size:.9rem;margin-bottom:1.2mm}
+.case--more .more dt{font-size:.9rem;margin-top:1.2mm;line-height:1.35}
+.case--more .more dd{font-size:.84rem;line-height:1.45}
+.case--more .more+.foot{margin-top:3mm;line-height:1.45}
+`
+
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
   ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', notion:'Notion 이력',
@@ -249,7 +260,7 @@ function render(lang, d) {
     return `<figure><img src="${UP}evidence/${esc(m.img)}" alt=""><figcaption><b>${esc(title)}</b><a class="go" href="${esc(NOTION + id)}">${esc(go)} ↗</a></figcaption></figure>`
   }).join('')
   const caseSec = (c) => `
-<section>
+<section${c.more ? ' class="case--more"' : ''}>
   <p class="eyebrow">${esc(l.doc)} · ${esc(c.tag)}</p>
   <p class="case-meta">${esc(c.dlgMeta)}</p>
   <h2 class="case-h">${esc(c.dlgTitle)}</h2>
@@ -288,7 +299,7 @@ function render(lang, d) {
      가변(variable)도 안 된다 — Chrome은 가변 폰트를 PDF에 Type3 윤곽선으로 구워서 글꼴 이름이
      남지 않고 파일이 두 배로 불어난다(Codex R7). 무게별 정적 폰트라야 /BaseFont로 내장된다. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>${CSS}${lang === 'en' ? TL_EN : ''}</style>
+<style>${CSS}${lang === 'en' ? TL_EN + CASE1_EN : ''}</style>
 </head>
 <body>
 

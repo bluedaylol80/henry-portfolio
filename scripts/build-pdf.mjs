@@ -4,7 +4,7 @@
  * v21 React /brief 전용 빌더를 폐기하고 다시 썼다(WO-18). 인쇄 페이지는 scripts/build-print.mjs가
  * 사이트 DOM에서 조립하므로 문구는 한 벌뿐이다. 여기서는 그 페이지를 A4로 굽기만 한다.
  *
- * 텍스트 원천 검사: 인쇄 페이지의 대표 사례 6항목이 사이트 상세창 데이터와 같은지 확인하고,
+ * 텍스트 원천 검사: 인쇄 페이지의 대표 사례 표가 사이트 상세창 데이터와 같은지 확인하고,
  * 다르면 굽지 않고 실패한다(문구가 두 벌로 갈라지는 것을 여기서 막는다).
  *
  * 사전 준비: python -m http.server 8787 --bind 127.0.0.1 --directory site
@@ -23,7 +23,7 @@ const norm = s => s.replace(/\s+/g, ' ').trim()
 
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox'] })
 
-/* 1. 원천 검사 — 사이트 상세창 6항목 vs 인쇄 페이지 표 */
+/* 1. 원천 검사 — 사이트 상세창 행 vs 인쇄 페이지 표 (사례마다 행 수가 다르다: case1=8, case2·3=6) */
 for (const lang of ['ko', 'en']) {
   const site = await browser.newPage()
   await site.goto(lang === 'ko' ? BASE + '/' : BASE + '/en/', { waitUntil: 'networkidle2', timeout: 60000 })
@@ -54,7 +54,7 @@ for (const lang of ['ko', 'en']) {
     const a = fromSite[i].map(norm).join('\u0002'), b = fromPrint[i].map(norm).join('\u0002')
     if (a !== b) fail(lang + ' 사례 ' + (i + 1) + ' 텍스트가 사이트와 다르다\n  사이트: ' + a.slice(0, 160) + '\n  인쇄  : ' + b.slice(0, 160))
   }
-  console.log('원천 일치 ' + lang + ': 사례 3건 × 6항목')
+  console.log('원천 일치 ' + lang + ': 사례 3건 — ' + fromSite.map(r => r.length + '항목').join(' · '))
 }
 
 /* 2. PDF 출력 */
