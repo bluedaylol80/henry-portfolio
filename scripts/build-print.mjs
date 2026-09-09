@@ -6,6 +6,9 @@
  * 렌더된 DOM 텍스트를 그대로 읽어 조립한다. 대표 사례 6항목은 상세창을 실제로 열어서 읽는다.
  * 근거 카드 썸네일·Notion URL은 site/evidence/index.json에서 가져온다.
  *
+ * 판형은 16:9 가로 슬라이드 15장이다(WO-24). 이미지는 site/pdf/img/의 사본만 쓴다
+ * (scripts/build-pdf-img.mjs가 만든다). 채택 전 슬롯은 "이미지 대기" 박스로 그린다.
+ *
  * 사전 준비: python -m http.server 8787 --bind 127.0.0.1 --directory site
  * Usage: node scripts/build-print.mjs
  */
@@ -120,129 +123,170 @@ async function scrape(lang) {
   return base
 }
 
-/* ---------- 인쇄 CSS — A4 세로, 사이트 토큰·Pretendard, 섹션 단위 페이지 나눔 ---------- */
+/* ---------- 인쇄 CSS — 16:9 가로 슬라이드, 사이트 토큰·Pretendard ---------- */
+const SLIDES = 15
 const CSS = `
-@page{size:A4 portrait}
+@page{size:338.67mm 190.5mm;margin:0}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--fg:#111;--muted:#5b5b5b;--line:#e6e5e2;--surface:#f6f5f3;--ink:#0a0a0a}
+:root{--fg:#111;--muted:#5b5b5b;--line:#e6e5e2;--surface:#f6f5f3;--ink:#0a0a0a;--acc:#8a3a24}
 html{font-size:11pt}
 /* 한국어는 어절 단위로 끊는다 — 기본 줄바꿈은 '실행/으로'처럼 낱말을 쪼갠다(Codex R6) */
-body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.6;
-  word-break:keep-all;
+body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.55;
+  word-break:keep-all;counter-reset:slide;
   -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-/* 쪽 나눔: 섹션은 새 쪽에서 시작하고, 카드·표·행·근거 그림은 쪼개지 않는다 */
-section{break-before:page;break-inside:auto}
-section:first-of-type{break-before:auto}
-/* 연락만으로 한 쪽을 쓰지 않는다 — 앞 섹션에 이어 붙이고 쪼개지지만 않게 한다(Codex R7) */
-section:last-of-type{break-before:auto;break-inside:avoid;margin-top:12mm}
-.kv,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
-.eyebrow,.sec-h,.lede{break-after:avoid}
-h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.3;break-after:avoid}
 a{color:inherit;text-decoration:none}
-.eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.sec-h{font-size:1.5rem;margin:0 0 4mm}
-.sec-h+.lede{margin:-2mm 0 5mm;color:var(--muted);font-size:.95rem}
-/* 표지 — 절대배치·flex 정렬을 쓰지 않는다. 텍스트 추출 순서가 DOM 순서와 어긋난다(Codex R6) */
-.cover{padding-top:60mm}
-.cover .name{font-size:2.9rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.cover .role{margin-top:2mm;font-size:1.05rem;color:var(--muted)}
-.cover .head{margin-top:14mm;font-size:1.75rem;font-weight:600;line-height:1.35;max-width:150mm}
-.cover .contact{margin-top:18mm;font-size:.95rem;color:var(--muted)}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
+/* 슬라이드 한 장 = 한 쪽. 쪽 번호는 CSS 카운터로 찍는다(puppeteer 꼬리말을 쓰지 않는다) */
+.s{position:relative;width:338.67mm;height:190.5mm;padding:11mm 14mm 13mm;overflow:hidden;
+  display:flex;flex-direction:column;counter-increment:slide;break-after:page;background:#fff}
+.s:last-of-type{break-after:auto}
+.s::after{content:counter(slide) " / ${SLIDES}";position:absolute;right:14mm;bottom:6.5mm;
+  font-size:.7rem;color:#8d8d8d;letter-spacing:.03em}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:10mm;
+  border-bottom:.5pt solid var(--line);padding-bottom:2.5mm;margin-bottom:5mm}
+.hd .who{font-size:.85rem;color:var(--muted);margin-top:.8mm}
+.eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bd{flex:1;min-height:0;display:flex;flex-direction:column}
+.rights{position:absolute;left:14mm;bottom:6.5mm;font-size:.68rem;color:#8d8d8d;max-width:255mm;line-height:1.4}
+.pill{display:inline-block;border-radius:99px;padding:1mm 3.2mm;font-size:.76rem;line-height:1.5;margin-left:2mm;white-space:nowrap}
+.pill--dark{background:var(--ink);color:#fff}
+.pill--line{border:.5pt solid #bdbcb9;color:var(--muted)}
+.t{font-size:1.55rem;max-width:230mm}
+.t--sm{font-size:1.25rem}
+.lede{margin-top:2.5mm;color:var(--muted);font-size:.95rem;max-width:230mm}
+.foot{margin-top:3mm;font-size:.8rem;color:var(--muted);line-height:1.5}
+.foot b{font-weight:600;color:var(--fg);margin-right:1.5mm}
+.go{color:var(--muted);text-decoration:underline}
+.nw{white-space:nowrap}
+/* 표지 */
+.cover{padding-top:16mm}
+.cover .name{font-size:3.1rem;font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.cover .role{margin-top:2.5mm;font-size:1.05rem;color:var(--muted)}
+.cover .head{margin-top:9mm;font-size:1.9rem;font-weight:600;line-height:1.3;max-width:210mm}
+.cover .contact{margin-top:8mm;font-size:.95rem;color:var(--muted)}
 .cover .contact p{margin-top:1.5mm}
 .cover .contact b{font-weight:500;color:var(--fg);display:inline-block;min-width:26mm}
-.cover .issued{margin-top:10mm;font-size:.85rem;color:var(--muted)}
-/* 표 */
-table{width:100%;border-collapse:collapse;font-size:.95rem;table-layout:fixed}
-th,td{border-top:.4pt solid var(--line);padding:2.4mm 3mm 2.4mm 0;vertical-align:top;text-align:left}
-th{font-weight:500;color:var(--muted)}
-tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
-.kv col:first-child{width:28mm}
-.tl col:nth-child(1){width:46mm}
-.tl col:nth-child(2){width:auto}
-.tl col:nth-child(3){width:24mm}
-.tl thead th{border-top:0;font-size:.8rem;letter-spacing:.04em;color:var(--muted)}
-.tl td{padding-right:4mm}
-.tl td.k{text-align:right;font-weight:500;padding-right:0}
-.tl .sub{display:block;color:var(--muted);font-size:.85rem;margin-top:.8mm}
-.nw{white-space:nowrap}
-.tl .impact{display:block;color:#333;font-size:.88rem;margin-top:1.2mm}
+.cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
+.strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.strip img{display:block;width:100%;height:44mm;object-fit:cover;object-position:center}
+.strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
+/* Career Milestone */
+.ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
+.ms-ph{flex:1;border-radius:1.5mm;background:var(--surface);border:.5pt solid var(--line);padding:2.5mm 3.5mm}
+.ms-ph b{display:block;font-size:1rem;font-weight:600}
+.ms-ph span{font-size:.78rem;color:var(--muted)}
+.ms-ph:nth-child(3){background:var(--ink);border-color:var(--ink);color:#fff}
+.ms-ph:nth-child(3) span{color:#cfcfcf}
+.ms-rail{height:.8mm;background:linear-gradient(90deg,#dcdbd8,#9a9894);border-radius:99px;margin-bottom:4mm}
+.ms-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:4mm}
+.ms-c{border-top:.8pt solid var(--ink);padding-top:2mm}
+.ms-c b{display:block;font-size:.98rem;font-weight:600}
+.ms-c .per{font-size:.78rem;color:var(--muted);margin-top:.6mm}
+.ms-c .rl{font-size:.78rem;margin-top:1.2mm}
+.ms-c .ti{font-size:.75rem;color:var(--muted);margin-top:.8mm;line-height:1.4}
+.ms-c .im{font-size:.74rem;color:#333;margin-top:1.6mm;line-height:1.42}
+/* 요약·역량 */
+.cards4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;align-items:stretch}
+.sk{border:.5pt solid var(--line);border-radius:2mm;padding:4mm;background:#fff}
+.sk h3{font-size:1.02rem}
+.sk p{margin-top:2mm;font-size:.82rem;line-height:1.5}
+.sk .cs{margin-top:2.5mm;font-size:.75rem;color:var(--muted);line-height:1.45}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;margin-top:auto;border-top:.5pt solid var(--line);padding-top:4mm}
+.stats b{display:block;font-size:1.6rem;font-weight:600;letter-spacing:-.01em}
+.stats .lb{display:block;font-size:.78rem;color:var(--muted)}
 /* 사례 */
-.case-h{font-size:1.3rem;line-height:1.35;max-width:150mm}
-.case-meta{font-size:.9rem;color:var(--muted);margin-bottom:1.5mm}
-.pills{margin:3mm 0 4mm}
-.pill{display:inline-block;border-radius:99px;padding:1mm 3mm;font-size:.8rem;line-height:1.5;margin-right:2mm}
-.pill--dark{background:var(--ink);color:#fff}
-.pill--line{border:.4pt solid #bdbcb9;color:var(--muted)}
-.more{margin-top:3mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
-.more h4{font-size:.95rem;color:var(--muted);margin-bottom:2mm}
-.more dt{font-size:.95rem;font-weight:500;margin-top:2mm}
-.more dd{font-size:.9rem;color:#333}
-/* 근거 카드 — 그림과 설명이 갈라지지 않게 통째로 묶는다 */
-.ev{margin-top:3mm;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:3mm;break-inside:avoid}
-.ev figure{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ev img{display:block;width:100%;height:26mm;object-fit:cover;object-position:top}
-.ev figcaption{padding:2mm 2.5mm;font-size:.82rem;line-height:1.45}
-.ev figcaption b{display:block;font-weight:500}
-.ev figcaption .go{color:var(--muted);text-decoration:underline}
-/* 카드형 */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
-.card{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden}
-.card img{display:block;width:100%;height:42mm;object-fit:cover;object-position:center}
-.card .in{padding:3mm}
-.card h3{font-size:1.05rem}
-.card p{margin-top:1.5mm;font-size:.9rem;color:#333}
-.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5;display:grid;grid-template-columns:20mm 1fr;gap:1.2mm 3mm}
+.two{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:9mm}
+.two--top{align-items:start}
+.two--l{grid-template-columns:118mm 1fr}
+.two--r{grid-template-columns:1fr 130mm}
+.kpi{border-left:1.2mm solid var(--acc);padding-left:3.5mm;margin:3mm 0 4mm}
+.kpi b{display:block;font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.kpi .lb{display:block;font-size:.76rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+.kv{font-size:.84rem}
+.kv th,.kv td{border-top:.4pt solid var(--line);padding:1.8mm 3mm 1.8mm 0;vertical-align:top;text-align:left;line-height:1.5}
+.kv th{font-weight:500;color:var(--muted)}
+.kv tr:last-child td,.kv tr:last-child th{border-bottom:.4pt solid var(--line)}
+.kv col:first-child{width:24mm}
+.hero-shot{align-self:center;border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.hero-shot img{display:block;width:100%;height:auto}
+.hero-shot figcaption{padding:2.2mm 3mm;font-size:.78rem;color:var(--muted)}
+.more{margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
+.more h4{font-size:.85rem;color:var(--muted);margin-bottom:1.5mm}
+.more dt{font-size:.84rem;font-weight:600;margin-top:1.5mm}
+.more dd{font-size:.78rem;color:#333;line-height:1.45}
+/* 이미지 그리드·대기 박스 */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:4mm;align-content:start}
+.evlist{font-size:.78rem;line-height:1.5}
+.evlist b{display:block;font-weight:600;margin-bottom:1.2mm}
+.evlist a{display:block;margin-top:1.2mm}
+.ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
+.ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
+.ph figcaption b{display:block;font-weight:500;color:var(--fg)}
+.pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
+  height:47mm;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+/* 성과 */
+.res-n{font-size:3.4rem;font-weight:600;letter-spacing:-.03em;line-height:1}
+.res-l{margin-top:2mm;font-size:.8rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.res-b{margin-top:5mm;font-size:.9rem;line-height:1.55}
+.res-b li{list-style:none;padding-left:4.5mm;position:relative;margin-top:1.8mm}
+.res-b li::before{content:"";position:absolute;left:0;top:2.1mm;width:2mm;height:2mm;border-radius:99px;background:var(--acc)}
+/* 타임라인 */
+.tl{font-size:.78rem}
+.tl th,.tl td{border-top:.4pt solid var(--line);padding:1.6mm 3mm 1.6mm 0;vertical-align:top;text-align:left;line-height:1.42}
+.tl thead th{border-top:0;font-size:.72rem;letter-spacing:.05em;color:var(--muted);font-weight:500}
+.tl col:nth-child(1){width:34mm}
+.tl col:nth-child(3){width:20mm}
+.tl td.k{text-align:right;font-weight:600;padding-right:0}
+.tl b{font-weight:600}
+.tl .sub{display:block;color:var(--muted);font-size:.72rem;margin-top:.4mm}
+.tl .impact{display:block;color:#333;font-size:.74rem;margin-top:.6mm}
+/* 프로토타입 카드 */
+.proto{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:100%}
+.pc{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
+.pc img{display:block;width:100%;height:58mm;object-fit:cover;object-position:top}
+.pc .in{padding:4mm;flex:1;display:flex;flex-direction:column}
+.pc h3{font-size:1.05rem;margin-top:1mm}
+.pc p.sum{margin-top:1.8mm;font-size:.82rem;line-height:1.5}
+.note{margin-top:2.5mm;font-size:.78rem;line-height:1.45;display:grid;grid-template-columns:20mm 1fr;gap:1mm 3mm}
 .note p{display:contents}
 .note b{font-weight:600}
-.note .go{color:var(--muted);text-decoration:underline}
-.rights{margin-top:2.5mm;font-size:.75rem;color:var(--muted)}
-.stats{margin-top:5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
-.stats b{display:block;font-size:1.5rem;font-weight:600}
-.stats span{font-size:.85rem;color:var(--muted)}
-.foot{margin-top:6mm;font-size:.85rem;color:var(--muted)}
-.foot b{font-weight:600;color:var(--fg);margin-right:1mm}
-.foot .go{color:var(--muted);text-decoration:underline}
-.contact-end{margin-top:10mm;border-top:.4pt solid var(--line);padding-top:4mm}
-.contact-line{margin-top:2mm;font-size:.95rem}
-.contact-line b{display:inline-block;min-width:26mm;font-weight:600}
-.contact-end .foot{margin-top:2.5mm}
-`
-
-/* EN 타임라인만 조인다 — 영어 문장이 길어 10행이 한 쪽을 넘겼다(Codex R7 PDF04). KO는 그대로 한 쪽에 든다. */
-const TL_EN = `
-.tl{font-size:.86rem}
-.tl col:nth-child(1){width:42mm}
-.tl col:nth-child(3){width:22mm}
-.tl th,.tl td{padding:1.5mm 3mm 1.5mm 0;line-height:1.42}
-.tl td{padding-right:3mm}
-.tl .sub{font-size:.78rem;margin-top:.3mm;line-height:1.35}
-.tl .impact{font-size:.8rem;margin-top:.6mm;line-height:1.38}
-`
-
-/* EN 사례 1만 조인다 — 행 2개(결정 범위·미룬 것)가 늘어 보조 사례가 다음 쪽으로 밀렸다(WO-23).
-   본문 행은 그대로 두고 보조 사례 블록과 근거 링크 줄만 좁힌다. */
-const CASE1_EN = `
-.case--more .kv th,.case--more .kv td{padding-top:1.5mm;padding-bottom:1.5mm;line-height:1.48}
-.case--more .more{margin-top:2.5mm;padding-top:2mm}
-.case--more .more h4{font-size:.9rem;margin-bottom:1.2mm}
-.case--more .more dt{font-size:.9rem;margin-top:1.2mm;line-height:1.35}
-.case--more .more dd{font-size:.84rem;line-height:1.45}
-.case--more .more+.foot{margin-top:3mm;line-height:1.45}
+/* 연락 */
+.end{display:flex;flex-direction:column;justify-content:center;height:100%}
+.end .name{font-size:2.4rem;font-weight:600;letter-spacing:-.02em}
+.end .role{margin-top:2mm;font-size:1rem;color:var(--muted)}
+.end .lines{margin-top:9mm;font-size:1rem}
+.end .lines p{margin-top:2.5mm}
+.end .lines b{display:inline-block;min-width:30mm;font-weight:600}
 `
 
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
   ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', notion:'Notion 이력',
-        evMore:'전체 근거는 사이트 상세창에서 볼 수 있습니다 — 총', timeline:'프로젝트 타임라인', tlCompany:'회사', tlTitle:'대표 타이틀', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
+        timeline:'프로젝트 타임라인', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
-        summary:'한 줄 요약과 역량 4분류', numbers:'숫자로 남은 기록' },
+        summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
+        phases:['운영','사업 PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
+        pending:'이미지 대기', proto:'AI 프로토타입', lab:'개인 프로덕트' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
-        evMore:'All evidence is in the site detail view — total', timeline:'Project timeline', tlCompany:'Company', tlTitle:'Titles', tlPeriod:'Team, role, period', tlKpi:'Headline number',
+        timeline:'Project timeline', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
         contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
-        summary:'Summary and the four areas', numbers:'The record in numbers' },
+        summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
+        phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
+        pending:'이미지 대기', proto:'AI prototypes', lab:'Personal product' },
 }
 const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원더피플', 3], ['Wonderpeople', 3],
                 ['스카이피플', 4], ['Skypeople', 4], ['넵튠', 5], ['Neptune', 5]]
+/* 사례별 키 비주얼과 상세 행 분할점(개요 슬라이드가 가져가는 행 수) — 사례 1만 '결정 범위'가 있어 5행이다 */
+const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
+const CASE_SPLIT = { case1: 5, case2: 4, case3: 4 }
+/* 성과 슬라이드 3장이 쓰는 #works 인덱스와 키 비주얼 */
+const RESULTS = [[2, 'chaos'], [4, 'fivestars'], [5, 'nanakage']]
+/* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
+const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
+const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
 
 function render(lang, d) {
   const l = L[lang]
@@ -250,43 +294,184 @@ function render(lang, d) {
   const nw = (v) => esc(v).split(' ').map(w => (/\d/.test(w) ? `<span class="nw">${w}</span>` : w)).join(' ')
   /* EN 인쇄 페이지는 site/pdf/en/ 아래라 자산 경로가 한 단계 더 올라간다 */
   const UP = lang === 'en' ? '../../' : '../'
-  /* 사례 1건 = 1쪽. 보조 사례(함께 보기)가 붙는 쪽은 그림 자리가 없어 근거 링크 줄로 대신한다(Codex R7). */
-  const evFig = (c) => c.ev.slice(0, 2).map(e => {
-    const id = e.href.replace(/^.*\//, '')
-    const m = EV[id]
-    if (!m) return ''
-    const title = lang === 'en' && m.en ? m.en.title : m.title
-    const go = lang === 'en' ? 'Open in Notion' : 'Notion에서 보기'
-    return `<figure><img src="${UP}evidence/${esc(m.img)}" alt=""><figcaption><b>${esc(title)}</b><a class="go" href="${esc(NOTION + id)}">${esc(go)} ↗</a></figcaption></figure>`
-  }).join('')
-  const caseSec = (c) => `
-<section${c.more ? ' class="case--more"' : ''}>
-  <p class="eyebrow">${esc(l.doc)} · ${esc(c.tag)}</p>
-  <p class="case-meta">${esc(c.dlgMeta)}</p>
-  <h2 class="case-h">${esc(c.dlgTitle)}</h2>
-  <p class="pills"><span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span></p>
-  <table class="kv"><colgroup><col><col></colgroup>${c.rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(pr(v))}</td></tr>`).join('')}</table>
-  ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}
-  ${c.ev.length ? (c.more
-    ? `<p class="foot"><b>${esc(l.evidence)}</b> ${c.ev.map(e => `<a class="go" href="${esc(e.href)}">${esc(e.title)} ↗</a>`).join(' · ')}</p>`
-    : `<div class="ev">${evFig(c)}</div>${c.ev.length > 2 ? `<p class="foot"><a class="go" href="${esc(d.canonical + '#cases')}">${esc(l.evMore)} ${c.ev.length} ↗</a></p>` : ''}`) : ''}
-</section>`
+  const IMG = lang === 'en' ? '../img/' : 'img/'
+  const pend = `<div class="pend">${esc(l.pending)}</div>`
+  const kv = rows => `<table class="kv"><colgroup><col><col></colgroup>${
+    rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(pr(v))}</td></tr>`).join('')}</table>`
   const kpiFor = (company) => {
     const hit = KPI_OF.find(([k]) => company.includes(k))
     return hit ? d.works[hit[1]].kpi : ''
   }
-  const proto = d.proto.map(p => `
-    <div class="card">${p.shot ? `<img src="${esc(UP + 'works/' + p.shot.replace(/^.*\/works\//, ''))}" alt="">` : ''}
-      <div class="in">
-        <p class="eyebrow">${esc(p.meta)}</p>
-        <h3>${esc(p.title)}</h3>
-        <p>${esc(pr(p.summary))}</p>
-        <div class="note">${p.note.map(([k, v]) => `<p><b>${esc(k)}</b> ${esc(pr(v))}</p>`).join('')}
-          <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(d.canonical + p.href)}">${esc(l.open)} ↗</a></p></div>
-        <p class="rights">${esc(p.rights)}</p>
-      </div></div>`).join('')
+  const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
+      <figcaption>${esc(cap)}</figcaption></figure>`
+  const tile = (slug, cap) => `<figure class="ph"><img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(cap)}</figcaption></figure>`
+  /* 근거 카드 1장 — 썸네일과 제목은 site/evidence/index.json이 원천이다 */
+  const evTile = (c) => {
+    const e = c.ev[0]
+    if (!e) return pend
+    const m = EV[e.href.replace(/^.*\//, '')]
+    if (!m) return pend
+    const title = lang === 'en' && m.en ? m.en.title : m.title
+    return `<figure class="ph"><img src="${UP}evidence/${esc(m.img)}" alt="">
+      <figcaption><b>${esc(title)}</b></figcaption></figure>`
+  }
+  const evLinks = (c) => `<div class="evlist"><b>${esc(l.evidence)}</b>${c.ev.map(e =>
+    `<a class="go" href="${esc(e.href)}">${esc(e.title)} ↗</a>`).join('')}</div>`
+  const slide = (o) => `
+<section class="s${o.cls ? ' ' + o.cls : ''}"${o.attr || ''}>
+  <div class="hd">
+    <div><p class="eyebrow">${esc(o.eyebrow)}</p>${o.who ? `<p class="who">${esc(o.who)}</p>` : ''}</div>
+    <div>${o.pills || ''}</div>
+  </div>
+  <div class="bd">${o.body}</div>
+  ${o.rights ? `<p class="rights">${esc(o.rights)}</p>` : ''}
+</section>`
+
+  /* 1. 표지 */
+  const coverRights = [...new Set([d.works[0].rights, d.works[1].rights, d.works[3].rights])].join(' ')
+  const cover = `
+<section class="s cover">
+  <p class="eyebrow">${esc(l.doc)}</p>
+  <p class="name">${esc(d.brand)}</p>
+  <p class="role">${esc(d.role)}</p>
+  <p class="head">${d.h1.map(esc).join(' ')}</p>
+  <div class="contact">
+    <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
+    <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
+    <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
+  </div>
+  <p class="issued">${esc(l.issued)} ${TODAY}</p>
+  <div class="strip">${[0, 1, 3].map((i, k) =>
+    `<figure><img src="${IMG}${['dalcom', 'lyn', 'nightwalker'][k]}.jpg" alt=""><figcaption>${esc(d.works[i].title)}</figcaption></figure>`).join('')}</div>
+  <p class="rights">${esc(coverRights)}</p>
+</section>`
+
+  /* 2. Career Milestone — 상단 3구간 바 + 회사 10곳 타일(오래된 순) */
+  const per = s => (s.match(PERIOD) || [''])[0]
+  const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
+  const milestone = slide({
+    eyebrow: l.milestone, who: `${PHASES[0][0]} – ${PHASES[2][1]}`,
+    body: `
+    <div class="ms-bar">${PHASES.map(([a, b, w], i) =>
+      `<div class="ms-ph" style="flex:${w}"><b>${esc(l.phases[i])}</b><span>${a} – ${b}</span></div>`).join('')}</div>
+    <div class="ms-rail"></div>
+    <div class="ms-grid">${[...d.career].reverse().map(r => `
+      <div class="ms-c"><b>${esc(r.company)}</b>
+        <p class="per">${nw(per(r.sub))}</p>
+        <p class="rl">${esc(roleOf(r.sub))}</p>
+        <p class="ti">${esc(r.titles)}</p>
+        <p class="im">${nw(r.impact)}</p></div>`).join('')}</div>`,
+  })
+
+  /* 3. 한 줄 요약 + 역량 4분류 */
+  const summary = slide({
+    eyebrow: l.summary, who: d.brand,
+    body: `
+    <h2 class="t t--sm">${esc(d.skillsTitle)}</h2>
+    <p class="lede">${esc(pr(d.sub))}</p>
+    <div class="cards4" style="margin-top:6mm">${d.skills.map(s => `
+      <div class="sk"><h3>${esc(s.title)}</h3><p>${esc(s.note)}</p>
+        ${s.cases.length ? `<p class="cs">${s.cases.map(esc).join('<br>')}</p>` : ''}</div>`).join('')}</div>
+    <div class="stats">${d.stats.map(([n, k]) => `<div><b>${nw(n)}</b><span class="lb">${esc(k)}</span></div>`).join('')}</div>`,
+  })
+
+  /* 4·6·8. 사례 개요 — 키 비주얼 + KPI + 앞쪽 상세 행 */
+  const caseOverview = (c, i) => slide({
+    cls: 'case', attr: ` data-case="${esc(c.work)}"`,
+    eyebrow: `${l.caseN(i + 1)} · ${l.overview}`, who: c.dlgMeta,
+    pills: `<span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span>`,
+    rights: d.works[(KPI_OF.find(([k]) => c.dlgMeta.includes(k)) || [, 0])[1]].rights,
+    body: `<div class="two two--l">
+      ${shot(CASE_IMG[c.work], d.works[(KPI_OF.find(([k]) => c.dlgMeta.includes(k)) || [, 0])[1]].title)}
+      <div><h2 class="t case-h">${esc(c.dlgTitle)}</h2>
+        <div class="kpi"><b>${nw(kpiFor(c.dlgMeta))}</b><span class="lb">${esc(l.tlKpi)}</span></div>
+        ${kv(c.rows.slice(0, CASE_SPLIT[c.work]))}</div>
+    </div>`,
+  })
+
+  /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 3칸 + 근거 링크 */
+  const caseExec = (c, i) => {
+    const tiles = [pend, pend, evTile(c)]
+    return slide({
+      cls: 'case', attr: ` data-case="${esc(c.work)}"`,
+      eyebrow: `${l.caseN(i + 1)} · ${l.exec}`, who: c.dlgTitle,
+      pills: `<span class="pill pill--line">${esc(c.tag)}</span>`,
+      rights: c.work === 'case1' ? d.proto[0].rights : '',
+      body: `<div class="two two--r">
+        <div>${kv(c.rows.slice(CASE_SPLIT[c.work]))}
+          ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) =>
+            `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}</div>
+        <div class="ig">${tiles.join('')}${evLinks(c)}</div>
+      </div>`,
+    })
+  }
+
+  /* 10·11·12. 성과 3장 — 큰 KPI + 업무 요약 불릿 + 키 비주얼 + 옛 포폴 캡처 자리 */
+  const result = ([wi, slug]) => {
+    const w = d.works[wi]
+    const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
+    return slide({
+      cls: 'res', eyebrow: `${l.results} · ${w.title}`, who: w.meta, rights: w.rights,
+      body: `<div class="two two--top">
+        <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(l.tlKpi)}</p>
+          <ul class="res-b">${bullets.map(b => `<li>${nw(b)}</li>`).join('')}</ul></div>
+        <div class="ig">${tile(slug, w.title)}${pend}</div>
+      </div>`,
+    })
+  }
+
+  /* 13. 프로젝트 타임라인 — 2열 표 */
+  const tlRows = rows => `<table class="tl"><colgroup><col><col><col></colgroup>
+    <thead><tr><th>${esc(l.tlCompany)}</th><th>${esc(l.tlPeriod)}</th><th style="text-align:right">${esc(l.tlKpi)}</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td><b>${esc(r.company)}</b><span class="sub">${esc(r.titles)}</span></td>
+      <td>${esc(r.sub)}<span class="impact">${nw(r.impact)}</span></td>
+      <td class="k">${nw(kpiFor(r.company))}</td></tr>`).join('')}</tbody></table>`
+  const half = Math.ceil(d.career.length / 2)
+  const timeline = slide({
+    eyebrow: l.timeline, who: d.careerTitle,
+    body: `<div class="two two--top">${tlRows(d.career.slice(0, half))}${tlRows(d.career.slice(half))}</div>
+      <p class="foot">${esc(d.careerFoot)}</p>`,
+  })
+
+  /* 14. AI 프로토타입 2 + 가계부 1줄 */
+  const proto = slide({
+    eyebrow: l.proto, who: d.protoLede,
+    rights: d.proto[0].rights,
+    body: `<div class="proto">${d.proto.map((p, i) => `
+      <div class="pc"><img src="${IMG}${['deco', 'ssjproto'][i]}.jpg" alt="">
+        <div class="in"><p class="eyebrow">${esc(p.meta)}</p><h3>${esc(p.title)}</h3>
+          <p class="sum">${esc(pr(p.summary))}</p>
+          <div class="note">${p.note.map(([k, v]) => `<p><b>${esc(k)}</b> ${esc(pr(v))}</p>`).join('')}
+            <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(d.canonical + p.href)}">${esc(l.open)} ↗</a></p></div>
+        </div></div>`).join('')}</div>
+      ${d.lab ? `<p class="foot"><b>${esc(l.lab)}</b> ${esc(d.lab.title)} — ${esc(d.lab.summary)}
+        <a class="go" href="${esc(d.lab.href)}">${esc(l.open)} ↗</a></p>` : ''}`,
+  })
+
+  /* 15. 연락 */
   /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
+  const contact = slide({
+    eyebrow: l.contact, who: `${l.issued} ${TODAY}`,
+    body: `<div class="end">
+      <p class="name">${esc(d.brand)}</p>
+      <p class="role">${esc(d.role)}</p>
+      <div class="lines">
+        <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
+        <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
+        <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(HUB)}</a></p>
+      </div>
+      <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
+    </div>`,
+  })
+
+  const body = [cover, milestone, summary,
+    caseOverview(d.cases[0], 0), caseExec(d.cases[0], 0),
+    caseOverview(d.cases[1], 1), caseExec(d.cases[1], 1),
+    caseOverview(d.cases[2], 2), caseExec(d.cases[2], 2),
+    ...RESULTS.map(result), timeline, proto, contact]
+  if (body.length !== SLIDES) fail('슬라이드가 ' + SLIDES + '장이 아니다: ' + body.length)
+
   return `<!doctype html>
 <html lang="${lang}">
 <head>
@@ -299,61 +484,10 @@ function render(lang, d) {
      가변(variable)도 안 된다 — Chrome은 가변 폰트를 PDF에 Type3 윤곽선으로 구워서 글꼴 이름이
      남지 않고 파일이 두 배로 불어난다(Codex R7). 무게별 정적 폰트라야 /BaseFont로 내장된다. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<style>${CSS}${lang === 'en' ? TL_EN + CASE1_EN : ''}</style>
+<style>${CSS}</style>
 </head>
 <body>
-
-<section class="cover">
-  <p class="eyebrow">${esc(l.doc)}</p>
-  <p class="name">${esc(d.brand)}</p>
-  <p class="role">${esc(d.role)}</p>
-  <p class="head">${d.h1.map(esc).join(' ')}</p>
-  <div class="contact">
-    <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
-    <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
-    <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
-  </div>
-  <p class="issued">${esc(l.issued)} ${TODAY}</p>
-</section>
-
-<section>
-  <p class="eyebrow">${esc(l.summary)}</p>
-  <h2 class="sec-h">${esc(d.casesTitle)}</h2>
-  <p class="lede">${esc(pr(d.sub))}</p>
-  <table class="kv"><colgroup><col><col></colgroup>${d.skills.map(s => `<tr><th>${esc(s.title)}</th><td>${esc(s.note)}${s.cases.length ? `<br><span style="color:var(--muted);font-size:9pt">${s.cases.map(esc).join(' · ')}</span>` : ''}</td></tr>`).join('')}</table>
-  <div class="stats">${d.stats.map(([n, k]) => `<div><b>${esc(n)}</b><span>${esc(k)}</span></div>`).join('')}</div>
-</section>
-${d.cases.map(caseSec).join('')}
-
-<section>
-  <p class="eyebrow">${esc(l.timeline)}</p>
-  <h2 class="sec-h">${esc(d.careerTitle)}</h2>
-  <table class="tl">
-    <colgroup><col><col><col></colgroup>
-    <thead><tr><th>${esc(l.tlCompany)}</th><th>${esc(l.tlPeriod)}</th><th style="text-align:right">${esc(l.tlKpi)}</th></tr></thead>
-    <tbody>${d.career.map(r => `<tr><td><b>${esc(r.company)}</b><span class="sub">${esc(r.titles)}</span></td>
-      <td>${esc(r.sub)}<span class="impact">${nw(r.impact)}</span></td>
-      <td class="k">${nw(kpiFor(r.company))}</td></tr>`).join('')}</tbody>
-  </table>
-  <p class="foot">${esc(d.careerFoot)}</p>
-</section>
-
-<section>
-  <p class="eyebrow">${esc(d.protoTitle)}</p>
-  <h2 class="sec-h">${esc(d.protoLede)}</h2>
-  <div class="grid2">${proto}</div>
-  ${d.lab ? `<p class="foot"><b>${esc(d.lab.title)}</b> — ${esc(d.lab.summary)} <a class="go" href="${esc(d.lab.href)}">${esc(l.open)} ↗</a></p>` : ''}
-</section>
-
-<section class="contact-end">
-  <p class="eyebrow">${esc(l.contact)}</p>
-  <p class="contact-line"><b>${esc(d.brand)}</b>
-    <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a> ·
-    <a href="${esc(d.canonical)}">${esc(l.site)} ↗</a> ·
-    <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
-  <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
-</section>
-
+${body.join('\n')}
 </body>
 </html>
 `
@@ -365,4 +499,4 @@ mkdirSync('site/pdf/en', { recursive: true })
 writeFileSync('site/pdf/index.html', render('ko', ko), 'utf8')
 writeFileSync('site/pdf/en/index.html', render('en', en), 'utf8')
 console.log('생성: site/pdf/index.html · site/pdf/en/index.html')
-console.log('  사례 ' + ko.cases.length + '건 · 경력 ' + ko.career.length + '행 · 성과 카드 ' + ko.works.length + '장 · 프로토 ' + ko.proto.length + '장')
+console.log('  슬라이드 ' + SLIDES + '장 · 사례 ' + ko.cases.length + '건 · 경력 ' + ko.career.length + '행 · 성과 카드 ' + ko.works.length + '장 · 프로토 ' + ko.proto.length + '장')

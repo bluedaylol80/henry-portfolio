@@ -2,7 +2,7 @@
  * 포트폴리오 PDF 빌더 — site/pdf/ 인쇄 페이지 → site/henry-lim-portfolio-{ko,en}.pdf
  *
  * v21 React /brief 전용 빌더를 폐기하고 다시 썼다(WO-18). 인쇄 페이지는 scripts/build-print.mjs가
- * 사이트 DOM에서 조립하므로 문구는 한 벌뿐이다. 여기서는 그 페이지를 A4로 굽기만 한다.
+ * 사이트 DOM에서 조립하므로 문구는 한 벌뿐이다. 여기서는 그 페이지를 16:9 가로 슬라이드로 굽기만 한다(WO-24).
  *
  * 텍스트 원천 검사: 인쇄 페이지의 대표 사례 표가 사이트 상세창 데이터와 같은지 확인하고,
  * 다르면 굽지 않고 실패한다(문구가 두 벌로 갈라지는 것을 여기서 막는다).
@@ -15,7 +15,7 @@ import { statSync } from 'node:fs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'http://127.0.0.1:8787'
-const MAX_BYTES = 3 * 1024 * 1024
+const MAX_BYTES = 8 * 1024 * 1024
 const OUT = { ko: 'site/henry-lim-portfolio-ko.pdf', en: 'site/henry-lim-portfolio-en.pdf' }
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
@@ -43,11 +43,17 @@ for (const lang of ['ko', 'en']) {
   const print = await browser.newPage()
   await print.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
   await sleep(600)
-  const fromPrint = await print.evaluate(() =>
-    [...document.querySelectorAll('section')].filter(s => s.querySelector('.case-h')).map(s =>
-      [...s.querySelectorAll('table:first-of-type tr')].map(tr =>
+  /* 사례 하나가 슬라이드 두 장(개요·실행)으로 나뉜다 — data-case로 묶어 상세 행을 원래 순서로 잇는다 */
+  const fromPrint = await print.evaluate(() => {
+    const g = new Map()
+    for (const s of document.querySelectorAll('section[data-case]')) {
+      if (!g.has(s.dataset.case)) g.set(s.dataset.case, [])
+      g.get(s.dataset.case).push(...[...s.querySelectorAll('.kv tr')].map(tr =>
         tr.querySelector('th').textContent.replace(/\s+/g, ' ').trim() + '\u0001' +
-        tr.querySelector('td').textContent.replace(/\s+/g, ' ').trim())))
+        tr.querySelector('td').textContent.replace(/\s+/g, ' ').trim()))
+    }
+    return [...g.values()]
+  })
   await print.close()
   if (fromPrint.length !== 3) fail(lang + ' 인쇄 페이지 사례가 3장이 아니다: ' + fromPrint.length)
   for (let i = 0; i < 3; i++) {
@@ -73,15 +79,16 @@ for (const lang of ['ko', 'en']) {
   await page.evaluate(() => Promise.all([...document.images].filter(i => !i.complete)
     .map(i => new Promise(r => { i.onload = i.onerror = r }))))
   await sleep(900)
-  /* 쪽 번호는 puppeteer의 머리말/꼬리말로 넣는다 — Chrome은 @page의 여백 상자를 지원하지 않는다.
-     그래서 preferCSSPageSize 대신 여기서 A4 여백을 준다(꼬리말 자리 18mm). */
-  await page.pdf({ path: OUT[lang], format: 'A4', printBackground: true,
-    displayHeaderFooter: true, headerTemplate: '<span></span>',
-    footerTemplate: '<div style="width:100%;text-align:center;font-size:8pt;color:#8d8d8d;font-family:sans-serif">'
-      + '<span class="pageNumber"></span> / <span class="totalPages"></span></div>',
-    margin: { top: '16mm', right: '16mm', bottom: '18mm', left: '16mm' } })
+  /* 슬라이드가 넘치면 굽지 않는다 — 16:9 판형은 쪽이 자동으로 늘지 않아 글자가 잘려 나간다 */
+  const ovf = await page.evaluate(() => [...document.querySelectorAll('.s')].flatMap((s, i) =>
+    [s, s.querySelector('.bd')].filter(Boolean).map(el => ({ n: i + 1, over: el.scrollHeight - el.clientHeight })))
+    .filter(x => x.over > 2))
+  if (ovf.length) fail(lang + ' 슬라이드가 넘친다: ' + ovf.map(x => `${x.n}번 +${x.over}px`).join(' · '))
+  /* 쪽 번호는 인쇄 CSS의 카운터가 찍는다 — 판형은 @page가 정본이라 여백 없이 그대로 굽는다 */
+  await page.pdf({ path: OUT[lang], printBackground: true, preferCSSPageSize: true,
+    margin: { top: 0, right: 0, bottom: 0, left: 0 } })
   const bytes = statSync(OUT[lang]).size
-  if (bytes > MAX_BYTES) fail(OUT[lang] + ' 크기 초과: ' + Math.round(bytes / 1024) + 'KB > 3MB')
+  if (bytes > MAX_BYTES) fail(OUT[lang] + ' 크기 초과: ' + Math.round(bytes / 1024) + 'KB > 8MB')
   console.log('생성: ' + OUT[lang] + ' — ' + Math.round(bytes / 1024) + 'KB')
   await page.close()
 }

@@ -11,110 +11,145 @@
      남지 않고 파일이 두 배로 불어난다(Codex R7). 무게별 정적 폰트라야 /BaseFont로 내장된다. -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
-@page{size:A4 portrait}
+@page{size:338.67mm 190.5mm;margin:0}
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--fg:#111;--muted:#5b5b5b;--line:#e6e5e2;--surface:#f6f5f3;--ink:#0a0a0a}
+:root{--fg:#111;--muted:#5b5b5b;--line:#e6e5e2;--surface:#f6f5f3;--ink:#0a0a0a;--acc:#8a3a24}
 html{font-size:11pt}
 /* 한국어는 어절 단위로 끊는다 — 기본 줄바꿈은 '실행/으로'처럼 낱말을 쪼갠다(Codex R6) */
-body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.6;
-  word-break:keep-all;
+body{font-family:Pretendard,-apple-system,'Segoe UI',sans-serif;color:var(--fg);background:#fff;line-height:1.55;
+  word-break:keep-all;counter-reset:slide;
   -webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-/* 쪽 나눔: 섹션은 새 쪽에서 시작하고, 카드·표·행·근거 그림은 쪼개지 않는다 */
-section{break-before:page;break-inside:auto}
-section:first-of-type{break-before:auto}
-/* 연락만으로 한 쪽을 쓰지 않는다 — 앞 섹션에 이어 붙이고 쪼개지지만 않게 한다(Codex R7) */
-section:last-of-type{break-before:auto;break-inside:avoid;margin-top:12mm}
-.kv,tr,.card,.ev figure,.more,.stats,.note{break-inside:avoid}
-.eyebrow,.sec-h,.lede{break-after:avoid}
-h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.3;break-after:avoid}
 a{color:inherit;text-decoration:none}
-.eyebrow{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.sec-h{font-size:1.5rem;margin:0 0 4mm}
-.sec-h+.lede{margin:-2mm 0 5mm;color:var(--muted);font-size:.95rem}
-/* 표지 — 절대배치·flex 정렬을 쓰지 않는다. 텍스트 추출 순서가 DOM 순서와 어긋난다(Codex R6) */
-.cover{padding-top:60mm}
-.cover .name{font-size:2.9rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.cover .role{margin-top:2mm;font-size:1.05rem;color:var(--muted)}
-.cover .head{margin-top:14mm;font-size:1.75rem;font-weight:600;line-height:1.35;max-width:150mm}
-.cover .contact{margin-top:18mm;font-size:.95rem;color:var(--muted)}
+h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
+/* 슬라이드 한 장 = 한 쪽. 쪽 번호는 CSS 카운터로 찍는다(puppeteer 꼬리말을 쓰지 않는다) */
+.s{position:relative;width:338.67mm;height:190.5mm;padding:11mm 14mm 13mm;overflow:hidden;
+  display:flex;flex-direction:column;counter-increment:slide;break-after:page;background:#fff}
+.s:last-of-type{break-after:auto}
+.s::after{content:counter(slide) " / 15";position:absolute;right:14mm;bottom:6.5mm;
+  font-size:.7rem;color:#8d8d8d;letter-spacing:.03em}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;gap:10mm;
+  border-bottom:.5pt solid var(--line);padding-bottom:2.5mm;margin-bottom:5mm}
+.hd .who{font-size:.85rem;color:var(--muted);margin-top:.8mm}
+.eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.bd{flex:1;min-height:0;display:flex;flex-direction:column}
+.rights{position:absolute;left:14mm;bottom:6.5mm;font-size:.68rem;color:#8d8d8d;max-width:255mm;line-height:1.4}
+.pill{display:inline-block;border-radius:99px;padding:1mm 3.2mm;font-size:.76rem;line-height:1.5;margin-left:2mm;white-space:nowrap}
+.pill--dark{background:var(--ink);color:#fff}
+.pill--line{border:.5pt solid #bdbcb9;color:var(--muted)}
+.t{font-size:1.55rem;max-width:230mm}
+.t--sm{font-size:1.25rem}
+.lede{margin-top:2.5mm;color:var(--muted);font-size:.95rem;max-width:230mm}
+.foot{margin-top:3mm;font-size:.8rem;color:var(--muted);line-height:1.5}
+.foot b{font-weight:600;color:var(--fg);margin-right:1.5mm}
+.go{color:var(--muted);text-decoration:underline}
+.nw{white-space:nowrap}
+/* 표지 */
+.cover{padding-top:16mm}
+.cover .name{font-size:3.1rem;font-weight:600;letter-spacing:-.02em;line-height:1.05}
+.cover .role{margin-top:2.5mm;font-size:1.05rem;color:var(--muted)}
+.cover .head{margin-top:9mm;font-size:1.9rem;font-weight:600;line-height:1.3;max-width:210mm}
+.cover .contact{margin-top:8mm;font-size:.95rem;color:var(--muted)}
 .cover .contact p{margin-top:1.5mm}
 .cover .contact b{font-weight:500;color:var(--fg);display:inline-block;min-width:26mm}
-.cover .issued{margin-top:10mm;font-size:.85rem;color:var(--muted)}
-/* 표 */
-table{width:100%;border-collapse:collapse;font-size:.95rem;table-layout:fixed}
-th,td{border-top:.4pt solid var(--line);padding:2.4mm 3mm 2.4mm 0;vertical-align:top;text-align:left}
-th{font-weight:500;color:var(--muted)}
-tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
-.kv col:first-child{width:28mm}
-.tl col:nth-child(1){width:46mm}
-.tl col:nth-child(2){width:auto}
-.tl col:nth-child(3){width:24mm}
-.tl thead th{border-top:0;font-size:.8rem;letter-spacing:.04em;color:var(--muted)}
-.tl td{padding-right:4mm}
-.tl td.k{text-align:right;font-weight:500;padding-right:0}
-.tl .sub{display:block;color:var(--muted);font-size:.85rem;margin-top:.8mm}
-.nw{white-space:nowrap}
-.tl .impact{display:block;color:#333;font-size:.88rem;margin-top:1.2mm}
+.cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
+.strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.strip img{display:block;width:100%;height:44mm;object-fit:cover;object-position:center}
+.strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
+/* Career Milestone */
+.ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
+.ms-ph{flex:1;border-radius:1.5mm;background:var(--surface);border:.5pt solid var(--line);padding:2.5mm 3.5mm}
+.ms-ph b{display:block;font-size:1rem;font-weight:600}
+.ms-ph span{font-size:.78rem;color:var(--muted)}
+.ms-ph:nth-child(3){background:var(--ink);border-color:var(--ink);color:#fff}
+.ms-ph:nth-child(3) span{color:#cfcfcf}
+.ms-rail{height:.8mm;background:linear-gradient(90deg,#dcdbd8,#9a9894);border-radius:99px;margin-bottom:4mm}
+.ms-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:4mm}
+.ms-c{border-top:.8pt solid var(--ink);padding-top:2mm}
+.ms-c b{display:block;font-size:.98rem;font-weight:600}
+.ms-c .per{font-size:.78rem;color:var(--muted);margin-top:.6mm}
+.ms-c .rl{font-size:.78rem;margin-top:1.2mm}
+.ms-c .ti{font-size:.75rem;color:var(--muted);margin-top:.8mm;line-height:1.4}
+.ms-c .im{font-size:.74rem;color:#333;margin-top:1.6mm;line-height:1.42}
+/* 요약·역량 */
+.cards4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;align-items:stretch}
+.sk{border:.5pt solid var(--line);border-radius:2mm;padding:4mm;background:#fff}
+.sk h3{font-size:1.02rem}
+.sk p{margin-top:2mm;font-size:.82rem;line-height:1.5}
+.sk .cs{margin-top:2.5mm;font-size:.75rem;color:var(--muted);line-height:1.45}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;margin-top:auto;border-top:.5pt solid var(--line);padding-top:4mm}
+.stats b{display:block;font-size:1.6rem;font-weight:600;letter-spacing:-.01em}
+.stats .lb{display:block;font-size:.78rem;color:var(--muted)}
 /* 사례 */
-.case-h{font-size:1.3rem;line-height:1.35;max-width:150mm}
-.case-meta{font-size:.9rem;color:var(--muted);margin-bottom:1.5mm}
-.pills{margin:3mm 0 4mm}
-.pill{display:inline-block;border-radius:99px;padding:1mm 3mm;font-size:.8rem;line-height:1.5;margin-right:2mm}
-.pill--dark{background:var(--ink);color:#fff}
-.pill--line{border:.4pt solid #bdbcb9;color:var(--muted)}
-.more{margin-top:3mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
-.more h4{font-size:.95rem;color:var(--muted);margin-bottom:2mm}
-.more dt{font-size:.95rem;font-weight:500;margin-top:2mm}
-.more dd{font-size:.9rem;color:#333}
-/* 근거 카드 — 그림과 설명이 갈라지지 않게 통째로 묶는다 */
-.ev{margin-top:3mm;display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));gap:3mm;break-inside:avoid}
-.ev figure{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ev img{display:block;width:100%;height:26mm;object-fit:cover;object-position:top}
-.ev figcaption{padding:2mm 2.5mm;font-size:.82rem;line-height:1.45}
-.ev figcaption b{display:block;font-weight:500}
-.ev figcaption .go{color:var(--muted);text-decoration:underline}
-/* 카드형 */
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
-.card{border:.4pt solid var(--line);border-radius:2mm;overflow:hidden}
-.card img{display:block;width:100%;height:42mm;object-fit:cover;object-position:center}
-.card .in{padding:3mm}
-.card h3{font-size:1.05rem}
-.card p{margin-top:1.5mm;font-size:.9rem;color:#333}
-.note{margin-top:2.5mm;font-size:.85rem;line-height:1.5;display:grid;grid-template-columns:20mm 1fr;gap:1.2mm 3mm}
+.two{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:9mm}
+.two--top{align-items:start}
+.two--l{grid-template-columns:118mm 1fr}
+.two--r{grid-template-columns:1fr 130mm}
+.kpi{border-left:1.2mm solid var(--acc);padding-left:3.5mm;margin:3mm 0 4mm}
+.kpi b{display:block;font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.kpi .lb{display:block;font-size:.76rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+table{width:100%;border-collapse:collapse;table-layout:fixed}
+.kv{font-size:.84rem}
+.kv th,.kv td{border-top:.4pt solid var(--line);padding:1.8mm 3mm 1.8mm 0;vertical-align:top;text-align:left;line-height:1.5}
+.kv th{font-weight:500;color:var(--muted)}
+.kv tr:last-child td,.kv tr:last-child th{border-bottom:.4pt solid var(--line)}
+.kv col:first-child{width:24mm}
+.hero-shot{align-self:center;border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.hero-shot img{display:block;width:100%;height:auto}
+.hero-shot figcaption{padding:2.2mm 3mm;font-size:.78rem;color:var(--muted)}
+.more{margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
+.more h4{font-size:.85rem;color:var(--muted);margin-bottom:1.5mm}
+.more dt{font-size:.84rem;font-weight:600;margin-top:1.5mm}
+.more dd{font-size:.78rem;color:#333;line-height:1.45}
+/* 이미지 그리드·대기 박스 */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:4mm;align-content:start}
+.evlist{font-size:.78rem;line-height:1.5}
+.evlist b{display:block;font-weight:600;margin-bottom:1.2mm}
+.evlist a{display:block;margin-top:1.2mm}
+.ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
+.ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
+.ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
+.ph figcaption b{display:block;font-weight:500;color:var(--fg)}
+.pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
+  height:47mm;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+/* 성과 */
+.res-n{font-size:3.4rem;font-weight:600;letter-spacing:-.03em;line-height:1}
+.res-l{margin-top:2mm;font-size:.8rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.res-b{margin-top:5mm;font-size:.9rem;line-height:1.55}
+.res-b li{list-style:none;padding-left:4.5mm;position:relative;margin-top:1.8mm}
+.res-b li::before{content:"";position:absolute;left:0;top:2.1mm;width:2mm;height:2mm;border-radius:99px;background:var(--acc)}
+/* 타임라인 */
+.tl{font-size:.78rem}
+.tl th,.tl td{border-top:.4pt solid var(--line);padding:1.6mm 3mm 1.6mm 0;vertical-align:top;text-align:left;line-height:1.42}
+.tl thead th{border-top:0;font-size:.72rem;letter-spacing:.05em;color:var(--muted);font-weight:500}
+.tl col:nth-child(1){width:34mm}
+.tl col:nth-child(3){width:20mm}
+.tl td.k{text-align:right;font-weight:600;padding-right:0}
+.tl b{font-weight:600}
+.tl .sub{display:block;color:var(--muted);font-size:.72rem;margin-top:.4mm}
+.tl .impact{display:block;color:#333;font-size:.74rem;margin-top:.6mm}
+/* 프로토타입 카드 */
+.proto{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:100%}
+.pc{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
+.pc img{display:block;width:100%;height:58mm;object-fit:cover;object-position:top}
+.pc .in{padding:4mm;flex:1;display:flex;flex-direction:column}
+.pc h3{font-size:1.05rem;margin-top:1mm}
+.pc p.sum{margin-top:1.8mm;font-size:.82rem;line-height:1.5}
+.note{margin-top:2.5mm;font-size:.78rem;line-height:1.45;display:grid;grid-template-columns:20mm 1fr;gap:1mm 3mm}
 .note p{display:contents}
 .note b{font-weight:600}
-.note .go{color:var(--muted);text-decoration:underline}
-.rights{margin-top:2.5mm;font-size:.75rem;color:var(--muted)}
-.stats{margin-top:5mm;display:grid;grid-template-columns:repeat(4,1fr);gap:4mm}
-.stats b{display:block;font-size:1.5rem;font-weight:600}
-.stats span{font-size:.85rem;color:var(--muted)}
-.foot{margin-top:6mm;font-size:.85rem;color:var(--muted)}
-.foot b{font-weight:600;color:var(--fg);margin-right:1mm}
-.foot .go{color:var(--muted);text-decoration:underline}
-.contact-end{margin-top:10mm;border-top:.4pt solid var(--line);padding-top:4mm}
-.contact-line{margin-top:2mm;font-size:.95rem}
-.contact-line b{display:inline-block;min-width:26mm;font-weight:600}
-.contact-end .foot{margin-top:2.5mm}
-
-.tl{font-size:.86rem}
-.tl col:nth-child(1){width:42mm}
-.tl col:nth-child(3){width:22mm}
-.tl th,.tl td{padding:1.5mm 3mm 1.5mm 0;line-height:1.42}
-.tl td{padding-right:3mm}
-.tl .sub{font-size:.78rem;margin-top:.3mm;line-height:1.35}
-.tl .impact{font-size:.8rem;margin-top:.6mm;line-height:1.38}
-
-.case--more .kv th,.case--more .kv td{padding-top:1.5mm;padding-bottom:1.5mm;line-height:1.48}
-.case--more .more{margin-top:2.5mm;padding-top:2mm}
-.case--more .more h4{font-size:.9rem;margin-bottom:1.2mm}
-.case--more .more dt{font-size:.9rem;margin-top:1.2mm;line-height:1.35}
-.case--more .more dd{font-size:.84rem;line-height:1.45}
-.case--more .more+.foot{margin-top:3mm;line-height:1.45}
+/* 연락 */
+.end{display:flex;flex-direction:column;justify-content:center;height:100%}
+.end .name{font-size:2.4rem;font-weight:600;letter-spacing:-.02em}
+.end .role{margin-top:2mm;font-size:1rem;color:var(--muted)}
+.end .lines{margin-top:9mm;font-size:1rem}
+.end .lines p{margin-top:2.5mm}
+.end .lines b{display:inline-block;min-width:30mm;font-weight:600}
 </style>
 </head>
 <body>
 
-<section class="cover">
+<section class="s cover">
   <p class="eyebrow">Portfolio</p>
   <p class="name">Henry Lim</p>
   <p class="role">Game Live Service PM &amp; Director · 19 yrs</p>
@@ -125,49 +160,225 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
     <p><b>Notion resume</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion resume ↗</a></p>
   </div>
   <p class="issued">Issued 2026-09-09</p>
+  <div class="strip"><figure><img src="../img/dalcom.jpg" alt=""><figcaption>Multi-title live operations and user-led product work</figcaption></figure><figure><img src="../img/lyn.jpg" alt=""><figcaption>Lyn</figcaption></figure><figure><img src="../img/nightwalker.jpg" alt=""><figcaption>Night Walker</figcaption></figure></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft. Game names and images are trademarks and copyrighted works of Nexon. Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
 </section>
 
-<section>
-  <p class="eyebrow">Summary and the four areas</p>
-  <h2 class="sec-h">Same method, three companies — three cases</h2>
-  <p class="lede">19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.</p>
-  <table class="kv"><colgroup><col><col></colgroup><tr><th>Product decisions &amp; milestones</th><td>Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.<br><span style="color:var(--muted);font-size:9pt">Case — from user research to shipped events · Case — soft launch metrics → pre-launch fixes</span></td></tr><tr><th>Launch &amp; live ops</th><td>Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.<br><span style="color:var(--muted);font-size:9pt">Case — redefining the systems to publisher spec · Work — Chaos Chronicle sunset ops</span></td></tr><tr><th>Team &amp; hiring</th><td>Hiring, team structure and who owns what. At Dalcomsoft I restructured 22 people across three teams into 13 across two while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.<br><span style="color:var(--muted);font-size:9pt">Case — restructuring (in the Dalcomsoft detail, "Also from the same period") · Work — Skypeople org setup</span></td></tr><tr><th>Operational standards</th><td>Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.<br><span style="color:var(--muted);font-size:9pt">Work — SKU automation and the abuse SOP</span></td></tr></table>
-  <div class="stats"><div><b>19 years</b><span>Total experience (per resume)</span></div><div><b>10</b><span>Companies</span></div><div><b>₩18.3B</b><span>Lyn revenue (#3 grossing, App Store · Google Play)</span></div><div><b>30</b><span>Projects — 8 published, 22 operated</span></div></div>
-</section>
-
-<section class="case--more">
-  <p class="eyebrow">Portfolio · Product decisions &amp; milestones</p>
-  <p class="case-meta">Dalcomsoft · Live Game Design Team — Team Lead</p>
-  <h2 class="case-h">From survey request to shipped events</h2>
-  <p class="pills"><span class="pill pill--dark">Shipped</span><span class="pill pill--line">Product decisions &amp; milestones</span></p>
-  <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned the survey request for webview events into shipped in-game minigames and webview events</td></tr><tr><th>Period &amp; role</th><td>Employed 2024.10 – 2026.07 · Team Lead, Live Game Design (live director) · case period: survey 2025.11 → launch 2026.05</td></tr><tr><th>Problem</th><td>In the November 2025 satisfaction survey across 6 titles (Korean, English, Japanese), IP satisfaction was high and players asked for the old webview events back. I took that on as an event improvement task.</td></tr><tr><th>Decision</th><td>With limited dev resources, I put in-game minigames first because they could run on existing systems, and extended to webview events, which needed separate development, afterwards.</td></tr><tr><th>Decision scope</th><td>I set the response order and the event scope (MVP); the dev schedule and launch dates were settled with the dev team and management.</td></tr><tr><th>What I did</th><td>Minigames v1 and v2 rolled out title by title (v1 2025-12, v2 2026-01). For the decoration event timed to a new group launch I wrote the brief myself and built a working AI prototype for the pre-development review, then set the scope down to core features to fit the dev schedule. After that I built the SuperStar JYP Nation 10th anniversary webview event prototype.</td></tr><tr><th>Deferred</th><td>Collection, display and community improvements from the same survey went to the H1 2026 direction proposal. For the decoration event, deck expansion, gacha and grooming details were deferred and only the core shipped.</td></tr><tr><th>Result &amp; status</th><td>Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.</td></tr><tr><th>Evidence</th><td>Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)</td></tr></table>
-  <div class="more"><h4>Also from the same period — 2 supporting cases</h4><dl><dt>Recurring product policy rework (KO)</dt><dd>A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.</dd><dt>Restructuring with design, QA and CS under one lead (KO)</dt><dd>While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.</dd></dl></div>
-  <p class="foot"><b>Evidence</b> <a class="go" href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69">From user research to shipped events ↗</a> · <a class="go" href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14">Recurring product policy rework ↗</a> · <a class="go" href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a">Restructuring with design, QA and CS under one lead ↗</a></p>
-</section>
-<section>
-  <p class="eyebrow">Portfolio · Launch &amp; live ops</p>
-  <p class="case-meta">Nexon Korea · Mobile Business Division — Team Lead</p>
-  <h2 class="case-h">Soft launch metrics into pre-launch fixes</h2>
-  <p class="pills"><span class="pill pill--dark">Project shipped</span><span class="pill pill--line">Launch &amp; live ops</span></p>
-  <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch</td></tr><tr><th>Period &amp; role</th><td>Team Lead, Mobile Business Division, Nexon Korea (employed 2015.07 – 2019.10) · Lyn business PM 2017.02 – 2019 (developer collaboration, build coordination)</td></tr><tr><th>Problem</th><td>Bringing the developer build up to launch condition meant turning user tests and market metrics into development requests. The soft launch (Australia, Malaysia, the Philippines, 2019.01–02) showed an unbalanced product mix, slow paid-gem spending and early drop-off.</td></tr><tr><th>Decision</th><td>I framed product mix, currency loop and early flow as fixes to close before launch, and set the product direction by benchmarking a comparable title (Langrisser).</td></tr><tr><th>What I did</th><td>As business team lead I ran the FGT (2018.06–07, testers selected against 10 competing titles) and the internal test (2018.11, 3 days) and turned the results into development requests. After the soft launch I wrote up the product, currency and early-flow fixes and aligned them with the developer.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (2019 global grand launch). Three fixes landed in the grand launch build: the reworked product lineup, the trading post timing and its dedicated store, and the early flow. Project results were a peak of #3 grossing on the App Store and Google Play in Korea and ₩18.3B cumulative revenue in 2019; my contribution was test lead, build improvement coordination, and the product and currency proposals.</td></tr><tr><th>Evidence</th><td>Notion "In-game improvement proposal" · soft launch metrics report (business team, not public) · FGT satisfaction data and internal test report (business team, not public)</td></tr></table>
+<section class="s">
+  <div class="hd">
+    <div><p class="eyebrow">Career Milestone</p><p class="who">2006 – 2026</p></div>
+    <div></div>
+  </div>
+  <div class="bd">
+    <div class="ms-bar"><div class="ms-ph" style="flex:5"><b>Operations</b><span>2006 – 2011</span></div><div class="ms-ph" style="flex:10"><b>Business PM</b><span>2011 – 2021</span></div><div class="ms-ph" style="flex:5"><b>Planning · Director</b><span>2021 – 2026</span></div></div>
+    <div class="ms-rail"></div>
+    <div class="ms-grid">
+      <div class="ms-c"><b>Webzen</b>
+        <p class="per"><span class="nw">2006.04</span> – <span class="nw">2007.10</span></p>
+        <p class="rl">Operations Team</p>
+        <p class="ti">SUN Online</p>
+        <p class="im">Live ops for the SUN Online launch — VOC analysis and log audits</p></div>
+      <div class="ms-c"><b>NHN Service</b>
+        <p class="per"><span class="nw">2008.05</span> – <span class="nw">2011.07</span></p>
+        <p class="rl">Part Lead, Hangame Operations Division</p>
+        <p class="ti">Tera web ops · Atlantica · R2</p>
+        <p class="im">Ran the Tera web ops part and FUN QA gameplay analysis on <span class="nw">4</span> titles; live ops for Atlantica and <span class="nw">R2</span></p></div>
+      <div class="ms-c"><b>Softnyx</b>
+        <p class="per"><span class="nw">2011.07</span> – <span class="nw">2015.02</span></p>
+        <p class="rl">Business PM, Strategic Business Team</p>
+        <p class="ti">NTD · Rakion 2 · Grand Age</p>
+        <p class="im">Designed <span class="nw">2</span> internal tests · <span class="nw">4</span> FGIs · <span class="nw">2</span> FGTs for NTD, analyzed monetization across <span class="nw">5</span> titles, prepared the Latin America launch</p></div>
+      <div class="ms-c"><b>Netmarble Blue</b>
+        <p class="per"><span class="nw">2015.03</span> – <span class="nw">2015.07</span></p>
+        <p class="rl">Business PM, KON Studio</p>
+        <p class="ti">KON</p>
+        <p class="im">Designed the KON tutorial flow and analyzed competing titles as launch foundation work</p></div>
+      <div class="ms-c"><b>Nexon Korea</b>
+        <p class="per"><span class="nw">2015.07</span> – <span class="nw">2019.10</span></p>
+        <p class="rl">Team Lead, Mobile Business Division</p>
+        <p class="ti">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</p>
+        <p class="im">Lyn <span class="nw">₩18.3B</span> · <span class="nw">#3</span> on both stores / Chaos Chronicle <span class="nw">₩9.8B</span> · <span class="nw">#7</span> · featured / Legion of Heroes <span class="nw">5×</span> prior revenue</p></div>
+      <div class="ms-c"><b>Neptune Legend</b>
+        <p class="per"><span class="nw">2019.10</span> – <span class="nw">2020.04</span></p>
+        <p class="rl">Business PM, Studio</p>
+        <p class="ti">Shadow Seven</p>
+        <p class="im">Weak results in Japan → added a rating management system → Google Play rating Japan <span class="nw">3.29</span> → global <span class="nw">4.4</span> · soft launch in <span class="nw">7</span> markets</p></div>
+      <div class="ms-c"><b>Skypeople</b>
+        <p class="per"><span class="nw">2020.07</span> – <span class="nw">2021.02</span></p>
+        <p class="rl">Team Lead, Business Team</p>
+        <p class="ti">Five Stars</p>
+        <p class="im">Set up and hired the business and operations teams, then ran launch prep and live ops — <span class="nw">200K</span> pre-registrations · <span class="nw">280K+</span> new users · <span class="nw">₩2.4B</span> revenue</p></div>
+      <div class="ms-c"><b>Neowiz</b>
+        <p class="per"><span class="nw">2021.02</span> – <span class="nw">2021.10</span></p>
+        <p class="rl">Team Lead, Game Design · Snowball Studio</p>
+        <p class="ti">Master of Knights</p>
+        <p class="im">Led design of <span class="nw">10</span> new systems and <span class="nw">8</span> reworks; hired game designers and ran milestones</p></div>
+      <div class="ms-c"><b>Wonderpeople · Acestorm</b>
+        <p class="per"><span class="nw">2022.02</span> – <span class="nw">2024.04</span></p>
+        <p class="rl">Part Lead, Business Team</p>
+        <p class="ti">Night Walker, Super People</p>
+        <p class="im">Night Walker <span class="nw">330K+</span> new users · DAU <span class="nw">63K</span> · <span class="nw">D+1</span> <span class="nw">~50%</span> / Super People China <span class="nw">560K+</span> new users</p></div>
+      <div class="ms-c"><b>Dalcomsoft</b>
+        <p class="per"><span class="nw">2024.10</span> – <span class="nw">2026.07</span></p>
+        <p class="rl">Team Lead, Live Game Design</p>
+        <p class="ti">SuperStar series reshaped 11 → 7 (K-pop IP)</p>
+        <p class="im">Reshaped <span class="nw">11</span> titles to <span class="nw">7:</span> retired <span class="nw">5,</span> launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</p></div></div></div>
   
-  <div class="ev"><figure><img src="../../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt=""><figcaption><b>Soft launch metrics into pre-launch fixes</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Open in Notion ↗</a></figcaption></figure><figure><img src="../../evidence/09624ec9cbdb4dd9a53085f168bfcfa7.jpg" alt=""><figcaption><b>In-game improvements</b><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">Open in Notion ↗</a></figcaption></figure></div>
-</section>
-<section>
-  <p class="eyebrow">Portfolio · Launch &amp; live ops</p>
-  <p class="case-meta">Wonderpeople/Acestorm · Business Team — Part Lead</p>
-  <h2 class="case-h">China service flows to the Korean spec</h2>
-  <p class="pills"><span class="pill pill--dark">Project shipped</span><span class="pill pill--line">Launch &amp; live ops</span></p>
-  <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Redefined the payment and server-select flows of the China service to the Korean publisher spec</td></tr><tr><th>Period &amp; role</th><td>2022.02 – 2024.04 · Part Lead, Business Team, Wonderpeople/Acestorm · Night Walker Korea (publisher: Nexon), business and publishing integration</td></tr><tr><th>Problem</th><td>The paid-currency purchase system and the SDK-based server-select flow from the China service had to be reworked for Korea, and the systems had to be defined against the publisher payment, coupon and server policies.</td></tr><tr><th>Decision</th><td>Taking the publisher policy and the internal API docs as the baseline, I redefined the UI/UX and the user flow of all three systems — paid-currency purchase, coupons and server select — to the Korean spec.</td></tr><tr><th>What I did</th><td>I wrote the paid-currency purchase integration design, the coupon feature definition and the server-select UI/flow design, and aligned them with the publisher and the dev team. After launch I analyzed weekly sales to propose products and used live metrics to propose fixes for player hurdles.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (Korea launch 2023-01-26). Paid currency and coupons are recorded as live; server select is documented as foundation work complete. The project reached 330K+ new users in Korea; my contribution was the integration work and the product and hurdle proposals.</td></tr><tr><th>Evidence</th><td>Notion "Paid-currency purchase system integration", "Coupon system integration", "Server-select UI/flow design", "Added promotional product feature"</td></tr></table>
-  
-  <div class="ev"><figure><img src="../../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt=""><figcaption><b>Redefining the systems to publisher spec</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">Open in Notion ↗</a></figcaption></figure><figure><img src="../../evidence/49043d5d2bfa44d18384126bbbd86f14.jpg" alt=""><figcaption><b>Paid-currency purchase system integration</b><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">Open in Notion ↗</a></figcaption></figure></div><p class="foot"><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/#cases">All evidence is in the site detail view — total 5 ↗</a></p>
 </section>
 
-<section>
-  <p class="eyebrow">Project timeline</p>
-  <h2 class="sec-h">19 years, 10 companies</h2>
-  <table class="tl">
-    <colgroup><col><col><col></colgroup>
+<section class="s">
+  <div class="hd">
+    <div><p class="eyebrow">Summary and the four areas</p><p class="who">Henry Lim</p></div>
+    <div></div>
+  </div>
+  <div class="bd">
+    <h2 class="t t--sm">Four jobs that keep a live service running</h2>
+    <p class="lede">19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.</p>
+    <div class="cards4" style="margin-top:6mm">
+      <div class="sk"><h3>Product decisions &amp; milestones</h3><p>Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.</p>
+        <p class="cs">Case — from user research to shipped events<br>Case — soft launch metrics → pre-launch fixes</p></div>
+      <div class="sk"><h3>Launch &amp; live ops</h3><p>Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
+        <p class="cs">Case — redefining the systems to publisher spec<br>Work — Chaos Chronicle sunset ops</p></div>
+      <div class="sk"><h3>Team &amp; hiring</h3><p>Hiring, team structure and who owns what. At Dalcomsoft I restructured 22 people across three teams into 13 across two while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
+        <p class="cs">Case — restructuring (in the Dalcomsoft detail, "Also from the same period")<br>Work — Skypeople org setup</p></div>
+      <div class="sk"><h3>Operational standards</h3><p>Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.</p>
+        <p class="cs">Work — SKU automation and the abuse SOP</p></div></div>
+    <div class="stats"><div><b><span class="nw">19</span> years</b><span class="lb">Total experience (per resume)</span></div><div><b><span class="nw">10</span></b><span class="lb">Companies</span></div><div><b><span class="nw">₩18.3B</span></b><span class="lb">Lyn revenue (#3 grossing, App Store · Google Play)</span></div><div><b><span class="nw">30</span></b><span class="lb">Projects — 8 published, 22 operated</span></div></div></div>
+  
+</section>
+
+<section class="s case" data-case="case1">
+  <div class="hd">
+    <div><p class="eyebrow">Case 1 · Overview</p><p class="who">Dalcomsoft · Live Game Design Team — Team Lead</p></div>
+    <div><span class="pill pill--dark">Shipped</span><span class="pill pill--line">Product decisions &amp; milestones</span></div>
+  </div>
+  <div class="bd"><div class="two two--l">
+      <figure class="hero-shot"><img src="../img/dalcom.jpg" alt="">
+      <figcaption>Multi-title live operations and user-led product work</figcaption></figure>
+      <div><h2 class="t case-h">From survey request to shipped events</h2>
+        <div class="kpi"><b><span class="nw">11→7</span></b><span class="lb">Headline number</span></div>
+        <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned the survey request for webview events into shipped in-game minigames and webview events</td></tr><tr><th>Period &amp; role</th><td>Employed 2024.10 – 2026.07 · Team Lead, Live Game Design (live director) · case period: survey 2025.11 → launch 2026.05</td></tr><tr><th>Problem</th><td>In the November 2025 satisfaction survey across 6 titles (Korean, English, Japanese), IP satisfaction was high and players asked for the old webview events back. I took that on as an event improvement task.</td></tr><tr><th>Decision</th><td>With limited dev resources, I put in-game minigames first because they could run on existing systems, and extended to webview events, which needed separate development, afterwards.</td></tr><tr><th>Decision scope</th><td>I set the response order and the event scope (MVP); the dev schedule and launch dates were settled with the dev team and management.</td></tr></table></div>
+    </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft.</p>
+</section>
+
+<section class="s case" data-case="case1">
+  <div class="hd">
+    <div><p class="eyebrow">Case 1 · Execution</p><p class="who">From survey request to shipped events</p></div>
+    <div><span class="pill pill--line">Product decisions &amp; milestones</span></div>
+  </div>
+  <div class="bd"><div class="two two--r">
+        <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>Minigames v1 and v2 rolled out title by title (v1 2025-12, v2 2026-01). For the decoration event timed to a new group launch I wrote the brief myself and built a working AI prototype for the pre-development review, then set the scope down to core features to fit the dev schedule. After that I built the SuperStar JYP Nation 10th anniversary webview event prototype.</td></tr><tr><th>Deferred</th><td>Collection, display and community improvements from the same survey went to the H1 2026 direction proposal. For the decoration event, deck expansion, gacha and grooming details were deferred and only the core shipped.</td></tr><tr><th>Result &amp; status</th><td>Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.</td></tr><tr><th>Evidence</th><td>Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)</td></tr></table>
+          <div class="more"><h4>Also from the same period — 2 supporting cases</h4><dl><dt>Recurring product policy rework (KO)</dt><dd>A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.</dd><dt>Restructuring with design, QA and CS under one lead (KO)</dt><dd>While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.</dd></dl></div></div>
+        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../../evidence/3d559de7280481dba20ee12a62cb7d69.jpg" alt="">
+      <figcaption><b>From user research to shipped events</b></figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69">From user research to shipped events ↗</a><a class="go" href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14">Recurring product policy rework ↗</a><a class="go" href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a">Restructuring with design, QA and CS under one lead ↗</a></div></div>
+      </div></div>
+  <p class="rights">Public screens are a summary with internal details removed.</p>
+</section>
+
+<section class="s case" data-case="case2">
+  <div class="hd">
+    <div><p class="eyebrow">Case 2 · Overview</p><p class="who">Nexon Korea · Mobile Business Division — Team Lead</p></div>
+    <div><span class="pill pill--dark">Project shipped</span><span class="pill pill--line">Launch &amp; live ops</span></div>
+  </div>
+  <div class="bd"><div class="two two--l">
+      <figure class="hero-shot"><img src="../img/lyn.jpg" alt="">
+      <figcaption>Lyn</figcaption></figure>
+      <div><h2 class="t case-h">Soft launch metrics into pre-launch fixes</h2>
+        <div class="kpi"><b><span class="nw">₩18.3B</span></b><span class="lb">Headline number</span></div>
+        <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch</td></tr><tr><th>Period &amp; role</th><td>Team Lead, Mobile Business Division, Nexon Korea (employed 2015.07 – 2019.10) · Lyn business PM 2017.02 – 2019 (developer collaboration, build coordination)</td></tr><tr><th>Problem</th><td>Bringing the developer build up to launch condition meant turning user tests and market metrics into development requests. The soft launch (Australia, Malaysia, the Philippines, 2019.01–02) showed an unbalanced product mix, slow paid-gem spending and early drop-off.</td></tr><tr><th>Decision</th><td>I framed product mix, currency loop and early flow as fixes to close before launch, and set the product direction by benchmarking a comparable title (Langrisser).</td></tr></table></div>
+    </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
+</section>
+
+<section class="s case" data-case="case2">
+  <div class="hd">
+    <div><p class="eyebrow">Case 2 · Execution</p><p class="who">Soft launch metrics into pre-launch fixes</p></div>
+    <div><span class="pill pill--line">Launch &amp; live ops</span></div>
+  </div>
+  <div class="bd"><div class="two two--r">
+        <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>As business team lead I ran the FGT (2018.06–07, testers selected against 10 competing titles) and the internal test (2018.11, 3 days) and turned the results into development requests. After the soft launch I wrote up the product, currency and early-flow fixes and aligned them with the developer.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (2019 global grand launch). Three fixes landed in the grand launch build: the reworked product lineup, the trading post timing and its dedicated store, and the early flow. Project results were a peak of #3 grossing on the App Store and Google Play in Korea and ₩18.3B cumulative revenue in 2019; my contribution was test lead, build improvement coordination, and the product and currency proposals.</td></tr><tr><th>Evidence</th><td>Notion "In-game improvement proposal" · soft launch metrics report (business team, not public) · FGT satisfaction data and internal test report (business team, not public)</td></tr></table>
+          </div>
+        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt="">
+      <figcaption><b>Soft launch metrics into pre-launch fixes</b></figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Soft launch metrics into pre-launch fixes ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">In-game improvements ↗</a></div></div>
+      </div></div>
+  
+</section>
+
+<section class="s case" data-case="case3">
+  <div class="hd">
+    <div><p class="eyebrow">Case 3 · Overview</p><p class="who">Wonderpeople/Acestorm · Business Team — Part Lead</p></div>
+    <div><span class="pill pill--dark">Project shipped</span><span class="pill pill--line">Launch &amp; live ops</span></div>
+  </div>
+  <div class="bd"><div class="two two--l">
+      <figure class="hero-shot"><img src="../img/nightwalker.jpg" alt="">
+      <figcaption>Night Walker</figcaption></figure>
+      <div><h2 class="t case-h">China service flows to the Korean spec</h2>
+        <div class="kpi"><b><span class="nw">330K+</span></b><span class="lb">Headline number</span></div>
+        <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Redefined the payment and server-select flows of the China service to the Korean publisher spec</td></tr><tr><th>Period &amp; role</th><td>2022.02 – 2024.04 · Part Lead, Business Team, Wonderpeople/Acestorm · Night Walker Korea (publisher: Nexon), business and publishing integration</td></tr><tr><th>Problem</th><td>The paid-currency purchase system and the SDK-based server-select flow from the China service had to be reworked for Korea, and the systems had to be defined against the publisher payment, coupon and server policies.</td></tr><tr><th>Decision</th><td>Taking the publisher policy and the internal API docs as the baseline, I redefined the UI/UX and the user flow of all three systems — paid-currency purchase, coupons and server select — to the Korean spec.</td></tr></table></div>
+    </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
+</section>
+
+<section class="s case" data-case="case3">
+  <div class="hd">
+    <div><p class="eyebrow">Case 3 · Execution</p><p class="who">China service flows to the Korean spec</p></div>
+    <div><span class="pill pill--line">Launch &amp; live ops</span></div>
+  </div>
+  <div class="bd"><div class="two two--r">
+        <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>I wrote the paid-currency purchase integration design, the coupon feature definition and the server-select UI/flow design, and aligned them with the publisher and the dev team. After launch I analyzed weekly sales to propose products and used live metrics to propose fixes for player hurdles.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (Korea launch 2023-01-26). Paid currency and coupons are recorded as live; server select is documented as foundation work complete. The project reached 330K+ new users in Korea; my contribution was the integration work and the product and hurdle proposals.</td></tr><tr><th>Evidence</th><td>Notion "Paid-currency purchase system integration", "Coupon system integration", "Server-select UI/flow design", "Added promotional product feature"</td></tr></table>
+          </div>
+        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt="">
+      <figcaption><b>Redefining the systems to publisher spec</b></figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">Redefining the systems to publisher spec ↗</a><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">Paid-currency purchase system integration ↗</a><a class="go" href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55">Coupon system integration ↗</a><a class="go" href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2">Server-select UI/flow design ↗</a><a class="go" href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f">Added promotional product feature ↗</a></div></div>
+      </div></div>
+  
+</section>
+
+<section class="s res">
+  <div class="hd">
+    <div><p class="eyebrow">Results · Chaos Chronicle</p><p class="who">Nexon — Team Lead</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="two two--top">
+        <div><p class="res-n"><span class="nw">₩9.8B</span></p><p class="res-l">Headline number</p>
+          <ul class="res-b"><li><span class="nw">#7</span> grossing on the App Store · <span class="nw">#23</span> on Google Play (Korea).</li><li>US revenue <span class="nw">₩9.8B,</span> featured on iOS · Google Play.</li><li>Soft launch in <span class="nw">5</span> markets, then global.</li></ul></div>
+        <div class="ig"><figure class="ph"><img src="../img/chaos.jpg" alt=""><figcaption>Chaos Chronicle</figcaption></figure><div class="pend">이미지 대기</div></div>
+      </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
+</section>
+
+<section class="s res">
+  <div class="hd">
+    <div><p class="eyebrow">Results · Five Stars</p><p class="who">Skypeople — Business Team Lead</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="two two--top">
+        <div><p class="res-n"><span class="nw">₩2.4B</span></p><p class="res-l">Headline number</p>
+          <ul class="res-b"><li><span class="nw">#46</span> grossing on Google Play · <span class="nw">#28</span> on ONE Store (Korea).</li><li><span class="nw">280K+</span> new users, peak DAU <span class="nw">44K,</span> revenue <span class="nw">₩2.4B.</span></li></ul></div>
+        <div class="ig"><figure class="ph"><img src="../img/fivestars.jpg" alt=""><figcaption>Five Stars</figcaption></figure><div class="pend">이미지 대기</div></div>
+      </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Skypeople.</p>
+</section>
+
+<section class="s res">
+  <div class="hd">
+    <div><p class="eyebrow">Results · Shadow Seven</p><p class="who">Neptune Legend — Business PM</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="two two--top">
+        <div><p class="res-n"><span class="nw">7</span> markets</p><p class="res-l">Headline number</p>
+          <ul class="res-b"><li>Added a rating management system after weak results in Japan.</li><li>Google Play rating: Japan <span class="nw">3.29</span> → global <span class="nw">4.4.</span></li><li>Soft launch in <span class="nw">7</span> markets.</li></ul></div>
+        <div class="ig"><figure class="ph"><img src="../img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><div class="pend">이미지 대기</div></div>
+      </div></div>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Neptune Legend.</p>
+</section>
+
+<section class="s">
+  <div class="hd">
+    <div><p class="eyebrow">Project timeline</p><p class="who">19 years, 10 companies</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="two two--top"><table class="tl"><colgroup><col><col><col></colgroup>
     <thead><tr><th>Company</th><th>Team, role, period</th><th style="text-align:right">Headline number</th></tr></thead>
     <tbody><tr><td><b>Dalcomsoft</b><span class="sub">SuperStar series reshaped 11 → 7 (K-pop IP)</span></td>
       <td>Team Lead, Live Game Design · 2024.10 – 2026.07<span class="impact">Reshaped <span class="nw">11</span> titles to <span class="nw">7:</span> retired <span class="nw">5,</span> launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</span></td>
@@ -179,7 +390,9 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
       <td>Team Lead, Business Team · 2020.07 – 2021.02<span class="impact">Set up and hired the business and operations teams, then ran launch prep and live ops — <span class="nw">200K</span> pre-registrations · <span class="nw">280K+</span> new users · <span class="nw">₩2.4B</span> revenue</span></td>
       <td class="k"><span class="nw">₩2.4B</span></td></tr><tr><td><b>Neptune Legend</b><span class="sub">Shadow Seven</span></td>
       <td>Business PM, Studio · 2019.10 – 2020.04<span class="impact">Weak results in Japan → added a rating management system → Google Play rating Japan <span class="nw">3.29</span> → global <span class="nw">4.4</span> · soft launch in <span class="nw">7</span> markets</span></td>
-      <td class="k"><span class="nw">7</span> markets</td></tr><tr><td><b>Nexon Korea</b><span class="sub">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</span></td>
+      <td class="k"><span class="nw">7</span> markets</td></tr></tbody></table><table class="tl"><colgroup><col><col><col></colgroup>
+    <thead><tr><th>Company</th><th>Team, role, period</th><th style="text-align:right">Headline number</th></tr></thead>
+    <tbody><tr><td><b>Nexon Korea</b><span class="sub">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</span></td>
       <td>Team Lead, Mobile Business Division · 2015.07 – 2019.10<span class="impact">Lyn <span class="nw">₩18.3B</span> · <span class="nw">#3</span> on both stores / Chaos Chronicle <span class="nw">₩9.8B</span> · <span class="nw">#7</span> · featured / Legion of Heroes <span class="nw">5×</span> prior revenue</span></td>
       <td class="k"><span class="nw">₩18.3B</span></td></tr><tr><td><b>Netmarble Blue</b><span class="sub">KON</span></td>
       <td>Business PM, KON Studio · 2015.03 – 2015.07<span class="impact">Designed the KON tutorial flow and analyzed competing titles as launch foundation work</span></td>
@@ -189,44 +402,50 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
       <td>Part Lead, Hangame Operations Division · 2008.05 – 2011.07<span class="impact">Ran the Tera web ops part and FUN QA gameplay analysis on <span class="nw">4</span> titles; live ops for Atlantica and <span class="nw">R2</span></span></td>
       <td class="k"></td></tr><tr><td><b>Webzen</b><span class="sub">SUN Online</span></td>
       <td>Operations Team · 2006.04 – 2007.10<span class="impact">Live ops for the SUN Online launch — VOC analysis and log audits</span></td>
-      <td class="k"></td></tr></tbody>
-  </table>
-  <p class="foot">* 2007.10 – 2008.05 returned to university (Kangnam University, Computer Engineering, class of 2009)</p>
+      <td class="k"></td></tr></tbody></table></div>
+      <p class="foot">* 2007.10 – 2008.05 returned to university (Kangnam University, Computer Engineering, class of 2009)</p></div>
+  
 </section>
 
-<section>
-  <p class="eyebrow">From idea to working screen with AI</p>
-  <h2 class="sec-h">I use AI to turn ideas into working screens, not to write documents.</h2>
-  <div class="grid2">
-    <div class="card"><img src="../../works/deco.jpg" alt="">
-      <div class="in">
-        <p class="eyebrow">Dalcomsoft · work prototypes</p>
-        <h3>Decoration event design &amp; wireframe</h3>
-        <p>Turned collection and display requests from the satisfaction survey into a decoration event design and wireframe. Open the link below for the demo (Korean).</p>
-        <div class="note"><p><b>How to try it</b> Pick items on the decoration screen and place them.</p><p><b>Why it was built</b> Built to settle the screen flow before development started.</p><p><b>My part</b> I wrote the brief myself and built the prototype.</p><p><b>Shipped?</b> The event shipped 2026-04-30 to 05-23.</p>
-          <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/deco.html">Open ↗</a></p></div>
-        <p class="rights">Public screens are a summary with internal details removed.</p>
-      </div></div>
-    <div class="card"><img src="../../works/ssjproto.jpg" alt="">
-      <div class="in">
-        <p class="eyebrow">Dalcomsoft · work prototypes</p>
-        <h3>SuperStar JYP Nation 10th anniversary webview event prototype</h3>
-        <p>Validated on a working webview instead of a spec — I built the clickable prototype myself with AI, covering weekly missions, reward claims and the entry flow. Open the link below to play it (Korean).</p>
-        <div class="note"><p><b>How to try it</b> Switch the week and compare the reward lock states, then follow missions → claim rewards → entry flow.</p><p><b>Why it was built</b> Built to validate the flow on a working webview instead of a spec.</p><p><b>My part</b> I built the interactive prototype myself with AI.</p><p><b>Shipped?</b> Shipped — May 2026.</p>
-          <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/ssjproto.html">Open ↗</a></p></div>
-        <p class="rights">Public screens are a summary with internal details removed.</p>
-      </div></div></div>
-  <p class="foot"><b>Our Household Budget</b> — A budget web app the two of us use every day. Built on Google Apps Script + a single HTML file, running live. <a class="go" href="https://bluedaylol80.github.io/family-budget-lite/">Open ↗</a></p>
+<section class="s">
+  <div class="hd">
+    <div><p class="eyebrow">AI prototypes</p><p class="who">I use AI to turn ideas into working screens, not to write documents.</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="proto">
+      <div class="pc"><img src="../img/deco.jpg" alt="">
+        <div class="in"><p class="eyebrow">Dalcomsoft · work prototypes</p><h3>Decoration event design &amp; wireframe</h3>
+          <p class="sum">Turned collection and display requests from the satisfaction survey into a decoration event design and wireframe. Open the link below for the demo (Korean).</p>
+          <div class="note"><p><b>How to try it</b> Pick items on the decoration screen and place them.</p><p><b>Why it was built</b> Built to settle the screen flow before development started.</p><p><b>My part</b> I wrote the brief myself and built the prototype.</p><p><b>Shipped?</b> The event shipped 2026-04-30 to 05-23.</p>
+            <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/deco.html">Open ↗</a></p></div>
+        </div></div>
+      <div class="pc"><img src="../img/ssjproto.jpg" alt="">
+        <div class="in"><p class="eyebrow">Dalcomsoft · work prototypes</p><h3>SuperStar JYP Nation 10th anniversary webview event prototype</h3>
+          <p class="sum">Validated on a working webview instead of a spec — I built the clickable prototype myself with AI, covering weekly missions, reward claims and the entry flow. Open the link below to play it (Korean).</p>
+          <div class="note"><p><b>How to try it</b> Switch the week and compare the reward lock states, then follow missions → claim rewards → entry flow.</p><p><b>Why it was built</b> Built to validate the flow on a working webview instead of a spec.</p><p><b>My part</b> I built the interactive prototype myself with AI.</p><p><b>Shipped?</b> Shipped — May 2026.</p>
+            <p><b>Demo</b> <a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/../demo/ssjproto.html">Open ↗</a></p></div>
+        </div></div></div>
+      <p class="foot"><b>Personal product</b> Our Household Budget — A budget web app the two of us use every day. Built on Google Apps Script + a single HTML file, running live.
+        <a class="go" href="https://bluedaylol80.github.io/family-budget-lite/">Open ↗</a></p></div>
+  <p class="rights">Public screens are a summary with internal details removed.</p>
 </section>
 
-<section class="contact-end">
-  <p class="eyebrow">Contact</p>
-  <p class="contact-line"><b>Henry Lim</b>
-    <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a> ·
-    <a href="https://bluedaylol80.github.io/henry-portfolio/en/">Site ↗</a> ·
-    <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion resume ↗</a></p>
-  <p class="foot">This document is generated from the site. Issued 2026-09-09 · © 2026 Henry Lim · All figures on this site come from my public resume.</p>
+<section class="s">
+  <div class="hd">
+    <div><p class="eyebrow">Contact</p><p class="who">Issued 2026-09-09</p></div>
+    <div></div>
+  </div>
+  <div class="bd"><div class="end">
+      <p class="name">Henry Lim</p>
+      <p class="role">Game Live Service PM &amp; Director · 19 yrs</p>
+      <div class="lines">
+        <p><b>Email</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
+        <p><b>Site</b> <a href="https://bluedaylol80.github.io/henry-portfolio/en/">https://bluedaylol80.github.io/henry-portfolio/en/</a></p>
+        <p><b>Notion resume</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</a></p>
+      </div>
+      <p class="foot">This document is generated from the site. Issued 2026-09-09 · © 2026 Henry Lim · All figures on this site come from my public resume.</p>
+    </div></div>
+  
 </section>
-
 </body>
 </html>
