@@ -4,22 +4,22 @@
  * 원칙: 사이트가 원천이다. 문구를 두 벌로 만들지 않는다.
  * 그래서 손으로 옮겨 적지 않고, 로컬 서버(8787)에 뜬 사이트를 실브라우저로 열어
  * 렌더된 DOM 텍스트를 그대로 읽어 조립한다. 대표 사례 6항목은 상세창을 실제로 열어서 읽는다.
- * 근거 카드 썸네일·Notion URL은 site/evidence/index.json에서 가져온다.
+ * 근거는 상세창에서 읽은 Notion 링크 목록으로 싣는다.
  *
  * 판형은 16:9 가로 슬라이드 15장이다(WO-24). 이미지는 site/pdf/img/의 사본만 쓴다
- * (scripts/build-pdf-img.mjs가 만든다). 채택 전 슬롯은 "이미지 대기" 박스로 그린다.
+ * (scripts/build-pdf-img.mjs가 만든다). 캡처는 잘라내지 않고 통째로 넣는다.
  *
  * 사전 준비: python -m http.server 8787 --bind 127.0.0.1 --directory site
  * Usage: node scripts/build-print.mjs
  */
 import puppeteer from 'puppeteer-core'
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
+import { hits as banHits } from './pdf-banned.mjs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'http://127.0.0.1:8787'
 const NOTION = 'https://limhenry.notion.site/'
 const HUB = NOTION + '0e48e826c73f4a7ab9c3522d7fb16ce5'
-const EV = JSON.parse(readFileSync('site/evidence/index.json', 'utf8'))
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -32,7 +32,10 @@ const PRINTIFY = [['카드를 누르면 체험판이 열립니다', '아래 링�
                   ['카드를 누르면 근거까지 보입니다', '아래 근거 카드에서 근거까지 볼 수 있습니다'],
                   ['Open the card for the demo', 'Open the link below for the demo'],
                   ['Open the card to play it', 'Open the link below to play it'],
-                  ['Open a card for the evidence', 'The evidence is in the cards below']]
+                  ['Open a card for the evidence', 'The evidence is in the cards below'],
+                  /* 역량 카드의 웹 안내는 인쇄물에서 쪽 안내로 바꾼다(Codex R11 D13) */
+                  ['(달콤 상세창 "함께 보기")', '(5쪽 함께 보기)'],
+                  ['(in the Dalcomsoft detail, "Also from the same period")', '(see p.5)']]
 const pr = (t) => PRINTIFY.reduce((a, [x, y]) => a.split(x).join(y), String(t))
 
 async function scrape(lang) {
@@ -96,30 +99,41 @@ async function scrape(lang) {
       legal: t(document.querySelector('.ft-legal')),
     }
   })
-  /* 대표 사례 6항목은 상세창을 실제로 열어서 읽는다 — 화면에 뜨는 문장과 바이트 단위로 같아진다 */
-  for (const c of base.cases) {
-    await page.evaluate(k => document.querySelector(`.card-open[data-work="${k}"]`).click(), c.work)
+  /* 상세창을 실제로 열어서 읽는다 — 화면에 뜨는 문장과 바이트 단위로 같아진다 */
+  const readDlg = () => page.evaluate(() => {
+    const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
+    return {
+      dlgMeta: t(document.getElementById('wdlgM')),
+      dlgTitle: t(document.getElementById('wdlgT')),
+      rows: [...document.querySelectorAll('#wdlgR > div')].map(d => [t(d.querySelector('dt')), t(d.querySelector('dd'))]),
+      more: document.getElementById('wdlgMore').hidden ? null : {
+        sum: t(document.querySelector('#wdlgMore summary')),
+        rows: [...document.querySelectorAll('#wdlgMore dt')].map((dt, i) =>
+          [t(dt), t(document.querySelectorAll('#wdlgMore dd')[i])]) },
+      evHead: t(document.querySelector('#wdlgN h4')),
+      ev: [...document.querySelectorAll('#wdlgN .ev-card')].map(a => ({ href: a.href, title: t(a.querySelector('.ev-t')) })),
+    }
+  })
+  const openDlg = async (k) => {
+    await page.evaluate(kk => document.querySelector(`.card-open[data-work="${kk}"]`).click(), k)
     await sleep(1600)
-    Object.assign(c, await page.evaluate(() => {
-      const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
-      return {
-        dlgMeta: t(document.getElementById('wdlgM')),
-        dlgTitle: t(document.getElementById('wdlgT')),
-        rows: [...document.querySelectorAll('#wdlgR > div')].map(d => [t(d.querySelector('dt')), t(d.querySelector('dd'))]),
-        more: document.getElementById('wdlgMore').hidden ? null : {
-          sum: t(document.querySelector('#wdlgMore summary')),
-          rows: [...document.querySelectorAll('#wdlgMore dt')].map((dt, i) =>
-            [t(dt), t(document.querySelectorAll('#wdlgMore dd')[i])]) },
-        evHead: t(document.querySelector('#wdlgN h4')),
-        ev: [...document.querySelectorAll('#wdlgN .ev-card')].map(a => ({ href: a.href, title: t(a.querySelector('.ev-t')) })),
-      }
-    }))
+    const r = await readDlg()
     await page.keyboard.press('Escape'); await sleep(500)
+    return r
   }
+  for (const c of base.cases) Object.assign(c, await openDlg(c.work))
+  /* 성과 3장도 상세창에서 읽는다 — 본인 행동·근거 링크를 손으로 옮기지 않는다(Codex R11 D10) */
+  base.res = {}
+  for (const [, slug] of RESULTS) base.res[slug] = await openDlg(slug)
   await browser.close()
   if (base.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + base.cases.length)
   // 한 줄 요약 + 6항목 = 7행(WO-19 13). 항목이 줄면 원고와 어긋난 것이라 실패시킨다.
   for (const c of base.cases) if (c.rows.length < 7) fail('사례 상세 행이 모자란다: ' + c.title + ' ' + c.rows.length)
+  for (const [, slug] of RESULTS) {
+    const r = base.res[slug]
+    if (!r || r.rows.length < 3) fail('성과 상세 행이 모자란다: ' + slug + ' ' + (r ? r.rows.length : 0))
+    if (!r.ev.length) fail('성과 근거 링크가 없다: ' + slug)
+  }
   return base
 }
 
@@ -141,20 +155,21 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
   display:flex;flex-direction:column;counter-increment:slide;break-after:page;background:#fff}
 .s:last-of-type{break-after:auto}
 .s::after{content:counter(slide) " / ${SLIDES}";position:absolute;right:14mm;bottom:6.5mm;
-  font-size:.7rem;color:#8d8d8d;letter-spacing:.03em}
+  font-size:.82rem;color:#8d8d8d;letter-spacing:.03em}
 .hd{display:flex;justify-content:space-between;align-items:flex-end;gap:10mm;
   border-bottom:.5pt solid var(--line);padding-bottom:2.5mm;margin-bottom:5mm}
-.hd .who{font-size:.85rem;color:var(--muted);margin-top:.8mm}
-.eyebrow{font-size:.7rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hd .who{font-size:.91rem;color:var(--muted);margin-top:.8mm}
+.eyebrow{font-size:.82rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .bd{flex:1;min-height:0;display:flex;flex-direction:column}
-.rights{position:absolute;left:14mm;bottom:6.5mm;font-size:.68rem;color:#8d8d8d;max-width:255mm;line-height:1.4}
-.pill{display:inline-block;border-radius:99px;padding:1mm 3.2mm;font-size:.76rem;line-height:1.5;margin-left:2mm;white-space:nowrap}
+/* 권리 줄은 모든 슬라이드에 있다(Codex R11 D3) — 쪽 번호와 겹치지 않게 폭을 잘라 둔다 */
+.rights{position:absolute;left:14mm;right:34mm;bottom:6mm;font-size:.82rem;color:#7c7c7c;line-height:1.35}
+.pill{display:inline-block;border-radius:99px;padding:1mm 3.2mm;font-size:.88rem;line-height:1.5;margin-left:2mm;white-space:nowrap}
 .pill--dark{background:var(--ink);color:#fff}
 .pill--line{border:.5pt solid #bdbcb9;color:var(--muted)}
 .t{font-size:1.55rem;max-width:230mm}
 .t--sm{font-size:1.25rem}
-.lede{margin-top:2.5mm;color:var(--muted);font-size:.95rem;max-width:230mm}
-.foot{margin-top:3mm;font-size:.8rem;color:var(--muted);line-height:1.5}
+.lede{margin-top:2.5mm;color:var(--muted);font-size:1rem;max-width:230mm}
+.foot{margin-top:3mm;font-size:.91rem;color:var(--muted);line-height:1.5}
 .foot b{font-weight:600;color:var(--fg);margin-right:1.5mm}
 .go{color:var(--muted);text-decoration:underline}
 .nw{white-space:nowrap}
@@ -166,98 +181,122 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .cover .contact{margin-top:8mm;font-size:.95rem;color:var(--muted)}
 .cover .contact p{margin-top:1.5mm}
 .cover .contact b{font-weight:500;color:var(--fg);display:inline-block;min-width:26mm}
-.cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
-.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
+.cover .issued{margin-top:4mm;font-size:.91rem;color:var(--muted)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto;margin-bottom:6mm}
 .strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
 /* 키 비주얼 3장은 가로세로비가 제각각이다(1.33~1.78) — cover로 자르면 달콤 아이콘 격자와
    'Superstar Series' 글자가 잘린다. 통째로 보여주고 남는 자리는 종이색으로 채운다(WO-24 ④) */
 .strip img{display:block;width:100%;height:44mm;object-fit:contain;object-position:center;background:var(--surface)}
-.strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
-/* Career Milestone */
-.ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
-.ms-ph{flex:1;border-radius:1.5mm;background:var(--surface);border:.5pt solid var(--line);padding:2.5mm 3.5mm}
+.strip figcaption{padding:1.8mm 2.5mm;font-size:1rem;color:var(--muted)}
+/* Career Milestone — 연도선 + 회사별 기간 막대(간트). 막대와 타일은 같은 번호로 묶인다(Codex R11 D12) */
+.ms-bar{display:flex;gap:2mm;margin-bottom:1.5mm}
+.ms-ph{flex:1;border-radius:1.5mm;background:var(--surface);border:.5pt solid var(--line);padding:2mm 3.5mm}
 .ms-ph b{display:block;font-size:1rem;font-weight:600}
-.ms-ph span{font-size:.78rem;color:var(--muted)}
+.ms-ph span{font-size:.91rem;color:var(--muted)}
 .ms-ph:nth-child(3){background:var(--ink);border-color:var(--ink);color:#fff}
 .ms-ph:nth-child(3) span{color:#cfcfcf}
-.ms-rail{height:.8mm;background:linear-gradient(90deg,#dcdbd8,#9a9894);border-radius:99px;margin-bottom:4mm}
-.ms-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:4mm}
-.ms-c{border-top:.8pt solid var(--ink);padding-top:2mm}
-.ms-c b{display:block;font-size:.98rem;font-weight:600}
-.ms-c .per{font-size:.78rem;color:var(--muted);margin-top:.6mm}
-.ms-c .rl{font-size:.78rem;margin-top:1.2mm}
-.ms-c .ti{font-size:.75rem;color:var(--muted);margin-top:.8mm;line-height:1.4}
-.ms-c .im{font-size:.74rem;color:#333;margin-top:1.6mm;line-height:1.42}
+.gantt{position:relative;height:7mm;margin-bottom:1.2mm}
+.gantt i{position:absolute;top:0;height:7mm;border-radius:1mm;background:#cfcdc9;
+  display:flex;align-items:center;justify-content:center;font-style:normal;
+  font-size:.82rem;font-weight:600;color:#3a3a3a;overflow:hidden}
+.gantt i.on{background:var(--acc);color:#fff}
+.ms-axis{position:relative;height:5mm;border-top:.5pt solid var(--line)}
+.ms-axis span{position:absolute;top:1mm;font-size:.82rem;color:var(--muted);transform:translateX(-50%)}
+.ms-axis span:first-child{transform:none}
+.ms-axis span:last-child{transform:translateX(-100%)}
+.ms-grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:1fr;gap:3.5mm;margin-top:3mm}
+.ms-c{border-top:.8pt solid var(--ink);padding-top:1.8mm}
+.ms-c b{display:block;font-size:1rem;font-weight:600}
+.ms-c b em{font-style:normal;color:var(--acc);margin-right:1.4mm}
+.ms-c .per{font-size:.91rem;color:var(--muted);margin-top:.5mm}
+.ms-c .rl{font-size:.91rem;margin-top:.9mm}
+.ms-c .ti{font-size:.91rem;color:var(--muted);margin-top:.6mm;line-height:1.38}
+.ms-c .im{font-size:.91rem;color:#333;margin-top:1.2mm;line-height:1.38}
 /* 요약·역량 */
 .cards4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;align-items:stretch}
-.sk{border:.5pt solid var(--line);border-radius:2mm;padding:4mm;background:#fff}
-.sk h3{font-size:1.02rem}
-.sk p{margin-top:2mm;font-size:.82rem;line-height:1.5}
-.sk .cs{margin-top:2.5mm;font-size:.75rem;color:var(--muted);line-height:1.45}
+.sk{border:.5pt solid var(--line);border-radius:2mm;padding:5mm;background:#fff;display:flex;flex-direction:column}
+.sk h3{font-size:1.2rem}
+.sk p{margin-top:2.5mm;font-size:.94rem;line-height:1.55}
+.sk .cs{margin-top:auto;padding-top:4mm;font-size:.91rem;color:var(--muted);line-height:1.5}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;margin-top:auto;border-top:.5pt solid var(--line);padding-top:4mm}
-.stats b{display:block;font-size:1.6rem;font-weight:600;letter-spacing:-.01em}
-.stats .lb{display:block;font-size:.78rem;color:var(--muted)}
+.stats b{display:block;font-size:1.9rem;font-weight:600;letter-spacing:-.01em}
+.stats .lb{display:block;font-size:.91rem;color:var(--muted)}
 /* 사례 */
 .two{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:9mm}
 .two--top{align-items:start}
 .two--l{grid-template-columns:118mm 1fr}
 .two--r{grid-template-columns:1fr 130mm}
+.two--r3{grid-template-columns:1fr 152mm}
 .kpi{border-left:1.2mm solid var(--acc);padding-left:3.5mm;margin:3mm 0 4mm}
 .kpi b{display:block;font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
-.kpi .lb{display:block;font-size:.76rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.kpi .lb{display:block;font-size:.91rem;color:var(--muted);margin-top:.8mm;line-height:1.35}
 table{width:100%;border-collapse:collapse;table-layout:fixed}
-.kv{font-size:.84rem}
-.kv th,.kv td{border-top:.4pt solid var(--line);padding:1.8mm 3mm 1.8mm 0;vertical-align:top;text-align:left;line-height:1.5}
+.kv{font-size:.91rem}
+.kv th,.kv td{border-top:.4pt solid var(--line);padding:1.6mm 3mm 1.6mm 0;vertical-align:top;text-align:left;line-height:1.45}
 .kv th{font-weight:500;color:var(--muted)}
 .kv tr:last-child td,.kv tr:last-child th{border-bottom:.4pt solid var(--line)}
 .kv col:first-child{width:24mm}
 .hero-shot{align-self:center;border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
 .hero-shot img{display:block;width:100%;height:auto}
-.hero-shot figcaption{padding:2.2mm 3mm;font-size:.78rem;color:var(--muted)}
-.more{margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
-.more h4{font-size:.85rem;color:var(--muted);margin-bottom:1.5mm}
-.more dt{font-size:.84rem;font-weight:600;margin-top:1.5mm}
-.more dd{font-size:.78rem;color:#333;line-height:1.45}
-/* 이미지 그리드·대기 박스 */
-.ig{display:grid;grid-template-columns:1fr 1fr;gap:4mm;align-content:start}
-.evlist{font-size:.78rem;line-height:1.5}
-.evlist b{display:block;font-weight:600;margin-bottom:1.2mm}
-.evlist a{display:block;margin-top:1.2mm}
-.ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
-/* 기획서·플로우·UI 시안은 잘리면 읽을 수 없다 — 통째로 넣고 남는 자리는 흰 여백으로 둔다 */
-.ph--doc img{object-fit:contain;background:#fff}
+.hero-shot figcaption{padding:2.2mm 3mm;font-size:1rem;color:var(--muted)}
+.more{margin-top:3mm;border-top:.4pt solid var(--line);padding-top:2.2mm}
+.more h4{font-size:.91rem;color:var(--muted);margin-bottom:1.2mm}
+.more dt{font-size:.94rem;font-weight:600;margin-top:1.4mm}
+.more dd{font-size:.91rem;color:#333;line-height:1.42}
+/* 이미지 그리드 */
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-content:start}
+.evlist{font-size:.91rem;line-height:1.45;margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
+.ig>.evlist{grid-column:1/-1;margin-top:1mm}
+.evlist b{display:block;font-weight:600;margin-bottom:1mm}
+.evlist a{display:block;margin-top:1mm}
+.ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:#fff;
+  display:flex;flex-direction:column;justify-self:center;width:100%}
+/* 캡처는 잘라내지 않는다 — 통째로 보여주고 남는 자리는 종이색으로 둔다(Codex R11 D6·D7) */
+.ph img{display:block;width:100%;height:36mm;object-fit:contain;object-position:center;background:#fff}
 .ph--wide{grid-column:1/-1}
-.ph--wide img{height:auto;object-fit:contain}
-.ig--4 .ph img{height:36mm}
-.ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
+.ph--wide img{height:auto}
+.ig--proto .ph:first-child img{height:54mm}
+.ig--proto .ph:nth-child(2) img{height:40mm}
+.res .ig .ph img{height:44mm}
+.res .ph--wide img{height:70mm}
+.res .ph--por img{height:66mm}
+/* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
+.ig--solo .ph{grid-column:1/-1}
+.ig--solo .ph img{height:66mm}
+/* 사례 3 실행 — 세로로 긴 플로우차트를 큰 칸에 세우고 나머지 3장을 옆에 작게 둔다 */
+.ig--tall{grid-template-columns:62mm 1fr;grid-template-rows:repeat(3,auto)}
+.ph--tall{grid-row:1/4}
+.ph--tall img{height:100mm}
+.ig--tall .ph:not(.ph--tall) img{height:28mm}
+.ph figcaption{padding:1.6mm 2.5mm;font-size:1rem;color:var(--muted);line-height:1.35;border-top:.4pt solid var(--line)}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
-.pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
-  height:47mm;display:flex;align-items:center;justify-content:center;font-size:.8rem}
 /* 성과 */
-.res-n{font-size:3.4rem;font-weight:600;letter-spacing:-.03em;line-height:1}
-.res-l{margin-top:2mm;font-size:.8rem;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-.res-b{margin-top:5mm;font-size:.9rem;line-height:1.55}
-.res-b li{list-style:none;padding-left:4.5mm;position:relative;margin-top:1.8mm}
+.res-n{font-size:3.1rem;font-weight:600;letter-spacing:-.03em;line-height:1}
+.res-l{margin-top:2mm;font-size:.91rem;color:var(--muted);line-height:1.35;max-width:80mm}
+.res-b{margin-top:4mm;font-size:.94rem;line-height:1.5}
+.res-b li{list-style:none;padding-left:4.5mm;position:relative;margin-top:1.6mm}
 .res-b li::before{content:"";position:absolute;left:0;top:2.1mm;width:2mm;height:2mm;border-radius:99px;background:var(--acc)}
+.res-meta{margin-top:3mm;font-size:.91rem;color:var(--muted);line-height:1.4}
+.res .kv{margin-top:3.5mm}
 /* 타임라인 */
-.tl{font-size:.78rem}
-.tl th,.tl td{border-top:.4pt solid var(--line);padding:1.6mm 3mm 1.6mm 0;vertical-align:top;text-align:left;line-height:1.42}
-.tl thead th{border-top:0;font-size:.72rem;letter-spacing:.05em;color:var(--muted);font-weight:500}
-.tl col:nth-child(1){width:34mm}
-.tl col:nth-child(3){width:20mm}
+.tl{font-size:.91rem}
+.tl th,.tl td{border-top:.4pt solid var(--line);padding:2.8mm 3mm 2.8mm 0;vertical-align:top;text-align:left;line-height:1.38}
+.tl thead th{border-top:0;font-size:.91rem;letter-spacing:.03em;color:var(--muted);font-weight:500}
+.tl col:nth-child(1){width:32mm}
+.tl col:nth-child(3){width:19mm}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
-.tl .sub{display:block;color:var(--muted);font-size:.72rem;margin-top:.4mm}
-.tl .impact{display:block;color:#333;font-size:.74rem;margin-top:.6mm}
+.tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}
+.tl .impact{display:block;color:#333;font-size:.91rem;margin-top:.5mm}
 /* 프로토타입 카드 */
 .proto{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:100%}
 .pc{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
-.pc img{display:block;width:100%;height:58mm;object-fit:cover;object-position:top}
+.pc img{display:block;width:100%;height:56mm;object-fit:contain;object-position:center;background:#fff;
+  border-bottom:.4pt solid var(--line)}
 .pc .in{padding:4mm;flex:1;display:flex;flex-direction:column}
-.pc h3{font-size:1.05rem;margin-top:1mm}
-.pc p.sum{margin-top:1.8mm;font-size:.82rem;line-height:1.5}
-.note{margin-top:2.5mm;font-size:.78rem;line-height:1.45;display:grid;grid-template-columns:20mm 1fr;gap:1mm 3mm}
+.pc h3{font-size:1.15rem;margin-top:1mm}
+.pc p.sum{margin-top:1.8mm;font-size:.94rem;line-height:1.5}
+.note{margin-top:2.5mm;font-size:.91rem;line-height:1.42;display:grid;grid-template-columns:22mm 1fr;gap:1mm 3mm}
 .note p{display:contents}
 .note b{font-weight:600}
 /* 연락 */
@@ -272,38 +311,86 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
   ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', notion:'Notion 이력',
-        timeline:'프로젝트 타임라인', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
+        timeline:'프로젝트 타임라인 — 회사별 상세', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
         phases:['운영','사업 PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
-        pending:'이미지 대기', proto:'AI 프로토타입', lab:'개인 프로덕트' },
+        proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간·직위',
+        rightsPlain:'수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.',
+        rightsNW:'나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
+        rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
-        timeline:'Project timeline', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
+        timeline:'Project timeline — by company', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
         contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
         summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
         phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
-        pending:'이미지 대기', proto:'AI prototypes', lab:'Personal product' },
+        proto:'AI prototypes', lab:'Personal product', period:'Period and role',
+        rightsPlain:'Figures follow the public résumé · Game titles are trademarks of their respective owners.',
+        rightsNW:'Night Walker developed by Wonderpeople and Acetom · published by Nexon.',
+        rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
 }
 /* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
    ph--doc는 잘라내지 않고 통째로, ph--wide는 두 칸을 가로질러 놓는다. */
 const CAPS = {
-  'lyn/before_after': ['변경 전·후 화면 비교', 'Screens before and after the change'],
-  'lyn/system_ui': ['시스템 UI 기획', 'System UI spec'],
-  'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안', 'Server select flow proposal'],
-  'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트·와이어프레임', 'Server select flowchart and wireframe'],
-  'nightwalker/charge_flow': ['보석 충전·프로모션 플로우', 'Gem purchase and promotion flow'],
-  'nightwalker/charge_ui_mock': ['충전 UI 시안', 'Purchase UI mockup'],
-  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안', 'Event page UI spec'],
-  'chaos/ingame': ['인게임 화면', 'In-game screen'],
+  'lyn/before_after': ['폴리싱 제안 반영 전(1)·후(2) 화면 — 소프트런칭 지표 기반 개선 3건 중 게임성 폴리싱',
+                       'Before (1) and after (2) the polishing proposal — one of three pre-launch fixes from soft-launch metrics'],
+  'lyn/system_ui': ['시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처',
+                    'System UI plan — the fix laid out as a screen flow'],
+  'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
+                                       "Server-select flow proposal — the China SDK flow redefined around the publisher's login and launcher"],
+  'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트 — 퍼블리셔 플랫폼(로그인·런처)과 개발사 영역(서버 선택·캐릭터 생성) 구분',
+                                        'Server-select flowchart — publisher platform (login, launcher) vs. developer scope (server select, character creation)'],
+  'nightwalker/charge_flow': ['보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
+                              "Gem top-up and promotion flow — item grant flow aligned to the publisher's billing policy"],
+  'nightwalker/charge_ui_mock': ['충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
+                                 'Top-up UI mock — showing promotion benefits inside the top-up window'],
+  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안 — 라이브 이벤트 미션 구조',
+                          'Event page UI plan — live event mission structure'],
+  'chaos/ingame': ['인게임 전투 화면', 'In-game battle screen'],
   'fivestars/prereg': ['정식 런칭 사전예약 키 비주얼', 'Launch pre-registration key visual'],
-  'nanakage/update_plan': ['1Q~2Q 업데이트 계획', 'Q1–Q2 update plan'],
-  'nanakage/mission_ui': ['미션 이벤트 UI', 'Mission event UI'],
+  'nanakage/update_plan': ['1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 일정 정리',
+                           '1Q–2Q update plan — content schedule after soft launch'],
+  'nanakage/mission_ui': ['미션 이벤트 UI — 일본 서비스 잔존 대응 이벤트',
+                          'Mission event UI — retention event for the Japan service'],
 }
 /* 사례 실행 슬라이드(7·9)와 성과 슬라이드(10·11·12)가 쓰는 채택 캡처 */
-const EXEC_SHOTS = { case2: ['lyn/before_after', 'lyn/system_ui'],
-                     case3: ['nightwalker/server_flow_proposal', 'nightwalker/server_flowchart_wire',
+const EXEC_SHOTS = { case2: ['lyn/system_ui', 'lyn/before_after'],
+                     case3: ['nightwalker/server_flowchart_wire', 'nightwalker/server_flow_proposal',
                              'nightwalker/charge_flow', 'nightwalker/charge_ui_mock'] }
-const WIDE_SHOTS = new Set(['lyn/before_after'])
+/* 위계 — 판독이 어려운 기획서·플로우 한 장을 큰 칸에 두고 나머지는 작은 칸으로 내린다(Codex R11 D6) */
+const WIDE_SHOTS = new Set(['lyn/system_ui', 'lyn/before_after', 'chaos/event_ui_plan', 'nanakage/update_plan'])
+const TALL_SHOTS = new Set(['nightwalker/server_flowchart_wire'])
+/* 세로로 긴 원본은 폭이 아니라 높이로 키워야 읽힌다 */
+const POR_SHOTS = new Set(['nanakage/mission_ui'])
+/* 원본이 작은 캡처는 표시 폭을 원본의 1.5배로 묶는다(Codex R11 D8) — px→mm는 96dpi 기준 */
+const NAT_W = { 'chaos/ingame': 500, 'fivestars/prereg': 361, 'nanakage/mission_ui': 304,
+                chaos: 550, fivestars: 600, nanakage: 574, lyn: 600 }
+const capMM = (slug) => (NAT_W[slug] ? ` style="max-width:${(NAT_W[slug] * 1.5 * 25.4 / 96).toFixed(1)}mm"` : '')
+/* 대표 지표의 정의 라벨 — KO는 수치 근거표에서 그대로 읽고, EN만 여기서 옮긴다(Codex R11 D11) */
+const KPI_NUM = { dalcom:'11→7', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
+const KPI_DEF_EN = { dalcom:'Titles in the live portfolio (11 at hire → 5 sunset + 1 new → 7)',
+                     lyn:'Revenue', chaos:'US revenue', nightwalker:'Cumulative new users in Korea',
+                     fivestars:'Revenue (previously approved for publication)',
+                     nanakage:'Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)' }
+const KPI_DEF_KO = (() => {
+  /* 근거표의 '정의' 칸을 그대로 쓴다 — 손으로 옮기면 문서와 갈라진다 */
+  const md = readFileSync('docs/handover/2026-09-08_numbers_basis_table.md', 'utf8')
+  const by = new Map()
+  for (const line of md.split('\n')) {
+    const c = line.split('|').map(s => s.trim())
+    if (c.length > 6 && /^\d+$/.test(c[1])) by.set(c[3], c[5])
+  }
+  const out = {}
+  for (const [k, n] of Object.entries(KPI_NUM)) {
+    if (!by.has(n)) fail(`수치 근거표에 '${n}'(${k}) 행이 없다`)
+    out[k] = by.get(n)
+  }
+  return out
+})()
+/* 회사 기간·직위는 경력 행에서 읽는다(Codex R11 D10) */
+const COMPANY_TOK = { dalcom:['달콤','Dalcom'], lyn:['넥슨','Nexon'], chaos:['넥슨','Nexon'],
+                      nightwalker:['원더피플','Wonderpeople'], fivestars:['스카이피플','Skypeople'],
+                      nanakage:['넵튠','Neptune'] }
 const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원더피플', 3], ['Wonderpeople', 3],
                 ['스카이피플', 4], ['Skypeople', 4], ['넵튠', 5], ['Neptune', 5]]
 /* 사례별 키 비주얼과 상세 행 분할점(개요 슬라이드가 가져가는 행 수) — 사례 1만 '결정 범위'가 있어 5행이다 */
@@ -321,34 +408,29 @@ function render(lang, d) {
   const l = L[lang]
   /* '56만+'의 '+'만 다음 줄로 떨어졌다(Codex R8-03) — 숫자가 든 토큰은 통째로 붙여 둔다 */
   const nw = (v) => esc(v).split(' ').map(w => (/\d/.test(w) ? `<span class="nw">${w}</span>` : w)).join(' ')
-  /* EN 인쇄 페이지는 site/pdf/en/ 아래라 자산 경로가 한 단계 더 올라간다 */
-  const UP = lang === 'en' ? '../../' : '../'
   const IMG = lang === 'en' ? '../img/' : 'img/'
-  const pend = `<div class="pend">${esc(l.pending)}</div>`
   const kv = rows => `<table class="kv"><colgroup><col><col></colgroup>${
     rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(pr(v))}</td></tr>`).join('')}</table>`
   const kpiFor = (company) => {
     const hit = KPI_OF.find(([k]) => company.includes(k))
     return hit ? d.works[hit[1]].kpi : ''
   }
+  /* 큰 숫자 밑에는 항목·단위를 붙인다 — 숫자만 있으면 무엇을 센 값인지 알 수 없다(Codex R11 D11) */
+  const kpiDef = (slug) => (lang === 'en' ? KPI_DEF_EN : KPI_DEF_KO)[slug]
+  const per = s => (s.match(PERIOD) || [''])[0]
+  const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
+  /* 성과 슬라이드의 참여 기간·직위 — 경력 행이 원천이다 */
+  const careerOf = (slug) => d.career.find(r => COMPANY_TOK[slug].some(tk => r.company.includes(tk)))
   /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구·키 비주얼 제목이 여기서 나온다 */
   const workOf = (meta) => d.works[(KPI_OF.find(([k]) => meta.includes(k)) || [, 0])[1]]
   const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
       <figcaption>${esc(cap)}</figcaption></figure>`
-  const tile = (slug, cap) => `<figure class="ph"><img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(cap)}</figcaption></figure>`
+  const tile = (slug, cap, cls = '') => `<figure class="ph${cls}"${capMM(slug)}>
+      <img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(cap)}</figcaption></figure>`
   /* 채택 캡처 한 칸 — 캡션은 CAPS가 원천이고, 잘라내지 않는다 */
-  const doc = (slug) => `<figure class="ph ph--doc${WIDE_SHOTS.has(slug) ? ' ph--wide' : ''}">
-      <img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(CAPS[slug][lang === 'en' ? 1 : 0])}</figcaption></figure>`
-  /* 근거 카드 1장 — 썸네일과 제목은 site/evidence/index.json이 원천이다 */
-  const evTile = (c) => {
-    const e = c.ev[0]
-    if (!e) return pend
-    const m = EV[e.href.replace(/^.*\//, '')]
-    if (!m) return pend
-    const title = lang === 'en' && m.en ? m.en.title : m.title
-    return `<figure class="ph"><img src="${UP}evidence/${esc(m.img)}" alt="">
-      <figcaption><b>${esc(title)}</b></figcaption></figure>`
-  }
+  const doc = (slug) => tile(slug, CAPS[slug][lang === 'en' ? 1 : 0],
+    (WIDE_SHOTS.has(slug) ? ' ph--wide' : '') + (TALL_SHOTS.has(slug) ? ' ph--tall' : '') +
+    (POR_SHOTS.has(slug) ? ' ph--por' : ''))
   const evLinks = (c) => `<div class="evlist"><b>${esc(l.evidence)}</b>${c.ev.map(e =>
     `<a class="go" href="${esc(e.href)}">${esc(e.title)} ↗</a>`).join('')}</div>`
   const slide = (o) => `
@@ -372,7 +454,7 @@ function render(lang, d) {
     while (ss.every(x => x[x.length - 1 - s] === ss[0][ss[0].length - 1 - s]) && s < ss[0].length - p - 1) s++
     const mids = ss.map(x => x.slice(p, x.length - s))
     return ss[0].slice(0, p) + mids.join('·') + ss[0].slice(ss[0].length - s)
-  })()
+  })() + ' ' + l.rightsNW
   const cover = `
 <section class="s cover">
   <p class="eyebrow">${esc(l.doc)}</p>
@@ -390,17 +472,28 @@ function render(lang, d) {
   <p class="rights">${esc(coverRights)}</p>
 </section>`
 
-  /* 2. Career Milestone — 상단 3구간 바 + 회사 10곳 타일(오래된 순) */
-  const per = s => (s.match(PERIOD) || [''])[0]
-  const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
+  /* 2. Career Milestone — 3구간 밴드 + 회사별 기간 막대(간트) + 회사 10곳 타일(오래된 순).
+     막대와 타일은 같은 번호를 달아 연결한다(Codex R11 D12). 기간은 경력 행이 원천이다. */
+  const rows2 = [...d.career].reverse()
+  const T0 = +PHASES[0][0], T1 = +PHASES[2][1]
+  const at = (ym) => { const [y, m] = ym.split('.').map(Number); return ((y + (m - 1) / 12) - T0) / (T1 - T0) * 100 }
+  const span = (sub) => {
+    const p = per(sub); if (!p) fail('경력 기간을 못 읽었다: ' + sub)
+    const [a, b] = p.split(/\s*[–—-]\s*/)
+    return [Math.max(0, at(a)), Math.min(100, /\d/.test(b) ? at(b) : 100)]
+  }
+  const ticks = ['2006', '2011', '2016', '2021', '2026']
   const milestone = slide({
-    eyebrow: l.milestone, who: `${PHASES[0][0]} – ${PHASES[2][1]}`,
+    eyebrow: l.milestone, who: `${PHASES[0][0]} – ${PHASES[2][1]}`, rights: l.rightsPlain,
     body: `
     <div class="ms-bar">${PHASES.map(([a, b, w], i) =>
       `<div class="ms-ph" style="flex:${w}"><b>${esc(l.phases[i])}</b><span>${a} – ${b}</span></div>`).join('')}</div>
-    <div class="ms-rail"></div>
-    <div class="ms-grid">${[...d.career].reverse().map(r => `
-      <div class="ms-c"><b>${esc(r.company)}</b>
+    <div class="gantt">${rows2.map((r, i) => { const [x0, x1] = span(r.sub)
+      return `<i class="${i % 2 ? 'on' : ''}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%">${i + 1}</i>` }).join('')}</div>
+    <div class="ms-axis">${ticks.map(y =>
+      `<span style="left:${at(y + '.1').toFixed(2)}%">${y}</span>`).join('')}</div>
+    <div class="ms-grid">${rows2.map((r, i) => `
+      <div class="ms-c"><b><em>${i + 1}</em>${esc(r.company)}</b>
         <p class="per">${nw(per(r.sub))}</p>
         <p class="rl">${esc(roleOf(r.sub))}</p>
         <p class="ti">${esc(r.titles)}</p>
@@ -409,61 +502,77 @@ function render(lang, d) {
 
   /* 3. 한 줄 요약 + 역량 4분류 */
   const summary = slide({
-    eyebrow: l.summary, who: d.brand,
+    eyebrow: l.summary, who: d.brand, rights: l.rightsPlain,
     body: `
     <h2 class="t t--sm">${esc(d.skillsTitle)}</h2>
     <p class="lede">${esc(pr(d.sub))}</p>
     <div class="cards4" style="margin-top:6mm">${d.skills.map(s => `
       <div class="sk"><h3>${esc(s.title)}</h3><p>${esc(s.note)}</p>
-        ${s.cases.length ? `<p class="cs">${s.cases.map(esc).join('<br>')}</p>` : ''}</div>`).join('')}</div>
+        ${s.cases.length ? `<p class="cs">${s.cases.map(x => esc(pr(x))).join('<br>')}</p>` : ''}</div>`).join('')}</div>
     <div class="stats">${d.stats.map(([n, k]) => `<div><b>${nw(n)}</b><span class="lb">${esc(k)}</span></div>`).join('')}</div>`,
   })
+
+  /* 권리 줄 — 나이트워커는 개발·퍼블리싱이 갈려 있어 사이트 문구에 권리자를 덧붙인다(Codex R11 D4) */
+  const rightsOf = (c) => workOf(c.dlgMeta).rights + (CASE_IMG[c.work] === 'nightwalker' ? ' ' + l.rightsNW : '')
 
   /* 4·6·8. 사례 개요 — 키 비주얼 + KPI + 앞쪽 상세 행 */
   const caseOverview = (c, i) => slide({
     cls: 'case', attr: ` data-case="${esc(c.work)}"`,
     eyebrow: `${l.caseN(i + 1)} · ${l.overview}`, who: c.dlgMeta,
     pills: `<span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span>`,
-    rights: workOf(c.dlgMeta).rights,
+    rights: rightsOf(c),
     body: `<div class="two two--l">
       ${shot(CASE_IMG[c.work], workOf(c.dlgMeta).title)}
       <div><h2 class="t case-h">${esc(c.dlgTitle)}</h2>
-        <div class="kpi"><b>${nw(kpiFor(c.dlgMeta))}</b><span class="lb">${esc(l.tlKpi)}</span></div>
+        <div class="kpi"><b>${nw(kpiFor(c.dlgMeta))}</b><span class="lb">${esc(kpiDef(CASE_IMG[c.work]))}</span></div>
         ${kv(c.rows.slice(0, CASE_SPLIT[c.work]))}</div>
     </div>`,
   })
 
-  /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 3칸 + 근거 링크 */
+  /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 + 근거 링크.
+     캡처는 큰 칸 1개 + 작은 칸으로 위계를 둔다(Codex R11 D6). 근거는 링크로만 싣는다 —
+     Notion 썸네일은 이 크기에서 읽히지 않는다(D6). */
   const caseExec = (c, i) => {
-    /* 사례 3은 채택 캡처가 4장이라 2×2로 채우고, 근거 카드는 썸네일 없이 링크만 남긴다(자리가 없다) */
-    const shots = EXEC_SHOTS[c.work]
     const tiles = c.work === 'case1'
-      ? [tile('deco', d.proto[0].title), tile('ssjproto', d.proto[1].title), evTile(c)]
-      : shots.length === 4 ? shots.map(doc) : [...shots.map(doc), evTile(c)]
+      ? [tile('deco', d.proto[0].title, ' ph--wide'), tile('ssjproto', d.proto[1].title, ' ph--wide')]
+      : EXEC_SHOTS[c.work].map(doc)
     return slide({
       cls: 'case', attr: ` data-case="${esc(c.work)}"`,
       eyebrow: `${l.caseN(i + 1)} · ${l.exec}`, who: c.dlgTitle,
       pills: `<span class="pill pill--line">${esc(c.tag)}</span>`,
-      rights: c.work === 'case1' ? d.proto[0].rights : workOf(c.dlgMeta).rights,
-      body: `<div class="two two--r">
+      rights: c.work === 'case1' ? l.rightsProto : rightsOf(c),
+      body: `<div class="two two--r${c.work === 'case3' ? ' two--r3' : ''}">
         <div>${kv(c.rows.slice(CASE_SPLIT[c.work]))}
           ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) =>
-            `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}</div>
-        <div class="ig${tiles.length === 4 ? ' ig--4' : ''}">${tiles.join('')}${evLinks(c)}</div>
+            `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}
+          ${c.work === 'case3' ? evLinks(c) : ''}</div>
+        <div class="ig${c.work === 'case3' ? ' ig--tall' : c.work === 'case1' ? ' ig--proto' : ''}">${tiles.join('')}${c.work === 'case3' ? '' : evLinks(c)}</div>
       </div>`,
     })
   }
 
-  /* 10·11·12. 성과 3장 — 큰 KPI + 업무 요약 불릿 + 키 비주얼 + 옛 포폴 캡처 자리 */
+  /* 10·11·12. 성과 3장 — 큰 KPI + 정의 라벨 + 참여 기간·직위 + 상세창의 본인 행동 표 + 근거 링크.
+     본문은 손으로 옮기지 않는다 — 상세창에서 읽은 행을 그대로 싣는다(Codex R11 D10). */
+  /* 사이트에는 있지만 인쇄물 배포가 막힌 항목이 섞여 있다 — 그 행만 빼고 나머지는 그대로 싣는다 */
+  const resRows = (slug, rows) => rows.filter(([k, v]) => {
+    const h = banHits(k + ' ' + v)
+    if (h.length) console.log(`  인쇄 제외(${lang} ${slug}): ${k} — 금지어 ${h.join(',')}`)
+    return !h.length
+  })
   const result = ([wi, slug, shots]) => {
-    const w = d.works[wi]
+    const w = d.works[wi], r = d.res[slug], cr = careerOf(slug)
+    if (!cr) fail('경력 행을 못 찾았다: ' + slug)
     const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
     return slide({
-      cls: 'res', eyebrow: `${l.results} · ${w.title}`, who: w.meta, rights: w.rights,
+      cls: 'res', eyebrow: `${l.results} · ${w.title}`, who: r.dlgMeta,
+      rights: w.rights + (slug === 'nightwalker' ? ' ' + l.rightsNW : ''),
       body: `<div class="two two--top">
-        <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(l.tlKpi)}</p>
-          <ul class="res-b">${bullets.map(b => `<li>${nw(b)}</li>`).join('')}</ul></div>
-        <div class="ig">${tile(slug, w.title)}${shots.map(doc).join('')}</div>
+        <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(kpiDef(slug))}</p>
+          <p class="res-meta"><b>${esc(l.period)}</b> ${nw(per(cr.sub))} · ${esc(roleOf(cr.sub))}</p>
+          <ul class="res-b">${bullets.map(b => `<li>${nw(b)}</li>`).join('')}</ul>
+          ${kv(resRows(slug, r.rows))}${evLinks(r)}</div>
+        <div class="ig${shots.length < 2 ? ' ig--solo' : ''}">${tile(slug, w.title)}${[...shots].sort((a, b) =>
+          WIDE_SHOTS.has(a) - WIDE_SHOTS.has(b)).map(doc).join('')}</div>
       </div>`,
     })
   }
@@ -476,7 +585,7 @@ function render(lang, d) {
       <td class="k">${nw(kpiFor(r.company))}</td></tr>`).join('')}</tbody></table>`
   const half = Math.ceil(d.career.length / 2)
   const timeline = slide({
-    eyebrow: l.timeline, who: d.careerTitle,
+    eyebrow: l.timeline, who: d.careerTitle, rights: l.rightsPlain,
     body: `<div class="two two--top">${tlRows(d.career.slice(0, half))}${tlRows(d.career.slice(half))}</div>
       <p class="foot">${esc(d.careerFoot)}</p>`,
   })
@@ -484,7 +593,7 @@ function render(lang, d) {
   /* 14. AI 프로토타입 2 + 가계부 1줄 */
   const proto = slide({
     eyebrow: l.proto, who: d.protoLede,
-    rights: d.proto[0].rights,
+    rights: l.rightsProto,
     body: `<div class="proto">${d.proto.map((p, i) => `
       <div class="pc"><img src="${IMG}${['deco', 'ssjproto'][i]}.jpg" alt="">
         <div class="in"><p class="eyebrow">${esc(p.meta)}</p><h3>${esc(p.title)}</h3>
@@ -500,7 +609,7 @@ function render(lang, d) {
   /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   const contact = slide({
-    eyebrow: l.contact, who: `${l.issued} ${TODAY}`,
+    eyebrow: l.contact, who: `${l.issued} ${TODAY}`, rights: l.rightsPlain,
     body: `<div class="end">
       <p class="name">${esc(d.brand)}</p>
       <p class="role">${esc(d.role)}</p>
