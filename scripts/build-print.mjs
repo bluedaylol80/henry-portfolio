@@ -227,7 +227,7 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .two--top{align-items:start}
 .two--l{grid-template-columns:118mm 1fr}
 .two--r{grid-template-columns:1fr 130mm}
-.two--r3{grid-template-columns:1fr 152mm}
+.two--r3{grid-template-columns:1fr 160mm}
 .kpi{border-left:1.2mm solid var(--acc);padding-left:3.5mm;margin:3mm 0 4mm}
 .kpi b{display:block;font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
 .kpi .lb{display:block;font-size:.91rem;color:var(--muted);margin-top:.8mm;line-height:1.35}
@@ -256,18 +256,22 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .ph img{display:block;width:100%;height:36mm;object-fit:contain;object-position:center;background:#fff}
 .ph--wide{grid-column:1/-1}
 .ph--wide img{height:auto}
-.ig--proto .ph:first-child img{height:54mm}
-.ig--proto .ph:nth-child(2) img{height:40mm}
+.ig--proto .ph:first-child img{height:52mm}
+.ig--proto .ph:nth-child(2) img{height:42mm}
 .res .ig .ph img{height:44mm}
 .res .ph--wide img{height:70mm}
+/* 12쪽 일정표는 가로로 넓은 원본이라 칸 폭이 곧 판독성이다(Codex R12 D6) */
+.two--res{grid-template-columns:1fr 1.3fr}
+.two--res .ig .ph--wide img{height:75mm}
+.two--res .ig .ph--por img{height:44mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
 .ig--solo .ph img{height:66mm}
 /* 사례 3 실행 — 세로로 긴 플로우차트를 큰 칸에 세우고 나머지 3장을 옆에 작게 둔다 */
-.ig--tall{grid-template-columns:62mm 1fr;grid-template-rows:repeat(3,auto)}
+.ig--tall{grid-template-columns:68mm 1fr;grid-template-rows:repeat(3,auto)}
 .ph--tall{grid-row:1/4}
-.ph--tall img{height:100mm}
+.ph--tall img{height:120mm}
 .ig--tall .ph:not(.ph--tall) img{height:28mm}
 .ph figcaption{padding:1.6mm 2.5mm;font-size:1rem;color:var(--muted);line-height:1.35;border-top:.4pt solid var(--line)}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
@@ -292,7 +296,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 /* 프로토타입 카드 */
 .proto{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:100%}
 .pc{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
-.pc img{display:block;width:100%;height:56mm;object-fit:contain;object-position:center;background:#fff;
+.pc img{display:block;width:100%;height:58mm;object-fit:contain;object-position:center;background:#fff;
   border-bottom:.4pt solid var(--line)}
 .pc .in{padding:4mm;flex:1;display:flex;flex-direction:column}
 .pc h3{font-size:1.15rem;margin-top:1mm}
@@ -316,7 +320,7 @@ const L = {
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
         phases:['운영','사업 PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
-        proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간·직위',
+        proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간',
         rightsPlain:'수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.',
         rightsNW:'나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
         rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
@@ -325,7 +329,7 @@ const L = {
         contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
         summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
         phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
-        proto:'AI prototypes', lab:'Personal product', period:'Period and role',
+        proto:'AI prototypes', lab:'Personal product', period:'Period',
         rightsPlain:'Figures follow the public résumé · Game titles are trademarks of their respective owners.',
         rightsNW:'Night Walker developed by Wonderpeople and Acestorm · published by Nexon.',
         rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
@@ -333,8 +337,8 @@ const L = {
 /* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
    ph--doc는 잘라내지 않고 통째로, ph--wide는 두 칸을 가로질러 놓는다. */
 const CAPS = {
-  'lyn/before_after': ['폴리싱 제안 반영 전(1)·후(2) 화면 — 소프트런칭 지표 기반 개선 3건 중 게임성 폴리싱',
-                       'Before (1) and after (2) the polishing proposal — one of three pre-launch fixes from soft-launch metrics'],
+  'lyn/before_after': ['변경 전(1)·후(2) — 초반 안내 대화 정리(폴리싱 3건 중 초반 동선)',
+                       'Before (1) · after (2) — early guidance dialogue trimmed (one of three polishing fixes: early flow)'],
   'lyn/system_ui': ['시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처',
                     'System UI plan — the fix laid out as a screen flow'],
   'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
@@ -371,15 +375,20 @@ const capMM = (slug) => (NAT_W[slug] ? ` style="max-width:${(NAT_W[slug] * 1.5 *
 const KPI_NUM = { dalcom:'11→7', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
 const KPI_DEF_EN = { dalcom:'Titles in the live portfolio (11 at hire → 5 sunset + 1 new → 7)',
                      lyn:'Revenue', chaos:'US revenue', nightwalker:'Cumulative new users in Korea',
-                     fivestars:'Revenue (previously approved for publication)',
+                     fivestars:'Revenue',
                      nanakage:'Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)' }
-const KPI_DEF_KO = (() => {
-  /* 근거표의 '정의' 칸을 그대로 쓴다 — 손으로 옮기면 문서와 갈라진다 */
+/* 집계 기간 — KO는 근거표에서 읽고 EN만 옮긴다. 근거표가 '미상'이면 라벨에 기간을 달지 않는다 */
+const KPI_PER_EN = { dalcom:'Oct 2024 – Jul 2026', lyn:'cumulative through 2019',
+                     chaos:'cumulative over the service period', fivestars:'first five months after launch' }
+/* 라벨에서만 떼는 괄호 주석 — 근거표에는 그대로 남는다(Codex R12 D11) */
+const KPI_DROP = [/\(기존 게시 승인분\)/g, /\s*\(previously approved for publication\)/g]
+const KPI_TBL = (() => {
+  /* 근거표의 '정의'·'기간' 칸을 그대로 쓴다 — 손으로 옮기면 문서와 갈라진다 */
   const md = readFileSync('docs/handover/2026-09-08_numbers_basis_table.md', 'utf8')
   const by = new Map()
   for (const line of md.split('\n')) {
     const c = line.split('|').map(s => s.trim())
-    if (c.length > 6 && /^\d+$/.test(c[1])) by.set(c[3], c[5])
+    if (c.length > 7 && /^\d+$/.test(c[1])) by.set(c[3], [c[5], c[6]])
   }
   const out = {}
   for (const [k, n] of Object.entries(KPI_NUM)) {
@@ -388,6 +397,12 @@ const KPI_DEF_KO = (() => {
   }
   return out
 })()
+/* 큰 숫자 밑 라벨 = '정의 · 기간' — 숫자만 두면 무엇을 언제까지 센 값인지 알 수 없다(Codex R11 D11·R12 D11) */
+const kpiLabel = (lang, slug) => {
+  const [def, per] = lang === 'en' ? [KPI_DEF_EN[slug], KPI_PER_EN[slug]] : KPI_TBL[slug]
+  const d = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).trim()
+  return per && per !== '미상' ? `${d} · ${per}` : d
+}
 /* 회사 기간·직위는 경력 행에서 읽는다(Codex R11 D10) */
 const COMPANY_TOK = { dalcom:['달콤','Dalcom'], lyn:['넥슨','Nexon'], chaos:['넥슨','Nexon'],
                       nightwalker:['원더피플','Wonderpeople'], fivestars:['스카이피플','Skypeople'],
@@ -404,6 +419,8 @@ const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
 /* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
+/* 프로젝트 기간은 상세창에서 '2019.10 ~ 2020.04'처럼 물결표로도 적힌다 */
+const PROJ_PERIOD = /\d{4}\.\d{1,2}\s*[–—~-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
 
 function render(lang, d) {
   const l = L[lang]
@@ -416,12 +433,18 @@ function render(lang, d) {
     const hit = KPI_OF.find(([k]) => company.includes(k))
     return hit ? d.works[hit[1]].kpi : ''
   }
-  /* 큰 숫자 밑에는 항목·단위를 붙인다 — 숫자만 있으면 무엇을 센 값인지 알 수 없다(Codex R11 D11) */
-  const kpiDef = (slug) => (lang === 'en' ? KPI_DEF_EN : KPI_DEF_KO)[slug]
+  const kpiDef = (slug) => kpiLabel(lang, slug)
   const per = s => (s.match(PERIOD) || [''])[0]
   const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
-  /* 성과 슬라이드의 참여 기간·직위 — 경력 행이 원천이다 */
-  const careerOf = (slug) => d.career.find(r => COMPANY_TOK[slug].some(tk => r.company.includes(tk)))
+  /* 성과 슬라이드의 참여 기간 — 회사 재직기간이 아니라 프로젝트 기간이다(Codex R12 D10).
+     성과 카드 메타와 상세창 행에서 찾고, 어디에도 없으면 그 줄을 싣지 않는다. */
+  const projPeriod = (w, r) => {
+    for (const v of [w.meta, r.dlgMeta, ...r.rows.map(([, x]) => x)]) {
+      const m = String(v).match(PROJ_PERIOD)
+      if (m) return m[0]
+    }
+    return ''
+  }
   /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구·키 비주얼 제목이 여기서 나온다 */
   const workOf = (meta) => d.works[(KPI_OF.find(([k]) => meta.includes(k)) || [, 0])[1]]
   const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
@@ -497,8 +520,7 @@ function render(lang, d) {
       <div class="ms-c"><b><em>${i + 1}</em>${esc(r.company)}</b>
         <p class="per">${nw(per(r.sub))}</p>
         <p class="rl">${esc(roleOf(r.sub))}</p>
-        <p class="ti">${esc(r.titles)}</p>
-        <p class="im">${nw(r.impact)}</p></div>`).join('')}</div>`,
+        <p class="ti">${esc(r.titles)}</p></div>`).join('')}</div>`,
   })
 
   /* 3. 한 줄 요약 + 역량 4분류 */
@@ -561,15 +583,15 @@ function render(lang, d) {
     return !h.length
   })
   const result = ([wi, slug, shots]) => {
-    const w = d.works[wi], r = d.res[slug], cr = careerOf(slug)
-    if (!cr) fail('경력 행을 못 찾았다: ' + slug)
+    const w = d.works[wi], r = d.res[slug]
+    const pp = projPeriod(w, r)
     const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
     return slide({
       cls: 'res', eyebrow: `${l.results} · ${w.title}`, who: r.dlgMeta,
       rights: w.rights + (slug === 'nightwalker' ? ' ' + l.rightsNW : ''),
-      body: `<div class="two two--top">
+      body: `<div class="two two--top${shots.includes('nanakage/update_plan') ? ' two--res' : ''}">
         <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(kpiDef(slug))}</p>
-          <p class="res-meta"><b>${esc(l.period)}</b> ${nw(per(cr.sub))} · ${esc(roleOf(cr.sub))}</p>
+          ${pp ? `<p class="res-meta"><b>${esc(l.period)}</b> ${nw(pp)}</p>` : ''}
           <ul class="res-b">${bullets.map(b => `<li>${nw(b)}</li>`).join('')}</ul>
           ${kv(resRows(slug, r.rows))}${evLinks(r)}</div>
         <div class="ig${shots.length < 2 ? ' ig--solo' : ''}">${tile(slug, w.title)}${[...shots].sort((a, b) =>

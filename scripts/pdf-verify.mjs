@@ -4,6 +4,7 @@
    금지어는 텍스트 레이어만 본다. 이미지 속 글자는 여기서 못 잡으니 캡처 자체를 갈아야 한다. */
 import puppeteer from 'puppeteer-core'
 import { BANNED as BAD } from './pdf-banned.mjs'
+/* EN 표지·연락 장의 /henry-portfolio/en/ 은 이 브랜치가 배포돼야 생기는 주소다 — 미배포 EN 경로는 링크 검사에서 허용한다(Codex R12 N1) */
 const PAGES = 15
 const LINKS_MIN = 19
 const b = await puppeteer.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:'new', args:['--no-sandbox'] })

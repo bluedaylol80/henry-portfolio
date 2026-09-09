@@ -97,7 +97,7 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .two--top{align-items:start}
 .two--l{grid-template-columns:118mm 1fr}
 .two--r{grid-template-columns:1fr 130mm}
-.two--r3{grid-template-columns:1fr 152mm}
+.two--r3{grid-template-columns:1fr 160mm}
 .kpi{border-left:1.2mm solid var(--acc);padding-left:3.5mm;margin:3mm 0 4mm}
 .kpi b{display:block;font-size:2rem;font-weight:600;letter-spacing:-.02em;line-height:1.1}
 .kpi .lb{display:block;font-size:.91rem;color:var(--muted);margin-top:.8mm;line-height:1.35}
@@ -126,18 +126,22 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .ph img{display:block;width:100%;height:36mm;object-fit:contain;object-position:center;background:#fff}
 .ph--wide{grid-column:1/-1}
 .ph--wide img{height:auto}
-.ig--proto .ph:first-child img{height:54mm}
-.ig--proto .ph:nth-child(2) img{height:40mm}
+.ig--proto .ph:first-child img{height:52mm}
+.ig--proto .ph:nth-child(2) img{height:42mm}
 .res .ig .ph img{height:44mm}
 .res .ph--wide img{height:70mm}
+/* 12쪽 일정표는 가로로 넓은 원본이라 칸 폭이 곧 판독성이다(Codex R12 D6) */
+.two--res{grid-template-columns:1fr 1.3fr}
+.two--res .ig .ph--wide img{height:75mm}
+.two--res .ig .ph--por img{height:44mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
 .ig--solo .ph img{height:66mm}
 /* 사례 3 실행 — 세로로 긴 플로우차트를 큰 칸에 세우고 나머지 3장을 옆에 작게 둔다 */
-.ig--tall{grid-template-columns:62mm 1fr;grid-template-rows:repeat(3,auto)}
+.ig--tall{grid-template-columns:68mm 1fr;grid-template-rows:repeat(3,auto)}
 .ph--tall{grid-row:1/4}
-.ph--tall img{height:100mm}
+.ph--tall img{height:120mm}
 .ig--tall .ph:not(.ph--tall) img{height:28mm}
 .ph figcaption{padding:1.6mm 2.5mm;font-size:1rem;color:var(--muted);line-height:1.35;border-top:.4pt solid var(--line)}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
@@ -162,7 +166,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 /* 프로토타입 카드 */
 .proto{display:grid;grid-template-columns:1fr 1fr;gap:7mm;height:100%}
 .pc{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
-.pc img{display:block;width:100%;height:56mm;object-fit:contain;object-position:center;background:#fff;
+.pc img{display:block;width:100%;height:58mm;object-fit:contain;object-position:center;background:#fff;
   border-bottom:.4pt solid var(--line)}
 .pc .in{padding:4mm;flex:1;display:flex;flex-direction:column}
 .pc h3{font-size:1.15rem;margin-top:1mm}
@@ -209,53 +213,43 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
       <div class="ms-c"><b><em>1</em>웹젠</b>
         <p class="per"><span class="nw">2006.04</span> – <span class="nw">2007.10</span></p>
         <p class="rl">SUN 운영팀</p>
-        <p class="ti">SUN 온라인</p>
-        <p class="im">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p></div>
+        <p class="ti">SUN 온라인</p></div>
       <div class="ms-c"><b><em>2</em>NHN Service</b>
         <p class="per"><span class="nw">2008.05</span> – <span class="nw">2011.07</span></p>
         <p class="rl">한게임운영실 파트장</p>
-        <p class="ti">Tera 웹운영 · 아틀란티카 · R2</p>
-        <p class="im">Tera 웹운영 파트 관리·FUN QA <span class="nw">4종</span> 게임성 분석, <span class="nw">아틀란티카·R2</span> 라이브 운영</p></div>
+        <p class="ti">Tera 웹운영 · 아틀란티카 · R2</p></div>
       <div class="ms-c"><b><em>3</em>소프트닉스</b>
         <p class="per"><span class="nw">2011.07</span> – <span class="nw">2015.02</span></p>
         <p class="rl">전략사업팀 사업PM</p>
-        <p class="ti">NTD · 라키온2 · 그랑에이지</p>
-        <p class="im">NTD 사내테스트 <span class="nw">2·FGI</span> <span class="nw">4·FGT</span> <span class="nw">2</span> 설계, <span class="nw">5개</span> 타이틀 유료화 분석, 남미 런칭 준비</p></div>
+        <p class="ti">NTD · 라키온2 · 그랑에이지</p></div>
       <div class="ms-c"><b><em>4</em>넷마블 블루</b>
         <p class="per"><span class="nw">2015.03</span> – <span class="nw">2015.07</span></p>
         <p class="rl">KON 스튜디오 사업PM</p>
-        <p class="ti">KON</p>
-        <p class="im">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</p></div>
+        <p class="ti">KON</p></div>
       <div class="ms-c"><b><em>5</em>넥슨 코리아</b>
         <p class="per"><span class="nw">2015.07</span> – <span class="nw">2019.10</span></p>
         <p class="rl">모바일사업실 팀장</p>
-        <p class="ti">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p>
-        <p class="im">린 매출 <span class="nw">183억·양대</span> 마켓 <span class="nw">3위</span> / 카오스크로니클 <span class="nw">98억·7위·피처드</span> / 영웅의 군단 매출 <span class="nw">5배</span></p></div>
+        <p class="ti">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p></div>
       <div class="ms-c"><b><em>6</em>넵튠 레전드</b>
         <p class="per"><span class="nw">2019.10</span> – <span class="nw">2020.04</span></p>
         <p class="rl">스튜디오 사업PM</p>
-        <p class="ti">Shadow Seven</p>
-        <p class="im">일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 <span class="nw">3.29→글로벌</span> <span class="nw">4.4</span> · <span class="nw">7개국</span> 소프트런칭</p></div>
+        <p class="ti">Shadow Seven</p></div>
       <div class="ms-c"><b><em>7</em>스카이피플</b>
         <p class="per"><span class="nw">2020.07</span> – <span class="nw">2021.02</span></p>
         <p class="rl">사업팀 팀장</p>
-        <p class="ti">Five Stars</p>
-        <p class="im">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 <span class="nw">20만·신규</span> <span class="nw">28만+·매출</span> <span class="nw">24억</span></p></div>
+        <p class="ti">Five Stars</p></div>
       <div class="ms-c"><b><em>8</em>네오위즈</b>
         <p class="per"><span class="nw">2021.02</span> – <span class="nw">2021.10</span></p>
         <p class="rl">스노우볼 스튜디오 기획 팀장</p>
-        <p class="ti">마스터 오브 나이츠</p>
-        <p class="im">신규 시스템 <span class="nw">10종·개편</span> <span class="nw">8종</span> 기획 주도, 기획팀 채용·마일스톤 관리</p></div>
+        <p class="ti">마스터 오브 나이츠</p></div>
       <div class="ms-c"><b><em>9</em>원더피플·에이스톰</b>
         <p class="per"><span class="nw">2022.02</span> – <span class="nw">2024.04</span></p>
         <p class="rl">사업팀 파트장</p>
-        <p class="ti">나이트워커, 슈퍼피플</p>
-        <p class="im">나이트워커 신규 <span class="nw">33만+·DAU</span> <span class="nw">6.3만·D+1</span> 약 <span class="nw">50%</span> / 슈퍼피플 중국 신규 <span class="nw">56만+</span></p></div>
+        <p class="ti">나이트워커, 슈퍼피플</p></div>
       <div class="ms-c"><b><em>10</em>달콤소프트</b>
         <p class="per"><span class="nw">2024.10</span> – <span class="nw">2026.07</span></p>
         <p class="rl">라이브기획팀 팀장</p>
-        <p class="ti">SuperStar 시리즈 11→7 재편 (K-pop IP)</p>
-        <p class="im"><span class="nw">11개</span> → <span class="nw">5개</span> 종료·SSWO 론칭 → <span class="nw">7개</span> 재편, GAS로 <span class="nw">7개</span> SKU 자동화 도입</p></div></div></div>
+        <p class="ti">SuperStar 시리즈 11→7 재편 (K-pop IP)</p></div></div></div>
   <p class="rights">수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.</p>
 </section>
 
@@ -289,7 +283,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
       <figure class="hero-shot"><img src="img/dalcom.jpg" alt="">
       <figcaption>멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</figcaption></figure>
       <div><h2 class="t case-h">만족도 조사 요구를 실제 출시로</h2>
-        <div class="kpi"><b><span class="nw">11→7</span></b><span class="lb">담당 타이틀 수 변화(입사11→종료5+신규1→7)</span></div>
+        <div class="kpi"><b><span class="nw">11→7</span></b><span class="lb">담당 타이틀 수 변화(입사11→종료5+신규1→7) · 2024.10~2026.07</span></div>
         <table class="kv"><colgroup><col><col></colgroup><tr><th>한 줄 요약</th><td>만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다</td></tr><tr><th>기간·역할</th><td>재직 2024.10 – 2026.07 · 라이브기획팀 팀장(라이브 디렉터) · 사건 기간 2025.11 조사 → 2026.05 출시</td></tr><tr><th>문제</th><td>2025년 11월 6개 타이틀(한·영·일) 만족도 조사에서 IP 만족도는 높았고, 예전에 있던 웹뷰 이벤트의 복귀 요구가 나왔다. 이를 이벤트 개선 과제로 다뤘다.</td></tr><tr><th>판단</th><td>개발 리소스가 제한된 상황이라, 기존 시스템으로 바로 적용할 수 있는 인게임 미니게임을 먼저 준비·적용하고, 별도 개발이 필요한 웹뷰 이벤트는 그 뒤에 확장하는 순서로 갔다.</td></tr><tr><th>결정 범위</th><td>대응 순서와 이벤트 범위(MVP)는 본인이 정했고, 개발 일정과 출시일은 개발팀·경영진 협의로 확정했다.</td></tr></table></div>
     </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다.</p>
@@ -320,7 +314,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
       <figure class="hero-shot"><img src="img/lyn.jpg" alt="">
       <figcaption>린</figcaption></figure>
       <div><h2 class="t case-h">소프트런칭 지표를 출시 전 개선으로</h2>
-        <div class="kpi"><b><span class="nw">183억</span></b><span class="lb">매출</span></div>
+        <div class="kpi"><b><span class="nw">183억</span></b><span class="lb">매출 · 2019년 누적</span></div>
         <table class="kv"><colgroup><col><col></colgroup><tr><th>한 줄 요약</th><td>3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다</td></tr><tr><th>기간·역할</th><td>넥슨 코리아 모바일사업실 팀장(재직 2015.07 – 2019.10) · 린 사업 PM 참여 2017.02 – 2019 (개발사 협업, 빌드 코디네이션)</td></tr><tr><th>문제</th><td>개발사가 만드는 빌드를 출시 조건에 맞추려면 사용자 테스트와 시장 지표를 개발 요구로 바꿔야 했다. 소프트런칭(호주·말레이시아·필리핀, 2019.01~02)에서 상품 구성 불균형, 유료 다이아 소비 침체, 초반 이탈 문제를 확인했다.</td></tr><tr><th>판단</th><td>상품 구성 · 재화 순환 · 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 사례를 벤치마킹해 방향을 잡았다.</td></tr></table></div>
     </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
@@ -337,7 +331,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
           </div>
         <div class="ig"><figure class="ph ph--wide">
       <img src="img/lyn/system_ui.jpg" alt=""><figcaption>시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처</figcaption></figure><figure class="ph ph--wide">
-      <img src="img/lyn/before_after.jpg" alt=""><figcaption>폴리싱 제안 반영 전(1)·후(2) 화면 — 소프트런칭 지표 기반 개선 3건 중 게임성 폴리싱</figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">소프트런칭 지표 기반 출시 전 개선 ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">인게임 개선 진행 ↗</a></div></div>
+      <img src="img/lyn/before_after.jpg" alt=""><figcaption>변경 전(1)·후(2) — 초반 안내 대화 정리(폴리싱 3건 중 초반 동선)</figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">소프트런칭 지표 기반 출시 전 개선 ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">인게임 개선 진행 ↗</a></div></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
 </section>
@@ -381,8 +375,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
     <div></div>
   </div>
   <div class="bd"><div class="two two--top">
-        <div><p class="res-n"><span class="nw">98억</span></p><p class="res-l">미국 매출</p>
-          <p class="res-meta"><b>참여 기간·직위</b> <span class="nw">2015.07</span> – <span class="nw">2019.10</span> · 모바일사업실 팀장</p>
+        <div><p class="res-n"><span class="nw">98억</span></p><p class="res-l">미국 매출 · 서비스 기간 누적</p>
+          
           <ul class="res-b"><li>한국 앱스토어 매출 <span class="nw">7위</span> · 구글 <span class="nw">23위.</span></li><li>미국 매출 <span class="nw">98억,</span> iOS·구글 피처드.</li><li><span class="nw">5개국</span> 소프트런칭 후 글로벌.</li></ul>
           <table class="kv"><colgroup><col><col></colgroup><tr><th>미국 성적</th><td>앱스토어 112위 · 북미 등 iOS·구글 피처드</td></tr><tr><th>소프트런칭</th><td>5개국 소프트런칭 후 글로벌</td></tr><tr><th>서비스 종료 운영</th><td>2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당</td></tr></table><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/0fcb2233c75c4b04b5317fe2ded2fec4">초반 동선 폴리싱 ↗</a><a class="go" href="https://limhenry.notion.site/508469dc0586497f8ce75618b142e29a">BM 기획 및 제안 ↗</a><a class="go" href="https://limhenry.notion.site/aa5b9015b7c044809731b0e073012101">이벤트 기획 ↗</a></div></div>
         <div class="ig"><figure class="ph" style="max-width:218.3mm">
@@ -399,8 +393,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
     <div></div>
   </div>
   <div class="bd"><div class="two two--top">
-        <div><p class="res-n"><span class="nw">24억</span></p><p class="res-l">매출(기존 게시 승인분)</p>
-          <p class="res-meta"><b>참여 기간·직위</b> <span class="nw">2020.07</span> – <span class="nw">2021.02</span> · 사업팀 팀장</p>
+        <div><p class="res-n"><span class="nw">24억</span></p><p class="res-l">매출 · 오픈 후 5개월</p>
+          
           <ul class="res-b"><li>한국 구글 매출 <span class="nw">46위</span> · 원스토어 <span class="nw">28위.</span></li><li>신규 <span class="nw">28만+,</span> DAU 피크 <span class="nw">4.4만,</span> 매출 <span class="nw">24억.</span></li></ul>
           <table class="kv"><colgroup><col><col></colgroup><tr><th>한국 성적</th><td>앱스토어 49위 · 원스토어 28위 · 사전예약 20만</td></tr><tr><th>지표</th><td>DAU 피크 4.4만 · PU 1.6% · ARPPU 16만원대</td></tr><tr><th>조직 셋업·채용</th><td>사업 · 운영 조직 셋팅 · 리크루트</td></tr><tr><th>계약·정산</th><td>OST 제작·발매 · 더빙 외주 · 마케팅 대행 컨택</td></tr><tr><th>대외 활동</th><td>쇼케이스 · OST 발매</td></tr></table><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/4c6d6bbaaee24779ba80cce602592248">미디어 쇼케이스 시나리오 구성 ↗</a><a class="go" href="https://limhenry.notion.site/b14364484326425d981697677cf386ab">초반 이탈구간 개선 ↗</a><a class="go" href="https://limhenry.notion.site/29609a7acf9046be87cdee55d11d9f30">업데이트 현황 보고 ↗</a></div></div>
         <div class="ig ig--solo"><figure class="ph" style="max-width:238.1mm">
@@ -415,9 +409,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
     <div><p class="eyebrow">성과 · Shadow Seven</p><p class="who">넵튠 레전드 · 스튜디오 — 사업PM</p></div>
     <div></div>
   </div>
-  <div class="bd"><div class="two two--top">
+  <div class="bd"><div class="two two--top two--res">
         <div><p class="res-n"><span class="nw">7개국</span></p><p class="res-l">소프트런칭 국가 수(인도네시아·홍콩·필리핀·말레이시아·싱가폴·태국·마카오)</p>
-          <p class="res-meta"><b>참여 기간·직위</b> <span class="nw">2019.10</span> – <span class="nw">2020.04</span> · 스튜디오 사업PM</p>
+          <p class="res-meta"><b>참여 기간</b> <span class="nw">2019.10</span> ~ <span class="nw">2020.04</span></p>
           <ul class="res-b"><li>일본 성적이 저조해 평점 관리 시스템을 추가했습니다.</li><li>구글 평점 일본 <span class="nw">3.29</span> → 글로벌 <span class="nw">4.4.</span></li><li><span class="nw">7개국</span> 소프트런칭.</li></ul>
           <table class="kv"><colgroup><col><col></colgroup><tr><th>담당</th><td>사업PM (2019.10 ~ 2020.04)</td></tr><tr><th>지표 → 조치 → 결과</th><td>일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29 → 글로벌 4.4</td></tr><tr><th>소프트런칭</th><td>인도네시아 · 홍콩 · 필리핀 · 말레이시아 · 싱가폴 · 태국 · 마카오 (7개국)</td></tr><tr><th>그랜드런칭</th><td>2020-02-20 한국 · 미국 · 대만 — 한국 AOS 매출 173위</td></tr></table><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2">인게임 재화/BM 개선 ↗</a><a class="go" href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f">소프트런칭 비교 분석 ↗</a><a class="go" href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f">평점 관리 시스템 추가 ↗</a></div></div>
         <div class="ig"><figure class="ph" style="max-width:227.8mm">
