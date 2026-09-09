@@ -16,7 +16,7 @@
   "title": "초반 동선 폴리싱",
   "summary": "프로젝트의 초반 동선과 이탈 구간을 분석하여 개선 요소 적용",
   "process": "사내테스트 빌드의 동선 검증 진행 → 액션에 따른 액션 Log화 → 육성 동선 정리 → 이탈 구간 개선 기획안 제안 → 개발팀 협의 통한 구현 진행 → 사내테스트를 통한 추가 검증 진행 → 개선 방향 추가 협의",
-  "period": "May 6, 2016 → July 1, 2016",
+  "period": "2016년 5월 6일 → 2016년 7월 1일",
   "tools": "Excel · PowerPoint · Tapjoy · 프로젝트의 초반 동선과 이탈 구간을 분석하여 개선 요소 적용",
   "img": "0fcb2233c75c4b04b5317fe2ded2fec4.jpg",
   "en": {
@@ -366,14 +366,14 @@
  "3d559de728048112b3c9ec7998d34e14": {
   "title": "정기 상품 정책 개편 제안",
   "summary": "판매 제한과 확률형 카드팩으로 상품 구성을 바꿔 실서비스 상점에 적용했다",
-  "process": "2025-07-22 IVE부터 개편 상품 적용 시작 → 2025-08-06 「R팩 제외 대한 의견」으로 판매 제한 방향 검토 → 2025-09 중순 5개 그룹 전환 완료 → 2026-05 정책 문서화",
+  "process": "2025-07-22 IVE부터 적용 시작 → 08-06 R팩 제외 의견 검토 → 09 중순 5개 그룹 전환 완료 → 2026-05 정책 문서화",
   "period": "July 1, 2025 → May 31, 2026",
   "tools": "notion · 판매 제한과 확률형 카드팩으로 상품 구성을 바꿔 실서비스 상점에 적용했다",
   "img": "3d559de728048112b3c9ec7998d34e14.jpg",
   "en": {
    "title": "Recurring product policy rework",
-   "summary": "Changed the lineup to a purchase cap and a probability card pack, applied in the live store",
-   "process": "Rolled out 07–09 2025 → R pack reviewed after → cap and card pack → documented 2026-05"
+   "summary": "Live store lineup switched to a purchase cap and a probability card pack",
+   "process": "Applied 2025-07-22 (IVE) → cap reviewed 08-06 → 5 groups by mid-Sep → documented 2026-05"
   }
  },
  "3d559de72804813fac33d543e20c1a0a": {
