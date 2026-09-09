@@ -15,7 +15,6 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'http://127.0.0.1:8787'
 const NOTION = 'https://limhenry.notion.site/'
-const SITE = { ko: 'https://bluedaylol80.github.io/henry-portfolio/', en: 'https://bluedaylol80.github.io/henry-portfolio/en/' }
 const HUB = NOTION + '0e48e826c73f4a7ab9c3522d7fb16ce5'
 const EV = JSON.parse(readFileSync('site/evidence/index.json', 'utf8'))
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
@@ -84,10 +83,12 @@ async function scrape(lang) {
         rights: t(c.querySelector('.card-rights')),
         shot: (getComputedStyle(c.querySelector('.card-shot')).backgroundImage.match(/url\("?(.+?)"?\)/) || [])[1] || '',
       })),
+      /* 사이트 주소는 손으로 적지 않는다 — canonical이 정본이다(Codex R8-04) */
+      canonical: document.querySelector('link[rel=canonical]').href,
       labTitle: t(document.querySelector('#lab .h2')),
       lab: (() => { const c = document.querySelector('#lab .card'); if (!c) return null
         return { meta: t(c.querySelector('.card-meta')), title: t(c.querySelector('.card-bot h3')).replace(/\s*(상세 보기|View details)\s*$/, ''),
-          summary: t(c.querySelector('.card-bot > p')) } })(),
+          summary: t(c.querySelector('.card-bot > p')), href: c.querySelector('.card-cta a').href } })(),
       stats: all('.stats-grid li', l => [t(l.querySelector('.stat-n')), t(l.querySelector('.stat-l'))]),
       legal: t(document.querySelector('.ft-legal')),
     }
@@ -163,6 +164,7 @@ tr:last-child td,tr:last-child th{border-bottom:.4pt solid var(--line)}
 .tl td{padding-right:4mm}
 .tl td.k{text-align:right;font-weight:500;padding-right:0}
 .tl .sub{display:block;color:var(--muted);font-size:.85rem;margin-top:.8mm}
+.nw{white-space:nowrap}
 .tl .impact{display:block;color:#333;font-size:.88rem;margin-top:1.2mm}
 /* 사례 */
 .case-h{font-size:1.3rem;line-height:1.35;max-width:150mm}
@@ -233,6 +235,8 @@ const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원
 
 function render(lang, d) {
   const l = L[lang]
+  /* '56만+'의 '+'만 다음 줄로 떨어졌다(Codex R8-03) — 숫자가 든 토큰은 통째로 붙여 둔다 */
+  const nw = (v) => esc(v).split(' ').map(w => (/\d/.test(w) ? `<span class="nw">${w}</span>` : w)).join(' ')
   /* EN 인쇄 페이지는 site/pdf/en/ 아래라 자산 경로가 한 단계 더 올라간다 */
   const UP = lang === 'en' ? '../../' : '../'
   /* 사례 1건 = 1쪽. 보조 사례(함께 보기)가 붙는 쪽은 그림 자리가 없어 근거 링크 줄로 대신한다(Codex R7). */
@@ -254,7 +258,7 @@ function render(lang, d) {
   ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}
   ${c.ev.length ? (c.more
     ? `<p class="foot"><b>${esc(l.evidence)}</b> ${c.ev.map(e => `<a class="go" href="${esc(e.href)}">${esc(e.title)} ↗</a>`).join(' · ')}</p>`
-    : `<div class="ev">${evFig(c)}</div>${c.ev.length > 2 ? `<p class="foot">${esc(l.evMore)} ${c.ev.length}</p>` : ''}`) : ''}
+    : `<div class="ev">${evFig(c)}</div>${c.ev.length > 2 ? `<p class="foot"><a class="go" href="${esc(d.canonical + '#cases')}">${esc(l.evMore)} ${c.ev.length} ↗</a></p>` : ''}`) : ''}
 </section>`
   const kpiFor = (company) => {
     const hit = KPI_OF.find(([k]) => company.includes(k))
@@ -267,7 +271,7 @@ function render(lang, d) {
         <h3>${esc(p.title)}</h3>
         <p>${esc(pr(p.summary))}</p>
         <div class="note">${p.note.map(([k, v]) => `<p><b>${esc(k)}</b> ${esc(pr(v))}</p>`).join('')}
-          <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(SITE[lang] + p.href)}">${esc(l.open)} ↗</a></p></div>
+          <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(d.canonical + p.href)}">${esc(l.open)} ↗</a></p></div>
         <p class="rights">${esc(p.rights)}</p>
       </div></div>`).join('')
   /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
@@ -295,7 +299,7 @@ function render(lang, d) {
   <p class="head">${d.h1.map(esc).join(' ')}</p>
   <div class="contact">
     <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
-    <p><b>${esc(l.site)}</b> <a href="${esc(SITE[lang])}">${esc(SITE[lang])}</a></p>
+    <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
     <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
   </div>
   <p class="issued">${esc(l.issued)} ${TODAY}</p>
@@ -317,8 +321,8 @@ ${d.cases.map(caseSec).join('')}
     <colgroup><col><col><col></colgroup>
     <thead><tr><th>${esc(l.tlCompany)}</th><th>${esc(l.tlPeriod)}</th><th style="text-align:right">${esc(l.tlKpi)}</th></tr></thead>
     <tbody>${d.career.map(r => `<tr><td><b>${esc(r.company)}</b><span class="sub">${esc(r.titles)}</span></td>
-      <td>${esc(r.sub)}<span class="impact">${esc(r.impact)}</span></td>
-      <td class="k">${esc(kpiFor(r.company))}</td></tr>`).join('')}</tbody>
+      <td>${esc(r.sub)}<span class="impact">${nw(r.impact)}</span></td>
+      <td class="k">${nw(kpiFor(r.company))}</td></tr>`).join('')}</tbody>
   </table>
   <p class="foot">${esc(d.careerFoot)}</p>
 </section>
@@ -327,14 +331,14 @@ ${d.cases.map(caseSec).join('')}
   <p class="eyebrow">${esc(d.protoTitle)}</p>
   <h2 class="sec-h">${esc(d.protoLede)}</h2>
   <div class="grid2">${proto}</div>
-  ${d.lab ? `<p class="foot"><b>${esc(d.lab.title)}</b> — ${esc(d.lab.summary)}</p>` : ''}
+  ${d.lab ? `<p class="foot"><b>${esc(d.lab.title)}</b> — ${esc(d.lab.summary)} <a class="go" href="${esc(d.lab.href)}">${esc(l.open)} ↗</a></p>` : ''}
 </section>
 
 <section class="contact-end">
   <p class="eyebrow">${esc(l.contact)}</p>
   <p class="contact-line"><b>${esc(d.brand)}</b>
     <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a> ·
-    <a href="${esc(SITE[lang])}">${esc(l.site)} ↗</a> ·
+    <a href="${esc(d.canonical)}">${esc(l.site)} ↗</a> ·
     <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
   <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
 </section>

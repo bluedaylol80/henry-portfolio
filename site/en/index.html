@@ -336,7 +336,7 @@ html[lang="ko"] .clock-t{order:4}
 #proto .card-wm{font-size:2.25rem}
 @media (min-width:640px){#proto .card-wm{font-size:4.25rem}}
 /* 배경 사진의 금색 선·글자가 제목·소개 뒤로 비친다 — 텍스트 블록에 불투명 바탕을 깐다(Codex R7) */
-#proto .card-bot{border-radius:var(--r-control);background:rgba(10,10,10,.82);padding:1rem}
+#proto .card-bot{border-radius:var(--r-control);background:#0a0a0a;padding:1rem}
 .card-wm--long{white-space:nowrap}
 @media (max-width:639.98px){.card-wm--long{font-size:clamp(3rem,15vw,4rem)}}
 .card-bot h3{font-size:1.5rem;font-weight:500;letter-spacing:-.01em}
@@ -424,7 +424,7 @@ html[lang="ko"] .clock-t{order:4}
 /* 체험판 안내 4줄 */
 /* 배경 사진의 글자·선이 안내 뒤로 비쳐 읽기 어려웠다(Codex R6) — 불투명 바탕을 깐다.
    항목명과 설명은 열을 맞춰 긴 문단으로 읽히지 않게 하고, 390에서는 항목명을 독립 행으로 내린다. */
-.demo-note{margin-top:1rem;border-radius:var(--r-control);background:rgba(10,10,10,.82);padding:.75rem .875rem;
+.demo-note{margin-top:1rem;border-radius:var(--r-control);background:#0a0a0a;padding:.75rem .875rem;
   display:grid;gap:.45rem .75rem;font-size:.8125rem;line-height:1.5;color:rgba(255,255,255,.78)}
 @media (min-width:640px){.demo-note{grid-template-columns:5.5rem 1fr}.demo-note p{display:contents}}
 .demo-note b{font-weight:600;color:#fff}
@@ -904,7 +904,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:180ms;--ry:32px">
         <article class="case">
           <p class="case-meta">Wonderpeople/Acestorm · Business Team — Part Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case3" aria-haspopup="dialog">Rebuilt payment and server flows to the publisher spec<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case3" aria-haspopup="dialog">Redefined payment and server flows to the publisher spec<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The China service payment and server flows had to fit Korea</dd></div>
               <div><dt>Decision</dt><dd>Redefined them against the publisher policy and API docs</dd></div>
@@ -1757,7 +1757,7 @@ const WORKS = {
        ['Result & status','Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.'],
        ['Evidence','Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)']],
     x:{ s:'Also from the same period — 2 supporting cases',
-        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup went live in the store group by group from late July to mid-September 2025 (IVE switched 2025-08-05), and after it shipped I reviewed the purchase-cap direction in the August 2025 note "R pack exclusion". It was documented in May 2026 as the weekly recurring product policy.'],
+        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.'],
            ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.']] },
     n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
        {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
