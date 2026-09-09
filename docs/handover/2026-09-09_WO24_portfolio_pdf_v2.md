@@ -39,7 +39,7 @@
 ## 4. 빌더
 - `scripts/build-print.mjs`: 가로 템플릿으로 재작성(현행 세로 CSS 폐기, 두 벌 유지 금지). 텍스트 조립 규칙·원천 일치 검사·EN 재빌드 경로는 그대로.
 - `scripts/build-pdf.mjs`: `preferCSSPageSize:true`, footer 없음, 이미지 로드 완료 대기, 정적 Pretendard 가드 유지. 산출 파일명 동일(`site/henry-lim-portfolio-ko.pdf`·`-en.pdf`).
-- 판정 스크립트 `loop/pdf-verify.mjs`: 쪽수 15·링크 주석 ≥ 현행(17/18)·금지어 0·"이미지 대기" 텍스트 0.
+- 판정 스크립트 `scripts/pdf-verify.mjs`: 쪽수 15·링크 주석 ≥ 현행(17/18)·금지어 0·"이미지 대기" 텍스트 0.
 
 ## 5. 단계(커밋 단위)
 ① 골격+표지·Career Milestone·요약·타임라인·프로토·연락(이미지가 이미 있는 슬라이드) — 이미지 대기 박스 허용

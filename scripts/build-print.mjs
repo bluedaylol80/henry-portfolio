@@ -24,8 +24,9 @@ const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
-/* 발행일은 하루 단위로 고정 — 같은 날 다시 빌드해도 결과가 흔들리지 않는다 */
-const TODAY = new Date().toISOString().slice(0, 10)
+/* 발행일은 하루 단위로 고정 — 같은 날 다시 빌드해도 결과가 흔들리지 않는다.
+   기준은 한국 시각(Asia/Seoul) — UTC로 뽑으면 아침 9시 전까지 어제 날짜가 찍힌다(WO-26) */
+const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date())
 /* 인쇄물에는 카드가 없다 — 화면 전용 안내를 링크 표현으로 바꾼다(Codex R6) */
 const PRINTIFY = [['카드를 누르면 체험판이 열립니다', '아래 링크를 열면 체험판이 열립니다'],
                   ['카드를 누르면 직접 플레이할 수 있습니다', '아래 링크를 열면 직접 플레이할 수 있습니다'],
