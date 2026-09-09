@@ -54,7 +54,9 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
 .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
 .strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.strip img{display:block;width:100%;height:44mm;object-fit:cover;object-position:center}
+/* 키 비주얼 3장은 가로세로비가 제각각이다(1.33~1.78) — cover로 자르면 달콤 아이콘 격자와
+   'Superstar Series' 글자가 잘린다. 통째로 보여주고 남는 자리는 종이색으로 채운다(WO-24 ④) */
+.strip img{display:block;width:100%;height:44mm;object-fit:contain;object-position:center;background:var(--surface)}
 .strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
 /* Career Milestone */
 .ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
@@ -108,6 +110,11 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .evlist a{display:block;margin-top:1.2mm}
 .ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
 .ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
+/* 기획서·플로우·UI 시안은 잘리면 읽을 수 없다 — 통째로 넣고 남는 자리는 흰 여백으로 둔다 */
+.ph--doc img{object-fit:contain;background:#fff}
+.ph--wide{grid-column:1/-1}
+.ph--wide img{height:auto;object-fit:contain}
+.ig--4 .ph img{height:36mm}
 .ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
 .pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
@@ -161,7 +168,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   </div>
   <p class="issued">발행일 2026-09-09</p>
   <div class="strip"><figure><img src="img/dalcom.jpg" alt=""><figcaption>멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</figcaption></figure><figure><img src="img/lyn.jpg" alt=""><figcaption>린</figcaption></figure><figure><img src="img/nightwalker.jpg" alt=""><figcaption>나이트워커</figcaption></figure></div>
-  <p class="rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다. 게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다. 게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다.</p>
+  <p class="rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트·넥슨·원더피플에 있습니다.</p>
 </section>
 
 <section class="s">
@@ -299,10 +306,12 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--r">
         <div><table class="kv"><colgroup><col><col></colgroup><tr><th>본인 행동</th><td>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품·재화·초반 동선 개선안을 정리하고 개발사와 조율했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.</td></tr><tr><th>증거</th><td>Notion 「인게임 개선 제안」 · 소프트런칭 지표보고(사업팀, 비공개) · FGT 만족도 데이터·사내테스트 결과보고(사업팀, 비공개)</td></tr></table>
           </div>
-        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt="">
+        <div class="ig"><figure class="ph ph--doc ph--wide">
+      <img src="img/lyn/before_after.jpg" alt=""><figcaption>변경 전·후 화면 비교</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/lyn/system_ui.jpg" alt=""><figcaption>시스템 UI 기획</figcaption></figure><figure class="ph"><img src="../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt="">
       <figcaption><b>소프트런칭 지표 기반 출시 전 개선</b></figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">소프트런칭 지표 기반 출시 전 개선 ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">인게임 개선 진행 ↗</a></div></div>
       </div></div>
-  
+  <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
 </section>
 
 <section class="s case" data-case="case3">
@@ -328,10 +337,13 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--r">
         <div><table class="kv"><colgroup><col><col></colgroup><tr><th>본인 행동</th><td>유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다. 런칭 후 주간 판매 현황을 분석해 상품을 제안하고 라이브 지표로 허들 개선을 제안했다.</td></tr><tr><th>결과·상태</th><td>프로젝트 실제 출시(2023-01-26 한국 런칭). 유료 재화·쿠폰 기능은 라이브 적용이 기록돼 있고, 서버 선택은 기반 작업 완료 상태로 문서화돼 있다. 프로젝트 전체 성과는 한국 서비스 신규 유저 33만+이며 본인 기여는 연동·상품·허들 제안 범위다.</td></tr><tr><th>증거</th><td>Notion 「유료재화 구매 시스템 연동」 「쿠폰 시스템 연동」 「서버 선택창 UI/플로우 기획」 「프로모션 상품 기능 추가」</td></tr></table>
           </div>
-        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt="">
-      <figcaption><b>퍼블리셔 규격 시스템 재정의</b></figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">퍼블리셔 규격 시스템 재정의 ↗</a><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">유료재화 구매 시스템 연동 ↗</a><a class="go" href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55">쿠폰 시스템 연동 ↗</a><a class="go" href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2">서버 선택창 UI/플로우 기획 ↗</a><a class="go" href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f">프로모션 상품 기능 추가 ↗</a></div></div>
+        <div class="ig ig--4"><figure class="ph ph--doc">
+      <img src="img/nightwalker/server_flow_proposal.jpg" alt=""><figcaption>서버 선택 플로우 제안</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/nightwalker/server_flowchart_wire.jpg" alt=""><figcaption>서버 선택 플로우차트·와이어프레임</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/nightwalker/charge_flow.jpg" alt=""><figcaption>보석 충전·프로모션 플로우</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/nightwalker/charge_ui_mock.jpg" alt=""><figcaption>충전 UI 시안</figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">퍼블리셔 규격 시스템 재정의 ↗</a><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">유료재화 구매 시스템 연동 ↗</a><a class="go" href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55">쿠폰 시스템 연동 ↗</a><a class="go" href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2">서버 선택창 UI/플로우 기획 ↗</a><a class="go" href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f">프로모션 상품 기능 추가 ↗</a></div></div>
       </div></div>
-  
+  <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다.</p>
 </section>
 
 <section class="s res">
@@ -342,7 +354,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">98억</span></p><p class="res-l">대표 지표</p>
           <ul class="res-b"><li>한국 앱스토어 매출 <span class="nw">7위</span> · 구글 <span class="nw">23위.</span></li><li>미국 매출 <span class="nw">98억,</span> iOS·구글 피처드.</li><li><span class="nw">5개국</span> 소프트런칭 후 글로벌.</li></ul></div>
-        <div class="ig"><figure class="ph"><img src="img/chaos.jpg" alt=""><figcaption>카오스크로니클</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="img/chaos.jpg" alt=""><figcaption>카오스크로니클</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/chaos/event_ui_plan.jpg" alt=""><figcaption>이벤트 페이지 UI 기획안</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/chaos/ingame.jpg" alt=""><figcaption>인게임 화면</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
 </section>
@@ -355,7 +369,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">24억</span></p><p class="res-l">대표 지표</p>
           <ul class="res-b"><li>한국 구글 매출 <span class="nw">46위</span> · 원스토어 <span class="nw">28위.</span></li><li>신규 <span class="nw">28만+,</span> DAU 피크 <span class="nw">4.4만,</span> 매출 <span class="nw">24억.</span></li></ul></div>
-        <div class="ig"><figure class="ph"><img src="img/fivestars.jpg" alt=""><figcaption>Five Stars</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="img/fivestars.jpg" alt=""><figcaption>Five Stars</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/fivestars/prereg.jpg" alt=""><figcaption>정식 런칭 사전예약 키 비주얼</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 스카이피플에 있습니다.</p>
 </section>
@@ -368,7 +383,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">7개국</span></p><p class="res-l">대표 지표</p>
           <ul class="res-b"><li>일본 성적이 저조해 평점 관리 시스템을 추가했습니다.</li><li>구글 평점 일본 <span class="nw">3.29</span> → 글로벌 <span class="nw">4.4.</span></li><li><span class="nw">7개국</span> 소프트런칭.</li></ul></div>
-        <div class="ig"><figure class="ph"><img src="img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/nanakage/update_plan.jpg" alt=""><figcaption>1Q~2Q 업데이트 계획</figcaption></figure><figure class="ph ph--doc">
+      <img src="img/nanakage/mission_ui.jpg" alt=""><figcaption>미션 이벤트 UI</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넵튠 레전드에 있습니다.</p>
 </section>

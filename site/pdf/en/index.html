@@ -54,7 +54,9 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
 .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
 .strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.strip img{display:block;width:100%;height:44mm;object-fit:cover;object-position:center}
+/* 키 비주얼 3장은 가로세로비가 제각각이다(1.33~1.78) — cover로 자르면 달콤 아이콘 격자와
+   'Superstar Series' 글자가 잘린다. 통째로 보여주고 남는 자리는 종이색으로 채운다(WO-24 ④) */
+.strip img{display:block;width:100%;height:44mm;object-fit:contain;object-position:center;background:var(--surface)}
 .strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
 /* Career Milestone */
 .ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
@@ -108,6 +110,11 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .evlist a{display:block;margin-top:1.2mm}
 .ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
 .ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
+/* 기획서·플로우·UI 시안은 잘리면 읽을 수 없다 — 통째로 넣고 남는 자리는 흰 여백으로 둔다 */
+.ph--doc img{object-fit:contain;background:#fff}
+.ph--wide{grid-column:1/-1}
+.ph--wide img{height:auto;object-fit:contain}
+.ig--4 .ph img{height:36mm}
 .ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
 .pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
@@ -161,7 +168,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   </div>
   <p class="issued">Issued 2026-09-09</p>
   <div class="strip"><figure><img src="../img/dalcom.jpg" alt=""><figcaption>Multi-title live operations and user-led product work</figcaption></figure><figure><img src="../img/lyn.jpg" alt=""><figcaption>Lyn</figcaption></figure><figure><img src="../img/nightwalker.jpg" alt=""><figcaption>Night Walker</figcaption></figure></div>
-  <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft. Game names and images are trademarks and copyrighted works of Nexon. Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
+  <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft·Nexon·Wonderpeople.</p>
 </section>
 
 <section class="s">
@@ -299,10 +306,12 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--r">
         <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>As business team lead I ran the FGT (2018.06–07, testers selected against 10 competing titles) and the internal test (2018.11, 3 days) and turned the results into development requests. After the soft launch I wrote up the product, currency and early-flow fixes and aligned them with the developer.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (2019 global grand launch). Three fixes landed in the grand launch build: the reworked product lineup, the trading post timing and its dedicated store, and the early flow. Project results were a peak of #3 grossing on the App Store and Google Play in Korea and ₩18.3B cumulative revenue in 2019; my contribution was test lead, build improvement coordination, and the product and currency proposals.</td></tr><tr><th>Evidence</th><td>Notion "In-game improvement proposal" · soft launch metrics report (business team, not public) · FGT satisfaction data and internal test report (business team, not public)</td></tr></table>
           </div>
-        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt="">
+        <div class="ig"><figure class="ph ph--doc ph--wide">
+      <img src="../img/lyn/before_after.jpg" alt=""><figcaption>Screens before and after the change</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/lyn/system_ui.jpg" alt=""><figcaption>System UI spec</figcaption></figure><figure class="ph"><img src="../../evidence/3d559de72804810faa75ca85ef0a25a0.jpg" alt="">
       <figcaption><b>Soft launch metrics into pre-launch fixes</b></figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Soft launch metrics into pre-launch fixes ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">In-game improvements ↗</a></div></div>
       </div></div>
-  
+  <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
 </section>
 
 <section class="s case" data-case="case3">
@@ -328,10 +337,13 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--r">
         <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>I wrote the paid-currency purchase integration design, the coupon feature definition and the server-select UI/flow design, and aligned them with the publisher and the dev team. After launch I analyzed weekly sales to propose products and used live metrics to propose fixes for player hurdles.</td></tr><tr><th>Result &amp; status</th><td>Project shipped (Korea launch 2023-01-26). Paid currency and coupons are recorded as live; server select is documented as foundation work complete. The project reached 330K+ new users in Korea; my contribution was the integration work and the product and hurdle proposals.</td></tr><tr><th>Evidence</th><td>Notion "Paid-currency purchase system integration", "Coupon system integration", "Server-select UI/flow design", "Added promotional product feature"</td></tr></table>
           </div>
-        <div class="ig"><div class="pend">이미지 대기</div><div class="pend">이미지 대기</div><figure class="ph"><img src="../../evidence/3d559de72804819f9a88c951cbc10f9a.jpg" alt="">
-      <figcaption><b>Redefining the systems to publisher spec</b></figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">Redefining the systems to publisher spec ↗</a><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">Paid-currency purchase system integration ↗</a><a class="go" href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55">Coupon system integration ↗</a><a class="go" href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2">Server-select UI/flow design ↗</a><a class="go" href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f">Added promotional product feature ↗</a></div></div>
+        <div class="ig ig--4"><figure class="ph ph--doc">
+      <img src="../img/nightwalker/server_flow_proposal.jpg" alt=""><figcaption>Server select flow proposal</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/nightwalker/server_flowchart_wire.jpg" alt=""><figcaption>Server select flowchart and wireframe</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/nightwalker/charge_flow.jpg" alt=""><figcaption>Gem purchase and promotion flow</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/nightwalker/charge_ui_mock.jpg" alt=""><figcaption>Purchase UI mockup</figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a">Redefining the systems to publisher spec ↗</a><a class="go" href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14">Paid-currency purchase system integration ↗</a><a class="go" href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55">Coupon system integration ↗</a><a class="go" href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2">Server-select UI/flow design ↗</a><a class="go" href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f">Added promotional product feature ↗</a></div></div>
       </div></div>
-  
+  <p class="rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
 </section>
 
 <section class="s res">
@@ -342,7 +354,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">₩9.8B</span></p><p class="res-l">Headline number</p>
           <ul class="res-b"><li><span class="nw">#7</span> grossing on the App Store · <span class="nw">#23</span> on Google Play (Korea).</li><li>US revenue <span class="nw">₩9.8B,</span> featured on iOS · Google Play.</li><li>Soft launch in <span class="nw">5</span> markets, then global.</li></ul></div>
-        <div class="ig"><figure class="ph"><img src="../img/chaos.jpg" alt=""><figcaption>Chaos Chronicle</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="../img/chaos.jpg" alt=""><figcaption>Chaos Chronicle</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/chaos/event_ui_plan.jpg" alt=""><figcaption>Event page UI spec</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/chaos/ingame.jpg" alt=""><figcaption>In-game screen</figcaption></figure></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
 </section>
@@ -355,7 +369,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">₩2.4B</span></p><p class="res-l">Headline number</p>
           <ul class="res-b"><li><span class="nw">#46</span> grossing on Google Play · <span class="nw">#28</span> on ONE Store (Korea).</li><li><span class="nw">280K+</span> new users, peak DAU <span class="nw">44K,</span> revenue <span class="nw">₩2.4B.</span></li></ul></div>
-        <div class="ig"><figure class="ph"><img src="../img/fivestars.jpg" alt=""><figcaption>Five Stars</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="../img/fivestars.jpg" alt=""><figcaption>Five Stars</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/fivestars/prereg.jpg" alt=""><figcaption>Launch pre-registration key visual</figcaption></figure></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Skypeople.</p>
 </section>
@@ -368,7 +383,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   <div class="bd"><div class="two two--top">
         <div><p class="res-n"><span class="nw">7</span> markets</p><p class="res-l">Headline number</p>
           <ul class="res-b"><li>Added a rating management system after weak results in Japan.</li><li>Google Play rating: Japan <span class="nw">3.29</span> → global <span class="nw">4.4.</span></li><li>Soft launch in <span class="nw">7</span> markets.</li></ul></div>
-        <div class="ig"><figure class="ph"><img src="../img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><div class="pend">이미지 대기</div></div>
+        <div class="ig"><figure class="ph"><img src="../img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/nanakage/update_plan.jpg" alt=""><figcaption>Q1–Q2 update plan</figcaption></figure><figure class="ph ph--doc">
+      <img src="../img/nanakage/mission_ui.jpg" alt=""><figcaption>Mission event UI</figcaption></figure></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Neptune Legend.</p>
 </section>

@@ -169,7 +169,9 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .cover .issued{margin-top:4mm;font-size:.82rem;color:var(--muted)}
 .strip{display:grid;grid-template-columns:repeat(3,1fr);gap:5mm;margin-top:auto}
 .strip figure{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
-.strip img{display:block;width:100%;height:44mm;object-fit:cover;object-position:center}
+/* 키 비주얼 3장은 가로세로비가 제각각이다(1.33~1.78) — cover로 자르면 달콤 아이콘 격자와
+   'Superstar Series' 글자가 잘린다. 통째로 보여주고 남는 자리는 종이색으로 채운다(WO-24 ④) */
+.strip img{display:block;width:100%;height:44mm;object-fit:contain;object-position:center;background:var(--surface)}
 .strip figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted)}
 /* Career Milestone */
 .ms-bar{display:flex;gap:2mm;margin-bottom:6mm}
@@ -360,7 +362,17 @@ function render(lang, d) {
 </section>`
 
   /* 1. 표지 */
-  const coverRights = [...new Set([d.works[0].rights, d.works[1].rights, d.works[3].rights])].join(' ')
+  /* 세 회사 문구를 이어 붙이면 같은 문장이 세 번 반복돼 한 줄로 뭉갠 것처럼 읽혔다(WO-24 ④).
+     문안을 손으로 새로 쓰지 않고, 세 문장의 공통 앞뒤를 잘라 회사 이름만 묶는다. */
+  const coverRights = (() => {
+    const ss = [...new Set([d.works[0].rights, d.works[1].rights, d.works[3].rights])]
+    if (ss.length < 2) return ss.join(' ')
+    let p = 0, s = 0
+    while (ss.every(x => x[p] === ss[0][p]) && p < ss[0].length - 1) p++
+    while (ss.every(x => x[x.length - 1 - s] === ss[0][ss[0].length - 1 - s]) && s < ss[0].length - p - 1) s++
+    const mids = ss.map(x => x.slice(p, x.length - s))
+    return ss[0].slice(0, p) + mids.join('·') + ss[0].slice(ss[0].length - s)
+  })()
   const cover = `
 <section class="s cover">
   <p class="eyebrow">${esc(l.doc)}</p>
