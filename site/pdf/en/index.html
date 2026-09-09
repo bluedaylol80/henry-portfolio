@@ -114,6 +114,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .more h4{font-size:.91rem;color:var(--muted);margin-bottom:1.2mm}
 .more dt{font-size:.94rem;font-weight:600;margin-top:1.4mm}
 .more dd{font-size:.91rem;color:#333;line-height:1.42}
+.moreref{margin-top:1.4mm;font-size:.94rem}
 /* 이미지 그리드 */
 .ig{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-content:start}
 .evlist{font-size:.91rem;line-height:1.45;margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
@@ -134,6 +135,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .two--res{grid-template-columns:1fr 1.3fr}
 .two--res .ig .ph--wide img{height:75mm}
 .two--res .ig .ph--por img{height:44mm}
+/* EN 캡션이 한 줄 더 길어 12쪽이 넘친다 — 일정표는 그대로 두고 작은 세로 캡처에서 뺀다(Codex R13) */
+html[lang=en] .two--res .ig .ph--por img{height:39mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
@@ -159,6 +162,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .tl thead th{border-top:0;font-size:.91rem;letter-spacing:.03em;color:var(--muted);font-weight:500}
 .tl col:nth-child(1){width:32mm}
 .tl col:nth-child(3){width:19mm}
+/* EN은 회사명·프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
+html[lang=en] .tl col:nth-child(1){width:41mm}
+html[lang=en] .tl col:nth-child(3){width:16mm}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
 .tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}
@@ -296,7 +302,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
   </div>
   <div class="bd"><div class="two two--r">
         <div><table class="kv"><colgroup><col><col></colgroup><tr><th>What I did</th><td>Minigames v1 and v2 rolled out title by title (v1 2025-12, v2 2026-01). For the decoration event timed to a new group launch I wrote the brief myself and built a working AI prototype for the pre-development review, then set the scope down to core features to fit the dev schedule. After that I built the SuperStar JYP Nation 10th anniversary webview event prototype.</td></tr><tr><th>Deferred</th><td>Collection, display and community improvements from the same survey went to the H1 2026 direction proposal. For the decoration event, deck expansion, gacha and grooming details were deferred and only the core shipped.</td></tr><tr><th>Result &amp; status</th><td>Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.</td></tr><tr><th>Evidence</th><td>Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)</td></tr></table>
-          <div class="more"><h4>Also from the same period — 2 supporting cases</h4><dl><dt>Recurring product policy rework (KO)</dt><dd>A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.</dd><dt>Restructuring with design, QA and CS under one lead (KO)</dt><dd>While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.</dd></dl></div>
+          <div class="more"><h4>Also from the same period — 2 supporting cases</h4><p class="moreref"><a class="go" href="https://bluedaylol80.github.io/henry-portfolio/en/">See the site detail for the full text ↗</a></p></div>
           </div>
         <div class="ig ig--proto"><figure class="ph ph--wide">
       <img src="../img/deco.jpg" alt=""><figcaption>Decoration event design &amp; wireframe</figcaption></figure><figure class="ph ph--wide">
@@ -331,7 +337,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
           </div>
         <div class="ig"><figure class="ph ph--wide">
       <img src="../img/lyn/system_ui.jpg" alt=""><figcaption>System UI plan — the fix laid out as a screen flow</figcaption></figure><figure class="ph ph--wide">
-      <img src="../img/lyn/before_after.jpg" alt=""><figcaption>Before (1) · after (2) — early guidance dialogue trimmed (one of three polishing fixes: early flow)</figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Soft launch metrics into pre-launch fixes ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">In-game improvements ↗</a></div></div>
+      <img src="../img/lyn/before_after.jpg" alt=""><figcaption>Before (1) · after (2) — early guidance dialogue box and portrait layout reworked (one of three polishing fixes: early flow)</figcaption></figure><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">Soft launch metrics into pre-launch fixes ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">In-game improvements ↗</a></div></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
 </section>
@@ -382,7 +388,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
         <div class="ig"><figure class="ph" style="max-width:218.3mm">
       <img src="../img/chaos.jpg" alt=""><figcaption>Chaos Chronicle</figcaption></figure><figure class="ph" style="max-width:198.4mm">
       <img src="../img/chaos/ingame.jpg" alt=""><figcaption>In-game battle screen</figcaption></figure><figure class="ph ph--wide">
-      <img src="../img/chaos/event_ui_plan.jpg" alt=""><figcaption>Event page UI plan — live event mission structure</figcaption></figure></div>
+      <img src="../img/chaos/event_ui_plan.jpg" alt=""><figcaption>Event page UI plan — I designed the mission structure and reward placement for the live event</figcaption></figure></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Nexon.</p>
 </section>
@@ -416,8 +422,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
           <table class="kv"><colgroup><col><col></colgroup><tr><th>Role</th><td>Business PM (2019.10 – 2020.04)</td></tr><tr><th>Metrics → action → result</th><td>Weak Japan performance → added rating management → Google Play rating 3.29 in Japan → 4.4 global</td></tr><tr><th>Soft launch</th><td>Indonesia · Hong Kong · the Philippines · Malaysia · Singapore · Thailand · Macau (7 markets)</td></tr><tr><th>Grand launch</th><td>2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea</td></tr></table><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2">In-game currency/BM improvements ↗</a><a class="go" href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f">Soft launch comparison ↗</a><a class="go" href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f">Added rating management system ↗</a></div></div>
         <div class="ig"><figure class="ph" style="max-width:227.8mm">
       <img src="../img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><figure class="ph ph--por" style="max-width:120.6mm">
-      <img src="../img/nanakage/mission_ui.jpg" alt=""><figcaption>Mission event UI — retention event for the Japan service</figcaption></figure><figure class="ph ph--wide">
-      <img src="../img/nanakage/update_plan.jpg" alt=""><figcaption>1Q–2Q update plan — content schedule after soft launch</figcaption></figure></div>
+      <img src="../img/nanakage/mission_ui.jpg" alt=""><figcaption>Mission event UI — the mission event I proposed for Japan retention</figcaption></figure><figure class="ph ph--wide">
+      <img src="../img/nanakage/update_plan.jpg" alt=""><figcaption>1Q–2Q update plan — the content order I set after soft launch, including the rating-management system</figcaption></figure></div>
       </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Neptune Legend.</p>
 </section>

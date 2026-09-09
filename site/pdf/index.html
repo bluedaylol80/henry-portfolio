@@ -114,6 +114,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .more h4{font-size:.91rem;color:var(--muted);margin-bottom:1.2mm}
 .more dt{font-size:.94rem;font-weight:600;margin-top:1.4mm}
 .more dd{font-size:.91rem;color:#333;line-height:1.42}
+.moreref{margin-top:1.4mm;font-size:.94rem}
 /* 이미지 그리드 */
 .ig{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-content:start}
 .evlist{font-size:.91rem;line-height:1.45;margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
@@ -134,6 +135,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .two--res{grid-template-columns:1fr 1.3fr}
 .two--res .ig .ph--wide img{height:75mm}
 .two--res .ig .ph--por img{height:44mm}
+/* EN 캡션이 한 줄 더 길어 12쪽이 넘친다 — 일정표는 그대로 두고 작은 세로 캡처에서 뺀다(Codex R13) */
+html[lang=en] .two--res .ig .ph--por img{height:39mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
@@ -159,6 +162,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .tl thead th{border-top:0;font-size:.91rem;letter-spacing:.03em;color:var(--muted);font-weight:500}
 .tl col:nth-child(1){width:32mm}
 .tl col:nth-child(3){width:19mm}
+/* EN은 회사명·프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
+html[lang=en] .tl col:nth-child(1){width:41mm}
+html[lang=en] .tl col:nth-child(3){width:16mm}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
 .tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}
@@ -331,7 +337,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
           </div>
         <div class="ig"><figure class="ph ph--wide">
       <img src="img/lyn/system_ui.jpg" alt=""><figcaption>시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처</figcaption></figure><figure class="ph ph--wide">
-      <img src="img/lyn/before_after.jpg" alt=""><figcaption>변경 전(1)·후(2) — 초반 안내 대화 정리(폴리싱 3건 중 초반 동선)</figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">소프트런칭 지표 기반 출시 전 개선 ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">인게임 개선 진행 ↗</a></div></div>
+      <img src="img/lyn/before_after.jpg" alt=""><figcaption>변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)</figcaption></figure><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0">소프트런칭 지표 기반 출시 전 개선 ↗</a><a class="go" href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7">인게임 개선 진행 ↗</a></div></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
 </section>
@@ -382,7 +388,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
         <div class="ig"><figure class="ph" style="max-width:218.3mm">
       <img src="img/chaos.jpg" alt=""><figcaption>카오스크로니클</figcaption></figure><figure class="ph" style="max-width:198.4mm">
       <img src="img/chaos/ingame.jpg" alt=""><figcaption>인게임 전투 화면</figcaption></figure><figure class="ph ph--wide">
-      <img src="img/chaos/event_ui_plan.jpg" alt=""><figcaption>이벤트 페이지 UI 기획안 — 라이브 이벤트 미션 구조</figcaption></figure></div>
+      <img src="img/chaos/event_ui_plan.jpg" alt=""><figcaption>이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
 </section>
@@ -416,8 +422,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
           <table class="kv"><colgroup><col><col></colgroup><tr><th>담당</th><td>사업PM (2019.10 ~ 2020.04)</td></tr><tr><th>지표 → 조치 → 결과</th><td>일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29 → 글로벌 4.4</td></tr><tr><th>소프트런칭</th><td>인도네시아 · 홍콩 · 필리핀 · 말레이시아 · 싱가폴 · 태국 · 마카오 (7개국)</td></tr><tr><th>그랜드런칭</th><td>2020-02-20 한국 · 미국 · 대만 — 한국 AOS 매출 173위</td></tr></table><div class="evlist"><b>근거</b><a class="go" href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2">인게임 재화/BM 개선 ↗</a><a class="go" href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f">소프트런칭 비교 분석 ↗</a><a class="go" href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f">평점 관리 시스템 추가 ↗</a></div></div>
         <div class="ig"><figure class="ph" style="max-width:227.8mm">
       <img src="img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><figure class="ph ph--por" style="max-width:120.6mm">
-      <img src="img/nanakage/mission_ui.jpg" alt=""><figcaption>미션 이벤트 UI — 일본 서비스 잔존 대응 이벤트</figcaption></figure><figure class="ph ph--wide">
-      <img src="img/nanakage/update_plan.jpg" alt=""><figcaption>1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 일정 정리</figcaption></figure></div>
+      <img src="img/nanakage/mission_ui.jpg" alt=""><figcaption>미션 이벤트 UI — 일본 서비스 잔존 대응으로 제안한 미션 이벤트</figcaption></figure><figure class="ph ph--wide">
+      <img src="img/nanakage/update_plan.jpg" alt=""><figcaption>1Q~2Q 업데이트 계획 — 소프트런칭 뒤 평점 관리 시스템을 포함해 콘텐츠 순서를 정리한 계획</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넵튠 레전드에 있습니다.</p>
 </section>

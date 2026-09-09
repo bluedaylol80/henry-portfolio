@@ -47,6 +47,32 @@ const SHOTS = [
         })
       })
       await sleep(300)
+      /* 밝은 카드 위의 필터 칩 글자가 흰색 계열이라 인쇄 축소에서 배경에 묻힌다(Codex R13).
+         데모 페이지는 그대로 두고, 캡처 직전 화면에서만 글자색을 어둡게 올린다. */
+      await page.evaluate(() => {
+        /* 미리보기 칸은 3:4로 잡혀 세로 절반이 빈자리다 — 그만큼 폰 프레임이 길어지고,
+           인쇄 칸은 높이가 고정이라 화면 전체가 작게 들어간다. 빈자리를 걷어내면
+           같은 칸에서 필터 칩이 크게 실린다(Codex R13). */
+        for (const el of document.querySelectorAll('#screen-deco .preview-state')) {
+          el.style.aspectRatio = 'auto'
+          el.style.height = '260px'
+        }
+        const num = (c) => (c.match(/[\d.]+/g) || []).map(Number)
+        for (const el of document.querySelectorAll('#screen-deco .card, #screen-deco .card *')) {
+          const cs = getComputedStyle(el)
+          const [r, g, b, a = 1] = num(cs.color)
+          if (r === undefined) continue
+          const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+          if (lum > 0.6 || a < 0.75) el.style.color = '#1e293b'
+          if (Number(cs.opacity) < 0.85) el.style.opacity = '0.92'
+          const bg = num(cs.backgroundColor)
+          if (bg.length === 4 && bg[0] > 200 && bg[1] > 200 && bg[2] > 200 && bg[3] > 0 && bg[3] < 0.4) {
+            el.style.background = 'rgba(15,23,42,0.07)'
+            el.style.borderColor = 'rgba(15,23,42,0.32)'
+          }
+        }
+      })
+      await sleep(300)
     } },
   { name: 'ssjproto', url: '/demo/ssjproto.html', clip: '.phone-frame', prep: async () => {} },
 ]

@@ -244,6 +244,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .more h4{font-size:.91rem;color:var(--muted);margin-bottom:1.2mm}
 .more dt{font-size:.94rem;font-weight:600;margin-top:1.4mm}
 .more dd{font-size:.91rem;color:#333;line-height:1.42}
+.moreref{margin-top:1.4mm;font-size:.94rem}
 /* 이미지 그리드 */
 .ig{display:grid;grid-template-columns:1fr 1fr;gap:3.5mm;align-content:start}
 .evlist{font-size:.91rem;line-height:1.45;margin-top:3.5mm;border-top:.4pt solid var(--line);padding-top:2.5mm}
@@ -264,6 +265,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .two--res{grid-template-columns:1fr 1.3fr}
 .two--res .ig .ph--wide img{height:75mm}
 .two--res .ig .ph--por img{height:44mm}
+/* EN 캡션이 한 줄 더 길어 12쪽이 넘친다 — 일정표는 그대로 두고 작은 세로 캡처에서 뺀다(Codex R13) */
+html[lang=en] .two--res .ig .ph--por img{height:39mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
@@ -289,6 +292,9 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .tl thead th{border-top:0;font-size:.91rem;letter-spacing:.03em;color:var(--muted);font-weight:500}
 .tl col:nth-child(1){width:32mm}
 .tl col:nth-child(3){width:19mm}
+/* EN은 회사명·프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
+html[lang=en] .tl col:nth-child(1){width:41mm}
+html[lang=en] .tl col:nth-child(3){width:16mm}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
 .tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}
@@ -330,6 +336,8 @@ const L = {
         summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
         phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
         proto:'AI prototypes', lab:'Personal product', period:'Period',
+        /* EN 5쪽 보조 사례는 제목과 근거 링크만 싣는다 — 본문은 사이트에서 읽는다(Codex R13) */
+        moreRef:'See the site detail for the full text',
         rightsPlain:'Figures follow the public résumé · Game titles are trademarks of their respective owners.',
         rightsNW:'Night Walker developed by Wonderpeople and Acestorm · published by Nexon.',
         rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
@@ -337,8 +345,8 @@ const L = {
 /* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
    ph--doc는 잘라내지 않고 통째로, ph--wide는 두 칸을 가로질러 놓는다. */
 const CAPS = {
-  'lyn/before_after': ['변경 전(1)·후(2) — 초반 안내 대화 정리(폴리싱 3건 중 초반 동선)',
-                       'Before (1) · after (2) — early guidance dialogue trimmed (one of three polishing fixes: early flow)'],
+  'lyn/before_after': ['변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)',
+                       'Before (1) · after (2) — early guidance dialogue box and portrait layout reworked (one of three polishing fixes: early flow)'],
   'lyn/system_ui': ['시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처',
                     'System UI plan — the fix laid out as a screen flow'],
   'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
@@ -349,14 +357,14 @@ const CAPS = {
                               "Gem top-up and promotion flow — item grant flow aligned to the publisher's billing policy"],
   'nightwalker/charge_ui_mock': ['충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
                                  'Top-up UI mock — showing promotion benefits inside the top-up window'],
-  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안 — 라이브 이벤트 미션 구조',
-                          'Event page UI plan — live event mission structure'],
+  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용',
+                          'Event page UI plan — I designed the mission structure and reward placement for the live event'],
   'chaos/ingame': ['인게임 전투 화면', 'In-game battle screen'],
   'fivestars/prereg': ['정식 런칭 사전예약 키 비주얼', 'Launch pre-registration key visual'],
-  'nanakage/update_plan': ['1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 일정 정리',
-                           '1Q–2Q update plan — content schedule after soft launch'],
-  'nanakage/mission_ui': ['미션 이벤트 UI — 일본 서비스 잔존 대응 이벤트',
-                          'Mission event UI — retention event for the Japan service'],
+  'nanakage/update_plan': ['1Q~2Q 업데이트 계획 — 소프트런칭 뒤 평점 관리 시스템을 포함해 콘텐츠 순서를 정리한 계획',
+                           '1Q–2Q update plan — the content order I set after soft launch, including the rating-management system'],
+  'nanakage/mission_ui': ['미션 이벤트 UI — 일본 서비스 잔존 대응으로 제안한 미션 이벤트',
+                          'Mission event UI — the mission event I proposed for Japan retention'],
 }
 /* 사례 실행 슬라이드(7·9)와 성과 슬라이드(10·11·12)가 쓰는 채택 캡처 */
 const EXEC_SHOTS = { case2: ['lyn/system_ui', 'lyn/before_after'],
@@ -566,8 +574,10 @@ function render(lang, d) {
       rights: c.work === 'case1' ? l.rightsProto : rightsOf(c),
       body: `<div class="two two--r${c.work === 'case3' ? ' two--r3' : ''}">
         <div>${kv(c.rows.slice(CASE_SPLIT[c.work]))}
-          ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) =>
-            `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}
+          ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4>${
+            lang === 'en' && c.work === 'case1'
+              ? `<p class="moreref"><a class="go" href="${esc(d.canonical)}">${esc(l.moreRef)} ↗</a></p>`
+              : `<dl>${c.more.rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`}</div>` : ''}
           ${c.work === 'case3' ? evLinks(c) : ''}</div>
         <div class="ig${c.work === 'case3' ? ' ig--tall' : c.work === 'case1' ? ' ig--proto' : ''}">${tiles.join('')}${c.work === 'case3' ? '' : evLinks(c)}</div>
       </div>`,
