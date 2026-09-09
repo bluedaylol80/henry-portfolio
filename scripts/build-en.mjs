@@ -183,7 +183,7 @@ for (const [line, times] of [["h.textContent = '주요 사례 (Notion)';", 1],
 
 /* ---------- 4. 상대 경로 → ../ (en/ 하위로 한 단계 들어간다) ---------- */
 for (const attr of ['href="', 'src="', 'content="']) {
-  for (const p of ['works/', 'media/', 'demo/', 'evidence/', 'og.png', 'favicon']) {
+  for (const p of ['works/', 'media/', 'demo/', 'evidence/', 'deck/', 'og.png', 'favicon']) {
     html = html.split(attr + p).join(attr + '../' + p)
   }
 }
