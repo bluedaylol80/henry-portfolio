@@ -223,6 +223,11 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .evlist a{display:block;margin-top:1.2mm}
 .ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:var(--surface)}
 .ph img{display:block;width:100%;height:40mm;object-fit:cover;object-position:top}
+/* 기획서·플로우·UI 시안은 잘리면 읽을 수 없다 — 통째로 넣고 남는 자리는 흰 여백으로 둔다 */
+.ph--doc img{object-fit:contain;background:#fff}
+.ph--wide{grid-column:1/-1}
+.ph--wide img{height:auto;object-fit:contain}
+.ig--4 .ph img{height:36mm}
 .ph figcaption{padding:1.8mm 2.5mm;font-size:.75rem;color:var(--muted);line-height:1.4}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
 .pend{border:.5pt dashed #bdbcb9;border-radius:2mm;background:var(--surface);color:#8d8d8d;
@@ -277,13 +282,35 @@ const L = {
         phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
         pending:'이미지 대기', proto:'AI prototypes', lab:'Personal product' },
 }
+/* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
+   ph--doc는 잘라내지 않고 통째로, ph--wide는 두 칸을 가로질러 놓는다. */
+const CAPS = {
+  'lyn/before_after': ['변경 전·후 화면 비교', 'Screens before and after the change'],
+  'lyn/system_ui': ['시스템 UI 기획', 'System UI spec'],
+  'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안', 'Server select flow proposal'],
+  'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트·와이어프레임', 'Server select flowchart and wireframe'],
+  'nightwalker/charge_flow': ['보석 충전·프로모션 플로우', 'Gem purchase and promotion flow'],
+  'nightwalker/charge_ui_mock': ['충전 UI 시안', 'Purchase UI mockup'],
+  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안', 'Event page UI spec'],
+  'chaos/ingame': ['인게임 화면', 'In-game screen'],
+  'fivestars/prereg': ['정식 런칭 사전예약 키 비주얼', 'Launch pre-registration key visual'],
+  'nanakage/update_plan': ['1Q~2Q 업데이트 계획', 'Q1–Q2 update plan'],
+  'nanakage/mission_ui': ['미션 이벤트 UI', 'Mission event UI'],
+}
+/* 사례 실행 슬라이드(7·9)와 성과 슬라이드(10·11·12)가 쓰는 채택 캡처 */
+const EXEC_SHOTS = { case2: ['lyn/before_after', 'lyn/system_ui'],
+                     case3: ['nightwalker/server_flow_proposal', 'nightwalker/server_flowchart_wire',
+                             'nightwalker/charge_flow', 'nightwalker/charge_ui_mock'] }
+const WIDE_SHOTS = new Set(['lyn/before_after'])
 const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원더피플', 3], ['Wonderpeople', 3],
                 ['스카이피플', 4], ['Skypeople', 4], ['넵튠', 5], ['Neptune', 5]]
 /* 사례별 키 비주얼과 상세 행 분할점(개요 슬라이드가 가져가는 행 수) — 사례 1만 '결정 범위'가 있어 5행이다 */
 const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
 const CASE_SPLIT = { case1: 5, case2: 4, case3: 4 }
 /* 성과 슬라이드 3장이 쓰는 #works 인덱스와 키 비주얼 */
-const RESULTS = [[2, 'chaos'], [4, 'fivestars'], [5, 'nanakage']]
+const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
+                 [4, 'fivestars', ['fivestars/prereg']],
+                 [5, 'nanakage', ['nanakage/update_plan', 'nanakage/mission_ui']]]
 /* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
@@ -302,9 +329,14 @@ function render(lang, d) {
     const hit = KPI_OF.find(([k]) => company.includes(k))
     return hit ? d.works[hit[1]].kpi : ''
   }
+  /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구·키 비주얼 제목이 여기서 나온다 */
+  const workOf = (meta) => d.works[(KPI_OF.find(([k]) => meta.includes(k)) || [, 0])[1]]
   const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
       <figcaption>${esc(cap)}</figcaption></figure>`
   const tile = (slug, cap) => `<figure class="ph"><img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(cap)}</figcaption></figure>`
+  /* 채택 캡처 한 칸 — 캡션은 CAPS가 원천이고, 잘라내지 않는다 */
+  const doc = (slug) => `<figure class="ph ph--doc${WIDE_SHOTS.has(slug) ? ' ph--wide' : ''}">
+      <img src="${IMG}${slug}.jpg" alt=""><figcaption>${esc(CAPS[slug][lang === 'en' ? 1 : 0])}</figcaption></figure>`
   /* 근거 카드 1장 — 썸네일과 제목은 site/evidence/index.json이 원천이다 */
   const evTile = (c) => {
     const e = c.ev[0]
@@ -380,9 +412,9 @@ function render(lang, d) {
     cls: 'case', attr: ` data-case="${esc(c.work)}"`,
     eyebrow: `${l.caseN(i + 1)} · ${l.overview}`, who: c.dlgMeta,
     pills: `<span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span>`,
-    rights: d.works[(KPI_OF.find(([k]) => c.dlgMeta.includes(k)) || [, 0])[1]].rights,
+    rights: workOf(c.dlgMeta).rights,
     body: `<div class="two two--l">
-      ${shot(CASE_IMG[c.work], d.works[(KPI_OF.find(([k]) => c.dlgMeta.includes(k)) || [, 0])[1]].title)}
+      ${shot(CASE_IMG[c.work], workOf(c.dlgMeta).title)}
       <div><h2 class="t case-h">${esc(c.dlgTitle)}</h2>
         <div class="kpi"><b>${nw(kpiFor(c.dlgMeta))}</b><span class="lb">${esc(l.tlKpi)}</span></div>
         ${kv(c.rows.slice(0, CASE_SPLIT[c.work]))}</div>
@@ -391,25 +423,27 @@ function render(lang, d) {
 
   /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 3칸 + 근거 링크 */
   const caseExec = (c, i) => {
+    /* 사례 3은 채택 캡처가 4장이라 2×2로 채우고, 근거 카드는 썸네일 없이 링크만 남긴다(자리가 없다) */
+    const shots = EXEC_SHOTS[c.work]
     const tiles = c.work === 'case1'
       ? [tile('deco', d.proto[0].title), tile('ssjproto', d.proto[1].title), evTile(c)]
-      : [pend, pend, evTile(c)]
+      : shots.length === 4 ? shots.map(doc) : [...shots.map(doc), evTile(c)]
     return slide({
       cls: 'case', attr: ` data-case="${esc(c.work)}"`,
       eyebrow: `${l.caseN(i + 1)} · ${l.exec}`, who: c.dlgTitle,
       pills: `<span class="pill pill--line">${esc(c.tag)}</span>`,
-      rights: c.work === 'case1' ? d.proto[0].rights : '',
+      rights: c.work === 'case1' ? d.proto[0].rights : workOf(c.dlgMeta).rights,
       body: `<div class="two two--r">
         <div>${kv(c.rows.slice(CASE_SPLIT[c.work]))}
           ${c.more ? `<div class="more"><h4>${esc(c.more.sum)}</h4><dl>${c.more.rows.map(([k, v]) =>
             `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl></div>` : ''}</div>
-        <div class="ig">${tiles.join('')}${evLinks(c)}</div>
+        <div class="ig${tiles.length === 4 ? ' ig--4' : ''}">${tiles.join('')}${evLinks(c)}</div>
       </div>`,
     })
   }
 
   /* 10·11·12. 성과 3장 — 큰 KPI + 업무 요약 불릿 + 키 비주얼 + 옛 포폴 캡처 자리 */
-  const result = ([wi, slug]) => {
+  const result = ([wi, slug, shots]) => {
     const w = d.works[wi]
     const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
     return slide({
@@ -417,7 +451,7 @@ function render(lang, d) {
       body: `<div class="two two--top">
         <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(l.tlKpi)}</p>
           <ul class="res-b">${bullets.map(b => `<li>${nw(b)}</li>`).join('')}</ul></div>
-        <div class="ig">${tile(slug, w.title)}${pend}</div>
+        <div class="ig">${tile(slug, w.title)}${shots.map(doc).join('')}</div>
       </div>`,
     })
   }
