@@ -391,7 +391,9 @@ function render(lang, d) {
 
   /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 3칸 + 근거 링크 */
   const caseExec = (c, i) => {
-    const tiles = [pend, pend, evTile(c)]
+    const tiles = c.work === 'case1'
+      ? [tile('deco', d.proto[0].title), tile('ssjproto', d.proto[1].title), evTile(c)]
+      : [pend, pend, evTile(c)]
     return slide({
       cls: 'case', attr: ` data-case="${esc(c.work)}"`,
       eyebrow: `${l.caseN(i + 1)} · ${l.exec}`, who: c.dlgTitle,
