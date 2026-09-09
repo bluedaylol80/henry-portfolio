@@ -327,7 +327,7 @@ const L = {
         phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
         proto:'AI prototypes', lab:'Personal product', period:'Period and role',
         rightsPlain:'Figures follow the public résumé · Game titles are trademarks of their respective owners.',
-        rightsNW:'Night Walker developed by Wonderpeople and Acetom · published by Nexon.',
+        rightsNW:'Night Walker developed by Wonderpeople and Acestorm · published by Nexon.',
         rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
 }
 /* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
