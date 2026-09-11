@@ -223,8 +223,13 @@ const css = fontUrl => `
 *{margin:0;padding:0;box-sizing:border-box}
 @font-face{font-family:SUIT;src:url('${fontUrl}') format('woff2-variations');
   font-weight:100 900;font-style:normal;font-display:swap}
+/* 보조색 규칙(WO-30 D1·D2)
+   --m60 = 본문 보조 글자. 어떤 배경에서도 4.5:1 이상이어야 한다.
+   --m38 = 화살표·구분선 같은 도형 전용. 3:1 이상. 글자에는 쓰지 않는다.
+   서브컬러(#E62B1E)는 값이 고정이라 작은 글자에 쓰면 4.5:1을 못 넘는다.
+   그래서 빨강은 28px 이상 굵은 글자·도형·선에만 쓰고, 작은 라벨은 굵기·크기로 강조한다. */
 :root{--bg:#F5F5F5;--ink:#26262B;--sub:#E62B1E;--tx:#1A1A1A;
-  --m60:rgba(26,26,26,.62);--m38:rgba(26,26,26,.38);--m12:rgba(26,26,26,.12);
+  --m60:rgba(26,26,26,.62);--m38:rgba(26,26,26,.50);--m12:rgba(26,26,26,.12);
   --panel:#fff;--shot:#fff}
 html,body{height:100%;overflow:hidden;background:var(--ink)}
 body{font-family:SUIT,-apple-system,'Segoe UI',sans-serif;color:var(--tx);word-break:keep-all;
@@ -241,9 +246,9 @@ li{list-style:none}
   background:var(--bg);color:var(--tx);opacity:0;visibility:hidden;transform:translateY(20px);
   transition:opacity .35s ease,transform .35s ease,visibility 0s linear .35s}
 .s.on{opacity:1;visibility:visible;transform:none;transition:opacity .35s ease,transform .35s ease,visibility 0s}
-.s--dark{--bg:var(--ink);--tx:#fff;--m60:rgba(255,255,255,.72);--m38:rgba(255,255,255,.42);
+.s--dark{--bg:var(--ink);--tx:#fff;--m60:rgba(255,255,255,.72);--m38:rgba(255,255,255,.52);
   --m12:rgba(255,255,255,.18);--panel:rgba(255,255,255,.06);--shot:rgba(255,255,255,.9)}
-.s--acc{--bg:#1A1A1A;--tx:#fff;--m60:rgba(255,255,255,.72);--m38:rgba(255,255,255,.42);
+.s--acc{--bg:#1A1A1A;--tx:#fff;--m60:rgba(255,255,255,.72);--m38:rgba(255,255,255,.52);
   --m12:rgba(255,255,255,.18);--panel:rgba(255,255,255,.06);--shot:rgba(255,255,255,.9)}
 /* 머리 */
 .eb{font-size:22px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--m60)}
@@ -253,7 +258,7 @@ li{list-style:none}
 .h--sm{font-size:40px}
 .lede{margin-top:16px;font-size:28px;line-height:1.55;color:var(--m60);max-width:1450px}
 .bd{flex:1;min-height:0;margin-top:36px;display:flex;flex-direction:column}
-.rights{position:absolute;left:96px;right:300px;bottom:36px;font-size:22px;line-height:1.35;color:var(--m38)}
+.rights{position:absolute;left:96px;right:300px;bottom:36px;font-size:22px;line-height:1.35;color:var(--m60)}
 /* 숫자 */
 .n{font-size:120px;font-weight:800;color:var(--sub);letter-spacing:-.04em;line-height:.92}
 .n--md{font-size:96px}
@@ -268,7 +273,9 @@ li{list-style:none}
 .chip{display:inline-block;border:1px solid var(--m12);border-radius:999px;padding:9px 18px;
   font-size:22px;line-height:1.35;color:var(--m60)}
 .chip--dark{background:var(--tx);border-color:var(--tx);color:var(--bg)}
-.chip--sub{background:var(--sub);border-color:var(--sub);color:#fff;font-weight:600}
+/* 서브컬러 칩 — 면을 채우면 흰 글자가 4.5:1을 못 넘는다(빨강/흰 4.44:1).
+   그래서 빨강은 테두리(선)로만 쓰고 글자는 텍스트색으로 둔다. */
+.chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
 /* 캡처 */
 .shot{background:var(--shot);border:1px solid var(--m12);border-radius:20px;overflow:hidden;
   display:flex;flex-direction:column;min-height:0}
@@ -279,7 +286,7 @@ li{list-style:none}
 /* 플로우 */
 .flow{display:flex;flex-direction:column}
 .fs{background:var(--panel);border:1px solid var(--m12);border-radius:20px;padding:22px 28px}
-.fs b{display:block;font-size:22px;font-weight:700;letter-spacing:.08em;color:var(--sub);margin-bottom:10px}
+.fs b{display:block;font-size:22px;font-weight:800;letter-spacing:.08em;color:var(--tx);margin-bottom:10px}
 .fs p{font-size:26px;line-height:1.5}
 .farr{height:36px;display:grid;place-items:center;color:var(--m38)}
 .farr svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg)}
@@ -290,7 +297,7 @@ li{list-style:none}
 /* 표 비슷한 행 */
 .rows{display:flex;flex-direction:column;gap:22px}
 .row{display:flex;gap:20px;align-items:flex-start}
-.row .rt{font-size:22px;font-weight:700;letter-spacing:.06em;color:var(--sub);margin-bottom:8px}
+.row .rt{font-size:22px;font-weight:800;letter-spacing:.06em;color:var(--tx);margin-bottom:8px}
 .row p{font-size:24px;line-height:1.55}
 .kv{display:grid;grid-template-columns:170px 1fr;gap:12px 22px;font-size:23px;line-height:1.5}
 .kv dt{color:var(--m60);font-weight:600}
@@ -335,17 +342,19 @@ li{list-style:none}
 .msb div:nth-child(3){background:var(--tx);border-color:var(--tx);color:var(--bg)}
 .msb div:nth-child(3) span{color:rgba(245,245,245,.7)}
 .gantt{position:relative;height:46px;margin-top:22px}
+/* 간트 — 번갈이 색은 의미가 없었다. 전부 중립 회색으로 두고 현재 재직 구간만 서브컬러(D5).
+   숫자는 28px 굵게 — 빨강 막대 위 흰 숫자를 큰 글자 기준(3:1)으로 통과시키기 위해서다. */
 .gantt i{position:absolute;top:0;height:46px;border-radius:10px;background:rgba(26,26,26,.16);
-  display:grid;place-items:center;font-style:normal;font-size:22px;font-weight:700;color:var(--tx)}
+  display:grid;place-items:center;font-style:normal;font-size:28px;font-weight:800;color:var(--tx)}
 .gantt i.on{background:var(--sub);color:#fff}
 .axis{position:relative;height:34px;border-top:1px solid var(--m12);margin-top:8px}
-.axis span{position:absolute;top:8px;font-size:22px;color:var(--m38);transform:translateX(-50%)}
+.axis span{position:absolute;top:8px;font-size:22px;color:var(--m60);transform:translateX(-50%)}
 .axis span:first-child{transform:none}.axis span:last-child{transform:translateX(-100%)}
 .msg{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:auto;
   align-content:space-around;gap:56px 24px;margin-top:30px}
 .msc{border-top:3px solid var(--tx);padding-top:14px}
 .msc b{display:block;font-size:24px;font-weight:700}
-.msc b em{font-style:normal;color:var(--sub);margin-right:10px}
+.msc b em{font-style:normal;color:var(--sub);margin-right:10px;font-size:28px;font-weight:800}
 .msc .p{font-size:22px;color:var(--m60);margin-top:6px}
 .msc .r{font-size:22px;margin-top:8px;line-height:1.4}
 /* 회사별 상세 */
@@ -362,7 +371,7 @@ li{list-style:none}
 .st:first-child{border-radius:24px 0 0 24px}
 .st:last-child{border-radius:0 24px 24px 0}
 .st+.st{border-left:none}
-.st .no{font-size:22px;font-weight:800;color:var(--sub);letter-spacing:.1em}
+.st .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
 .st h3{margin-top:12px;font-size:28px;font-weight:700;line-height:1.3}
 .st ul{margin-top:22px;display:flex;flex-direction:column;gap:12px}
 .st li{font-size:22px;line-height:1.45;color:var(--m60);padding-left:20px;position:relative}
@@ -370,8 +379,16 @@ li{list-style:none}
 /* 조작 UI */
 .bar{position:absolute;left:0;bottom:0;height:6px;background:var(--sub);width:0;transition:width .35s ease;z-index:5}
 .cnt{position:absolute;right:96px;bottom:36px;font-size:24px;font-weight:600;z-index:5;letter-spacing:.04em;
-  color:var(--uim,rgba(26,26,26,.55))}
+  color:var(--uim,rgba(26,26,26,.62))}
 .cnt em{font-style:normal;color:var(--ui,#1A1A1A)}
+/* 세로 화면 안내 — 390×844에서는 스테이지가 219px라 읽을 수 없다. 가로로 돌리면 사라진다(D14). */
+.rot{position:fixed;inset:0;z-index:20;display:none;place-items:center;text-align:center;
+  background:#26262B;color:#fff;padding:40px}
+.rot p{font-size:20px;font-weight:700;line-height:1.5}
+.rot span{display:block;margin-top:10px;font-size:15px;color:rgba(255,255,255,.72);font-weight:400}
+.rot svg{width:132px;height:72px;margin:0 auto 22px;display:block;fill:none;stroke:#E62B1E;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}
+@media (orientation:portrait) and (max-width:900px){.rot{display:grid}}
 `
 
 /* ============================ 5. 렌더 ============================ */
@@ -461,13 +478,19 @@ function render(d, A) {
 
   /* --- 3. Career Milestone --- */
   const rows3 = [...d.career].reverse()
-  const T0 = +PHASES[0][0], T1 = +PHASES[2][1]
-  const at = ym => { const [y, m] = ym.split('.').map(Number); return ((y + (m - 1) / 12) - T0) / (T1 - T0) * 100 }
+  const ym = s => { const [y, m] = s.split('.').map(Number); return y + (m - 1) / 12 }
+  const ends = rows3.map(r => { const p = per(r.sub); if (!p) fail('경력 기간을 못 읽었다: ' + r.sub)
+    return p.split(/\s*[–—-]\s*/)[1] })
+  /* 축 상한은 실제 마지막 종료월까지 잡는다 — 2026.01로 못 박으면 달콤(2026.07) 막대가 잘린다(D5) */
+  const T0 = ym(PHASES[0][0] + '.1')
+  const T1 = Math.max(ym(PHASES[2][1] + '.1'), ...ends.filter(e => /\d/.test(e)).map(ym))
+  const at = s => (ym(s) - T0) / (T1 - T0) * 100
   const span = sub => {
-    const p = per(sub); if (!p) fail('경력 기간을 못 읽었다: ' + sub)
+    const p = per(sub)
     const [a, b] = p.split(/\s*[–—-]\s*/)
     return [Math.max(0, at(a)), Math.min(100, /\d/.test(b) ? at(b) : 100)]
   }
+  const lastIx = rows3.length - 1
   const milestone = slide({
     aria: 'Career Milestone — 2006부터 2026까지', eyebrow: L.milestone, title: d.careerTitle, hcls: 'h--sm',
     rights: L.rightsPlain,
@@ -475,7 +498,7 @@ function render(d, A) {
     <div class="msb">${PHASES.map(([a, b, w], i) =>
       `<div style="flex:${w}"><b>${esc(L.phases[i])}</b><span>${a} – ${b}</span></div>`).join('')}</div>
     <div class="gantt">${rows3.map((r, i) => { const [x0, x1] = span(r.sub)
-      return `<i class="${i % 2 ? 'on' : ''}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%">${i + 1}</i>` }).join('')}</div>
+      return `<i class="${i === lastIx ? 'on' : ''}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%">${i + 1}</i>` }).join('')}</div>
     <div class="axis">${['2006', '2011', '2016', '2021', '2026'].map(y =>
       `<span style="left:${at(y + '.1').toFixed(2)}%">${y}</span>`).join('')}</div>
     <div class="msg">${rows3.map((r, i) => `
@@ -522,7 +545,7 @@ function render(d, A) {
       : [c.steps[0], c.steps[1], c.steps[3]]
     const lanes = c.work === 'case3' ? `
       <div class="pn" style="margin-bottom:24px;padding:24px 28px">
-        <p style="font-size:22px;font-weight:700;color:var(--sub);letter-spacing:.08em;margin-bottom:16px">${esc(LANE_ARROW)}</p>
+        <p style="font-size:22px;font-weight:800;color:var(--tx);letter-spacing:.08em;margin-bottom:16px">${esc(LANE_ARROW)}</p>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">${LANES.map(([nm, chips], k) => `
           <div style="border-left:4px solid ${k ? 'var(--m38)' : 'var(--sub)'};padding-left:18px">
             <p style="font-size:24px;font-weight:700">${esc(nm)}</p>
@@ -561,7 +584,7 @@ function render(d, A) {
     } else if (c.work === 'case2') {
       tiles = `<div style="display:grid;grid-template-rows:auto 1fr 1fr;gap:20px;min-height:0">
         <p style="display:flex;gap:12px;align-items:center;font-size:22px;color:var(--m60)">
-          <span class="chip chip--dark">${L.before}</span><span style="color:var(--m38)">→</span><span class="chip chip--sub">${L.after}</span></p>
+          <span class="chip chip--dark">${L.before}</span><span style="color:var(--m60)">→</span><span class="chip chip--sub">${L.after}</span></p>
         ${doc('lyn/before_after', 'min-height:0')}${doc('lyn/system_ui', 'min-height:0')}</div>`
     } else {
       tiles = `<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;min-height:0">
@@ -666,7 +689,7 @@ function render(d, A) {
       <p><b>${L.notion}</b><a href="${esc(HUB)}" target="_blank" rel="noopener">${L.open} ↗</a></p>
       <p><b>${L.pdf}</b><a href="${esc(d.canonical + 'henry-lim-portfolio-ko.pdf')}" target="_blank" rel="noopener">${L.open} ↗</a></p>
     </div>
-    <p style="margin-top:44px;font-size:22px;color:var(--m38);line-height:1.5">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
+    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
   </div>
   <div>${motion(640)}</div>
 </section>`
@@ -690,6 +713,12 @@ function render(d, A) {
 <style>${css(A.font())}</style>
 </head>
 <body>
+<div class="rot" aria-hidden="true">
+  <div>
+    <svg viewBox="0 0 44 24"><rect x="2" y="2" width="12" height="20" rx="2.5"/><path d="M19 12h7"/><path d="M23 9l3 3-3 3"/><rect x="30" y="7" width="12" height="10" rx="2.5"/></svg>
+    <p>가로로 돌려 보세요<span>Rotate for full view</span></p>
+  </div>
+</div>
 <div class="wrap"><div class="stage" id="stage">
 ${body.join('\n')}
 <div class="bar" id="bar"></div>
@@ -706,7 +735,7 @@ ${body.join('\n')}
     var dk=ss[i].dataset.bg!=='#F5F5F5'
     document.body.style.background=ss[i].dataset.bg
     stage.style.setProperty('--ui',dk?'#fff':'#1A1A1A')
-    stage.style.setProperty('--uim',dk?'rgba(255,255,255,.62)':'rgba(26,26,26,.55)')
+    stage.style.setProperty('--uim',dk?'rgba(255,255,255,.72)':'rgba(26,26,26,.62)')
     bar.style.width=((i+1)/N*100)+'%'
     cnt.innerHTML='<em>'+(i+1)+'</em> / '+N
     if(push!==false){history.replaceState(null,'','#'+(i+1))}
@@ -715,6 +744,9 @@ ${body.join('\n')}
   addEventListener('resize',fit); addEventListener('hashchange',function(){show(fromHash(),false)})
   addEventListener('keydown',function(e){
     var k=e.key
+    /* 링크·버튼에 포커스가 있으면 Enter는 그 요소의 기본 동작이다 — 장 넘김으로 가로채지 않는다 */
+    var onCtl=document.activeElement&&document.activeElement.closest&&document.activeElement.closest('a,button')
+    if(k==='Enter'&&onCtl)return
     if(k==='ArrowRight'||k==='ArrowDown'||k===' '||k==='PageDown'||k==='Enter'){show(cur+1);e.preventDefault()}
     else if(k==='ArrowLeft'||k==='ArrowUp'||k==='PageUp'||k==='Backspace'){show(cur-1);e.preventDefault()}
     else if(k==='Home'){show(0);e.preventDefault()}
