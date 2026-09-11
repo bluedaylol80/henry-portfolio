@@ -111,6 +111,8 @@ async function scrape() {
   for (const c of d.cases) Object.assign(c, await openDlg(c.work))
   d.res = {}
   for (const [, slug] of RESULTS) d.res[slug] = await openDlg(slug)
+  /* 사례 2 흐름도의 소프트런칭 3개국은 린 상세창에 있다(8장 D6) */
+  for (const slug of EXTRA_DLG) d.res[slug] = await openDlg(slug)
   await browser.close()
 
   if (d.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + d.cases.length)
@@ -138,6 +140,8 @@ const L = {
   email: '이메일', site: '사이트', notion: 'Notion 이력', pdf: '포트폴리오 PDF', issued: '발행일',
   before: '변경 전', after: '변경 후', decision: '결정 범위', deferred: '미룬 것', outcome: '결과·상태',
   act: '본인 행동', lab: '개인 프로덕트', period: '기간',
+  full: '문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.',
+  role: '역할', verdict: '판단', result: '결과', priority: '우선순위 결정',
   phases: ['운영', '사업 PM', '기획·디렉터'],
   rightsPlain: '수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.',
   rightsNW: '나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
@@ -193,6 +197,14 @@ const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
 const WORK_IX = { dalcom: 0, lyn: 1, chaos: 2, nightwalker: 3, fivestars: 4, nanakage: 5 }
 const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan']], [4, 'fivestars', ['fivestars/prereg']],
                  [5, 'nanakage', ['nanakage/update_plan']]]
+const EXTRA_DLG = ['lyn']
+/* 13장 — 발주서 §2가 요구한 역할·판단·결과 3줄. 값은 사이트 상세창 행에서 읽고,
+   어느 행이 어느 칸인지만 여기(덱 전용 표)에서 정한다. */
+const RESULT_ROWS = {
+  chaos: [['역할', '서비스 종료 운영'], ['판단', '소프트런칭'], ['결과', '미국 성적']],
+  fivestars: [['역할', '조직 셋업·채용'], ['판단', '계약·정산'], ['결과', '한국 성적']],
+  nanakage: [['역할', '담당'], ['판단', '지표 → 조치 → 결과'], ['결과', '그랜드런칭']],
+}
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재)/
 /* 4분류 아이콘 — 단순 선형 인라인 SVG(외부 아이콘 폰트 금지) */
@@ -217,6 +229,20 @@ const makeAssets = inline => ({
   img: slug => (inline ? b64(IMG_DIR + slug + '.jpg', 'image/jpeg') : '../pdf/img/' + slug + '.jpg'),
   font: () => (inline ? b64(FONT, 'font/woff2') : 'fonts/SUIT-Variable.woff2'),
 })
+/* 원본 픽셀 크기 — JPEG 프레임 헤더에서 직접 읽는다.
+   확대 금지(D9) 상한을 렌더 때 계산하려면 원본 크기를 알아야 한다. */
+const natural = slug => {
+  const b = readFileSync(IMG_DIR + slug + '.jpg')
+  for (let i = 2; i < b.length - 9;) {
+    if (b[i] !== 0xFF) { i++; continue }
+    const m = b[i + 1]
+    if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) {
+      return { w: b.readUInt16BE(i + 7), h: b.readUInt16BE(i + 5) }
+    }
+    i += 2 + b.readUInt16BE(i + 2)
+  }
+  return fail('이미지 크기를 못 읽었다: ' + slug)
+}
 
 /* ============================ 4. CSS ============================ */
 const css = fontUrl => `
@@ -263,8 +289,13 @@ li{list-style:none}
 .n{font-size:120px;font-weight:800;color:var(--sub);letter-spacing:-.04em;line-height:.92}
 .n--md{font-size:96px}
 .n--sm{font-size:72px}
+.n--xs{font-size:56px}
 .nl{margin-top:14px;font-size:22px;line-height:1.4;color:var(--m60)}
 .nn{white-space:nowrap}
+/* 전→후 — 앞은 회색, 뒤는 서브컬러. 큰 숫자에만 쓴다(작은 빨강 금지) */
+.ba i{font-style:normal;color:var(--m60)}
+.ba u{text-decoration:none;color:var(--sub)}
+.ba s{text-decoration:none;color:var(--m38);margin:0 .12em}
 /* 블록 */
 .pn{background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:32px 34px}
 .ico{width:64px;height:64px;border-radius:50%;background:var(--sub);display:grid;place-items:center;flex:none}
@@ -278,8 +309,15 @@ li{list-style:none}
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
 /* 캡처 */
 .shot{background:var(--shot);border:1px solid var(--m12);border-radius:20px;overflow:hidden;
-  display:flex;flex-direction:column;min-height:0}
-.shot img{display:block;width:100%;flex:1;min-height:0;object-fit:contain;background:#fff}
+  display:flex;flex-direction:column;min-height:0;position:relative}
+/* 원본보다 크게 늘리지 않는다 — 저해상 캡처가 흐려지는 것을 막는다(D9).
+   max-width·max-height는 렌더 때 원본 픽셀에서 계산해 인라인으로 박는다. */
+.shot img{display:block;width:100%;flex:1;min-height:0;object-fit:contain;background:#fff;margin:0 auto}
+/* 전·후 배지 — 그림 모서리에 얹어 범례와 실제 화면을 잇는다(D6b) */
+.bdg{position:absolute;top:14px;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  font-size:28px;font-weight:800;color:#fff;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.28)}
+.bdg--b{background:#26262B}
+.bdg--a{background:var(--sub)}
 .shot figcaption{padding:14px 20px;font-size:22px;line-height:1.35;color:var(--m60);
   border-top:1px solid var(--m12);background:var(--panel)}
 .shot--plain img{object-fit:cover}
@@ -372,6 +410,8 @@ li{list-style:none}
 .st:last-child{border-radius:0 24px 24px 0}
 .st+.st{border-left:none}
 .st .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
+.st .pri{margin-top:18px;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.45}
+.st .pri b{display:block;font-weight:800;margin-bottom:6px}
 .st h3{margin-top:12px;font-size:28px;font-weight:700;line-height:1.3}
 .st ul{margin-top:22px;display:flex;flex-direction:column;gap:12px}
 .st li{font-size:22px;line-height:1.45;color:var(--m60);padding-left:20px;position:relative}
@@ -401,10 +441,24 @@ function render(d, A) {
   const workOf = slug => d.works[WORK_IX[slug]]
   const icon = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`
   const arrow = cls => `<div class="farr ${cls || ''}">${icon('arrow')}</div>`
-  const shot = (slug, cap, style) => `<figure class="shot"${style ? ` style="${style}"` : ''}>
-      <img src="${IMGX(slug)}" alt="${esc(cap)}">
-      <figcaption>${esc(cap)}</figcaption></figure>`
-  const doc = (slug, style) => shot(slug, CAPS[slug], style)
+  /* 발표용 요약 — 첫 문장부터 n문장까지만 남긴다. 자르기만 하고 고쳐 쓰지 않는다(사실 왜곡 금지). */
+  const sentsOf = t => pr(t).trim().split(/(?<=[다요]\.)\s+/)
+  const brief = (t, n = 1) => sentsOf(t).slice(0, n).join(' ')
+  const briefCut = (t, n = 1) => sentsOf(t).length > n
+  /* 전→후 — 앞은 회색, 뒤는 서브컬러. 28px 이상 굵은 숫자에만 붙인다. */
+  const BA = /^(.+?)\s*(?:→|>)\s*(.+)$/
+  const ba = v => { const m = String(v).match(BA)
+    return m ? `<span class="ba"><i>${esc(m[1])}</i><s>→</s><u>${esc(m[2])}</u></span>` : nw(v) }
+  /* altOnly — 키 비주얼처럼 제목이 이미 옆에 있는 그림은 캡션 없이 대체텍스트만 둔다.
+     band — 띠로 잘라 채운다(칸보다 원본이 넓을 때만 쓴다. 확대가 아니라 크롭이다). */
+  const shot = (slug, cap, style, extra, altOnly, band) => {
+    const { w, h } = natural(slug)
+    const fit = band ? 'object-fit:cover' : `max-width:${w}px;max-height:${h}px`
+    return `<figure class="shot"${style ? ` style="${style}"` : ''}>${extra || ''}
+      <img src="${IMGX(slug)}" alt="${esc(cap)}" style="${fit}">
+      ${altOnly ? '' : `<figcaption>${esc(cap)}</figcaption>`}</figure>`
+  }
+  const doc = (slug, style, extra) => shot(slug, CAPS[slug], style, extra)
   const evList = ev => `<div class="ev"><b>${L.evidence}</b>${ev.map(e =>
     `<a href="${esc(e.href)}" target="_blank" rel="noopener">${esc(e.title)} ↗</a>`).join('')}</div>`
   const rightsOf = slug => workOf(slug).rights + (slug === 'nightwalker' ? ' ' + L.rightsNW : '')
@@ -417,6 +471,27 @@ function render(d, A) {
     while (u.every(x => x[x.length - 1 - b] === u[0][u[0].length - 1 - b]) && b < u[0].length - a - 1) b++
     return u[0].slice(0, a) + u.map(x => x.slice(a, x.length - b)).join('·') + u[0].slice(u[0].length - b)
   }
+
+  /* 사례 1의 큰 숫자 — 11→7은 운영 포트폴리오 재편이지 이 이벤트의 결과가 아니다.
+     사이트 '결과·상태' 문장에 적힌 출시 항목을 세어 쓴다(D4). 11→7은 12·16장에만 남긴다. */
+  const launched = (() => {
+    const v = d.cases[0].rows.find(r => r[0] === L.outcome)[1]
+    const m = v.match(/실제 출시\s*[—–-]\s*(.+?)\.?\s*$/)
+    if (!m) fail('사례 1 결과에서 출시 목록을 못 읽었다: ' + v)
+    const items = []
+    let depth = 0, buf = ''
+    for (const ch of m[1]) {
+      if (ch === '(') depth++
+      else if (ch === ')') depth--
+      if (ch === ',' && !depth) { items.push(buf); buf = '' } else buf += ch
+    }
+    items.push(buf)
+    const names = items.map(s => s.replace(/\([^)]*\)/g, '').trim()).filter(Boolean)
+    if (names.length !== 3) fail('사례 1 출시 항목이 3건이 아니다: ' + names.join(' / '))
+    return [`출시 ${names.length}건`, names.join(' · ')]
+  })()
+  const caseKpi = c => (c.work === 'case1' ? launched
+    : [kpiOf(CASE_IMG[c.work]), kpiLabel(CASE_IMG[c.work])])
 
   const slide = o => `
 <section class="s${o.cls ? ' ' + o.cls : ''}" role="group" aria-roledescription="slide"
@@ -515,7 +590,7 @@ function render(d, A) {
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico">${icon(SKILL_ICONS[i])}</span>
           <h3 style="font-size:32px;font-weight:700">${esc(s.title)}</h3></div>
-        <p style="margin-top:20px;font-size:24px;line-height:1.55">${esc(s.note)}</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">${esc(brief(s.note))}</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap">${
           s.cases.map(c => `<span class="chip">${esc(pr(c))}</span>`).join('')}</div>
       </div>`).join('')}</div>`,
@@ -525,47 +600,76 @@ function render(d, A) {
   const top3 = slide({
     cls: 's--acc', bg: '#1A1A1A', aria: '대표 사례 3 — ' + d.casesTitle,
     eyebrow: L.top3, title: d.casesTitle, lede: d.casesLede, rights: L.rightsPlain,
-    body: `<div class="g3" style="align-items:start">${d.cases.map((c, i) => {
-      const slug = CASE_IMG[c.work]
+    body: `<div class="g3" style="align-items:start">${d.cases.map(c => {
+      const [num, lab] = caseKpi(c)
       return `<div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">${esc(c.dlgMeta)}</p>
         <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3">${esc(c.dlgTitle)}</h3>
-        <p class="n n--sm" style="margin-top:28px">${nw(kpiOf(slug))}</p>
-        <p class="nl">${esc(kpiLabel(slug))}</p>
+        <p class="n n--sm" style="margin-top:28px">${ba(num)}</p>
+        <p class="nl">${esc(lab)}</p>
         <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">${esc(c.rows[0][1])}</p>
         <p style="margin-top:28px"><span class="chip chip--sub">${esc(c.state)}</span></p>
       </div>` }).join('')}</div>`,
   })
 
   /* --- 6·8·10. 사례 판단 --- */
+  /* 사례 2 — 소프트런칭 3개국 → 개선 3건 → 그랜드런칭을 실제로 잇는다(D6).
+     세 단계 모두 사이트 문장에서 읽는다. */
+  const chain2 = (() => {
+    const out = d.cases[1].rows.find(r => r[0] === L.outcome)[1]
+    const im = out.match(/(?:^|\.)\s*([^.]+?)\s*개선 (\d)건은/)
+    if (!im) fail('사례 2 결과에서 개선 항목을 못 읽었다: ' + out)
+    const items = im[1].split(/\s*·\s*/).map(s => s.trim()).filter(Boolean)
+    if (String(items.length) !== im[2]) fail(`사례 2 개선 항목 수가 안 맞는다: ${items.length} vs ${im[2]}`)
+    const gm = out.match(/출시\(([^)]+)\)/)
+    if (!gm) fail('사례 2 결과에서 그랜드런칭을 못 읽었다: ' + out)
+    const lyn = d.res.lyn.rows.find(r => r[0] === '소프트런칭')
+    if (!lyn) fail('린 상세에 소프트런칭 행이 없다')
+    const co = lyn[1].split(/\s*·\s*/).map(s => s.trim()).filter(Boolean)
+    return [[`소프트런칭 ${co.length}개국`, co], [`개선 ${items.length}건`, items], ['그랜드런칭', [gm[1]]]]
+  })()
+
   const judge = (c, i) => {
     const slug = CASE_IMG[c.work]
+    const [num, lab] = caseKpi(c)
     const boxes = c.work === 'case1'
       ? [c.steps[0], c.steps[1], [L.decision, c.rows[4][1]]]
       : [c.steps[0], c.steps[1], c.steps[3]]
+    const stage = ([nm, xs]) => `<div class="fs">
+      <b>${esc(nm)}</b>
+      <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">${xs.map(x =>
+        `<span class="chip">${esc(x)}</span>`).join('')}</p></div>`
+    /* 사례 3 — 두 레인 사이에 실제 이관 화살표를 둔다(D6) */
     const lanes = c.work === 'case3' ? `
-      <div class="pn" style="margin-bottom:24px;padding:24px 28px">
-        <p style="font-size:22px;font-weight:800;color:var(--tx);letter-spacing:.08em;margin-bottom:16px">${esc(LANE_ARROW)}</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">${LANES.map(([nm, chips], k) => `
-          <div style="border-left:4px solid ${k ? 'var(--m38)' : 'var(--sub)'};padding-left:18px">
-            <p style="font-size:24px;font-weight:700">${esc(nm)}</p>
-            <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">${chips.map(x =>
-              `<span class="chip${k ? '' : ' chip--sub'}">${esc(x)}</span>`).join('')}</p></div>`).join('')}</div>
+      <div class="pn" style="margin-bottom:24px;padding:24px 28px;
+        display:grid;grid-template-columns:1fr 132px 1fr;gap:0;align-items:center">${[LANES[0], null, LANES[1]]
+        .map((ln, k) => (ln === null
+          ? `<div style="text-align:center;color:var(--m38)">
+               <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.8;
+                 stroke-linecap:round;stroke-linejoin:round">${ICONS.arrow}</svg>
+               <p style="margin-top:6px;font-size:20px;font-weight:700;color:var(--tx);line-height:1.3">${esc(LANE_ARROW.split('→')[0].trim())}<br>${esc(LANE_ARROW.split('→')[1].trim())}</p></div>`
+          : `<div style="border-left:4px solid ${k ? 'var(--m38)' : 'var(--sub)'};padding-left:18px">
+               <p style="font-size:24px;font-weight:700">${esc(ln[0])}</p>
+               <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">${ln[1].map(x =>
+                 `<span class="chip${k ? '' : ' chip--sub'}">${esc(x)}</span>`).join('')}</p></div>`)).join('')}
       </div>` : ''
+    const chain = c.work === 'case2' ? `
+      <div class="frow" style="margin-bottom:24px;flex:none">${
+        chain2.map((s, k) => (k ? arrow() : '') + stage(s)).join('')}</div>` : ''
     return slide({
       aria: `${L.caseN(i + 1)} 판단 — ${c.dlgTitle}`,
       eyebrow: `${L.caseN(i + 1)} · ${L.judge}`, title: c.dlgTitle, lede: c.dlgMeta,
       rights: rightsOf(slug),
       body: `<div class="g2" style="grid-template-columns:1fr 660px">
-        <div style="display:flex;flex-direction:column;min-height:0">${lanes}
+        <div style="display:flex;flex-direction:column;min-height:0">${lanes}${chain}
           <div class="flow">${boxes.map(([k, v], n) =>
             (n ? arrow() : '') + `<div class="fs"><b>${esc(k)}</b><p>${esc(v)}</p></div>`).join('')}</div>
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           ${shot(slug, workOf(slug).title, 'flex:1;min-height:0')}
           <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
-            <p class="n">${nw(kpiOf(slug))}</p>
-            <p class="nl" style="margin-bottom:10px">${esc(kpiLabel(slug))}</p></div>
+            <p class="n${c.work === 'case1' ? ' n--sm' : ''}">${ba(num)}</p>
+            <p class="nl" style="margin-bottom:10px">${esc(lab)}</p></div>
         </div>
       </div>`,
     })
@@ -573,33 +677,44 @@ function render(d, A) {
 
   /* --- 7·9·11. 사례 실행 --- */
   const exec = (c, i) => {
-    const rows = [[L.act, c.rows.find(r => r[0] === '본인 행동')[1]]]
-    const deferred = c.rows.find(r => r[0] === L.deferred)
-    if (deferred) rows.push([L.deferred, deferred[1]])
-    rows.push([L.outcome, c.rows.find(r => r[0] === L.outcome)[1]])
-    let tiles
+    /* 발표용으로 줄인다 — 행동·미룬 것은 첫 문장만. 결과는 본인 기여 범위 단서가 들어 있어 통째로 남긴다(D3). */
+    const pick = k => { const r = c.rows.find(x => x[0] === k); return r && r[1] }
+    const rows = [[L.act, brief(pick('본인 행동'))]]
+    const deferred = pick(L.deferred)
+    if (deferred) rows.push([L.deferred, brief(deferred)])
+    rows.push([L.outcome, pr(pick(L.outcome))])
+    const cut = briefCut(pick('본인 행동')) || (deferred && briefCut(deferred))
+    /* 전·후 배지 — 2분할 캡처의 각 절반 오른쪽 위에 얹는다. 왼쪽 위 원본 라벨과 겹치지 않게. */
+    const baBadge = `<span class="bdg bdg--b" style="left:45.5%">1</span><span class="bdg bdg--a" style="right:2.5%">2</span>`
+    let tiles, cols
     if (c.work === 'case1') {
+      cols = '1fr 860px'
       tiles = `<div style="display:grid;grid-template-rows:1fr 1fr;gap:24px;min-height:0">
         ${shot('deco', d.proto[0].title, 'min-height:0')}${shot('ssjproto', d.proto[1].title, 'min-height:0')}</div>`
     } else if (c.work === 'case2') {
+      cols = '640px 1fr'
       tiles = `<div style="display:grid;grid-template-rows:auto 1fr 1fr;gap:20px;min-height:0">
-        <p style="display:flex;gap:12px;align-items:center;font-size:22px;color:var(--m60)">
-          <span class="chip chip--dark">${L.before}</span><span style="color:var(--m60)">→</span><span class="chip chip--sub">${L.after}</span></p>
-        ${doc('lyn/before_after', 'min-height:0')}${doc('lyn/system_ui', 'min-height:0')}</div>`
+        <p style="display:flex;gap:14px;align-items:center;font-size:22px;font-weight:700">
+          <span class="bdg bdg--b" style="position:static;width:42px;height:42px;font-size:28px">1</span>${L.before}
+          <span style="color:var(--m60)">→</span>
+          <span class="bdg bdg--a" style="position:static;width:42px;height:42px;font-size:28px">2</span>${L.after}</p>
+        ${doc('lyn/before_after', 'min-height:0', baBadge)}${doc('lyn/system_ui', 'min-height:0')}</div>`
     } else {
-      tiles = `<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;min-height:0">
-        ${doc('nightwalker/server_flow_proposal', 'min-height:0')}${doc('nightwalker/server_flowchart_wire', 'min-height:0')}
-        ${doc('nightwalker/charge_flow', 'min-height:0')}${doc('nightwalker/charge_ui_mock', 'min-height:0')}</div>`
+      /* 4장을 작게 늘어놓으니 아무것도 안 읽혔다. 발주서 §2대로 플로우 제안·충전 UI 시안 2장만 크게(D9). */
+      cols = '640px 1fr'
+      tiles = `<div style="display:grid;grid-template-columns:1fr 1.25fr;gap:22px;min-height:0">
+        ${doc('nightwalker/server_flow_proposal', 'min-height:0')}${doc('nightwalker/charge_ui_mock', 'min-height:0')}</div>`
     }
     return slide({
       aria: `${L.caseN(i + 1)} 실행 — ${c.dlgTitle}`,
       eyebrow: `${L.caseN(i + 1)} · ${L.exec}`, title: c.title, hcls: 'h--sm',
       rights: c.work === 'case1' ? L.rightsProto : rightsOf(CASE_IMG[c.work]),
-      body: `<div class="g2" style="grid-template-columns:1fr 780px">
+      body: `<div class="g2" style="grid-template-columns:${cols}">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">${rows.map(([k, v]) => `
             <div class="row"><span class="ico ico--sm">${icon(EXEC_ICONS[k])}</span>
               <div><p class="rt">${esc(k)}</p><p>${esc(v)}</p></div></div>`).join('')}</div>
+          ${cut ? `<p style="margin-top:18px;font-size:22px;color:var(--m60)">${esc(L.full)}</p>` : ''}
           ${evList(c.ev)}
         </div>
         ${tiles}
@@ -616,7 +731,7 @@ function render(d, A) {
       ${Object.keys(KPI_NUM).map(slug => `
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">${esc(workOf(slug).title)}</p>
-          <p class="n" style="margin-top:26px">${nw(kpiOf(slug))}</p>
+          <p class="n" style="margin-top:26px">${ba(kpiOf(slug))}</p>
           <p class="nl">${esc(kpiLabel(slug))}</p></div>`).join('')}
     </div>`,
   })
@@ -628,15 +743,29 @@ function render(d, A) {
     rights: mergeRights(RESULTS.map(([wi]) => d.works[wi].rights)),
     body: `<div class="g3">${RESULTS.map(([wi, slug, shots]) => {
       const w = d.works[wi], r = d.res[slug]
-      const keep = r.rows.filter(([k, v]) => !banHits(k + ' ' + v).length).slice(0, 3)
+      /* 발주서 §2 — 키 비주얼 + 캡처 1 + 역할·판단·결과 3줄 + 근거 링크(D7·D8) */
+      const rowOf = k => { const x = r.rows.find(y => y[0] === k)
+        if (!x) fail(`${slug} 상세에 '${k}' 행이 없다`)
+        if (banHits(x[0] + ' ' + x[1]).length) fail(`${slug} '${k}' 행에 금지어가 있다`)
+        return x[1] }
+      /* Shadow Seven 평점은 전후 비교라 별도 칸으로 뺀다 — 본문에 남기면 작은 빨강이 된다(D6b) */
+      let pair = null
+      const line = ([lb, key]) => { let v = rowOf(key)
+        const m = v.match(/구글 평점[^\d]*([\d.]+)\s*(?:→|>)\s*[^\d]*([\d.]+)/)
+        if (m) { pair = [m[1], m[2]]; v = v.slice(0, m.index).replace(/\s*(?:→|>)\s*$/, '').trim() }
+        return `<dt>${esc(lb)}</dt><dd>${esc(brief(v))}</dd>` }
+      const lines = RESULT_ROWS[slug].map(line).join('')
       return `<div style="display:flex;flex-direction:column;min-height:0">
-        ${doc(shots[0], 'height:300px;flex:none')}
-        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:24px">
-          <p class="n n--sm">${nw(w.kpi)}</p>
-          <p class="nl" style="margin-bottom:8px">${esc(kpiLabel(slug))}</p></div>
-        <dl class="kv" style="margin-top:24px;grid-template-columns:150px 1fr">${keep.map(([k, v]) =>
-          `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
-        ${evList(r.ev.slice(0, 2))}
+        ${shot(slug, w.title, 'height:132px;flex:none', '', true, true)}
+        ${doc(shots[0], 'height:216px;flex:none;margin-top:16px')}
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
+          <p class="n n--xs">${ba(w.kpi)}</p>
+          <p class="nl" style="margin-bottom:4px">${esc(kpiLabel(slug).replace(/\s*\([^)]*\)/g, ''))}</p></div>
+        ${pair ? `<p class="ba" style="margin-top:16px;font-size:40px;font-weight:800;letter-spacing:-.02em">
+          <span style="font-size:22px;font-weight:600;color:var(--m60);margin-right:12px">구글 평점</span>
+          <i>${esc(pair[0])}</i><s>→</s><u>${esc(pair[1])}</u></p>` : ''}
+        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px">${lines}</dl>
+        ${evList(r.ev)}
       </div>` }).join('')}</div>`,
   })
 
@@ -646,7 +775,10 @@ function render(d, A) {
     rights: L.rightsPlain,
     body: `<div class="steps">${STEPS.map(([nm, pick], i) => `
       <div class="st"><p class="no">0${i + 1}</p><h3>${esc(nm)}</h3>
-        <ul>${pick(d).map(x => `<li>${esc(pr(x))}</li>`).join('')}</ul></div>`).join('')}</div>`,
+        <ul>${pick(d).map(x => `<li>${esc(pr(x))}</li>`).join('')}</ul>
+        ${i === 2 ? `<div class="pri"><b>${esc(L.priority)}</b>${esc(brief(
+          d.cases[0].rows.find(r => r[0] === L.decision)[1]))}</div>` : ''}
+      </div>`).join('')}</div>`,
   })
 
   /* --- 15. AI 프로토타입 --- */
@@ -670,9 +802,10 @@ function render(d, A) {
     rights: L.rightsPlain + ' ' + d.careerFoot,
     body: `<div class="co">${d.career.map(r => {
       const hit = KPI_BY_CO.find(([k]) => r.company.includes(k))
+      if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
       return `<div class="cor"><b>${esc(r.company)}</b>
-        <span class="k">${hit ? nw(d.works[hit[1]].kpi) : ''}</span>
-        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.titles)}</p></div>` }).join('')}</div>`,
+        <span class="k">${hit ? ba(d.works[hit[1]].kpi) : ''}</span>
+        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}</p></div>` }).join('')}</div>`,
   })
 
   /* --- 17. 연락 --- */

@@ -51,8 +51,13 @@ li{list-style:none}
 .n{font-size:120px;font-weight:800;color:var(--sub);letter-spacing:-.04em;line-height:.92}
 .n--md{font-size:96px}
 .n--sm{font-size:72px}
+.n--xs{font-size:56px}
 .nl{margin-top:14px;font-size:22px;line-height:1.4;color:var(--m60)}
 .nn{white-space:nowrap}
+/* 전→후 — 앞은 회색, 뒤는 서브컬러. 큰 숫자에만 쓴다(작은 빨강 금지) */
+.ba i{font-style:normal;color:var(--m60)}
+.ba u{text-decoration:none;color:var(--sub)}
+.ba s{text-decoration:none;color:var(--m38);margin:0 .12em}
 /* 블록 */
 .pn{background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:32px 34px}
 .ico{width:64px;height:64px;border-radius:50%;background:var(--sub);display:grid;place-items:center;flex:none}
@@ -66,8 +71,15 @@ li{list-style:none}
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
 /* 캡처 */
 .shot{background:var(--shot);border:1px solid var(--m12);border-radius:20px;overflow:hidden;
-  display:flex;flex-direction:column;min-height:0}
-.shot img{display:block;width:100%;flex:1;min-height:0;object-fit:contain;background:#fff}
+  display:flex;flex-direction:column;min-height:0;position:relative}
+/* 원본보다 크게 늘리지 않는다 — 저해상 캡처가 흐려지는 것을 막는다(D9).
+   max-width·max-height는 렌더 때 원본 픽셀에서 계산해 인라인으로 박는다. */
+.shot img{display:block;width:100%;flex:1;min-height:0;object-fit:contain;background:#fff;margin:0 auto}
+/* 전·후 배지 — 그림 모서리에 얹어 범례와 실제 화면을 잇는다(D6b) */
+.bdg{position:absolute;top:14px;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
+  font-size:28px;font-weight:800;color:#fff;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.28)}
+.bdg--b{background:#26262B}
+.bdg--a{background:var(--sub)}
 .shot figcaption{padding:14px 20px;font-size:22px;line-height:1.35;color:var(--m60);
   border-top:1px solid var(--m12);background:var(--panel)}
 .shot--plain img{object-fit:cover}
@@ -160,6 +172,8 @@ li{list-style:none}
 .st:last-child{border-radius:0 24px 24px 0}
 .st+.st{border-left:none}
 .st .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
+.st .pri{margin-top:18px;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.45}
+.st .pri b{display:block;font-weight:800;margin-bottom:6px}
 .st h3{margin-top:12px;font-size:28px;font-weight:700;line-height:1.3}
 .st ul{margin-top:22px;display:flex;flex-direction:column;gap:12px}
 .st li{font-size:22px;line-height:1.45;color:var(--m60);padding-left:20px;position:relative}
@@ -282,28 +296,28 @@ li{list-style:none}
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">제품 판단·마일스톤</h3></div>
-        <p style="margin-top:20px;font-size:24px;line-height:1.55">조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤을 재조립해 실행까지 끌고 가는 디렉터·PM 역할입니다. 런칭 전 마일스톤 재조립과 코디네이션을 포함합니다.</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤을 재조립해 실행까지 끌고 가는 디렉터·PM 역할입니다.</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 사용자 조사 기반 이벤트 복귀</span><span class="chip">사례 — 소프트런칭 지표 → 개선 과제</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l-1 5 5-1"/><path d="M9 15l-3-3c3-7 8-9 12-9 0 4-2 9-9 12z"/><circle cx="14.5" cy="9.5" r="1.6"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">출시·라이브 실행</h3></div>
-        <p style="margin-top:20px;font-size:24px;line-height:1.55">소프트런칭·런칭·라이브 운영·서비스 종료를 실제로 돌린 일입니다. 린·카오스크로니클·Shadow Seven 소프트런칭, 나이트워커 퍼블리싱 연동, 서비스 종료 5개의 잔여 이슈까지 맡았습니다.</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">소프트런칭·런칭·라이브 운영·서비스 종료를 실제로 돌린 일입니다.</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 퍼블리셔 규격 시스템 재정의</span><span class="chip">성과 — 카오스크로니클 종료 운영</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.6a3.2 3.2 0 010 5.6M18 20c0-2.4-.9-4.2-2.3-5.3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">조직·인력 운영</h3></div>
-        <p style="margin-top:20px;font-size:24px;line-height:1.55">채용·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 22명을 두 조직 13명으로 재편하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 셋업했습니다.</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">채용·팀 구조·담당 배치입니다.</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 조직 재편(사례 1 참조)</span><span class="chip">성과 — 스카이피플 조직 셋업</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.5 7.5l2.2 1.3M17.3 15.2l2.2 1.3M4.5 16.5l2.2-1.3M17.3 8.8l2.2-1.3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">운영 표준화</h3></div>
-        <p style="margin-top:20px;font-size:24px;line-height:1.55">반복 업무를 규칙·자동화로 만든 일입니다. Google Apps Script로 7개 프로젝트 SKU를 자동화했고, 상품 어뷰징 사후 대응 SOP와 Notion 업무 이력 통합을 문서로 남겼습니다.</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">반복 업무를 규칙·자동화로 만든 일입니다.</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">성과 — SKU 자동화·어뷰징 SOP</span></div>
       </div></div></div>
   <p class="rights">수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.</p>
@@ -317,8 +331,8 @@ li{list-style:none}
   <div class="bd"><div class="g3" style="align-items:start"><div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">달콤소프트 · 라이브기획팀 — 팀장</p>
         <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3">만족도 조사 요구를 실제 출시로</h3>
-        <p class="n n--sm" style="margin-top:28px"><span class="nn">11→7</span></p>
-        <p class="nl">담당 타이틀 수 변화(입사11→종료5+신규1→7) · 2024.10~2026.07</p>
+        <p class="n n--sm" style="margin-top:28px">출시 <span class="nn">3건</span></p>
+        <p class="nl">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p>
         <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다</p>
         <p style="margin-top:28px"><span class="chip chip--sub">실제 출시</span></p>
       </div><div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
@@ -350,11 +364,11 @@ li{list-style:none}
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/dalcom.jpg" alt="멀티 타이틀 라이브 운영과 사용자 기반 제품 개선">
+      <img src="../pdf/img/dalcom.jpg" alt="멀티 타이틀 라이브 운영과 사용자 기반 제품 개선" style="max-width:1073px;max-height:787px">
       <figcaption>멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</figcaption></figure>
           <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
-            <p class="n"><span class="nn">11→7</span></p>
-            <p class="nl" style="margin-bottom:10px">담당 타이틀 수 변화(입사11→종료5+신규1→7) · 2024.10~2026.07</p></div>
+            <p class="n n--sm">출시 <span class="nn">3건</span></p>
+            <p class="nl" style="margin-bottom:10px">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p></div>
         </div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다.</p>
@@ -365,22 +379,23 @@ li{list-style:none}
   <p class="eb">사례 1 · 실행</p>
   <h2 class="h h--sm">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결</h2>
   
-  <div class="bd"><div class="g2" style="grid-template-columns:1fr 780px">
+  <div class="bd"><div class="g2" style="grid-template-columns:1fr 860px">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
-              <div><p class="rt">본인 행동</p><p>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025-12, v2 2026-01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다. 이어서 SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입을 제작했다.</p></div></div>
+              <div><p class="rt">본인 행동</p><p>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025-12, v2 2026-01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg></span>
-              <div><p class="rt">미룬 것</p><p>조사에서 함께 나온 수집·전시·커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다. 꾸미기 이벤트는 덱 확장·뽑기·육성 세부를 후속으로 미루고 핵심 기능만 출시했다.</p></div></div>
+              <div><p class="rt">미룬 것</p><p>조사에서 함께 나온 수집·전시·커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
               <div><p class="rt">결과·상태</p><p>실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.</p></div></div></div>
+          <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
           <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69" target="_blank" rel="noopener">사용자 조사 기반 이벤트 복귀 ↗</a><a href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14" target="_blank" rel="noopener">정기 상품 정책 개편 제안 ↗</a><a href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a" target="_blank" rel="noopener">조직 재편과 기획·QA·CS 통합 운영 ↗</a></div>
         </div>
         <div style="display:grid;grid-template-rows:1fr 1fr;gap:24px;min-height:0">
         <figure class="shot" style="min-height:0">
-      <img src="../pdf/img/deco.jpg" alt="꾸미기 이벤트 기획·와이어프레임">
+      <img src="../pdf/img/deco.jpg" alt="꾸미기 이벤트 기획·와이어프레임" style="max-width:1480px;max-height:1470px">
       <figcaption>꾸미기 이벤트 기획·와이어프레임</figcaption></figure><figure class="shot" style="min-height:0">
-      <img src="../pdf/img/ssjproto.jpg" alt="SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입">
+      <img src="../pdf/img/ssjproto.jpg" alt="SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입" style="max-width:1600px;max-height:739px">
       <figcaption>SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입</figcaption></figure></div>
       </div></div>
   <p class="rights">화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.</p>
@@ -393,11 +408,18 @@ li{list-style:none}
   <p class="lede">넥슨 코리아 · 모바일사업실 — 팀장</p>
   <div class="bd"><div class="g2" style="grid-template-columns:1fr 660px">
         <div style="display:flex;flex-direction:column;min-height:0">
+      <div class="frow" style="margin-bottom:24px;flex:none"><div class="fs">
+      <b>소프트런칭 3개국</b>
+      <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><span class="chip">호주</span><span class="chip">말레이시아</span><span class="chip">필리핀</span></p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs">
+      <b>개선 3건</b>
+      <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><span class="chip">상품 재구성</span><span class="chip">거래소 시점/전용 상점</span><span class="chip">초반 동선</span></p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs">
+      <b>그랜드런칭</b>
+      <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px"><span class="chip">2019 글로벌 그랜드런칭</span></p></div></div>
           <div class="flow"><div class="fs"><b>문제</b><p>소프트런칭에서 상품 구성·재화 소비·초반 이탈을 확인했다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>판단</b><p>상품·재화·초반 동선을 출시 전 개선 과제로 정리했다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>결과</b><p>개선 3건이 그랜드런칭 빌드에 반영됐다</p></div></div>
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/lyn.jpg" alt="린">
+      <img src="../pdf/img/lyn.jpg" alt="린" style="max-width:600px;max-height:450px">
       <figcaption>린</figcaption></figure>
           <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
             <p class="n"><span class="nn">183억</span></p>
@@ -412,22 +434,25 @@ li{list-style:none}
   <p class="eb">사례 2 · 실행</p>
   <h2 class="h h--sm">3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시로</h2>
   
-  <div class="bd"><div class="g2" style="grid-template-columns:1fr 780px">
+  <div class="bd"><div class="g2" style="grid-template-columns:640px 1fr">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
-              <div><p class="rt">본인 행동</p><p>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품·재화·초반 동선 개선안을 정리하고 개발사와 조율했다.</p></div></div>
+              <div><p class="rt">본인 행동</p><p>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
               <div><p class="rt">결과·상태</p><p>프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.</p></div></div></div>
+          <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
           <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/3d559de72804810faa75ca85ef0a25a0" target="_blank" rel="noopener">소프트런칭 지표 기반 출시 전 개선 ↗</a><a href="https://limhenry.notion.site/09624ec9cbdb4dd9a53085f168bfcfa7" target="_blank" rel="noopener">인게임 개선 진행 ↗</a></div>
         </div>
         <div style="display:grid;grid-template-rows:auto 1fr 1fr;gap:20px;min-height:0">
-        <p style="display:flex;gap:12px;align-items:center;font-size:22px;color:var(--m60)">
-          <span class="chip chip--dark">변경 전</span><span style="color:var(--m60)">→</span><span class="chip chip--sub">변경 후</span></p>
-        <figure class="shot" style="min-height:0">
-      <img src="../pdf/img/lyn/before_after.jpg" alt="변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)">
+        <p style="display:flex;gap:14px;align-items:center;font-size:22px;font-weight:700">
+          <span class="bdg bdg--b" style="position:static;width:42px;height:42px;font-size:28px">1</span>변경 전
+          <span style="color:var(--m60)">→</span>
+          <span class="bdg bdg--a" style="position:static;width:42px;height:42px;font-size:28px">2</span>변경 후</p>
+        <figure class="shot" style="min-height:0"><span class="bdg bdg--b" style="left:45.5%">1</span><span class="bdg bdg--a" style="right:2.5%">2</span>
+      <img src="../pdf/img/lyn/before_after.jpg" alt="변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)" style="max-width:1084px;max-height:325px">
       <figcaption>변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)</figcaption></figure><figure class="shot" style="min-height:0">
-      <img src="../pdf/img/lyn/system_ui.jpg" alt="시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처">
+      <img src="../pdf/img/lyn/system_ui.jpg" alt="시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처" style="max-width:1212px;max-height:517px">
       <figcaption>시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨에 있습니다.</p>
@@ -440,21 +465,21 @@ li{list-style:none}
   <p class="lede">원더피플/에이스톰 · 사업팀 — 파트장</p>
   <div class="bd"><div class="g2" style="grid-template-columns:1fr 660px">
         <div style="display:flex;flex-direction:column;min-height:0">
-      <div class="pn" style="margin-bottom:24px;padding:24px 28px">
-        <p style="font-size:22px;font-weight:800;color:var(--tx);letter-spacing:.08em;margin-bottom:16px">중국 SDK 흐름 → 퍼블리셔 규격</p>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-          <div style="border-left:4px solid var(--sub);padding-left:18px">
-            <p style="font-size:24px;font-weight:700">퍼블리셔 플랫폼</p>
-            <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><span class="chip chip--sub">로그인</span><span class="chip chip--sub">런처</span></p></div>
-          <div style="border-left:4px solid var(--m38);padding-left:18px">
-            <p style="font-size:24px;font-weight:700">개발사 영역</p>
-            <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><span class="chip">서버 선택</span><span class="chip">캐릭터 생성</span></p></div></div>
+      <div class="pn" style="margin-bottom:24px;padding:24px 28px;
+        display:grid;grid-template-columns:1fr 132px 1fr;gap:0;align-items:center"><div style="border-left:4px solid var(--sub);padding-left:18px">
+               <p style="font-size:24px;font-weight:700">퍼블리셔 플랫폼</p>
+               <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><span class="chip chip--sub">로그인</span><span class="chip chip--sub">런처</span></p></div><div style="text-align:center;color:var(--m38)">
+               <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.8;
+                 stroke-linecap:round;stroke-linejoin:round"><path d="M4 12h15M13 6l6 6-6 6"/></svg>
+               <p style="margin-top:6px;font-size:20px;font-weight:700;color:var(--tx);line-height:1.3">중국 SDK 흐름<br>퍼블리셔 규격</p></div><div style="border-left:4px solid var(--m38);padding-left:18px">
+               <p style="font-size:24px;font-weight:700">개발사 영역</p>
+               <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap"><span class="chip">서버 선택</span><span class="chip">캐릭터 생성</span></p></div>
       </div>
           <div class="flow"><div class="fs"><b>문제</b><p>중국 서비스의 결제·서버 선택 흐름을 한국에 맞춰야 했다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>판단</b><p>퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>결과</b><p>유료 재화·쿠폰이 라이브 적용되고 2023-01 한국 런칭</p></div></div>
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/nightwalker.jpg" alt="나이트워커">
+      <img src="../pdf/img/nightwalker.jpg" alt="나이트워커" style="max-width:1280px;max-height:720px">
       <figcaption>나이트워커</figcaption></figure>
           <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
             <p class="n"><span class="nn">33만+</span></p>
@@ -469,25 +494,21 @@ li{list-style:none}
   <p class="eb">사례 3 · 실행</p>
   <h2 class="h h--sm">중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의</h2>
   
-  <div class="bd"><div class="g2" style="grid-template-columns:1fr 780px">
+  <div class="bd"><div class="g2" style="grid-template-columns:640px 1fr">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
-              <div><p class="rt">본인 행동</p><p>유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다. 런칭 후 주간 판매 현황을 분석해 상품을 제안하고 라이브 지표로 허들 개선을 제안했다.</p></div></div>
+              <div><p class="rt">본인 행동</p><p>유료 재화 구매 시스템 연동 기획, 쿠폰 시스템 기능 정의, 서버 선택창 UI/플로우 기획을 작성해 퍼블리셔·개발과 협의했다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
               <div><p class="rt">결과·상태</p><p>프로젝트 실제 출시(2023-01-26 한국 런칭). 유료 재화·쿠폰 기능은 라이브 적용이 기록돼 있고, 서버 선택은 기반 작업 완료 상태로 문서화돼 있다. 프로젝트 전체 성과는 한국 서비스 신규 유저 33만+이며 본인 기여는 연동·상품·허들 제안 범위다.</p></div></div></div>
+          <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
           <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/3d559de72804819f9a88c951cbc10f9a" target="_blank" rel="noopener">퍼블리셔 규격 시스템 재정의 ↗</a><a href="https://limhenry.notion.site/49043d5d2bfa44d18384126bbbd86f14" target="_blank" rel="noopener">유료재화 구매 시스템 연동 ↗</a><a href="https://limhenry.notion.site/2ade8f618bb945a6b0c0f6a711133b55" target="_blank" rel="noopener">쿠폰 시스템 연동 ↗</a><a href="https://limhenry.notion.site/581e150745124f13b3d6d3721841b1c2" target="_blank" rel="noopener">서버 선택창 UI/플로우 기획 ↗</a><a href="https://limhenry.notion.site/39a59de7280481888c8dff7c54446d1f" target="_blank" rel="noopener">프로모션 상품 기능 추가 ↗</a></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:20px;min-height:0">
+        <div style="display:grid;grid-template-columns:1fr 1.25fr;gap:22px;min-height:0">
         <figure class="shot" style="min-height:0">
-      <img src="../pdf/img/nightwalker/server_flow_proposal.jpg" alt="서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의">
+      <img src="../pdf/img/nightwalker/server_flow_proposal.jpg" alt="서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의" style="max-width:777px;max-height:353px">
       <figcaption>서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의</figcaption></figure><figure class="shot" style="min-height:0">
-      <img src="../pdf/img/nightwalker/server_flowchart_wire.jpg" alt="서버 선택 플로우차트 — 퍼블리셔 플랫폼과 개발사 영역 구분">
-      <figcaption>서버 선택 플로우차트 — 퍼블리셔 플랫폼과 개발사 영역 구분</figcaption></figure>
-        <figure class="shot" style="min-height:0">
-      <img src="../pdf/img/nightwalker/charge_flow.jpg" alt="보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름">
-      <figcaption>보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름</figcaption></figure><figure class="shot" style="min-height:0">
-      <img src="../pdf/img/nightwalker/charge_ui_mock.jpg" alt="충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안">
+      <img src="../pdf/img/nightwalker/charge_ui_mock.jpg" alt="충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안" style="max-width:941px;max-height:950px">
       <figcaption>충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안</figcaption></figure></div>
       </div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다. 나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.</p>
@@ -503,7 +524,7 @@ li{list-style:none}
       
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</p>
-          <p class="n" style="margin-top:26px"><span class="nn">11→7</span></p>
+          <p class="n" style="margin-top:26px"><span class="ba"><i>11</i><s>→</s><u>7</u></span></p>
           <p class="nl">담당 타이틀 수 변화(입사11→종료5+신규1→7) · 2024.10~2026.07</p></div>
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">린</p>
@@ -535,32 +556,46 @@ li{list-style:none}
   <h2 class="h h--sm">카오스크로니클 · Five Stars · Shadow Seven</h2>
   
   <div class="bd"><div class="g3"><div style="display:flex;flex-direction:column;min-height:0">
-        <figure class="shot" style="height:300px;flex:none">
-      <img src="../pdf/img/chaos/event_ui_plan.jpg" alt="이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용">
+        <figure class="shot" style="height:132px;flex:none">
+      <img src="../pdf/img/chaos.jpg" alt="카오스크로니클" style="object-fit:cover">
+      </figure>
+        <figure class="shot" style="height:216px;flex:none;margin-top:16px">
+      <img src="../pdf/img/chaos/event_ui_plan.jpg" alt="이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용" style="max-width:1085px;max-height:720px">
       <figcaption>이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용</figcaption></figure>
-        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:24px">
-          <p class="n n--sm"><span class="nn">98억</span></p>
-          <p class="nl" style="margin-bottom:8px">미국 매출 · 서비스 기간 누적</p></div>
-        <dl class="kv" style="margin-top:24px;grid-template-columns:150px 1fr"><dt>미국 성적</dt><dd>앱스토어 112위 · 북미 등 iOS·구글 피처드</dd><dt>소프트런칭</dt><dd>5개국 소프트런칭 후 글로벌</dd><dt>서비스 종료 운영</dt><dd>2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당</dd></dl>
-        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/0fcb2233c75c4b04b5317fe2ded2fec4" target="_blank" rel="noopener">초반 동선 폴리싱 ↗</a><a href="https://limhenry.notion.site/508469dc0586497f8ce75618b142e29a" target="_blank" rel="noopener">BM 기획 및 제안 ↗</a></div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
+          <p class="n n--xs"><span class="nn">98억</span></p>
+          <p class="nl" style="margin-bottom:4px">미국 매출 · 서비스 기간 누적</p></div>
+        
+        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당</dd><dt>판단</dt><dd>5개국 소프트런칭 후 글로벌</dd><dt>결과</dt><dd>앱스토어 112위 · 북미 등 iOS·구글 피처드</dd></dl>
+        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/0fcb2233c75c4b04b5317fe2ded2fec4" target="_blank" rel="noopener">초반 동선 폴리싱 ↗</a><a href="https://limhenry.notion.site/508469dc0586497f8ce75618b142e29a" target="_blank" rel="noopener">BM 기획 및 제안 ↗</a><a href="https://limhenry.notion.site/aa5b9015b7c044809731b0e073012101" target="_blank" rel="noopener">이벤트 기획 ↗</a></div>
       </div><div style="display:flex;flex-direction:column;min-height:0">
-        <figure class="shot" style="height:300px;flex:none">
-      <img src="../pdf/img/fivestars/prereg.jpg" alt="정식 런칭 사전예약 키 비주얼">
+        <figure class="shot" style="height:132px;flex:none">
+      <img src="../pdf/img/fivestars.jpg" alt="Five Stars" style="object-fit:cover">
+      </figure>
+        <figure class="shot" style="height:216px;flex:none;margin-top:16px">
+      <img src="../pdf/img/fivestars/prereg.jpg" alt="정식 런칭 사전예약 키 비주얼" style="max-width:361px;max-height:180px">
       <figcaption>정식 런칭 사전예약 키 비주얼</figcaption></figure>
-        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:24px">
-          <p class="n n--sm"><span class="nn">24억</span></p>
-          <p class="nl" style="margin-bottom:8px">매출 · 오픈 후 5개월</p></div>
-        <dl class="kv" style="margin-top:24px;grid-template-columns:150px 1fr"><dt>한국 성적</dt><dd>앱스토어 49위 · 원스토어 28위 · 사전예약 20만</dd><dt>지표</dt><dd>DAU 피크 4.4만 · PU 1.6% · ARPPU 16만원대</dd><dt>조직 셋업·채용</dt><dd>사업 · 운영 조직 셋팅 · 리크루트</dd></dl>
-        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/4c6d6bbaaee24779ba80cce602592248" target="_blank" rel="noopener">미디어 쇼케이스 시나리오 구성 ↗</a><a href="https://limhenry.notion.site/b14364484326425d981697677cf386ab" target="_blank" rel="noopener">초반 이탈구간 개선 ↗</a></div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
+          <p class="n n--xs"><span class="nn">24억</span></p>
+          <p class="nl" style="margin-bottom:4px">매출 · 오픈 후 5개월</p></div>
+        
+        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>사업 · 운영 조직 셋팅 · 리크루트</dd><dt>판단</dt><dd>OST 제작·발매 · 더빙 외주 · 마케팅 대행 컨택</dd><dt>결과</dt><dd>앱스토어 49위 · 원스토어 28위 · 사전예약 20만</dd></dl>
+        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/4c6d6bbaaee24779ba80cce602592248" target="_blank" rel="noopener">미디어 쇼케이스 시나리오 구성 ↗</a><a href="https://limhenry.notion.site/b14364484326425d981697677cf386ab" target="_blank" rel="noopener">초반 이탈구간 개선 ↗</a><a href="https://limhenry.notion.site/29609a7acf9046be87cdee55d11d9f30" target="_blank" rel="noopener">업데이트 현황 보고 ↗</a></div>
       </div><div style="display:flex;flex-direction:column;min-height:0">
-        <figure class="shot" style="height:300px;flex:none">
-      <img src="../pdf/img/nanakage/update_plan.jpg" alt="1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 순서를 정리한 계획">
+        <figure class="shot" style="height:132px;flex:none">
+      <img src="../pdf/img/nanakage.jpg" alt="Shadow Seven" style="object-fit:cover">
+      </figure>
+        <figure class="shot" style="height:216px;flex:none;margin-top:16px">
+      <img src="../pdf/img/nanakage/update_plan.jpg" alt="1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 순서를 정리한 계획" style="max-width:943px;max-height:466px">
       <figcaption>1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 순서를 정리한 계획</figcaption></figure>
-        <div style="display:flex;align-items:flex-end;gap:18px;margin-top:24px">
-          <p class="n n--sm"><span class="nn">7개국</span></p>
-          <p class="nl" style="margin-bottom:8px">소프트런칭 국가 수(인도네시아·홍콩·필리핀·말레이시아·싱가폴·태국·마카오)</p></div>
-        <dl class="kv" style="margin-top:24px;grid-template-columns:150px 1fr"><dt>담당</dt><dd>사업PM (2019.10 ~ 2020.04)</dd><dt>지표 → 조치 → 결과</dt><dd>일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29 → 글로벌 4.4</dd><dt>소프트런칭</dt><dd>인도네시아 · 홍콩 · 필리핀 · 말레이시아 · 싱가폴 · 태국 · 마카오 (7개국)</dd></dl>
-        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2" target="_blank" rel="noopener">인게임 재화/BM 개선 ↗</a><a href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f" target="_blank" rel="noopener">소프트런칭 비교 분석 ↗</a></div>
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
+          <p class="n n--xs"><span class="nn">7개국</span></p>
+          <p class="nl" style="margin-bottom:4px">소프트런칭 국가 수</p></div>
+        <p class="ba" style="margin-top:16px;font-size:40px;font-weight:800;letter-spacing:-.02em">
+          <span style="font-size:22px;font-weight:600;color:var(--m60);margin-right:12px">구글 평점</span>
+          <i>3.29</i><s>→</s><u>4.4</u></p>
+        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>사업PM (2019.10 ~ 2020.04)</dd><dt>판단</dt><dd>일본 성적 저조 → 평점 관리 시스템 추가</dd><dt>결과</dt><dd>2020-02-20 한국 · 미국 · 대만 — 한국 AOS 매출 173위</dd></dl>
+        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2" target="_blank" rel="noopener">인게임 재화/BM 개선 ↗</a><a href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f" target="_blank" rel="noopener">소프트런칭 비교 분석 ↗</a><a href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f" target="_blank" rel="noopener">평점 관리 시스템 추가 ↗</a></div>
       </div></div></div>
   <p class="rights">게임 명칭·이미지의 상표와 저작권은 넥슨·스카이피플·넵튠 레전드에 있습니다.</p>
 </section>
@@ -572,15 +607,25 @@ li{list-style:none}
   <p class="lede">문제 → 판단 → 행동 → 결과 순서로 씁니다. 각 장의 근거 링크에서 근거까지 볼 수 있습니다.</p>
   <div class="bd"><div class="steps">
       <div class="st"><p class="no">01</p><h3>사용자 조사·지표</h3>
-        <ul><li>만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다</li><li>소프트런칭에서 상품 구성·재화 소비·초반 이탈을 확인했다</li></ul></div>
+        <ul><li>만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다</li><li>소프트런칭에서 상품 구성·재화 소비·초반 이탈을 확인했다</li></ul>
+        
+      </div>
       <div class="st"><p class="no">02</p><h3>제품 판단</h3>
-        <ul><li>인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다</li><li>상품·재화·초반 동선을 출시 전 개선 과제로 정리했다</li></ul></div>
+        <ul><li>인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다</li><li>상품·재화·초반 동선을 출시 전 개선 과제로 정리했다</li></ul>
+        
+      </div>
       <div class="st"><p class="no">03</p><h3>개발 우선순위</h3>
-        <ul><li>퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다</li><li>사례 — 소프트런칭 지표 → 개선 과제</li></ul></div>
+        <ul><li>퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다</li><li>사례 — 소프트런칭 지표 → 개선 과제</li></ul>
+        <div class="pri"><b>우선순위 결정</b>대응 순서와 이벤트 범위(MVP)는 본인이 정했고, 개발 일정과 출시일은 개발팀·경영진 협의로 확정했다.</div>
+      </div>
       <div class="st"><p class="no">04</p><h3>실행·출시</h3>
-        <ul><li>꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다</li><li>구매·쿠폰·서버 선택 UI/플로우 기획을 쓰고 협의했다</li></ul></div>
+        <ul><li>꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다</li><li>구매·쿠폰·서버 선택 UI/플로우 기획을 쓰고 협의했다</li></ul>
+        
+      </div>
       <div class="st"><p class="no">05</p><h3>라이브 운영·표준화</h3>
-        <ul><li>성과 — 카오스크로니클 종료 운영</li><li>성과 — SKU 자동화·어뷰징 SOP</li></ul></div></div></div>
+        <ul><li>성과 — 카오스크로니클 종료 운영</li><li>성과 — SKU 자동화·어뷰징 SOP</li></ul>
+        
+      </div></div></div>
   <p class="rights">수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.</p>
 </section>
 
@@ -592,7 +637,7 @@ li{list-style:none}
   <div class="bd"><div class="g2">
       <div style="display:flex;flex-direction:column;min-height:0">
         <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/deco.jpg" alt="꾸미기 이벤트 기획·와이어프레임">
+      <img src="../pdf/img/deco.jpg" alt="꾸미기 이벤트 기획·와이어프레임" style="max-width:1480px;max-height:1470px">
       <figcaption>꾸미기 이벤트 기획·와이어프레임</figcaption></figure>
         <dl class="kv" style="margin-top:24px"><dt>체험 순서</dt><dd>꾸미기 화면에서 아이템을 고르고 배치해 보세요.</dd><dt>설계 목적</dt><dd>개발 전 협의용으로 화면 흐름을 먼저 맞추려고 만들었습니다.</dd><dt>본인 역할</dt><dd>기획서 초안 작성과 프로토타입 제작을 직접 했습니다.</dd><dt>출시 여부</dt><dd>실제 이벤트는 2026-04-30~05-23 출시.</dd>
           <dt>체험판</dt><dd><a href="https://bluedaylol80.github.io/henry-portfolio/demo/deco.html" target="_blank" rel="noopener"
@@ -600,7 +645,7 @@ li{list-style:none}
       </div>
       <div style="display:flex;flex-direction:column;min-height:0">
         <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/ssjproto.jpg" alt="SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입">
+      <img src="../pdf/img/ssjproto.jpg" alt="SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입" style="max-width:1600px;max-height:739px">
       <figcaption>SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입</figcaption></figure>
         <dl class="kv" style="margin-top:24px"><dt>체험 순서</dt><dd>주차를 바꾸고 보상 잠금 상태를 비교한 뒤, 미션 → 보상 수령 → 응모 흐름 순서로 눌러 보세요.</dd><dt>설계 목적</dt><dd>기획서 대신 작동하는 웹뷰로 흐름을 검증하려고 만들었습니다.</dd><dt>본인 역할</dt><dd>AI로 인터랙티브 프로토타입을 직접 만들었습니다.</dd><dt>출시 여부</dt><dd>실제 출시 — 2026년 5월.</dd>
           <dt>체험판</dt><dd><a href="https://bluedaylol80.github.io/henry-portfolio/demo/ssjproto.html" target="_blank" rel="noopener"
@@ -615,26 +660,26 @@ li{list-style:none}
   <h2 class="h h--sm">10개 회사, 19년의 기록</h2>
   
   <div class="bd"><div class="co"><div class="cor"><b>달콤소프트</b>
-        <span class="k"><span class="nn">11→7</span></span>
-        <p class="p">라이브기획팀 팀장 · 2024.10 – 2026.07</p><p class="t">SuperStar 시리즈 11→7 재편 (K-pop IP)</p></div><div class="cor"><b>원더피플·에이스톰</b>
+        <span class="k"><span class="ba"><i>11</i><s>→</s><u>7</u></span></span>
+        <p class="p">라이브기획팀 팀장 · 2024.10 – 2026.07</p><p class="t">11개 → 5개 종료·SSWO 론칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</p></div><div class="cor"><b>원더피플·에이스톰</b>
         <span class="k"><span class="nn">33만+</span></span>
-        <p class="p">사업팀 파트장 · 2022.02 – 2024.04</p><p class="t">나이트워커, 슈퍼피플</p></div><div class="cor"><b>네오위즈</b>
+        <p class="p">사업팀 파트장 · 2022.02 – 2024.04</p><p class="t">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p></div><div class="cor"><b>네오위즈</b>
         <span class="k"></span>
-        <p class="p">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p><p class="t">마스터 오브 나이츠</p></div><div class="cor"><b>스카이피플</b>
+        <p class="p">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p><p class="t">신규 시스템 10종·개편 8종 기획 주도, 기획팀 채용·마일스톤 관리</p></div><div class="cor"><b>스카이피플</b>
         <span class="k"><span class="nn">24억</span></span>
-        <p class="p">사업팀 팀장 · 2020.07 – 2021.02</p><p class="t">Five Stars</p></div><div class="cor"><b>넵튠 레전드</b>
+        <p class="p">사업팀 팀장 · 2020.07 – 2021.02</p><p class="t">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 20만·신규 28만+·매출 24억</p></div><div class="cor"><b>넵튠 레전드</b>
         <span class="k"><span class="nn">7개국</span></span>
-        <p class="p">스튜디오 사업PM · 2019.10 – 2020.04</p><p class="t">Shadow Seven</p></div><div class="cor"><b>넥슨 코리아</b>
+        <p class="p">스튜디오 사업PM · 2019.10 – 2020.04</p><p class="t">일본 성적 저조 → 평점 관리 시스템 추가 → 구글 평점 일본 3.29→글로벌 4.4 · 7개국 소프트런칭</p></div><div class="cor"><b>넥슨 코리아</b>
         <span class="k"><span class="nn">183억</span></span>
-        <p class="p">모바일사업실 팀장 · 2015.07 – 2019.10</p><p class="t">린 · 런닝맨 히어로즈 · 드래곤네스트2 · 카오스크로니클 · 영웅의 군단</p></div><div class="cor"><b>넷마블 블루</b>
+        <p class="p">모바일사업실 팀장 · 2015.07 – 2019.10</p><p class="t">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p></div><div class="cor"><b>넷마블 블루</b>
         <span class="k"></span>
-        <p class="p">KON 스튜디오 사업PM · 2015.03 – 2015.07</p><p class="t">KON</p></div><div class="cor"><b>소프트닉스</b>
+        <p class="p">KON 스튜디오 사업PM · 2015.03 – 2015.07</p><p class="t">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</p></div><div class="cor"><b>소프트닉스</b>
         <span class="k"></span>
-        <p class="p">전략사업팀 사업PM · 2011.07 – 2015.02</p><p class="t">NTD · 라키온2 · 그랑에이지</p></div><div class="cor"><b>NHN Service</b>
+        <p class="p">전략사업팀 사업PM · 2011.07 – 2015.02</p><p class="t">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p></div><div class="cor"><b>NHN Service</b>
         <span class="k"></span>
-        <p class="p">한게임운영실 파트장 · 2008.05 – 2011.07</p><p class="t">Tera 웹운영 · 아틀란티카 · R2</p></div><div class="cor"><b>웹젠</b>
+        <p class="p">한게임운영실 파트장 · 2008.05 – 2011.07</p><p class="t">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</p></div><div class="cor"><b>웹젠</b>
         <span class="k"></span>
-        <p class="p">SUN 운영팀 · 2006.04 – 2007.10</p><p class="t">SUN 온라인</p></div></div></div>
+        <p class="p">SUN 운영팀 · 2006.04 – 2007.10</p><p class="t">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p></div></div></div>
   <p class="rights">수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다. ※ 2007.10 – 2008.05 학업 복학 (강남대학교 컴퓨터공학, 2009 졸업)</p>
 </section>
 
