@@ -107,7 +107,9 @@ for (const t of targets) {
         return {
           blocks,
           title: (document.title || '').replace(/\s*\|\s*Notion\s*$/, '').trim(),
-          summary: txt(callout),
+          // 요약 = 첫 콜아웃의 자기 문장만. 콜아웃 안 자식 블록(대표 이미지·설명 문단)은 섞지 않는다(WO-32 양식).
+          // 렌더 DOM에서 콜아웃 자기 문장은 콜아웃 안 첫 편집 leaf다.
+          summary: txt(callout && (callout.querySelector('[data-content-editable-leaf]') || callout)),
           process,
           period: prop('참여 기간'),
           tools: prop('활용 Tool'),
@@ -151,6 +153,10 @@ for (const t of targets) {
            💡 요약 콜아웃이 있으면 거기서 24px 위를 기준으로 잘라 요약 + ✅ 업무 프로세스가 프레임에 들어오게 한다.
            제목은 카드가 텍스트로 따로 쓰므로 그림에서 빠져도 잃는 정보가 없다. */
         const callout = document.querySelector('.notion-callout-block')
+        /* 양식 콜아웃은 안쪽에 대표 이미지·설명 문단을 품는다 — 그대로 찍으면 이미지가 프레임을 차지해
+           ✅ 업무 프로세스 줄이 밀려난다(WO-32). 캡처에서만 콜아웃 자기 문장 외 자식 블록을 접는다. */
+        const own = callout && callout.querySelector('[data-content-editable-leaf]')
+        if (own) for (const el of callout.querySelectorAll('[data-block-id]')) if (!el.contains(own)) el.style.display = 'none'
         if (callout){
           const cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
           if (cTop > top) return Math.max(0, Math.round(cTop - 24))

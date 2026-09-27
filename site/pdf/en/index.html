@@ -137,6 +137,11 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .two--res .ig .ph--por img{height:44mm}
 /* EN 캡션이 한 줄 더 길어 12쪽이 넘친다 — 일정표는 그대로 두고 작은 세로 캡처에서 뺀다(Codex R13) */
 html[lang=en] .two--res .ig .ph--por img{height:39mm}
+/* EN Shadow Seven은 시스템 기획 행(WO-31 §6)이 길어 왼쪽 칸이 넘친다 — 문구는 그대로 두고 칸 폭만 옮긴다 */
+html[lang=en] .two--res{grid-template-columns:1.3fr 1fr}
+html[lang=en] .two--res .evlist a{display:inline-block;margin-right:5mm}
+html[lang=en] .two--res .kv col:first-child{width:31mm}
+html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
@@ -195,14 +200,14 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
   <p class="eyebrow">Portfolio</p>
   <p class="name">Henry Lim</p>
   <p class="role">Game Live Service PM &amp; Director · 19 yrs</p>
-  <p class="head">Turn user needs into product direction, and dev priorities into shipped work.</p>
+  <p class="head">User needs set the direction. Milestones carry it through launch and live ops.</p>
   <div class="contact">
     <p><b>Email</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
     <p><b>Site</b> <a href="https://bluedaylol80.github.io/henry-portfolio/en/">https://bluedaylol80.github.io/henry-portfolio/en/</a></p>
     <p><b>Notion resume</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">Notion resume ↗</a></p>
   </div>
-  <p class="issued">Issued 2026-09-10</p>
-  <div class="strip"><figure><img src="../img/dalcom.jpg" alt=""><figcaption>Multi-title live operations and user-led product work</figcaption></figure><figure><img src="../img/lyn.jpg" alt=""><figcaption>Lyn</figcaption></figure><figure><img src="../img/nightwalker.jpg" alt=""><figcaption>Night Walker</figcaption></figure></div>
+  <p class="issued">Issued 2026-09-28</p>
+  <div class="strip"><figure><img src="../img/dalcom.jpg" alt=""><figcaption>Multi-title live operations and user‑led product work</figcaption></figure><figure><img src="../img/lyn.jpg" alt=""><figcaption>Lyn</figcaption></figure><figure><img src="../img/nightwalker.jpg" alt=""><figcaption>Night Walker</figcaption></figure></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft·Nexon·Wonderpeople. Night Walker developed by Wonderpeople and Acestorm · published by Nexon.</p>
 </section>
 
@@ -238,7 +243,7 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
         <p class="ti">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</p></div>
       <div class="ms-c"><b><em>6</em>Neptune Legend</b>
         <p class="per"><span class="nw">2019.10</span> – <span class="nw">2020.04</span></p>
-        <p class="rl">Business PM, Studio</p>
+        <p class="rl">Development PM, Studio</p>
         <p class="ti">Shadow Seven</p></div>
       <div class="ms-c"><b><em>7</em>Skypeople</b>
         <p class="per"><span class="nw">2020.07</span> – <span class="nw">2021.02</span></p>
@@ -248,15 +253,15 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
         <p class="per"><span class="nw">2021.02</span> – <span class="nw">2021.10</span></p>
         <p class="rl">Team Lead, Game Design · Snowball Studio</p>
         <p class="ti">Master of Knights</p></div>
-      <div class="ms-c"><b><em>9</em>Wonderpeople · Acestorm</b>
+      <div class="ms-c"><b><em>9</em>Wonderpeople/Acestorm</b>
         <p class="per"><span class="nw">2022.02</span> – <span class="nw">2024.04</span></p>
         <p class="rl">Part Lead, Business Team</p>
         <p class="ti">Night Walker, Super People</p></div>
       <div class="ms-c"><b><em>10</em>Dalcomsoft</b>
         <p class="per"><span class="nw">2024.10</span> – <span class="nw">2026.07</span></p>
         <p class="rl">Team Lead, Live Game Design</p>
-        <p class="ti">SuperStar series reshaped 11 → 7 (K-pop IP)</p></div></div></div>
-  <p class="rights">Figures follow the public résumé · Game titles are trademarks of their respective owners.</p>
+        <p class="ti">Led app services for 11 SuperStar titles (K-pop IP)</p></div></div></div>
+  <p class="rights">Game titles are trademarks of their respective owners.</p>
 </section>
 
 <section class="s">
@@ -265,19 +270,19 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
     <div></div>
   </div>
   <div class="bd">
-    <h2 class="t t--sm">Four jobs that keep a live service running</h2>
-    <p class="lede">19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.</p>
+    <h2 class="t t--sm">Core work of a live service</h2>
+    <p class="lede">Global launches and live ops for PC and mobile games, A to Z — as PM, designer and director. I turn user needs and metrics into product direction and dev priorities, and as a director I ran and coordinated dev, design, business and operations work. Lately I prototype events with AI and automate routine work.</p>
     <div class="cards4" style="margin-top:6mm">
-      <div class="sk"><h3>Product decisions &amp; milestones</h3><p>Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.</p>
-        <p class="cs">Case — from user research to shipped events<br>Case — soft launch metrics → pre-launch fixes</p></div>
-      <div class="sk"><h3>Launch &amp; live ops</h3><p>Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
+      <div class="sk"><h3>Product decisions &amp; milestones</h3><p>Deciding what to build from research and metrics, then driving it to delivery through design and dev milestones. At NEOWIZ, as design lead, I designed 18 core systems (10 new, 8 reworked) and ran the alpha and beta milestones.</p>
+        <p class="cs">Case — from user research to shipped events<br>Case — soft launch metrics → pre‑launch fixes</p></div>
+      <div class="sk"><h3>Launch &amp; live ops</h3><p>Soft launch, launch, live ops and sunset — I ran every stage, A to Z. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
         <p class="cs">Case — redefining the systems to publisher spec<br>Work — Chaos Chronicle sunset ops</p></div>
       <div class="sk"><h3>Team &amp; hiring</h3><p>Hiring, team structure and who owns what. At Dalcomsoft I restructured 22 people across three teams into 13 across two while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
         <p class="cs">Case — restructuring (see p.5)<br>Work — Skypeople org setup</p></div>
       <div class="sk"><h3>Operational standards</h3><p>Turning repetitive work into rules and automation. I automated SKUs for 7 projects with Google Apps Script and documented the abuse follow-up SOP and the consolidated Notion work history.</p>
         <p class="cs">Work — SKU automation and the abuse SOP</p></div></div>
-    <div class="stats"><div><b><span class="nw">19</span> years</b><span class="lb">Total experience (per resume)</span></div><div><b><span class="nw">10</span></b><span class="lb">Companies</span></div><div><b><span class="nw">₩18.3B</span></b><span class="lb">Lyn revenue (#3 grossing, App Store · Google Play)</span></div><div><b><span class="nw">30</span></b><span class="lb">Projects — 8 published, 22 operated</span></div></div></div>
-  <p class="rights">Figures follow the public résumé · Game titles are trademarks of their respective owners.</p>
+    <div class="stats"><div><b><span class="nw">19</span> years</b><span class="lb">Total experience</span></div><div><b><span class="nw">10</span></b><span class="lb">Companies</span></div><div><b><span class="nw">₩18.3B</span></b><span class="lb">Lyn revenue (#3 grossing, App Store · Google Play)</span></div><div><b><span class="nw">30</span></b><span class="lb">Projects — 8 published, 22 operated</span></div></div></div>
+  <p class="rights">Game titles are trademarks of their respective owners.</p>
 </section>
 
 <section class="s case" data-case="case1">
@@ -287,9 +292,9 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
   </div>
   <div class="bd"><div class="two two--l">
       <figure class="hero-shot"><img src="../img/dalcom.jpg" alt="">
-      <figcaption>Multi-title live operations and user-led product work</figcaption></figure>
+      <figcaption>Multi-title live operations and user‑led product work</figcaption></figure>
       <div><h2 class="t case-h">From survey request to shipped events</h2>
-        <div class="kpi"><b><span class="nw">11→7</span></b><span class="lb">Titles in the live portfolio (11 at hire → 5 sunset + 1 new → 7) · Oct 2024 – Jul 2026</span></div>
+        <div class="kpi"><b><span class="nw">11</span> titles</b><span class="lb">Led app services for 11 SuperStar titles · Oct 2024 – Jul 2026</span></div>
         <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned the survey request for webview events into shipped in-game minigames and webview events</td></tr><tr><th>Period &amp; role</th><td>Employed 2024.10 – 2026.07 · Team Lead, Live Game Design (live director) · case period: survey 2025.11 → launch 2026.05</td></tr><tr><th>Problem</th><td>In the November 2025 satisfaction survey across 6 titles (Korean, English, Japanese), IP satisfaction was high and players asked for the old webview events back. I took that on as an event improvement task.</td></tr><tr><th>Decision</th><td>With limited dev resources, I put in-game minigames first because they could run on existing systems, and extended to webview events, which needed separate development, afterwards.</td></tr><tr><th>Decision scope</th><td>I set the response order and the event scope (MVP); the dev schedule and launch dates were settled with the dev team and management.</td></tr></table></div>
     </div></div>
   <p class="rights">Game names and images are trademarks and copyrighted works of Dalcomsoft.</p>
@@ -319,7 +324,7 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
   <div class="bd"><div class="two two--l">
       <figure class="hero-shot"><img src="../img/lyn.jpg" alt="">
       <figcaption>Lyn</figcaption></figure>
-      <div><h2 class="t case-h">Soft launch metrics into pre-launch fixes</h2>
+      <div><h2 class="t case-h">Soft launch metrics into pre‑launch fixes</h2>
         <div class="kpi"><b><span class="nw">₩18.3B</span></b><span class="lb">Revenue · cumulative through 2019</span></div>
         <table class="kv"><colgroup><col><col></colgroup><tr><th>In one line</th><td>Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch</td></tr><tr><th>Period &amp; role</th><td>Team Lead, Mobile Business Division, Nexon Korea (employed 2015.07 – 2019.10) · Lyn business PM 2017.02 – 2019 (developer collaboration, build coordination)</td></tr><tr><th>Problem</th><td>Bringing the developer build up to launch condition meant turning user tests and market metrics into development requests. The soft launch (Australia, Malaysia, the Philippines, 2019.01–02) showed an unbalanced product mix, slow paid-gem spending and early drop-off.</td></tr><tr><th>Decision</th><td>I framed product mix, currency loop and early flow as fixes to close before launch, and set the product direction by benchmarking a comparable title (Langrisser).</td></tr></table></div>
     </div></div>
@@ -328,7 +333,7 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
 
 <section class="s case" data-case="case2">
   <div class="hd">
-    <div><p class="eyebrow">Case 2 · Execution</p><p class="who">Soft launch metrics into pre-launch fixes</p></div>
+    <div><p class="eyebrow">Case 2 · Execution</p><p class="who">Soft launch metrics into pre‑launch fixes</p></div>
     <div><span class="pill pill--line">Launch &amp; live ops</span></div>
   </div>
   <div class="bd"><div class="two two--r">
@@ -412,14 +417,14 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
 
 <section class="s res">
   <div class="hd">
-    <div><p class="eyebrow">Results · Shadow Seven</p><p class="who">Neptune Legend · Studio — Business PM</p></div>
+    <div><p class="eyebrow">Results · Shadow Seven</p><p class="who">Neptune Legend · Studio — Development PM</p></div>
     <div></div>
   </div>
   <div class="bd"><div class="two two--top two--res">
         <div><p class="res-n"><span class="nw">7</span> markets</p><p class="res-l">Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)</p>
           <p class="res-meta"><b>Period</b> <span class="nw">2019.10</span> – <span class="nw">2020.04</span></p>
-          <ul class="res-b"><li>Added a rating management system after weak results in Japan.</li><li>Google Play rating: Japan <span class="nw">3.29</span> → global <span class="nw">4.4.</span></li><li>Soft launch in <span class="nw">7</span> markets.</li></ul>
-          <table class="kv"><colgroup><col><col></colgroup><tr><th>Role</th><td>Business PM (2019.10 – 2020.04)</td></tr><tr><th>Metrics → action → result</th><td>Weak Japan performance → added rating management → Google Play rating 3.29 in Japan → 4.4 global</td></tr><tr><th>Soft launch</th><td>Indonesia · Hong Kong · the Philippines · Malaysia · Singapore · Thailand · Macau (7 markets)</td></tr><tr><th>Grand launch</th><td>2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea</td></tr></table><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2">In-game currency/BM improvements ↗</a><a class="go" href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f">Soft launch comparison ↗</a><a class="go" href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f">Added rating management system ↗</a></div></div>
+          <ul class="res-b"><li>As development PM I designed the core systems — content loop, monetization, tracking — and took the game from a <span class="nw">7-market</span> soft launch to the Korea, US and Taiwan grand launch.</li></ul>
+          <table class="kv"><colgroup><col><col></colgroup><tr><th>Role</th><td>Development PM (2019.10 – 2020.04)</td></tr><tr><th>System design</th><td>Content loop (currency flow), level-based content unlocks and reward structure · monetization and package structure (boxes, costumes, instant open) · Tapjoy funnel, ad placement and a tracking-event standard across every stage · referral pages in 5 languages · rating management system</td></tr><tr><th>Metrics → action → result</th><td>Weak Japan performance → added rating management → Google Play rating 3.29 in Japan → 4.4 global</td></tr><tr><th>Soft launch</th><td>Indonesia · Hong Kong · the Philippines · Malaysia · Singapore · Thailand · Macau (7 markets)</td></tr><tr><th>Grand launch</th><td>2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea</td></tr></table><div class="evlist"><b>Evidence</b><a class="go" href="https://limhenry.notion.site/f6a1be10d1d645d48f62aa02e72198f2">In-game currency/BM improvements ↗</a><a class="go" href="https://limhenry.notion.site/8cbbe93738e54e0d99020f2f6d03822f">Soft launch comparison ↗</a><a class="go" href="https://limhenry.notion.site/87c69184413f4cb78d66af21a98de32f">Added rating management system ↗</a></div></div>
         <div class="ig"><figure class="ph" style="max-width:227.8mm">
       <img src="../img/nanakage.jpg" alt=""><figcaption>Shadow Seven</figcaption></figure><figure class="ph ph--por" style="max-width:120.6mm">
       <img src="../img/nanakage/mission_ui.jpg" alt=""><figcaption>Mission event UI — the mission event I proposed for Japan retention</figcaption></figure><figure class="ph ph--wide">
@@ -435,16 +440,16 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
   </div>
   <div class="bd"><div class="two two--top"><table class="tl"><colgroup><col><col><col></colgroup>
     <thead><tr><th>Company</th><th>Team, role, period</th><th style="text-align:right">Headline number</th></tr></thead>
-    <tbody><tr><td><b>Dalcomsoft</b><span class="sub">SuperStar series reshaped 11 → 7 (K-pop IP)</span></td>
+    <tbody><tr><td><b>Dalcomsoft</b><span class="sub">Led app services for 11 SuperStar titles (K-pop IP)</span></td>
       <td>Team Lead, Live Game Design · 2024.10 – 2026.07<span class="impact">Reshaped <span class="nw">11</span> titles to <span class="nw">7:</span> retired <span class="nw">5,</span> launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</span></td>
-      <td class="k"><span class="nw">11→7</span></td></tr><tr><td><b>Wonderpeople · Acestorm</b><span class="sub">Night Walker, Super People</span></td>
+      <td class="k"><span class="nw">11</span> titles</td></tr><tr><td><b>Wonderpeople/Acestorm</b><span class="sub">Night Walker, Super People</span></td>
       <td>Part Lead, Business Team · 2022.02 – 2024.04<span class="impact">Night Walker <span class="nw">330K+</span> new users · DAU <span class="nw">63K</span> · <span class="nw">D+1</span> <span class="nw">~50%</span> / Super People China <span class="nw">560K+</span> new users</span></td>
       <td class="k"><span class="nw">330K+</span></td></tr><tr><td><b>Neowiz</b><span class="sub">Master of Knights</span></td>
-      <td>Team Lead, Game Design · Snowball Studio · 2021.02 – 2021.10<span class="impact">Led design of <span class="nw">10</span> new systems and <span class="nw">8</span> reworks; hired game designers and ran milestones</span></td>
+      <td>Team Lead, Game Design · Snowball Studio · 2021.02 – 2021.10<span class="impact">Design team lead · designed <span class="nw">10</span> new and <span class="nw">8</span> reworked core systems for alpha and beta, ran the dev milestones · hired the design team</span></td>
       <td class="k"></td></tr><tr><td><b>Skypeople</b><span class="sub">Five Stars</span></td>
       <td>Team Lead, Business Team · 2020.07 – 2021.02<span class="impact">Set up and hired the business and operations teams, then ran launch prep and live ops — <span class="nw">200K</span> pre-registrations · <span class="nw">280K+</span> new users · <span class="nw">₩2.4B</span> revenue</span></td>
       <td class="k"><span class="nw">₩2.4B</span></td></tr><tr><td><b>Neptune Legend</b><span class="sub">Shadow Seven</span></td>
-      <td>Business PM, Studio · 2019.10 – 2020.04<span class="impact">Weak results in Japan → added a rating management system → Google Play rating Japan <span class="nw">3.29</span> → global <span class="nw">4.4</span> · soft launch in <span class="nw">7</span> markets</span></td>
+      <td>Development PM, Studio · 2019.10 – 2020.04<span class="impact">Designed the content loop, monetization and tracking systems · soft launch in <span class="nw">7</span> markets → grand launch · Google Play rating Japan <span class="nw">3.29</span> → global <span class="nw">4.4</span></span></td>
       <td class="k"><span class="nw">7</span> markets</td></tr></tbody></table><table class="tl"><colgroup><col><col><col></colgroup>
     <thead><tr><th>Company</th><th>Team, role, period</th><th style="text-align:right">Headline number</th></tr></thead>
     <tbody><tr><td><b>Nexon Korea</b><span class="sub">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</span></td>
@@ -459,7 +464,7 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
       <td>Operations Team · 2006.04 – 2007.10<span class="impact">Live ops for the SUN Online launch — VOC analysis and log audits</span></td>
       <td class="k"></td></tr></tbody></table></div>
       <p class="foot">* 2007.10 – 2008.05 returned to university (Kangnam University, Computer Engineering, class of 2009)</p></div>
-  <p class="rights">Figures follow the public résumé · Game titles are trademarks of their respective owners.</p>
+  <p class="rights">Game titles are trademarks of their respective owners.</p>
 </section>
 
 <section class="s">
@@ -487,7 +492,7 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
 
 <section class="s">
   <div class="hd">
-    <div><p class="eyebrow">Contact</p><p class="who">Issued 2026-09-10</p></div>
+    <div><p class="eyebrow">Contact</p><p class="who">Issued 2026-09-28</p></div>
     <div></div>
   </div>
   <div class="bd"><div class="end">
@@ -498,9 +503,9 @@ html[lang=en] .tl col:nth-child(3){width:16mm}
         <p><b>Site</b> <a href="https://bluedaylol80.github.io/henry-portfolio/en/">https://bluedaylol80.github.io/henry-portfolio/en/</a></p>
         <p><b>Notion resume</b> <a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5">https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5</a></p>
       </div>
-      <p class="foot">This document is generated from the site. Issued 2026-09-10 · © 2026 Henry Lim · All figures on this site come from my public resume.</p>
+      <p class="foot">This document is generated from the site. Issued 2026-09-28 · © 2026 Henry Lim</p>
     </div></div>
-  <p class="rights">Figures follow the public résumé · Game titles are trademarks of their respective owners.</p>
+  <p class="rights">Game titles are trademarks of their respective owners.</p>
 </section>
 </body>
 </html>

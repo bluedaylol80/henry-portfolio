@@ -267,6 +267,11 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .two--res .ig .ph--por img{height:44mm}
 /* EN 캡션이 한 줄 더 길어 12쪽이 넘친다 — 일정표는 그대로 두고 작은 세로 캡처에서 뺀다(Codex R13) */
 html[lang=en] .two--res .ig .ph--por img{height:39mm}
+/* EN Shadow Seven은 시스템 기획 행(WO-31 §6)이 길어 왼쪽 칸이 넘친다 — 문구는 그대로 두고 칸 폭만 옮긴다 */
+html[lang=en] .two--res{grid-template-columns:1.3fr 1fr}
+html[lang=en] .two--res .evlist a{display:inline-block;margin-right:5mm}
+html[lang=en] .two--res .kv col:first-child{width:31mm}
+html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 .res .ph--por img{height:66mm}
 /* 보조 캡처가 한 장뿐인 장은 두 칸을 다 써서 키운다 */
 .ig--solo .ph{grid-column:1/-1}
@@ -327,7 +332,7 @@ const L = {
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
         phases:['운영','사업 PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
         proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간',
-        rightsPlain:'수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.',
+        rightsPlain:'게임 명칭은 각 권리자의 상표입니다.',
         rightsNW:'나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
         rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
@@ -338,7 +343,7 @@ const L = {
         proto:'AI prototypes', lab:'Personal product', period:'Period',
         /* EN 5쪽 보조 사례는 제목과 근거 링크만 싣는다 — 본문은 사이트에서 읽는다(Codex R13) */
         moreRef:'See the site detail for the full text',
-        rightsPlain:'Figures follow the public résumé · Game titles are trademarks of their respective owners.',
+        rightsPlain:'Game titles are trademarks of their respective owners.',
         rightsNW:'Night Walker developed by Wonderpeople and Acestorm · published by Nexon.',
         rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
 }
@@ -380,8 +385,8 @@ const NAT_W = { 'chaos/ingame': 500, 'fivestars/prereg': 361, 'nanakage/mission_
                 chaos: 550, fivestars: 600, nanakage: 574, lyn: 600 }
 const capMM = (slug) => (NAT_W[slug] ? ` style="max-width:${(NAT_W[slug] * 1.5 * 25.4 / 96).toFixed(1)}mm"` : '')
 /* 대표 지표의 정의 라벨 — KO는 수치 근거표에서 그대로 읽고, EN만 여기서 옮긴다(Codex R11 D11) */
-const KPI_NUM = { dalcom:'11→7', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
-const KPI_DEF_EN = { dalcom:'Titles in the live portfolio (11 at hire → 5 sunset + 1 new → 7)',
+const KPI_NUM = { dalcom:'11종', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
+const KPI_DEF_EN = { dalcom:'Led app services for 11 SuperStar titles',
                      lyn:'Revenue', chaos:'US revenue', nightwalker:'Cumulative new users in Korea',
                      fivestars:'Revenue',
                      nanakage:'Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)' }

@@ -46,7 +46,8 @@ async function scrape() {
   await page.waitForFunction(() => !document.getElementById('loader'), { timeout: 15000 }).catch(() => {})
   await sleep(1800)
   const d = await page.evaluate(() => {
-    const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
+    /* NBSP는 사이트가 일부러 넣은 줄바꿈 금지다(WO-31 §7) — 공백 정리에서 살려 덱까지 가져온다 */
+    const t = el => (el ? el.textContent.replace(/[^\S\u00a0]+/g, ' ').trim() : '')
     const all = (sel, f) => [...document.querySelectorAll(sel)].map(f)
     return {
       brand: t(document.querySelector('.hdr .brand')),
@@ -94,7 +95,7 @@ async function scrape() {
     }
   })
   const readDlg = () => page.evaluate(() => {
-    const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
+    const t = el => (el ? el.textContent.replace(/[^\S\u00a0]+/g, ' ').trim() : '')
     return {
       dlgMeta: t(document.getElementById('wdlgM')), dlgTitle: t(document.getElementById('wdlgT')),
       rows: [...document.querySelectorAll('#wdlgR > div')].map(x => [t(x.querySelector('dt')), t(x.querySelector('dd'))]),
@@ -143,7 +144,7 @@ const L = {
   full: '문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.',
   role: '역할', verdict: '판단', result: '결과', priority: '우선순위 결정',
   phases: ['운영', '사업 PM', '기획·디렉터'],
-  rightsPlain: '수치는 공개 이력 기준입니다 · 게임 명칭은 각 권리자의 상표입니다.',
+  rightsPlain: '게임 명칭은 각 권리자의 상표입니다.',
   rightsNW: '나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
   rightsProto: '화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.',
 }
@@ -154,7 +155,7 @@ const CAPS = {
   'nightwalker/server_flow_proposal': '서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
   'nightwalker/server_flowchart_wire': '서버 선택 플로우차트 — 퍼블리셔 플랫폼과 개발사 영역 구분',
   'nightwalker/charge_flow': '보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
-  'nightwalker/charge_ui_mock': '충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
+  'nightwalker/charge_ui_mock': '충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
   'chaos/event_ui_plan': '이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용',
   'chaos/ingame': '인게임 전투 화면',
   'fivestars/prereg': '정식 런칭 사전예약 키 비주얼',
@@ -172,7 +173,7 @@ const STEPS = [
   ['실행·출시', d => [d.cases[0].steps[2][1], d.cases[2].steps[2][1]]],
   ['라이브 운영·표준화', d => [d.skills[1].cases[1], d.skills[3].cases[0]]],
 ]
-const KPI_NUM = { dalcom: '11→7', lyn: '183억', chaos: '98억', nightwalker: '33만+', fivestars: '24억', nanakage: '7개국' }
+const KPI_NUM = { dalcom: '11종', lyn: '183억', chaos: '98억', nightwalker: '33만+', fivestars: '24억', nanakage: '7개국' }
 const KPI_DROP = [/\(기존 게시 승인분\)/g]
 const KPI_TBL = (() => {
   const md = readFileSync('docs/handover/2026-09-08_numbers_basis_table.md', 'utf8')
@@ -193,6 +194,12 @@ const kpiLabel = slug => {
   const dd = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).trim()
   return per && per !== '미상' ? `${dd} · ${per}` : dd
 }
+/* 12장 라벨 — 괄호 속 국가 목록은 칸에서 쪼개져 떨어진다(D5). 기간은 둘째 줄로 내린다(D4) */
+const kpiLabel2 = slug => {
+  const [def, per] = KPI_TBL[slug]
+  const dd = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).replace(/\s*\([^)]*\)/g, '').trim()
+  return esc(dd) + (per && per !== '미상' ? '<br>' + esc(per) : '')
+}
 const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
 const WORK_IX = { dalcom: 0, lyn: 1, chaos: 2, nightwalker: 3, fivestars: 4, nanakage: 5 }
 const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan']], [4, 'fivestars', ['fivestars/prereg']],
@@ -203,8 +210,11 @@ const EXTRA_DLG = ['lyn']
 const RESULT_ROWS = {
   chaos: [['역할', '서비스 종료 운영'], ['판단', '소프트런칭'], ['결과', '미국 성적']],
   fivestars: [['역할', '조직 셋업·채용'], ['판단', '계약·정산'], ['결과', '한국 성적']],
-  nanakage: [['역할', '담당'], ['판단', '지표 → 조치 → 결과'], ['결과', '그랜드런칭']],
+  /* Shadow Seven은 가운데 칸이 판단이 아니라 시스템 기획이다(WO-31 §6) — 칸 이름표도 그에 맞춘다 */
+  nanakage: [['역할', '담당'], ['기획', '시스템 기획'], ['결과', '지표 → 조치 → 결과']],
 }
+/* 13장 칸에 다 안 들어가는 긴 나열 행 — 앞 n개 항목만 싣고 말줄임을 단다(자르기만, 고쳐 쓰지 않는다) */
+const RESULT_CLIP = { '시스템 기획': 2 }
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재)/
 /* 4분류 아이콘 — 단순 선형 인라인 SVG(외부 아이콘 폰트 금지) */
@@ -292,6 +302,10 @@ li{list-style:none}
 .n--xs{font-size:56px}
 .nl{margin-top:14px;font-size:22px;line-height:1.4;color:var(--m60)}
 .nn{white-space:nowrap}
+/* 줄바꿈 다듬기(WO-31 §7) — 큰 숫자는 한 줄로(D2), 본문은 끝줄 외톨이를 줄이고(D3), 칩·목록·제목은 줄 길이를 고르게(D7) */
+.n{white-space:nowrap}
+p,dd{text-wrap:pretty}
+li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 전→후 — 앞은 회색, 뒤는 서브컬러. 큰 숫자에만 쓴다(작은 빨강 금지) */
 .ba i{font-style:normal;color:var(--m60)}
 .ba u{text-decoration:none;color:var(--sub)}
@@ -472,8 +486,8 @@ function render(d, A) {
     return u[0].slice(0, a) + u.map(x => x.slice(a, x.length - b)).join('·') + u[0].slice(u[0].length - b)
   }
 
-  /* 사례 1의 큰 숫자 — 11→7은 운영 포트폴리오 재편이지 이 이벤트의 결과가 아니다.
-     사이트 '결과·상태' 문장에 적힌 출시 항목을 세어 쓴다(D4). 11→7은 12·16장에만 남긴다. */
+  /* 사례 1의 큰 숫자 — 11종은 달콤 앱 서비스 총괄 범위이지 이 이벤트의 결과가 아니다.
+     사이트 '결과·상태' 문장에 적힌 출시 항목을 세어 쓴다(D4). 11종은 12·16장에만 남긴다. */
   const launched = (() => {
     const v = d.cases[0].rows.find(r => r[0] === L.outcome)[1]
     const m = v.match(/실제 출시\s*[—–-]\s*(.+?)\.?\s*$/)
@@ -497,7 +511,7 @@ function render(d, A) {
 <section class="s${o.cls ? ' ' + o.cls : ''}" role="group" aria-roledescription="slide"
   aria-label="${esc(o.aria)}" data-bg="${o.bg || '#F5F5F5'}">
   ${o.raw || `<p class="eb">${esc(o.eyebrow)}</p>
-  ${o.title ? `<h2 class="h${o.hcls ? ' ' + o.hcls : ''}">${esc(o.title)}</h2>` : ''}
+  ${o.title ? `<h2 class="h${o.hcls ? ' ' + o.hcls : ''}">${o.titleHtml || esc(o.title)}</h2>` : ''}
   ${o.lede ? `<p class="lede">${esc(pr(o.lede))}</p>` : ''}
   <div class="bd">${o.body}</div>`}
   ${o.rights ? `<p class="rights">${esc(o.rights)}</p>` : ''}
@@ -524,7 +538,7 @@ function render(d, A) {
     <p class="eb">${esc(L.cover)}</p>
     <p class="nm" style="margin-top:26px">${esc(d.brand)}</p>
     <p class="rl">${esc(d.role)}</p>
-    <p class="hl">${esc(d.h1.join(' '))}</p>
+    <p class="hl">${d.h1.map(esc).join('<br>')}</p>
     <div class="ct">
       <p><b>${L.email}</b>${MAIL}</p>
       <p><b>${L.site}</b>${esc(d.canonical.replace(/^https?:\/\//, ''))}</p>
@@ -536,7 +550,7 @@ function render(d, A) {
   /* --- 2. 한눈에 --- */
   const sents = pr(d.sub).split(/(?<=다\.)\s+/).filter(Boolean)
   const glance = slide({
-    aria: '한눈에 — ' + d.role, eyebrow: L.glance, title: d.h1.join(' '), hcls: 'h--lg',
+    aria: '한눈에 — ' + d.role, eyebrow: L.glance, title: d.h1.join(' '), titleHtml: d.h1.map(esc).join('<br>'), hcls: 'h--lg',
     rights: L.rightsPlain,
     body: `<div class="g2" style="grid-template-columns:1fr 860px;align-items:center">
       <ul style="display:flex;flex-direction:column;gap:26px">${sents.map(s =>
@@ -732,7 +746,7 @@ function render(d, A) {
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">${esc(workOf(slug).title)}</p>
           <p class="n" style="margin-top:26px">${ba(kpiOf(slug))}</p>
-          <p class="nl">${esc(kpiLabel(slug))}</p></div>`).join('')}
+          <p class="nl">${kpiLabel2(slug)}</p></div>`).join('')}
     </div>`,
   })
 
@@ -753,11 +767,12 @@ function render(d, A) {
       const line = ([lb, key]) => { let v = rowOf(key)
         const m = v.match(/구글 평점[^\d]*([\d.]+)\s*(?:→|>)\s*[^\d]*([\d.]+)/)
         if (m) { pair = [m[1], m[2]]; v = v.slice(0, m.index).replace(/\s*(?:→|>)\s*$/, '').trim() }
+        if (RESULT_CLIP[key]) { const xs = v.split(' · '); if (xs.length > RESULT_CLIP[key]) v = xs.slice(0, RESULT_CLIP[key]).join(' · ') + ' …' }
         return `<dt>${esc(lb)}</dt><dd>${esc(brief(v))}</dd>` }
       const lines = RESULT_ROWS[slug].map(line).join('')
       return `<div style="display:flex;flex-direction:column;min-height:0">
         ${shot(slug, w.title, 'height:132px;flex:none', '', true, true)}
-        ${doc(shots[0], 'height:216px;flex:none;margin-top:16px')}
+        ${doc(shots[0], 'height:196px;flex:none;margin-top:16px')}
         <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
           <p class="n n--xs">${ba(w.kpi)}</p>
           <p class="nl" style="margin-bottom:4px">${esc(kpiLabel(slug).replace(/\s*\([^)]*\)/g, ''))}</p></div>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Henry Lim — Game live-service PM & Director, 19 years</title>
-<meta name="description" content="Game live-service PM and Director, 19 years — hearing the user's voice, setting the direction, shipping it as a prototype. From global launch to live ops to sunset." />
+<meta name="description" content="Game live-service PM and Director, 19 years — user needs set the direction, and milestones carry it through launch and live ops. From global launch to live ops to sunset." />
 <meta name="theme-color" content="#0a0a0a" />
 <link rel="canonical" href="https://bluedaylol80.github.io/henry-portfolio/en/" />
 <link rel="alternate" hreflang="ko" href="https://bluedaylol80.github.io/henry-portfolio/" />
@@ -13,7 +13,7 @@
 <link rel="alternate" type="application/pdf" href="../henry-lim-portfolio-en.pdf" />
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Henry Lim — Game live-service PM & Director, 19 years" />
-<meta property="og:description" content="Game live-service PM and Director, 19 years — hearing the user's voice, setting the direction, shipping it as a prototype. From global launch to live ops to sunset." />
+<meta property="og:description" content="Game live-service PM and Director, 19 years — user needs set the direction, and milestones carry it through launch and live ops. From global launch to live ops to sunset." />
 <meta property="og:url" content="https://bluedaylol80.github.io/henry-portfolio/en/" />
 <meta property="og:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
 <meta property="og:image:width" content="1200" />
@@ -21,7 +21,7 @@
 <meta property="og:image:alt" content="Henry Lim — Game live-service PM & Director, 19 years" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Henry Lim — Game live-service PM & Director, 19 years" />
-<meta name="twitter:description" content="Game live-service PM and Director, 19 years — hearing the user's voice, setting the direction, shipping it as a prototype. From global launch to live ops to sunset." />
+<meta name="twitter:description" content="Game live-service PM and Director, 19 years — user needs set the direction, and milestones carry it through launch and live ops. From global launch to live ops to sunset." />
 <meta name="twitter:image" content="https://bluedaylol80.github.io/henry-portfolio/og.png" />
 <meta name="twitter:image:alt" content="Henry Lim — Game live-service PM & Director, 19 years" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23b15f2c' d='M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z'/%3E%3C/svg%3E" />
@@ -330,6 +330,9 @@ html[lang="ko"] .clock-t{order:4}
    한 줄로 묶고 모바일에서만 폰트를 줄여 카드 폭 안에 세운다.
    nowrap을 .card-wm 전체에 걸면 "10th anniv."가 1fr 열을 넓혀 390 가로 스크롤이 생긴다(실측 +61px). */
 .nb{white-space:nowrap}
+/* 줄바꿈 다듬기(WO-31 §7) — 본문은 끝줄 외톨이를 줄이고(pretty), 제목류는 줄 길이를 고르게(balance) */
+p,dd,li{text-wrap:pretty}
+h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .card-wm{flex:1;display:grid;place-items:center;padding-block:1.5rem 2.25rem;pointer-events:none;user-select:none;
   font-size:4.5rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:rgba(255,255,255,.12)}
 @media (min-width:640px){.card-wm{font-size:6rem}}
@@ -478,7 +481,7 @@ html[lang="ko"] .clock-t{order:4}
   transition:opacity .25s var(--e-soft)}
 .wdlg.at-end::after{opacity:0}
 @media (prefers-reduced-motion:reduce){.wdlg::after{transition:none}}
-@media (min-width:640px){.wdlg-in{padding:2.5rem}}
+@media (min-width:640px){.wdlg-in{padding:2.5rem 4rem 2.5rem 2.5rem}}
 /* 닫기 버튼은 스크롤 패널 밖(다이얼로그 직계)에 둔다 — 안에 두면 스크롤과 함께 밀려 사라진다(Codex R6) */
 .wdlg-x{position:absolute;z-index:2;top:1.25rem;right:1.25rem;width:2.25rem;height:2.25rem;display:grid;place-items:center;
   border-radius:var(--r-pill);background:var(--bg);box-shadow:0 0 0 1px var(--line);font-size:1rem;
@@ -490,7 +493,7 @@ html[lang="ko"] .clock-t{order:4}
 @media (min-width:640px){.wdlg-t{font-size:2rem}}
 /* 390에서 수치가 세로로 쌓이면 근거 카드가 첫 화면 밖으로 밀린다(Codex R2) — 3열 컴팩트 그리드로 접는다. */
 .wdlg-st[hidden]{display:none}   /* 클래스의 display가 UA의 [hidden]을 이긴다 */
-.wdlg-st{margin-top:1.5rem;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.875rem .75rem}
+.wdlg-st{margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.875rem 1.5rem}
 @media (min-width:640px){.wdlg-st{margin-top:1.75rem;display:flex;flex-wrap:wrap;gap:1.25rem 2.5rem}}
 .wdlg-st div{display:flex;flex-direction:column;gap:.3rem;min-width:0}
 .wdlg-st b{font-size:1.375rem;font-weight:600;letter-spacing:-.02em;line-height:1}
@@ -606,6 +609,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 @media (min-width:640px){.row-body h3{font-size:1.75rem}}
 @media (min-width:768px){.row-body h3{font-size:2rem}}
 .row-sub{font-size:.875rem;color:rgba(17,17,17,.72);line-height:1.5}
+/* 390에서 "직위 · ／ 기간"으로 갈라졌다 — 좁은 폭에서는 기간을 아랫줄로 내리고 구분자를 숨긴다 */
+@media (max-width:639.98px){.row-sub .sep{display:none}.row-sub .nb{display:block}}
 .row-note{font-size:.875rem;color:rgba(17,17,17,.72);line-height:1.5}
 @media (min-width:1024px){
   .row{align-items:center}
@@ -645,7 +650,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 @media (min-width:768px){.stats-panel .h2{font-size:2.25rem}}
 .stats-grid{margin-top:3.5rem;display:grid;grid-template-columns:repeat(2,1fr);column-gap:2rem;row-gap:3rem}
 @media (min-width:1024px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
-.stat-n{font-size:3rem;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.stat-n{font-size:3rem;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
 @media (min-width:640px){.stat-n{font-size:3.75rem}}
 @media (min-width:768px){.stat-n{font-size:4.5rem}}
 .stat-l{margin-top:.75rem;font-size:.875rem;line-height:1.5;color:rgba(255,255,255,.55)}
@@ -742,12 +747,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <p class="eyebrow" data-reveal data-gate="ready" style="--rd:200ms;--ry:10px">Game Live Service PM & Director · 19 yrs</p>
 
       <h1 class="h1" data-lines data-gate="ready" style="--rd:250ms;--ls:120ms">
-        <span class="line" style="--i:0"><span>Turn user needs</span></span>
-        <span class="line" style="--i:1"><span>into product direction, <span class="nb">and dev priorities</span></span></span>
-        <span class="line" style="--i:2"><span>into shipped work.</span></span>
+        <span class="line" style="--i:0"><span>User needs set the direction.</span></span>
+        <span class="line" style="--i:1"><span>Milestones carry it</span></span>
+        <span class="line" style="--i:2"><span>through launch and live ops.</span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">19 years in games — global launches and live ops. I turn user research and live metrics into product direction and dev priorities, and as a director I ran dev milestones and cross-team work. Lately I prototype events with AI and automate routine work.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms">Global launches and live ops for PC and mobile games, A to Z — as PM, designer and director. I turn user needs and metrics into product direction and dev priorities, and as a director I ran and coordinated dev, design, business and operations work. Lately I prototype events with AI and automate routine work.</p>
 
       <ul class="hero-keys" data-reveal data-gate="ready" style="--rd:700ms" aria-label="Core strengths">
         <li>Product decisions & milestones</li>
@@ -776,7 +781,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <div class="hc-slot">
               <div class="hc-item"><p class="hc-cap">LIVE OPS</p><p class="hc-title">From launch through sunset.</p></div>
               <div class="hc-item"><p class="hc-cap">GLOBAL</p><p class="hc-title">Soft launch — Lyn · Chaos Chronicle.</p></div>
-              <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">SuperStar series live, reshaped 11 → 7.</p></div>
+              <div class="hc-item"><p class="hc-cap">K-POP IP</p><p class="hc-title">Led app services for 11 SuperStar titles.</p></div>
               <div class="hc-item"><p class="hc-cap">SOFT LAUNCH</p><p class="hc-title">Shadow Seven — soft launch in 7 markets.</p></div>
             </div>
             <div class="hc-bot">
@@ -880,7 +885,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:0ms;--ry:32px">
         <article class="case">
           <p class="case-meta">Dalcomsoft · Live Game Design Team — Team Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog">Shipped the events users asked for, minigames first<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog">Shipped the events users asked for, minigames&nbsp;first<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The satisfaction survey asked for the old webview events back</dd></div>
               <div><dt>Decision</dt><dd>Ship in-game minigames first, then extend to webview</dd></div>
@@ -892,8 +897,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       </li>
       <li data-reveal style="--rd:90ms;--ry:32px">
         <article class="case">
-          <p class="case-meta">Nexon Korea · Mobile Business Division — Team Lead</p>
-          <h3 class="case-t"><button class="card-open" type="button" data-work="case2" aria-haspopup="dialog">Turned soft launch metrics into three pre-launch fixes<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+          <p class="case-meta">Nexon Korea · Mobile Business Division — Team&nbsp;Lead</p>
+          <h3 class="case-t"><button class="card-open" type="button" data-work="case2" aria-haspopup="dialog">Turned soft launch metrics into three pre‑launch fixes<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The soft launch showed product mix, currency and early drop-off issues</dd></div>
               <div><dt>Decision</dt><dd>Framed product, currency and early flow as fixes to close before launch</dd></div>
@@ -935,9 +940,9 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <article class="card">
           <div class="card-shot" data-shot="dalcom" aria-hidden="true"></div>
           <div class="card-meta">Dalcomsoft · Live Game Design Team — Team Lead</div>
-          <div class="card-wm" aria-hidden="true">11→7</div>
+          <div class="card-wm card-wm--long" aria-hidden="true">11 titles</div>
           <div class="card-bot">
-            <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">Multi-title live operations and user-led product work<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">Multi-title live operations and user‑led product work<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
             <p>Managed live game design and the dev milestones while the titles I owned went from 11 to 7. Turned the satisfaction survey into the 2026 product direction and into webview and decoration event prototypes — the events developed from these prototypes shipped.</p>
             <div class="card-tags"><span class="tag">Live Director</span><span class="tag">VOC → product direction</span><span class="tag">AI prototype</span><span class="tag">Dev milestones</span></div>
             <p class="card-rights">Game names and images are trademarks and copyrighted works of Dalcomsoft.</p>
@@ -977,7 +982,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <div class="card-wm" aria-hidden="true">330K+</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="nightwalker" aria-haspopup="dialog">Night Walker<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>330K+ new users in Korea, peak DAU 63K, D+1 retention averaging ~50%.</p>
+            <p>330K+ new users in Korea, peak DAU 63K, D+1 retention averaging&nbsp;~50%.</p>
             <div class="card-tags"><span class="tag">Publishing integration</span><span class="tag">Metrics management</span><span class="tag">Vendor contracts & process</span></div>
             <p class="card-rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
           </div>
@@ -999,12 +1004,12 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:450ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="nanakage" aria-hidden="true"></div>
-          <div class="card-meta">Neptune Legend — Business PM</div>
+          <div class="card-meta">Neptune Legend — Development PM</div>
           <div class="card-wm card-wm--long" aria-hidden="true">7 markets</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="nanakage" aria-haspopup="dialog">Shadow Seven<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>Added a rating management system after weak results in Japan. Google Play rating: Japan 3.29 → global 4.4. Soft launch in 7 markets.</p>
-            <div class="card-tags"><span class="tag">Business PM</span><span class="tag">Soft launch</span></div>
+            <p>As development PM I designed the core systems — content loop, monetization, tracking — and took the game from a 7-market soft launch to the Korea, US and Taiwan grand launch.</p>
+            <div class="card-tags"><span class="tag">Development PM</span><span class="tag">System design</span><span class="tag">Soft launch</span></div>
             <p class="card-rights">Game names and images are trademarks and copyrighted works of Neptune Legend.</p>
           </div>
         </article>
@@ -1075,7 +1080,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     </div>
     <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
       <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3>User research</h3><p>Find the real pain points in surveys and VOC</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — from user research to shipped events</button></p></li>
-      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>Problem definition</h3><p>Turn evidence into focused actions</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre-launch fixes</button></p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3>Problem definition</h3><p>Turn evidence into focused actions</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre‑launch fixes</button></p></li>
       <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3>Product direction</h3><p>Translate actions into a roadmap and direction</p><p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog">Work — SuperStar 2026 product direction</button></p></li>
       <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3>Prototype</h3><p>Validate with working screens, not documents</p><p class="row-cases"><a class="row-case" href="../demo/deco.html" target="_blank" rel="noopener">Demo — decoration event<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (opens in a new window)</span></a></p></li>
       <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3>Build & operate</h3><p>Ship against milestones, measure the outcome</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog">Case — redefining the systems to publisher spec</button></p></li>
@@ -1096,17 +1101,17 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">01</span>
         <div class="row-body">
           <h3 class="row-title">Dalcomsoft</h3>
-          <p class="row-note row-note--mobile-hide">SuperStar series reshaped 11 → 7 (K-pop IP)</p>
-          <p class="row-sub">Team Lead, Live Game Design · <span class="nb">2024.10 – 2026.07</span></p>
+          <p class="row-note row-note--mobile-hide">Led app services for 11 SuperStar titles (K-pop IP)</p>
+          <p class="row-sub">Team Lead, Live Game Design<span class="sep"> · </span><span class="nb">2024.10 – 2026.07</span></p>
           <p class="row-impact">Reshaped 11 titles to 7: retired 5, launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
         <span class="row-i">02</span>
         <div class="row-body">
-          <h3 class="row-title">Wonderpeople · Acestorm</h3>
+          <h3 class="row-title">Wonderpeople/Acestorm</h3>
           <p class="row-note row-note--mobile-hide">Night Walker, Super People</p>
-          <p class="row-sub">Part Lead, Business Team · <span class="nb">2022.02 – 2024.04</span></p>
+          <p class="row-sub">Part Lead, Business Team<span class="sep"> · </span><span class="nb">2022.02 – 2024.04</span></p>
           <p class="row-impact">Night Walker <span class="nb">330K+ new users ·</span> <span class="nb">DAU 63K · D+1 ~50%</span> / Super People China <span class="nb">560K+ new users</span></p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="wonderpeople"></p>
@@ -1117,8 +1122,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Neowiz</h3>
           <p class="row-note row-note--mobile-hide">Master of Knights</p>
-          <p class="row-sub">Team Lead, Game Design · Snowball Studio · <span class="nb">2021.02 – 2021.10</span></p>
-          <p class="row-impact">Led design of 10 new systems and 8 reworks; hired game designers and ran milestones</p>
+          <p class="row-sub">Team Lead, Game Design · Snowball Studio<span class="sep"> · </span><span class="nb">2021.02 – 2021.10</span></p>
+          <p class="row-impact">Design team lead · designed 10 new and 8 reworked core systems for alpha and beta, ran the dev milestones · hired the design team</p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="neowiz"></p>
         </div>
@@ -1128,7 +1133,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Skypeople</h3>
           <p class="row-note row-note--mobile-hide">Five Stars</p>
-          <p class="row-sub">Team Lead, Business Team · <span class="nb">2020.07 – 2021.02</span></p>
+          <p class="row-sub">Team Lead, Business Team<span class="sep"> · </span><span class="nb">2020.07 – 2021.02</span></p>
           <p class="row-impact">Set up and hired the business and operations teams, then ran launch prep and live ops — 200K pre-registrations · 280K+ new users · ₩2.4B revenue</p>
         </div>
       </div></li>
@@ -1137,8 +1142,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Neptune Legend</h3>
           <p class="row-note row-note--mobile-hide">Shadow Seven</p>
-          <p class="row-sub">Business PM, Studio · <span class="nb">2019.10 – 2020.04</span></p>
-          <p class="row-impact">Weak results in Japan → added a rating management system → Google Play rating Japan 3.29 → global 4.4 · soft launch in 7 markets</p>
+          <p class="row-sub">Development PM, Studio<span class="sep"> · </span><span class="nb">2019.10 – 2020.04</span></p>
+          <p class="row-impact">Designed the content loop, monetization and tracking systems · <span class="nb">soft launch in 7 markets</span> → grand launch · Google Play rating Japan <span class="nb">3.29 → global 4.4</span></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:400ms;--ry:24px"><div class="row">
@@ -1146,7 +1151,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Nexon Korea</h3>
           <p class="row-note row-note--mobile-hide">Lyn · Running Man Heroes · Dragon Nest 2 · Chaos Chronicle · Legion of Heroes</p>
-          <p class="row-sub">Team Lead, Mobile Business Division · <span class="nb">2015.07 – 2019.10</span></p>
+          <p class="row-sub">Team Lead, Mobile Business Division<span class="sep"> · </span><span class="nb">2015.07 – 2019.10</span></p>
           <p class="row-impact">Lyn ₩18.3B · #3 on both stores / Chaos Chronicle ₩9.8B · #7 · featured / Legion of Heroes 5× prior revenue</p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="nexon"></p>
@@ -1157,7 +1162,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Netmarble Blue</h3>
           <p class="row-note row-note--mobile-hide">KON</p>
-          <p class="row-sub">Business PM, KON Studio · <span class="nb">2015.03 – 2015.07</span></p>
+          <p class="row-sub">Business PM, KON Studio<span class="sep"> · </span><span class="nb">2015.03 – 2015.07</span></p>
           <p class="row-impact">Designed the KON tutorial flow and analyzed competing titles as launch foundation work</p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="netmarble"></p>
@@ -1168,8 +1173,8 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Softnyx</h3>
           <p class="row-note row-note--mobile-hide">NTD · Rakion 2 · Grand Age</p>
-          <p class="row-sub">Business PM, Strategic Business Team · <span class="nb">2011.07 – 2015.02</span></p>
-          <p class="row-impact">Designed 2 internal tests · 4 FGIs · 2 FGTs for NTD, analyzed monetization across 5 titles, prepared the Latin America launch</p>
+          <p class="row-sub">Business PM, Strategic Business Team<span class="sep"> · </span><span class="nb">2011.07 – 2015.02</span></p>
+          <p class="row-impact">Designed 2 internal tests · 4 FGIs&nbsp;· 2 FGTs for NTD, analyzed monetization across 5 titles, prepared the Latin America launch</p>
           <p class="row-evb">Evidence (Notion, KO)</p>
           <p class="row-links" data-links="softnyx"></p>
         </div>
@@ -1179,7 +1184,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">NHN Service</h3>
           <p class="row-note row-note--mobile-hide">Tera web ops · Atlantica · R2</p>
-          <p class="row-sub">Part Lead, Hangame Operations Division · <span class="nb">2008.05 – 2011.07</span></p>
+          <p class="row-sub">Part Lead, Hangame Operations Division<span class="sep"> · </span><span class="nb">2008.05 – 2011.07</span></p>
           <p class="row-impact">Ran the Tera web ops part and FUN QA gameplay analysis on 4 titles; <span class="nb">live ops for Atlantica and R2</span></p>
         </div>
       </div></li>
@@ -1189,7 +1194,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Webzen</h3>
           <p class="row-note row-note--mobile-hide">SUN Online</p>
-          <p class="row-sub">Operations Team · <span class="nb">2006.04 – 2007.10</span></p>
+          <p class="row-sub">Operations Team<span class="sep"> · </span><span class="nb">2006.04 – 2007.10</span></p>
           <p class="row-impact">Live ops for the SUN Online launch — VOC analysis and log audits</p>
         </div>
       </div></li>
@@ -1230,7 +1235,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   <div class="shell px rows-in" style="padding-top:0">
     <div class="rows-hd">
       <p class="eyebrow" data-reveal>What I do</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>Four jobs that keep a live service running</span></span></h2>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>Core work of a live service</span></span></h2>
     </div>
 
     <ul>
@@ -1238,15 +1243,15 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">01</span>
         <div class="row-body">
           <h3 class="row-title">Product decisions & milestones</h3>
-          <p class="row-note">Deciding what to build from research and metrics, then reassembling the design and dev milestones and carrying it through to shipped work — the director and PM role. It includes reassembling and coordinating milestones before launch.</p>
-          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — from user research to shipped events</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre-launch fixes</button></p>
+          <p class="row-note">Deciding what to build from research and metrics, then driving it to delivery through design and dev milestones. At NEOWIZ, as design lead, I designed 18 core systems (10 new, 8 reworked) and ran the alpha and beta milestones.</p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — from user research to shipped events</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog">Case — soft launch metrics → pre‑launch fixes</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
         <span class="row-i">02</span>
         <div class="row-body">
           <h3 class="row-title">Launch & live ops</h3>
-          <p class="row-note">Soft launches, launches, live operations and sunsets actually run. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
+          <p class="row-note">Soft launch, launch, live ops and sunset — I ran every stage, A to Z. Soft launches for Lyn, Chaos Chronicle and Shadow Seven, publishing integration for Night Walker, and the remaining issues from 5 sunset services.</p>
           <p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog">Case — redefining the systems to publisher spec</button><button class="row-case" type="button" data-open-work="chaos" aria-haspopup="dialog">Work — Chaos Chronicle sunset ops</button></p>
         </div>
       </div></li>
@@ -1275,11 +1280,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   <div class="shell px stats-in">
     <div class="stats-panel" data-reveal style="--ry:40px;--rs:.99">
       <p class="eyebrow eyebrow--light">By the numbers</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>The record, in numbers not words</span></span></h2>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span>The record, in numbers&nbsp;not&nbsp;words</span></span></h2>
       <ul class="stats-grid">
         <li data-reveal style="--rd:0ms;--ry:20px">
           <p class="stat-n"><span data-count="19">19</span> years</p>
-          <p class="stat-l">Total experience (per resume)</p>
+          <p class="stat-l">Total experience</p>
         </li>
         <li data-reveal style="--rd:90ms;--ry:20px">
           <p class="stat-n"><span data-count="10">10</span></p>
@@ -1287,7 +1292,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         </li>
         <li data-reveal style="--rd:180ms;--ry:20px">
           <p class="stat-n">₩18.3B</p>
-          <p class="stat-l">Lyn revenue (#3 grossing, App Store · Google Play)</p>
+          <p class="stat-l">Lyn revenue (#3 grossing, App&nbsp;Store&nbsp;·&nbsp;Google&nbsp;Play)</p>
         </li>
         <li data-reveal style="--rd:270ms;--ry:20px">
           <p class="stat-n"><span data-count="30">30</span></p>
@@ -1306,7 +1311,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <div class="ft-cta">
       <h2 class="h2" data-lines style="--ls:100ms">
         <span class="line" style="--i:0"><span>My resume and career history are</span></span>
-        <span class="line" style="--i:1"><span>available to read on Notion.</span></span>
+        <span class="line" style="--i:1"><span>available to read&nbsp;on&nbsp;Notion.</span></span>
       </h2>
       <div class="ft-acts" data-reveal style="--rd:200ms;--ry:12px">
         <a class="pill pill--light pill--arrow pill--ur" data-notion-hub href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer">
@@ -1345,7 +1350,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
     <div class="ft-legal">
       <span>© 2026 Henry Lim</span>
-      <span>All figures on this site come from my public resume.</span>
     </div>
   </div>
   <div class="wm ft-wm" aria-hidden="true">HENRY LIM</div>
@@ -1731,11 +1735,11 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
-  wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855']],
-  neowiz: [['Friend system design (KO)', '13f2864c7af74918b5a956367ddfdcb6'], ['Shop system rework design (KO)', '7298379e8a254d63b64747242afe60ff'], ['Balance design (KO)', '34f448cf443b415181d7d8fe05f2d7b0']],
-  nexon: [['Metric analysis of major issues (KO)', 'c2899733fed94b618af970a0796a7e6c'], ['Postmortems by project (KO)', '271affb46a12423bbb26dd3cdc183ae0'], ['Milestone alignment (KO)', '9a16f26d31cf438482942ce4baa00001']],
-  netmarble: [['Tutorial flow design (KO)', '47f569402610444e90b6944e84a2d235']],
-  softnyx: [['Focus Group Interview & Test (KO)', '32d0763c70714ce6af760a2312657da7'], ['Monetization analysis by title (KO)', 'cd308df4eafa4e66868de83e459fcdde'], ['2013–2014 game market analysis (KO)', '98d467b255b34ee1a4942ae49d12f121']],
+  wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855']],
+  neowiz: [['Friend system design (KO)', '13f2864c7af74918b5a956367ddfdcb6'], ['Shop system rework design (KO)', '7298379e8a254d63b64747242afe60ff'], ['Balance design (KO)', '34f448cf443b415181d7d8fe05f2d7b0']],
+  nexon: [['Metric analysis of major issues (KO)', 'c2899733fed94b618af970a0796a7e6c'], ['Postmortems by project (KO)', '271affb46a12423bbb26dd3cdc183ae0'], ['Milestone alignment (KO)', '9a16f26d31cf438482942ce4baa00001']],
+  netmarble: [['Tutorial flow design (KO)', '47f569402610444e90b6944e84a2d235']],
+  softnyx: [['Focus Group Interview & Test (KO)', '32d0763c70714ce6af760a2312657da7'], ['Monetization analysis by title (KO)', 'cd308df4eafa4e66868de83e459fcdde'], ['2013–2014 game market analysis (KO)', '98d467b255b34ee1a4942ae49d12f121']],
 };
 document.querySelectorAll('#career [data-links]').forEach(el => {
   const list = CAREER_LINKS[el.dataset.links];
@@ -1762,21 +1766,21 @@ const WORKS = {
        ['Result & status','Shipped — minigames v1 and v2, the decoration event (2026-04-30 to 05-23, SuperStar STAYC new group launch) and the 10th anniversary webview event.'],
        ['Evidence','Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)']],
     x:{ s:'Also from the same period — 2 supporting cases',
-        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.'],
-           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.']] },
-    n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
-       {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
-       {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
-  case2: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Soft launch metrics into pre-launch fixes',
+        r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.'],
+           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 22 people across three teams into 13 across two. Each project got a live owner paired with a QA owner, I took the QA lead role as well, and we ran 7 titles on that structure through July 2026.']] },
+    n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
+       {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
+       {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
+  case2: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Soft launch metrics into pre‑launch fixes',
     s:[],
     r:[['In one line','Turned soft launch metrics from 3 markets into product, currency and early-flow fixes before the global launch'],
-       ['Period & role','Team Lead, Mobile Business Division, Nexon Korea (employed 2015.07 – 2019.10) · Lyn business PM 2017.02 – 2019 (developer collaboration, build coordination)'],
+       ['Period & role','Team Lead, Mobile Business Division, Nexon Korea (employed 2015.07 – 2019.10) · Lyn business PM 2017.02 – 2019 (developer collaboration, build coordination)'],
        ['Problem','Bringing the developer build up to launch condition meant turning user tests and market metrics into development requests. The soft launch (Australia, Malaysia, the Philippines, 2019.01–02) showed an unbalanced product mix, slow paid-gem spending and early drop-off.'],
        ['Decision','I framed product mix, currency loop and early flow as fixes to close before launch, and set the product direction by benchmarking a comparable title (Langrisser).'],
        ['What I did','As business team lead I ran the FGT (2018.06–07, testers selected against 10 competing titles) and the internal test (2018.11, 3 days) and turned the results into development requests. After the soft launch I wrote up the product, currency and early-flow fixes and aligned them with the developer.'],
        ['Result & status','Project shipped (2019 global grand launch). Three fixes landed in the grand launch build: the reworked product lineup, the trading post timing and its dedicated store, and the early flow. Project results were a peak of #3 grossing on the App Store and Google Play in Korea and ₩18.3B cumulative revenue in 2019; my contribution was test lead, build improvement coordination, and the product and currency proposals.'],
        ['Evidence','Notion "In-game improvement proposal" · soft launch metrics report (business team, not public) · FGT satisfaction data and internal test report (business team, not public)']],
-    n:[{t:'Soft launch metrics into pre-launch fixes (KO)', id:'3d559de72804810faa75ca85ef0a25a0'},
+    n:[{t:'Soft launch metrics into pre‑launch fixes (KO)', id:'3d559de72804810faa75ca85ef0a25a0'},
        {t:'In-game improvements', id:'09624ec9cbdb4dd9a53085f168bfcfa7'}] },
   case3: { m:'Wonderpeople/Acestorm · Business Team — Part Lead', t:'China service flows to the Korean spec',
     s:[],
@@ -1787,22 +1791,22 @@ const WORKS = {
        ['What I did','I wrote the paid-currency purchase integration design, the coupon feature definition and the server-select UI/flow design, and aligned them with the publisher and the dev team. After launch I analyzed weekly sales to propose products and used live metrics to propose fixes for player hurdles.'],
        ['Result & status','Project shipped (Korea launch 2023-01-26). Paid currency and coupons are recorded as live; server select is documented as foundation work complete. The project reached 330K+ new users in Korea; my contribution was the integration work and the product and hurdle proposals.'],
        ['Evidence','Notion "Paid-currency purchase system integration", "Coupon system integration", "Server-select UI/flow design", "Added promotional product feature"']],
-    n:[{t:'Redefining the systems to publisher spec (KO)', id:'3d559de72804819f9a88c951cbc10f9a'},
+    n:[{t:'Redefining the systems to publisher spec (KO)', id:'3d559de72804819f9a88c951cbc10f9a'},
        {t:'Paid-currency purchase system integration', id:'49043d5d2bfa44d18384126bbbd86f14'},
        {t:'Coupon system integration', id:'2ade8f618bb945a6b0c0f6a711133b55'},
        {t:'Server-select UI/flow design', id:'581e150745124f13b3d6d3721841b1c2'},
        {t:'Added promotional product feature', id:'39a59de7280481888c8dff7c54446d1f'}] },
   dalcom: { m:'Dalcomsoft · Live Game Design Team — Team Lead', t:'Multi-title live operations and user-led product work',
-    s:[['11→7','Portfolio reshaped']],
+    s:[['11 titles','Led app services for 11 SuperStar titles']],
     r:[['Lead case','Connected the survey request for webview events to shipped in-game minigames → the decoration event → the 10th anniversary webview event. The full story is in the cases section above.'],
        ['Live portfolio','Audited the 11 projects I inherited, ran 5 sunsets alongside the new SSWO launch, and operated the final 7'],
        ['User research','Satisfaction survey across 6 titles in Korean, English and Japanese — turned user needs and pain points into product improvement tasks and proposed the H1 2026 direction'],
        ['Prototype','Decoration event design and wireframe · SuperStar JYP Nation 10th anniversary interactive webview prototype — the events developed from these prototypes shipped'],
        ['Automation & process','Auto-synced store product ID specs (Google Apps Script) · SKU automation across 7 projects · unified mail/Slack/Notion work dashboard · automated SM music settlement'],
        ['Risk management','Blocked product abuse the same day and closed clawback and compensation in a single approval · documented a 5-step follow-up SOP']],
-    n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
-       {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
-       {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
+    n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
+       {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
+       {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
   lyn: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Lyn',
     s:[['#3','Grossing, KR (both stores)'],['₩18.3B','Revenue']],
     r:[['My role','As business team lead in Nexon\'s mobile business division I ran the FGT and the internal test and coordinated build improvements with the developer'],
@@ -1810,7 +1814,7 @@ const WORKS = {
        ['Soft launch','Australia · Malaysia · Philippines'],
        ['Validation & research','FGT · internal tests'],
        ['External activity','G-star exhibit · user meetups']],
-    n:[{t:'Soft launch metrics into pre-launch fixes (KO)', id:'3d559de72804810faa75ca85ef0a25a0'},
+    n:[{t:'Soft launch metrics into pre‑launch fixes (KO)', id:'3d559de72804810faa75ca85ef0a25a0'},
        {t:'In-game improvements', id:'09624ec9cbdb4dd9a53085f168bfcfa7'}] },
   chaos: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Chaos Chronicle',
     s:[['#7','App Store grossing, KR'],['#23','Google Play grossing, KR'],['₩9.8B','US revenue']],
@@ -1826,7 +1830,7 @@ const WORKS = {
        ['Metrics → improvement proposals','Analyzed weekly sales to propose products, and live metrics to propose fixes for player hurdles'],
        ['Validation & research','FGT · internal tests'],
        ['External activity','Wanted collaboration · PR video']],
-    n:[{t:'Redefining the systems to publisher spec (KO)', id:'3d559de72804819f9a88c951cbc10f9a'},
+    n:[{t:'Redefining the systems to publisher spec (KO)', id:'3d559de72804819f9a88c951cbc10f9a'},
        {t:'Paid-currency purchase system integration', id:'49043d5d2bfa44d18384126bbbd86f14'},
        {t:'Coupon system integration', id:'2ade8f618bb945a6b0c0f6a711133b55'},
        {t:'Server-select UI/flow design', id:'581e150745124f13b3d6d3721841b1c2'},
@@ -1841,9 +1845,10 @@ const WORKS = {
     n:[{t:'Media showcase scenario', id:'4c6d6bbaaee24779ba80cce602592248'},
        {t:'Early drop-off improvements', id:'b14364484326425d981697677cf386ab'},
        {t:'Update status reporting', id:'29609a7acf9046be87cdee55d11d9f30'}] },
-  nanakage: { m:'Neptune Legend · Studio — Business PM', t:'Shadow Seven',
+  nanakage: { m:'Neptune Legend · Studio — Development PM', t:'Shadow Seven',
     s:[['7 markets','Soft launch']],
-    r:[['Role','Business PM (2019.10 – 2020.04)'],
+    r:[['Role','Development PM (2019.10 – 2020.04)'],
+       ['System design','Content loop (currency flow), level-based content unlocks and reward structure · monetization and package structure (boxes, costumes, instant open) · Tapjoy funnel, ad placement and a tracking-event standard across every stage · referral pages in 5 languages · rating management system'],
        ['Metrics → action → result','Weak Japan performance → added rating management → Google Play rating 3.29 in Japan → 4.4 global'],
        ['Soft launch','Indonesia · Hong Kong · the Philippines · Malaysia · Singapore · Thailand · Macau (7 markets)'],
        ['Grand launch','2020-02-20 Korea · US · Taiwan — #173 grossing on Android in Korea']],
@@ -2018,7 +2023,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     }
     const go = document.createElement('span');
     go.className = 'ev-go';
-    go.append('Open in Notion (KO)');
+    go.append('Open in Notion (KO)');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('class', 'ic'); svg.setAttribute('aria-hidden', 'true');
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');

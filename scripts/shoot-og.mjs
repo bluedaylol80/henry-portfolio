@@ -3,14 +3,14 @@
  * 카드 문구를 따로 만들지 않는 이유는 PDF와 같다: 문구가 두 벌이 되면 반드시 어긋난다.
  * (2026-08-08 실측: 수동 캡처였던 탓에 카드만 v20 시절 문구로 굳어 있었다.)
  *
- * 선행: npm run build && npm run preview (4173)
+ * 선행: python -m http.server 8787 --bind 127.0.0.1 --directory site
  * Usage: node scripts/shoot-og.mjs [baseUrl]
  */
 import puppeteer from 'puppeteer-core'
 import { statSync } from 'node:fs'
 
-const BASE = (process.argv[2] ?? 'http://localhost:4173/henry-portfolio/').replace(/\/$/, '') + '/'
-const OUT = 'public/og.png'
+const BASE = (process.argv[2] ?? 'http://127.0.0.1:8787/').replace(/\/$/, '') + '/'
+const OUT = 'site/og.png'
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 
 const browser = await puppeteer.launch({
@@ -22,7 +22,9 @@ const page = await browser.newPage()
 await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 1 })
 await page.evaluateOnNewDocument(() => localStorage.setItem('henry.lang', 'ko'))
 await page.goto(BASE, { waitUntil: 'networkidle0', timeout: 60000 })
-await new Promise((r) => setTimeout(r, 1500))
+// 로더가 걷히고 히어로 리빌이 끝난 뒤에 찍는다
+await page.waitForFunction(() => !document.getElementById('loader'), { timeout: 15000 }).catch(() => {})
+await new Promise((r) => setTimeout(r, 2500))
 
 // 카드에 히어로 문구가 실제로 담겼는지 확인하고 저장한다 — 빈 화면이 조용히 나가지 않게.
 const h1 = await page.evaluate(() => document.querySelector('h1')?.textContent?.trim() ?? '')
