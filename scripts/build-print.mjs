@@ -93,6 +93,8 @@ async function scrape(lang) {
       })),
       /* 사이트 주소는 손으로 적지 않는다 — canonical이 정본이다(Codex R8-04) */
       canonical: document.querySelector('link[rel=canonical]').href,
+      /* 발표자료 주소도 사이트의 덱 링크(상대 경로)를 canonical 기준으로 푼다 */
+      deck: new URL(document.querySelector('a[href$="deck/"]').getAttribute('href'), document.querySelector('link[rel=canonical]').href).href,
       labTitle: t(document.querySelector('#lab .h2')),
       lab: (() => { const c = document.querySelector('#lab .card'); if (!c) return null
         return { meta: t(c.querySelector('.card-meta')), title: t(c.querySelector('.card-bot h3')).replace(/\s*(상세 보기|View details)\s*$/, ''),
@@ -347,7 +349,7 @@ html[lang=en] .tl th,html[lang=en] .tl td{padding-top:2.1mm;padding-bottom:2.1mm
 
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
-  ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', notion:'Notion 이력',
+  ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', deck:'발표자료(HTML)', notion:'Notion 이력',
         timeline:'프로젝트 타임라인 — 회사별 상세', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
@@ -356,7 +358,7 @@ const L = {
         rightsPlain:'게임 명칭은 각 권리자의 상표입니다.',
         rightsNW:'나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.',
         rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
-  en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
+  en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', deck:'Deck (HTML)', notion:'Notion resume',
         timeline:'Project timeline — by company', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
         contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
         summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
@@ -699,6 +701,7 @@ function render(lang, d) {
       <div class="lines">
         <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
         <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
+        <p><b>${esc(l.deck)}</b> <a href="${esc(d.deck)}">${esc(d.deck)}</a></p>
         <p><b>${esc(l.notion)}</b> <a href="${esc(d.notion)}">${esc(d.notion)}</a></p>
       </div>
       <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
@@ -736,6 +739,7 @@ ${body.join('\n')}
 const ko = await scrape('ko')
 const en = await scrape('en')
 for (const [lg, d] of [['ko', ko], ['en', en]]) if (!d.notion.startsWith('https://limhenry.notion.site/')) fail(lg + ' 페이지에서 Notion 이력 링크를 못 읽었다')
+for (const [lg, d] of [['ko', ko], ['en', en]]) if (d.deck !== 'https://bluedaylol80.github.io/henry-portfolio/deck/') fail(lg + ' 페이지에서 발표자료 링크를 못 읽었다: ' + d.deck)
 mkdirSync('site/pdf/en', { recursive: true })
 writeFileSync('site/pdf/index.html', render('ko', ko), 'utf8')
 writeFileSync('site/pdf/en/index.html', render('en', en), 'utf8')
