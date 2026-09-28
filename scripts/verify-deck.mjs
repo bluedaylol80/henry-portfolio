@@ -163,7 +163,7 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
     const snap = () => page.evaluate(() => document.querySelector('.s.on canvas.mo').toDataURL())
     const a = await snap(); await sleep(600); const b = await snap()
     const st = await page.evaluate(() => ({ ...DeckMotion.state(),
-      hidden: [...document.querySelectorAll('.s.on .ch,.s.on [data-d]')].filter(el => +getComputedStyle(el).opacity < 1).length }))
+      hidden: [...document.querySelectorAll('.s.on .ch,.s.on [data-d],.s.on [data-n]')].filter(el => +getComputedStyle(el).opacity < 1).length }))
     if (st.running || a !== b) bad.push(`동작 줄이기에서 ${i}장 모션이 계속 움직인다`)
     if (st.hidden) bad.push(`동작 줄이기에서 ${i}장 글자 ${st.hidden}개가 덜 보인다`)
     if (a.length < 20000) bad.push(`동작 줄이기에서 ${i}장 캔버스가 비었다`)

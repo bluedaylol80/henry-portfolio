@@ -423,6 +423,8 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .hl .w{white-space:nowrap}
 .hl .ch{display:inline-block}
 .caret{position:absolute;width:4px;border-radius:2px;background:var(--sub);opacity:0;pointer-events:none}
+/* 등장 연출은 화면에서만 — 인쇄에서는 글자를 항상 완전히 보인다 */
+@media print{.cover [data-d],.cover [data-n],.hl .ch{opacity:1!important;transform:none!important}.caret{display:none}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .ct .sep{color:var(--m38);margin:0 .5em}
 .ct a,.lk a{text-decoration:underline;text-decoration-color:var(--m38);text-underline-offset:5px}
@@ -895,13 +897,13 @@ function render(d, A) {
     <p class="nm" style="margin-top:26px;font-size:72px" data-d="80">${esc(d.brand)}</p>
     <p class="rl" data-d="160">${esc(d.role)}</p>
     <div class="ct" style="margin-top:40px">
-      <p data-d="300"><b>${L.email}</b><a href="mailto:${MAIL}">${MAIL}</a></p>
-      <p data-d="380"><b>${L.web}</b>${ext(LINK.web, 'KO ↗')}${SEP}${ext(LINK.webEn, 'EN ↗')}</p>
-      <p data-d="460"><b>${L.cv}</b>${ext(LINK.cvKo, esc(L.cvKo) + ' ↗')}${SEP}${ext(LINK.cvEn, esc(L.cvEn) + ' ↗')}</p>
-      <p data-d="540"><b>${L.caseRep}</b>${ext(LINK.caseRep, L.open + ' ↗')}</p>
-      <p data-d="620"><b>${L.pdf}</b>${ext(LINK.pdfKo, 'KO ↗')}${SEP}${ext(LINK.pdfEn, 'EN ↗')}</p>
+      <p data-n="0"><b>${L.email}</b><a href="mailto:${MAIL}">${MAIL}</a></p>
+      <p data-n="1"><b>${L.web}</b>${ext(LINK.web, 'KO ↗')}${SEP}${ext(LINK.webEn, 'EN ↗')}</p>
+      <p data-n="2"><b>${L.cv}</b>${ext(LINK.cvKo, esc(L.cvKo) + ' ↗')}${SEP}${ext(LINK.cvEn, esc(L.cvEn) + ' ↗')}</p>
+      <p data-n="3"><b>${L.caseRep}</b>${ext(LINK.caseRep, L.open + ' ↗')}</p>
+      <p data-n="4"><b>${L.pdf}</b>${ext(LINK.pdfKo, 'KO ↗')}${SEP}${ext(LINK.pdfEn, 'EN ↗')}</p>
     </div>
-    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-d="760">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
+    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-n="5">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
   </div>
   <div></div>
 </section>`
