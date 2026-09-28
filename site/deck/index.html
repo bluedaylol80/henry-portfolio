@@ -163,12 +163,13 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .msc .r{font-size:22px;margin-top:8px;line-height:1.4}
 /* 회사별 상세 */
 .co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;
-  gap:26px 56px;flex:1;min-height:0;align-content:start}
-.cor{border-top:1px solid var(--m12);padding-top:16px;display:grid;grid-template-columns:1fr auto;gap:6px 20px}
+  gap:16px 56px;flex:1;min-height:0;align-content:start}
+/* WO-33 — 원더피플 행에 슈퍼피플이 붙어 3줄이 됐다. 문구는 두고 행 간격·줄 간격만 줄인다 */
+.cor{border-top:1px solid var(--m12);padding-top:12px;display:grid;grid-template-columns:1fr auto;gap:4px 20px}
 .cor b{font-size:26px;font-weight:700}
 .cor .k{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:-.02em;white-space:nowrap}
-.cor .p{grid-column:1/-1;font-size:22px;color:var(--m60);line-height:1.4}
-.cor .t{grid-column:1/-1;font-size:22px;line-height:1.4}
+.cor .p{grid-column:1/-1;font-size:22px;color:var(--m60);line-height:1.32}
+.cor .t{grid-column:1/-1;font-size:22px;line-height:1.32}
 /* 스텝 */
 .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;flex:none;align-items:stretch;margin:auto 0}
 .st{position:relative;background:var(--panel);border:1px solid var(--m12);padding:30px 26px;display:flex;flex-direction:column}
@@ -253,7 +254,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <h2 class="h h--sm">10개 회사, 19년의 기록</h2>
   
   <div class="bd">
-    <div class="msb"><div style="flex:5"><b>운영</b><span>2006 – 2011</span></div><div style="flex:10"><b>사업 PM</b><span>2011 – 2021</span></div><div style="flex:5"><b>기획·디렉터</b><span>2021 – 2026</span></div></div>
+    <div class="msb"><div style="flex:5"><b>운영</b><span>2006 – 2011</span></div><div style="flex:10"><b>사업PM</b><span>2011 – 2021</span></div><div style="flex:5"><b>기획·디렉터</b><span>2021 – 2026</span></div></div>
     <div class="gantt"><i class="" style="left:1.22%;width:7.32%">1</i><i class="" style="left:11.38%;width:15.45%">2</i><i class="" style="left:26.83%;width:17.48%">3</i><i class="" style="left:44.72%;width:1.63%">4</i><i class="" style="left:46.34%;width:20.73%">5</i><i class="" style="left:67.07%;width:2.44%">6</i><i class="" style="left:70.73%;width:2.85%">7</i><i class="" style="left:73.58%;width:3.25%">8</i><i class="" style="left:78.46%;width:10.57%">9</i><i class="on" style="left:91.46%;width:8.54%">10</i></div>
     <div class="axis"><span style="left:0.00%">2006</span><span style="left:24.39%">2011</span><span style="left:48.78%">2016</span><span style="left:73.17%">2021</span><span style="left:97.56%">2026</span></div>
     <div class="msg">
@@ -281,7 +282,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <div class="msc"><b><em>8</em>네오위즈</b>
         <p class="p"><span class="nn">2021.02</span> – <span class="nn">2021.10</span></p>
         <p class="r">스노우볼 스튜디오 기획 팀장</p></div>
-      <div class="msc"><b><em>9</em>원더피플·에이스톰</b>
+      <div class="msc"><b><em>9</em>원더피플/에이스톰</b>
         <p class="p"><span class="nn">2022.02</span> – <span class="nn">2024.04</span></p>
         <p class="r">사업팀 파트장</p></div>
       <div class="msc"><b><em>10</em>달콤소프트</b>
@@ -307,15 +308,15 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l-1 5 5-1"/><path d="M9 15l-3-3c3-7 8-9 12-9 0 4-2 9-9 12z"/><circle cx="14.5" cy="9.5" r="1.6"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">출시·라이브 실행</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">소프트런칭부터 런칭·라이브 운영·서비스 종료까지, A~Z 모든 단계를 직접 진행했습니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 퍼블리셔 규격 시스템 재정의</span><span class="chip">성과 — 카오스크로니클 종료 운영</span></div>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">소프트런칭부터 런칭·라이브 서비스·서비스 종료까지, A~Z 모든 단계를 직접 진행했습니다.</p>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 퍼블리셔 규격 시스템 재정의</span><span class="chip">성과 — 카오스크로니클 서비스 종료</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.6a3.2 3.2 0 010 5.6M18 20c0-2.4-.9-4.2-2.3-5.3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">조직·인력 운영</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">채용·팀 구조·담당 배치입니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 조직 재편(달콤 상세창 "함께 보기")</span><span class="chip">성과 — 스카이피플 조직 셋업</span></div>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">리크루트·팀 구조·담당 배치입니다.</p>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 조직 재편(달콤 상세창 "함께 보기")</span><span class="chip">성과 — 스카이피플 조직 세팅</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
@@ -368,8 +369,8 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/dalcom.jpg" alt="멀티 타이틀 라이브 운영과 사용자 기반 제품 개선" style="max-width:1073px;max-height:787px">
-      <figcaption>멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</figcaption></figure>
+      <img src="../pdf/img/dalcom.jpg" alt="멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선" style="max-width:1073px;max-height:787px">
+      <figcaption>멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선</figcaption></figure>
           <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
             <p class="n n--sm">출시 <span class="nn">3건</span></p>
             <p class="nl" style="margin-bottom:10px">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p></div>
@@ -389,7 +390,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
               <div><p class="rt">본인 행동</p><p>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025‑12, v2 2026‑01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg></span>
-              <div><p class="rt">미룬 것</p><p>조사에서 함께 나온 수집·전시·커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다.</p></div></div>
+              <div><p class="rt">미룬 것</p><p>조사에서 함께 나온 수집 완성·감상/전시·개인화·커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
               <div><p class="rt">결과·상태</p><p>실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.</p></div></div></div>
           <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
@@ -442,7 +443,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
-              <div><p class="rt">본인 행동</p><p>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내테스트(2018.11, 3일)를 사업팀장으로 이끌고 결과를 개발 요구로 정리했다.</p></div></div>
+              <div><p class="rt">본인 행동</p><p>FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내 테스트(2018.11, 3일)를 모바일사업실 팀장으로 이끌고 결과를 개발 요구로 정리했다.</p></div></div>
             <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
               <div><p class="rt">결과·상태</p><p>프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성 · 거래소 시점/전용 상점 · 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어·구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드·빌드 개선 조율·상품/재화 개선안 범위다.</p></div></div></div>
           <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
@@ -490,7 +491,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
             <p class="nl" style="margin-bottom:10px">한국 신규 유저 누적</p></div>
         </div>
       </div></div>
-  <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다. 나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.</p>
+  <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다. 나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.</p>
 </section>
 
 <section class="s" role="group" aria-roledescription="slide"
@@ -515,7 +516,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <img src="../pdf/img/nightwalker/charge_ui_mock.jpg" alt="충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안" style="max-width:941px;max-height:950px">
       <figcaption>충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안</figcaption></figure></div>
       </div></div>
-  <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다. 나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.</p>
+  <p class="rights">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다. 나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.</p>
 </section>
 
 <section class="s s--acc" role="group" aria-roledescription="slide"
@@ -527,7 +528,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       gap:30px 34px;flex:1;min-height:0">
       
         <div style="border-top:3px solid var(--sub);padding-top:22px">
-          <p style="font-size:22px;color:var(--m60)">멀티 타이틀 라이브 운영과 사용자 기반 제품 개선</p>
+          <p style="font-size:22px;color:var(--m60)">멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선</p>
           <p class="n" style="margin-top:26px"><span class="nn">11종</span></p>
           <p class="nl">SuperStar 시리즈 타이틀 11종 앱 서비스 총괄<br>2024.10~2026.07</p></div>
         <div style="border-top:3px solid var(--sub);padding-top:22px">
@@ -537,7 +538,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">카오스크로니클</p>
           <p class="n" style="margin-top:26px"><span class="nn">98억</span></p>
-          <p class="nl">미국 매출<br>서비스 기간 누적</p></div>
+          <p class="nl">매출<br>서비스 기간 누적</p></div>
         <div style="border-top:3px solid var(--sub);padding-top:22px">
           <p style="font-size:22px;color:var(--m60)">나이트워커</p>
           <p class="n" style="margin-top:26px"><span class="nn">33만+</span></p>
@@ -568,7 +569,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <figcaption>이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용</figcaption></figure>
         <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
           <p class="n n--xs"><span class="nn">98억</span></p>
-          <p class="nl" style="margin-bottom:4px">미국 매출 · 서비스 기간 누적</p></div>
+          <p class="nl" style="margin-bottom:4px">매출 · 서비스 기간 누적</p></div>
         
         <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>2017년 12월 종료 — 런칭부터 종료까지 전 주기 담당</dd><dt>판단</dt><dd>5개국 소프트런칭 후 글로벌</dd><dt>결과</dt><dd>앱스토어 112위 · 북미 등 iOS·구글 피처드</dd></dl>
         <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/0fcb2233c75c4b04b5317fe2ded2fec4" target="_blank" rel="noopener">초반 동선 폴리싱 ↗</a><a href="https://limhenry.notion.site/508469dc0586497f8ce75618b142e29a" target="_blank" rel="noopener">BM 기획 및 제안 ↗</a><a href="https://limhenry.notion.site/aa5b9015b7c044809731b0e073012101" target="_blank" rel="noopener">이벤트 기획 ↗</a></div>
@@ -577,13 +578,13 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <img src="../pdf/img/fivestars.jpg" alt="Five Stars" style="object-fit:cover">
       </figure>
         <figure class="shot" style="height:196px;flex:none;margin-top:16px">
-      <img src="../pdf/img/fivestars/prereg.jpg" alt="정식 런칭 사전예약 키 비주얼" style="max-width:361px;max-height:180px">
-      <figcaption>정식 런칭 사전예약 키 비주얼</figcaption></figure>
+      <img src="../pdf/img/fivestars/prereg.jpg" alt="정식 런칭 사전 예약 키 비주얼" style="max-width:361px;max-height:180px">
+      <figcaption>정식 런칭 사전 예약 키 비주얼</figcaption></figure>
         <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
           <p class="n n--xs"><span class="nn">24억</span></p>
           <p class="nl" style="margin-bottom:4px">매출 · 오픈 후 5개월</p></div>
         
-        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>사업 · 운영 조직 세팅 · 리크루트</dd><dt>판단</dt><dd>OST 제작·발매 · 더빙 외주 · 마케팅 대행 컨택</dd><dt>결과</dt><dd>앱스토어 49위 · 원스토어 28위 · 사전예약 20만</dd></dl>
+        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px"><dt>역할</dt><dd>사업 · 운영 조직 세팅 · 리크루트</dd><dt>판단</dt><dd>OST 제작·발매 · 더빙 외주 · 마케팅 대행 컨택</dd><dt>결과</dt><dd>앱스토어 49위 · 원스토어 28위 · 사전 예약 20만</dd></dl>
         <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/4c6d6bbaaee24779ba80cce602592248" target="_blank" rel="noopener">미디어 쇼케이스 시나리오 구성 ↗</a><a href="https://limhenry.notion.site/b14364484326425d981697677cf386ab" target="_blank" rel="noopener">초반 이탈구간 개선 ↗</a><a href="https://limhenry.notion.site/29609a7acf9046be87cdee55d11d9f30" target="_blank" rel="noopener">업데이트 현황 보고 ↗</a></div>
       </div><div style="display:flex;flex-direction:column;min-height:0">
         <figure class="shot" style="height:132px;flex:none">
@@ -626,8 +627,8 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
         <ul><li>꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다</li><li>구매·쿠폰·서버 선택 UI/플로우 기획을 쓰고 협의했다</li></ul>
         
       </div>
-      <div class="st"><p class="no">05</p><h3>라이브 운영·표준화</h3>
-        <ul><li>성과 — 카오스크로니클 종료 운영</li><li>성과 — SKU 자동화·어뷰징 SOP</li></ul>
+      <div class="st"><p class="no">05</p><h3>라이브 서비스·표준화</h3>
+        <ul><li>성과 — 카오스크로니클 서비스 종료</li><li>성과 — SKU 자동화·어뷰징 SOP</li></ul>
         
       </div></div></div>
   <p class="rights">게임 명칭은 각 권리자의 상표입니다.</p>
@@ -665,23 +666,23 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   
   <div class="bd"><div class="co"><div class="cor"><b>달콤소프트</b>
         <span class="k"><span class="nn">11종</span></span>
-        <p class="p">라이브기획팀 팀장 · 2024.10 – 2026.07</p><p class="t">11개 → 5개 종료·SSWO 런칭 → 7개 재편, GAS로 7개 SKU 자동화 도입</p></div><div class="cor"><b>원더피플·에이스톰</b>
+        <p class="p">라이브기획팀 팀장 · 2024.10 – 2026.07</p><p class="t">11개 → 5개 종료·SSWO 런칭 → 7개 재편, Google Apps Script로 7개 SKU 자동화 도입</p></div><div class="cor"><b>원더피플/에이스톰</b>
         <span class="k"><span class="nn">33만+</span></span>
-        <p class="p">사업팀 파트장 · 2022.02 – 2024.04</p><p class="t">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플 중국 신규 56만+</p></div><div class="cor"><b>네오위즈</b>
+        <p class="p">사업팀 파트장 · 2022.02 – 2024.04</p><p class="t">나이트워커 신규 33만+·DAU 6.3만·D+1 약 50% / 슈퍼피플(스팀 중국) 런칭·라이브 서비스·운영 지표 분석·경영기획실 보고, 중국 신규 56만+·중국 DAU 피크 7.1만 / 리크루트 개선 — 원티드 콜라보·PR 영상</p></div><div class="cor"><b>네오위즈</b>
         <span class="k"></span>
         <p class="p">스노우볼 스튜디오 기획 팀장 · 2021.02 – 2021.10</p><p class="t">기획 팀장 · 알파·베타 기반 시스템 신규 10종·개편 8종 기획, 개발 마일스톤 관리 · 기획팀 채용</p></div><div class="cor"><b>스카이피플</b>
         <span class="k"><span class="nn">24억</span></span>
-        <p class="p">사업팀 팀장 · 2020.07 – 2021.02</p><p class="t">사업·운영 조직 셋업·채용 후 런칭·라이브 — 사전예약 20만·신규 28만+·매출 24억</p></div><div class="cor"><b>넵튠 레전드</b>
+        <p class="p">사업팀 팀장 · 2020.07 – 2021.02</p><p class="t">사업·운영 조직 세팅·리크루트 후 런칭·라이브 — 사전 예약 20만·신규 28만+·매출 24억</p></div><div class="cor"><b>넵튠 레전드</b>
         <span class="k"><span class="nn">7개국</span></span>
         <p class="p">스튜디오 개발PM · 2019.10 – 2020.04</p><p class="t">콘텐츠 순환·BM·트래킹 시스템 기획 · 7개국 소프트런칭 → 그랜드런칭 · 구글 평점 일본 3.29 → 글로벌 4.4</p></div><div class="cor"><b>넥슨 코리아</b>
         <span class="k"><span class="nn">183억</span></span>
-        <p class="p">모바일사업실 팀장 · 2015.07 – 2019.10</p><p class="t">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 매출 5배</p></div><div class="cor"><b>넷마블 블루</b>
+        <p class="p">모바일사업실 팀장 · 2015.07 – 2019.10</p><p class="t">린 매출 183억·양대 마켓 3위 / 카오스크로니클 98억·7위·피처드 / 영웅의 군단 메인 PM·매출 5배</p></div><div class="cor"><b>넷마블 블루</b>
         <span class="k"></span>
         <p class="p">KON 스튜디오 사업PM · 2015.03 – 2015.07</p><p class="t">KON 튜토리얼 플로우 기획·경쟁 타이틀 분석으로 런칭 기반 작업</p></div><div class="cor"><b>소프트닉스</b>
         <span class="k"></span>
-        <p class="p">전략사업팀 사업PM · 2011.07 – 2015.02</p><p class="t">NTD 사내테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p></div><div class="cor"><b>NHN Service</b>
+        <p class="p">전략사업팀 사업PM · 2011.07 – 2015.02</p><p class="t">NTD 사내 테스트 2·FGI 4·FGT 2 설계, 5개 타이틀 유료화 분석, 남미 런칭 준비</p></div><div class="cor"><b>NHN Service</b>
         <span class="k"></span>
-        <p class="p">한게임운영실 파트장 · 2008.05 – 2011.07</p><p class="t">Tera 웹운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</p></div><div class="cor"><b>웹젠</b>
+        <p class="p">한게임운영실 파트장 · 2008.05 – 2011.07</p><p class="t">Tera 웹 운영 파트 관리·FUN QA 4종 게임성 분석, 아틀란티카·R2 라이브 운영</p></div><div class="cor"><b>웹젠</b>
         <span class="k"></span>
         <p class="p">SUN 운영팀 · 2006.04 – 2007.10</p><p class="t">SUN 온라인 런칭 라이브 운영 — VOC 분석·로그 감사</p></div></div></div>
   <p class="rights">게임 명칭은 각 권리자의 상표입니다. ※ 2007.10 – 2008.05 학업 복학(강남대학교 컴퓨터공학, 2009 졸업)</p>

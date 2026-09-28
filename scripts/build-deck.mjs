@@ -143,9 +143,9 @@ const L = {
   act: '본인 행동', lab: '개인 프로덕트', period: '기간',
   full: '문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.',
   role: '역할', verdict: '판단', result: '결과', priority: '우선순위 결정',
-  phases: ['운영', '사업 PM', '기획·디렉터'],
+  phases: ['운영', '사업PM', '기획·디렉터'],
   rightsPlain: '게임 명칭은 각 권리자의 상표입니다.',
-  rightsNW: '나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
+  rightsNW: '나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.',
   rightsProto: '화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.',
 }
 /* 채택 캡처의 캡션 — 인쇄 빌더와 같은 문구를 쓴다(원본 폴더명·내부 문서명은 쓰지 않는다) */
@@ -154,11 +154,11 @@ const CAPS = {
   'lyn/system_ui': '시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처',
   'nightwalker/server_flow_proposal': '서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
   'nightwalker/server_flowchart_wire': '서버 선택 플로우차트 — 퍼블리셔 플랫폼과 개발사 영역 구분',
-  'nightwalker/charge_flow': '보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
+  'nightwalker/charge_flow': '유료 재화 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
   'nightwalker/charge_ui_mock': '충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
   'chaos/event_ui_plan': '이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용',
   'chaos/ingame': '인게임 전투 화면',
-  'fivestars/prereg': '정식 런칭 사전예약 키 비주얼',
+  'fivestars/prereg': '정식 런칭 사전 예약 키 비주얼',
   'nanakage/update_plan': '1Q~2Q 업데이트 계획 — 소프트런칭 뒤 콘텐츠 순서를 정리한 계획',
   'nanakage/mission_ui': '미션 이벤트 UI — 일본 서비스 잔존 대응으로 제안한 미션 이벤트',
 }
@@ -171,7 +171,7 @@ const STEPS = [
   ['제품 판단', d => [d.cases[0].steps[1][1], d.cases[1].steps[1][1]]],
   ['개발 우선순위', d => [d.cases[2].steps[1][1], d.skills[0].cases[1]]],
   ['실행·출시', d => [d.cases[0].steps[2][1], d.cases[2].steps[2][1]]],
-  ['라이브 운영·표준화', d => [d.skills[1].cases[1], d.skills[3].cases[0]]],
+  ['라이브 서비스·표준화', d => [d.skills[1].cases[1], d.skills[3].cases[0]]],
 ]
 const KPI_NUM = { dalcom: '11종', lyn: '183억', chaos: '98억', nightwalker: '33만+', fivestars: '24억', nanakage: '7개국' }
 const KPI_DROP = [/\(기존 게시 승인분\)/g]
@@ -208,8 +208,8 @@ const EXTRA_DLG = ['lyn']
 /* 13장 — 발주서 §2가 요구한 역할·판단·결과 3줄. 값은 사이트 상세창 행에서 읽고,
    어느 행이 어느 칸인지만 여기(덱 전용 표)에서 정한다. */
 const RESULT_ROWS = {
-  chaos: [['역할', '서비스 종료 운영'], ['판단', '소프트런칭'], ['결과', '미국 성적']],
-  fivestars: [['역할', '조직 셋업·채용'], ['판단', '계약·정산'], ['결과', '한국 성적']],
+  chaos: [['역할', '서비스 종료'], ['판단', '소프트런칭'], ['결과', '미국 성적']],
+  fivestars: [['역할', '조직 세팅·리크루트'], ['판단', '외주사·계약 관리'], ['결과', '한국 성적']],
   /* Shadow Seven은 가운데 칸이 판단이 아니라 시스템 기획이다(WO-31 §6) — 칸 이름표도 그에 맞춘다 */
   nanakage: [['역할', '담당'], ['기획', '시스템 기획'], ['결과', '지표 → 조치 → 결과']],
 }
@@ -411,12 +411,13 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .msc .r{font-size:22px;margin-top:8px;line-height:1.4}
 /* 회사별 상세 */
 .co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;
-  gap:26px 56px;flex:1;min-height:0;align-content:start}
-.cor{border-top:1px solid var(--m12);padding-top:16px;display:grid;grid-template-columns:1fr auto;gap:6px 20px}
+  gap:16px 56px;flex:1;min-height:0;align-content:start}
+/* WO-33 — 원더피플 행에 슈퍼피플이 붙어 3줄이 됐다. 문구는 두고 행 간격·줄 간격만 줄인다 */
+.cor{border-top:1px solid var(--m12);padding-top:12px;display:grid;grid-template-columns:1fr auto;gap:4px 20px}
 .cor b{font-size:26px;font-weight:700}
 .cor .k{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:-.02em;white-space:nowrap}
-.cor .p{grid-column:1/-1;font-size:22px;color:var(--m60);line-height:1.4}
-.cor .t{grid-column:1/-1;font-size:22px;line-height:1.4}
+.cor .p{grid-column:1/-1;font-size:22px;color:var(--m60);line-height:1.32}
+.cor .t{grid-column:1/-1;font-size:22px;line-height:1.32}
 /* 스텝 */
 .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;flex:none;align-items:stretch;margin:auto 0}
 .st{position:relative;background:var(--panel);border:1px solid var(--m12);padding:30px 26px;display:flex;flex-direction:column}

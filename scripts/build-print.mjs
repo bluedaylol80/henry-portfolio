@@ -300,6 +300,8 @@ html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 /* EN은 회사명·프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
 html[lang=en] .tl col:nth-child(1){width:41mm}
 html[lang=en] .tl col:nth-child(3){width:16mm}
+/* WO-33 — 원더피플 행에 슈퍼피플 한 줄이 늘어 EN 왼쪽 칸이 넘쳤다. 문구는 두고 행 간격만 줄인다 */
+html[lang=en] .tl th,html[lang=en] .tl td{padding-top:2.1mm;padding-bottom:2.1mm;line-height:1.33}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
 .tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}
@@ -330,10 +332,10 @@ const L = {
         timeline:'프로젝트 타임라인 — 회사별 상세', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
-        phases:['운영','사업 PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
+        phases:['운영','사업PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
         proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간',
         rightsPlain:'게임 명칭은 각 권리자의 상표입니다.',
-        rightsNW:'나이트워커 개발 원더피플·에이스톰 · 퍼블리싱 넥슨.',
+        rightsNW:'나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.',
         rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', notion:'Notion resume',
         timeline:'Project timeline — by company', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
@@ -344,7 +346,7 @@ const L = {
         /* EN 5쪽 보조 사례는 제목과 근거 링크만 싣는다 — 본문은 사이트에서 읽는다(Codex R13) */
         moreRef:'See the site detail for the full text',
         rightsPlain:'Game titles are trademarks of their respective owners.',
-        rightsNW:'Night Walker developed by Wonderpeople and Acestorm · published by Nexon.',
+        rightsNW:'Night Walker developed by Wonderpeople/Acestorm · published by Nexon.',
         rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
 }
 /* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
@@ -358,14 +360,14 @@ const CAPS = {
                                        "Server-select flow proposal — the China SDK flow redefined around the publisher's login and launcher"],
   'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트 — 퍼블리셔 플랫폼(로그인·런처)과 개발사 영역(서버 선택·캐릭터 생성) 구분',
                                         'Server-select flowchart — publisher platform (login, launcher) vs. developer scope (server select, character creation)'],
-  'nightwalker/charge_flow': ['보석 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
-                              "Gem top-up and promotion flow — item grant flow aligned to the publisher's billing policy"],
+  'nightwalker/charge_flow': ['유료 재화 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
+                              "Paid-currency top-up and promotion flow — item grant flow aligned to the publisher's billing policy"],
   'nightwalker/charge_ui_mock': ['충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
                                  'Top-up UI mock — showing promotion benefits inside the top-up window'],
   'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용',
                           'Event page UI plan — I designed the mission structure and reward placement for the live event'],
   'chaos/ingame': ['인게임 전투 화면', 'In-game battle screen'],
-  'fivestars/prereg': ['정식 런칭 사전예약 키 비주얼', 'Launch pre-registration key visual'],
+  'fivestars/prereg': ['정식 런칭 사전 예약 키 비주얼', 'Launch pre-registration key visual'],
   'nanakage/update_plan': ['1Q~2Q 업데이트 계획 — 소프트런칭 뒤 평점 관리 시스템을 포함해 콘텐츠 순서를 정리한 계획',
                            '1Q–2Q update plan — the content order I set after soft launch, including the rating-management system'],
   'nanakage/mission_ui': ['미션 이벤트 UI — 일본 서비스 잔존 대응으로 제안한 미션 이벤트',
@@ -387,12 +389,12 @@ const capMM = (slug) => (NAT_W[slug] ? ` style="max-width:${(NAT_W[slug] * 1.5 *
 /* 대표 지표의 정의 라벨 — KO는 수치 근거표에서 그대로 읽고, EN만 여기서 옮긴다(Codex R11 D11) */
 const KPI_NUM = { dalcom:'11종', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
 const KPI_DEF_EN = { dalcom:'Led app services for 11 SuperStar titles',
-                     lyn:'Revenue', chaos:'US revenue', nightwalker:'Cumulative new users in Korea',
+                     lyn:'Revenue', chaos:'Revenue', nightwalker:'Cumulative new users in Korea',
                      fivestars:'Revenue',
                      nanakage:'Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)' }
 /* 집계 기간 — KO는 근거표에서 읽고 EN만 옮긴다. 근거표가 '미상'이면 라벨에 기간을 달지 않는다 */
 const KPI_PER_EN = { dalcom:'Oct 2024 – Jul 2026', lyn:'cumulative through 2019',
-                     chaos:'cumulative over the service period', fivestars:'first five months after launch' }
+                     chaos:'service lifetime', fivestars:'first five months after launch' }
 /* 라벨에서만 떼는 괄호 주석 — 근거표에는 그대로 남는다(Codex R12 D11) */
 const KPI_DROP = [/\(기존 게시 승인분\)/g, /\s*\(previously approved for publication\)/g]
 const KPI_TBL = (() => {
@@ -618,7 +620,7 @@ function render(lang, d) {
   /* 13. 프로젝트 타임라인 — 2열 표 */
   const tlRows = rows => `<table class="tl"><colgroup><col><col><col></colgroup>
     <thead><tr><th>${esc(l.tlCompany)}</th><th>${esc(l.tlPeriod)}</th><th style="text-align:right">${esc(l.tlKpi)}</th></tr></thead>
-    <tbody>${rows.map(r => `<tr><td><b>${esc(r.company)}</b><span class="sub">${esc(r.titles)}</span></td>
+    <tbody>${rows.map(r => `<tr><td><b>${esc(r.company).replace('/', '/<wbr>')}</b><span class="sub">${esc(r.titles)}</span></td>
       <td>${esc(r.sub)}<span class="impact">${nw(r.impact)}</span></td>
       <td class="k">${nw(kpiFor(r.company))}</td></tr>`).join('')}</tbody></table>`
   const half = Math.ceil(d.career.length / 2)
