@@ -18,8 +18,6 @@ import { hits as banHits } from './pdf-banned.mjs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'http://127.0.0.1:8787'
-const NOTION = 'https://limhenry.notion.site/'
-const HUB = NOTION + '0e48e826c73f4a7ab9c3522d7fb16ce5'
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -78,6 +76,8 @@ async function scrape(lang) {
       career: all('#career .row-li', r => ({ company: t(r.querySelector('.row-title')), titles: t(r.querySelector('.row-note')),
         sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')) })),
       careerFoot: t(document.querySelector('#career .row-foot')),
+      /* Notion 이력 링크는 사이트에서 읽는다 — KO=허브, EN=영문 이력서(build-en이 바꾼다) */
+      notion: (document.querySelector('a[data-notion-hub]') || {}).href || '',
       protoTitle: t(document.querySelector('#proto .h2')),
       protoLede: t(document.querySelector('#proto .proto-lede')),
       proto: all('#proto .card', c => ({
@@ -528,7 +528,7 @@ function render(lang, d) {
   <div class="contact">
     <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
     <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
-    <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
+    <p><b>${esc(l.notion)}</b> <a href="${esc(d.notion)}">${esc(l.notion)} ↗</a></p>
   </div>
   <p class="issued">${esc(l.issued)} ${TODAY}</p>
   <div class="strip">${['dalcom', 'lyn', 'nightwalker'].map(k =>
@@ -699,7 +699,7 @@ function render(lang, d) {
       <div class="lines">
         <p><b>${esc(l.email)}</b> <a href="mailto:bluedaylol80@gmail.com">bluedaylol80@gmail.com</a></p>
         <p><b>${esc(l.site)}</b> <a href="${esc(d.canonical)}">${esc(d.canonical)}</a></p>
-        <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(HUB)}</a></p>
+        <p><b>${esc(l.notion)}</b> <a href="${esc(d.notion)}">${esc(d.notion)}</a></p>
       </div>
       <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
     </div>`,
@@ -735,6 +735,7 @@ ${body.join('\n')}
 
 const ko = await scrape('ko')
 const en = await scrape('en')
+for (const [lg, d] of [['ko', ko], ['en', en]]) if (!d.notion.startsWith('https://limhenry.notion.site/')) fail(lg + ' 페이지에서 Notion 이력 링크를 못 읽었다')
 mkdirSync('site/pdf/en', { recursive: true })
 writeFileSync('site/pdf/index.html', render('ko', ko), 'utf8')
 writeFileSync('site/pdf/en/index.html', render('en', en), 'utf8')

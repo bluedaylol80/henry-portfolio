@@ -224,6 +224,9 @@ swap('>EN<', '>KO<')
 // 포트폴리오 PDF — 헤드 alternate·연락처 창·푸터 세 곳을 EN 파일로 한 번에 바꾼다
 swap('henry-lim-portfolio-ko.pdf', '../henry-lim-portfolio-en.pdf')
 swap('>English<', '>Korean<')
+// Notion 이력 — KO는 허브, EN은 영문 이력서로 (본부장 09-29). 근거 사례 페이지(다른 id)는 그대로
+const hubN = swap(dict.page.notionHubId, dict.page.notionResumeId)
+if (hubN !== 4) fail('Notion 허브 id가 4곳이 아니라 ' + hubN + '곳')
 swap('aria-label="Switch to English"', 'aria-label="한국어로 전환"')
 console.log('  언어 전환 링크 ' + langLinks + '곳')
 
