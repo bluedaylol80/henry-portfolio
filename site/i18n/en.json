@@ -237,7 +237,12 @@
     "PDF-열기": "PDF 열기",
     "대표-사례-보기": "대표 사례 보기",
     "체험판-바로가기": "체험판 바로가기",
-    "꾸미기-화면에서-아이템을": "꾸미기 화면에서 아이템을 고르고 배치해 보세요."
+    "꾸미기-화면에서-아이템을": "꾸미기 화면에서 아이템을 고르고 배치해 보세요.",
+    "슈퍼피플": "슈퍼피플",
+    "56만": "56만+",
+    "스팀-중국-서비스의-Live-ops": "스팀 중국 서비스의 Live-ops를 맡아 <span class=\"nb\">Douyu·KOOK</span> 채널 운영, 스트리밍 이벤트, VOC 수집, <span class=\"nb\">지표 분석·경영 보고까지</span> 이어 갔습니다.",
+    "중국-서비스": "중국 서비스",
+    "이벤트-콘텐츠": "이벤트·콘텐츠"
   },
   "strings": {
     "본문-바로가기": "Skip to content",
@@ -470,7 +475,12 @@
     "PDF-열기": "Open the PDF",
     "대표-사례-보기": "View cases",
     "체험판-바로가기": "Jump to the demos",
-    "꾸미기-화면에서-아이템을": "Pick items on the decoration screen and place them."
+    "꾸미기-화면에서-아이템을": "Pick items on the decoration screen and place them.",
+    "슈퍼피플": "Super People",
+    "56만": "560K+",
+    "스팀-중국-서비스의-Live-ops": "Ran live ops for the China service on Steam — <span class=\"nb\">Douyu and KOOK</span> channels, streaming events and VOC collection, through <span class=\"nb\">metrics analysis and management reporting.</span>",
+    "중국-서비스": "China service",
+    "이벤트-콘텐츠": "Events & content"
   },
   "attrs": {
     "맨 위로": "Back to top",
@@ -637,10 +647,30 @@
     "계약·라이선스": "Contracts & licensing",
     "QA 외주사 컨택·정산·계약 조정 · 중국 서비스 라이선스 계약 검토": "QA vendor contact, settlement and contract adjustments · reviewed the China service license contract",
     "국내 심의 및 내용 수정 신고 진행": "Handled the Korean content rating and content-change filings",
-    "함께 맡은 프로젝트": "Also ran",
-    "슈퍼피플(스팀 중국 서비스) — 런칭·라이브 서비스 · 이벤트 기획·진행 · 유료화 상품 기획·인게임 상점 개편 · EA 이후 90일 운영 지표 분석(DAU·신규·리텐션·플레이 시간·방송 지표, 경쟁작 비교)과 경영기획실 보고 — 보고 후 밸런스 패치팀 업무 이관으로 연결 · 스팀⁠·⁠중국 커뮤니티 5채널(Weibo·Bilibili·WeChat·QQ·KOOK) · CS·모니터링 외주사 관리 · 불법 프로그램 대응": "Super People (Steam, China service) — launched it and ran live ops · planned and ran events · planned monetization products and revamped the in-game shop · analyzed 90-day post-Early Access metrics (DAU, new users, retention, playtime, streaming vs competitors) and reported to the head of management planning, leading to issues being handed to the balance patch team · ran 5 China community channels (Weibo, Bilibili, WeChat, QQ, KOOK) · managed CS/monitoring vendors · handled cheat response",
-    "슈퍼피플 성과": "Super People results",
-    "중국 신규 56만+ · 중국 DAU 피크 7.1만": "560K+ new users (China) · peak China DAU 71K",
-    "외주사·계약 관리": "Vendors & contracts"
+    "외주사·계약 관리": "Vendors & contracts",
+    "중국 신규": "new users (China)",
+    "7.1만": "71K",
+    "중국 DAU 피크": "peak China DAU",
+    "서비스": "Service",
+    "스팀 중국 서비스(PC 배틀로얄 슈팅) 런칭·라이브 서비스": "Launched and ran live service for the China service on Steam (PC battle royale shooter)",
+    "채널 운영": "Channels",
+    "Douyu·KOOK·QQ·WeiBo·Bilibili·WeChat 커뮤니티 운영, 서비스 채널에 영상 콘텐츠 등록, 채널 관리로 바이럴 유도·VOC 지속 수령": "Ran communities on Douyu, KOOK, QQ, WeiBo, Bilibili and WeChat, posted video content to the service channels, and managed the channels to drive virality and keep VOC coming in",
+    "스트리밍 이벤트": "Streaming events",
+    "이벤트 신청 유저와 운영자 캐릭터 슈퍼걸(超击小妹)이 함께 플레이하는 스트리밍으로 참여자·시청자 관심 유도, KOOK으로 실시간 소통": "Streams where event applicants played alongside the operator character Super Girl (超击小妹) to draw participants and viewers, with real-time talk on KOOK",
+    "유저 콘텐츠": "User content",
+    "유저 하이라이트 영상을 제보받아 Douyu 채널에 시리즈로 업데이트(3기·4기 확인), 선정 유저 상품 지급": "Collected user highlight clips and posted them as a series on the Douyu channel (seasons 3 and 4 confirmed), with prizes for selected users",
+    "상점·이벤트": "Shop & events",
+    "인게임 상점 개편 · 이벤트 기획·진행 · 유료화 상품 기획": "Revamped the in-game shop · planned and ran events · planned monetization products",
+    "지표 분석·보고": "Metrics & reporting",
+    "EA 이후 90일 운영 지표 분석(DAU·신규·리텐션·플레이 시간·방송 지표, 경쟁작 비교)·경영기획실 보고 → 밸런스 패치팀 업무 이관으로 연결": "Analyzed 90-day post-Early Access metrics (DAU, new users, retention, playtime, streaming vs competitors) and reported to the head of management planning, leading to issues being handed to the balance patch team",
+    "운영 관리": "Operations",
+    "CS·모니터링 외주사 관리 · 불법 프로그램 대응": "Managed CS/monitoring vendors · handled cheat response",
+    "업데이트·이벤트·토너먼트를 지표 위에 겹쳐 본 90일 운영 리뷰": "90-day live-ops review with updates, events and tournaments overlaid on the metrics",
+    "KOOK 스트리밍 이벤트 — 슈퍼걸(超击小妹)과 함께 플레이": "KOOK streaming event — playing alongside Super Girl (超击小妹)",
+    "채널별(KOOK·Douyu·QQ) 유저 건의 로그와 요약": "User suggestion log by channel (KOOK, Douyu, QQ) with a summary",
+    "일자별 이슈·업데이트·이벤트·VOC 운영 일지": "Daily ops log of issues, updates, events and VOC",
+    "Douyu 이벤트 하이라이트": "Douyu event highlights",
+    "유저 하이라이트": "User highlights",
+    "NARAKA 성공요인 분석(타사 벤치마크)": "NARAKA success-factor analysis (competitor benchmark) (KO)"
   }
 }

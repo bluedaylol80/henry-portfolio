@@ -5,7 +5,7 @@
  * 로컬 서버(8787)에 뜬 사이트를 실브라우저로 열어 렌더된 DOM 텍스트를 읽고,
  * 덱 전용 캡션·라벨만 이 파일의 표에서 가져온다.
  *
- * 판형은 16:9 슬라이드 17장(WO-29). 스테이지는 1920×1080 고정 좌표계이고,
+ * 판형은 16:9 슬라이드 18장(WO-29 17장 + WO-34 슈퍼피플 1장). 스테이지는 1920×1080 고정 좌표계이고,
  * 창 크기가 달라도 비율을 유지한 채 중앙에서 통째로 확대·축소된다.
  *
  * 산출 2종
@@ -24,7 +24,7 @@ const BASE = 'http://127.0.0.1:8787'
 const NOTION = 'https://limhenry.notion.site/'
 const HUB = NOTION + '0e48e826c73f4a7ab9c3522d7fb16ce5'
 const MAIL = 'bluedaylol80@gmail.com'
-const SLIDES = 17
+const SLIDES = 18
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -100,6 +100,13 @@ async function scrape() {
       dlgMeta: t(document.getElementById('wdlgM')), dlgTitle: t(document.getElementById('wdlgT')),
       rows: [...document.querySelectorAll('#wdlgR > div')].map(x => [t(x.querySelector('dt')), t(x.querySelector('dd'))]),
       ev: [...document.querySelectorAll('#wdlgN .ev-card')].map(a => ({ href: a.href, title: t(a.querySelector('.ev-t')) })),
+      /* 슈퍼피플(WO-34) — 상세창 숫자·이미지 캡션·외부 링크도 사이트에서 읽는다 */
+      stats: [...document.querySelectorAll('#wdlgS > div')].map(x => [t(x.querySelector('b')), t(x.querySelector('span'))]),
+      gal: [...document.querySelectorAll('#wdlgG figure')].map(f => ({
+        file: f.querySelector('img').getAttribute('src').split('/').pop(), cap: t(f.querySelector('figcaption')) })),
+      links: [...document.querySelectorAll('#wdlgL a')].map(a => {
+        const c = a.cloneNode(true); c.querySelectorAll('.sr-only').forEach(n => n.remove())
+        return { href: a.href, title: t(c) } }),
     }
   })
   const openDlg = async k => {
@@ -118,7 +125,7 @@ async function scrape() {
 
   if (d.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + d.cases.length)
   if (d.career.length !== 10) fail('경력 행이 10개가 아니다: ' + d.career.length)
-  if (d.works.length !== 6) fail('성과 카드가 6장이 아니다: ' + d.works.length)
+  if (d.works.length !== 7) fail('성과 카드가 7장이 아니다: ' + d.works.length)
   if (d.skills.length !== 4) fail('역량 분류가 4개가 아니다: ' + d.skills.length)
   if (d.proto.length !== 2) fail('프로토타입 카드가 2장이 아니다: ' + d.proto.length)
   if (d.stats.length !== 4) fail('숫자 패널이 4칸이 아니다: ' + d.stats.length)
@@ -128,6 +135,9 @@ async function scrape() {
     if (!r || r.rows.length < 3) fail('성과 상세 행이 모자란다: ' + slug)
     if (!r.ev.length) fail('성과 근거 링크가 없다: ' + slug)
   }
+  const sp = d.res.superpeople
+  if (sp.stats.length !== 2 || sp.links.length !== 2 || !SP_SHOTS.every(f => sp.gal.some(g => g.file === f)))
+    fail(`슈퍼피플 상세가 발주서와 다르다: 숫자 ${sp.stats.length} · 링크 ${sp.links.length} · 이미지 ${sp.gal.map(g => g.file)}`)
   return d
 }
 
@@ -183,7 +193,8 @@ const KPI_TBL = (() => {
     if (c.length > 7 && /^\d+$/.test(c[1])) by.set(c[3], [c[5], c[6]])
   }
   const out = {}
-  for (const [k, n] of Object.entries(KPI_NUM)) {
+  /* 슈퍼피플은 12장(6개 지표) 대상이 아니라 KPI_NUM에 넣지 않고 라벨만 같은 근거표에서 읽는다 */
+  for (const [k, n] of Object.entries({ ...KPI_NUM, superpeople: '56만+' })) {
     if (!by.has(n)) fail(`수치 근거표에 '${n}'(${k}) 행이 없다`)
     out[k] = by.get(n)
   }
@@ -201,10 +212,13 @@ const kpiLabel2 = slug => {
   return esc(dd) + (per && per !== '미상' ? '<br>' + esc(per) : '')
 }
 const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
-const WORK_IX = { dalcom: 0, lyn: 1, chaos: 2, nightwalker: 3, fivestars: 4, nanakage: 5 }
+const WORK_IX = { dalcom: 0, lyn: 1, chaos: 2, nightwalker: 3, fivestars: 4, nanakage: 5, superpeople: 6 }
 const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan']], [4, 'fivestars', ['fivestars/prereg']],
                  [5, 'nanakage', ['nanakage/update_plan']]]
-const EXTRA_DLG = ['lyn']
+const EXTRA_DLG = ['lyn', 'superpeople']
+/* 14장 슈퍼피플(WO-34 §3) — 이미지 2장(가공본)과 흐름 5칸. 칸 이름은 발주서 문안 그대로다 */
+const SP_SHOTS = ['timeline.jpg', 'douyu-event.jpg']
+const SP_FLOW = ['채널 운영', '이벤트·콘텐츠', 'VOC', '지표 분석', '보고·조치']
 /* 13장 — 발주서 §2가 요구한 역할·판단·결과 3줄. 값은 사이트 상세창 행에서 읽고,
    어느 행이 어느 칸인지만 여기(덱 전용 표)에서 정한다. */
 const RESULT_ROWS = {
@@ -785,7 +799,31 @@ function render(d, A) {
       </div>` }).join('')}</div>`,
   })
 
-  /* --- 14. 업무 방식 5단계 --- */
+  /* --- 14. 슈퍼피플 — 흐름 5칸 + 가공 이미지 2장 + 상세창 숫자 2개 + 외부 링크 --- */
+  const spW = workOf('superpeople'), spR = d.res.superpeople
+  const spCap = f => spR.gal.find(g => g.file === f).cap
+  const spImg = f => `superpeople/${f.replace(/\.jpg$/, '')}`
+  const superpeople = slide({
+    aria: `${L.results} — ${spW.title}`, eyebrow: `${L.results} · ${spW.title}`, title: spW.summary, hcls: 'h--sm',
+    lede: spR.dlgMeta, rights: spW.rights,
+    body: `<div class="frow" style="flex:none">${SP_FLOW.map((x, k) => (k ? arrow() : '') +
+        `<div class="fs" style="padding:18px 22px"><p style="font-size:26px;font-weight:700;text-align:center">${esc(x)}</p></div>`).join('')}</div>
+      <div class="g2" style="grid-template-columns:1fr 600px;margin-top:28px">
+        <div style="display:flex;flex-direction:column;min-height:0">
+          ${shot(spImg(SP_SHOTS[0]), spCap(SP_SHOTS[0]), 'flex:1;min-height:0')}
+          <div class="pn" style="margin-top:24px;display:flex;gap:56px;padding:22px 30px">${spR.stats.map(([n, k]) =>
+            `<div style="display:flex;align-items:flex-end;gap:18px"><p class="n n--xs">${nw(n)}</p>
+              <p class="nl" style="margin-bottom:4px">${esc(k)}</p></div>`).join('')}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;min-height:0">
+          ${shot(spImg(SP_SHOTS[1]), spCap(SP_SHOTS[1]), 'flex:1;min-height:0')}
+          <div class="ev"><b>${L.evidence}</b>${spR.links.map(a =>
+            `<a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`).join('')}</div>
+        </div>
+      </div>`,
+  })
+
+  /* --- 15. 업무 방식 5단계 --- */
   const method = slide({
     aria: '업무 방식 5단계', eyebrow: L.method, title: d.h1.join(' '), lede: d.casesLede,
     rights: L.rightsPlain,
@@ -797,7 +835,7 @@ function render(d, A) {
       </div>`).join('')}</div>`,
   })
 
-  /* --- 15. AI 프로토타입 --- */
+  /* --- 16. AI 프로토타입 --- */
   const proto = slide({
     aria: 'AI 프로토타입 2종', eyebrow: L.proto, title: d.protoTitle, lede: d.protoLede,
     rights: L.rightsProto,
@@ -811,7 +849,7 @@ function render(d, A) {
       </div>`).join('')}</div>`,
   })
 
-  /* --- 16. 회사별 상세 --- */
+  /* --- 17. 회사별 상세 --- */
   const KPI_BY_CO = [['달콤', 0], ['넥슨', 1], ['원더피플', 3], ['스카이피플', 4], ['넵튠', 5]]
   const companies = slide({
     aria: '회사별 상세 — 10개 회사', eyebrow: L.companies, title: d.careerTitle, hcls: 'h--sm',
@@ -824,7 +862,7 @@ function render(d, A) {
         <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}</p></div>` }).join('')}</div>`,
   })
 
-  /* --- 17. 연락 --- */
+  /* --- 18. 연락 --- */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   const contact = `
 <section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락 — ${esc(d.brand)}" data-bg="#26262B">
@@ -847,7 +885,7 @@ function render(d, A) {
     judge(d.cases[0], 0), exec(d.cases[0], 0),
     judge(d.cases[1], 1), exec(d.cases[1], 1),
     judge(d.cases[2], 2), exec(d.cases[2], 2),
-    numbers, results, method, proto, companies, contact]
+    numbers, results, superpeople, method, proto, companies, contact]
   if (body.length !== SLIDES) fail('슬라이드가 ' + SLIDES + '장이 아니다: ' + body.length)
 
   return `<!doctype html>

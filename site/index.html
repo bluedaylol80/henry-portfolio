@@ -513,8 +513,13 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .wdlg-fig img{display:block;margin-inline:auto;width:auto;max-width:100%;max-height:min(46vh,22rem);
   border-radius:var(--r-card-sm);box-shadow:0 12px 30px rgba(17,17,17,.14)}
 .wdlg-fig figcaption{text-align:center;font-size:.75rem;line-height:1.5;color:rgba(17,17,17,.5)}
-.wdlg-cta{margin-top:2rem}
+.wdlg-cta{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
 .wdlg-cta:empty{display:none}
+/* 상세창 이미지(선택 필드 g) — 시연 영상 칸과 같은 틀. 캡처는 글자가 있어 높이 상한을 풀고 폭에 맞춘다 */
+.wdlg-gal{margin-top:1.75rem;display:grid;gap:1.75rem}
+.wdlg-gal[hidden]{display:none}
+.wdlg-gal .wdlg-fig{margin-top:0}
+.wdlg-gal .wdlg-fig img{max-height:none}
 /* 근거·과정 링크 — 카드 앞면이 아니라 다이얼로그 안에만 둔다(.card-open::after{inset:0} 함정). */
 .wdlg-src{margin-top:1.75rem;border-top:1px solid var(--line);padding-top:1.25rem}
 .wdlg-src[hidden]{display:none}
@@ -1014,6 +1019,19 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </div>
         </article>
       </li>
+      <li data-reveal style="--rd:540ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
+          <div class="card-meta" data-i18n="원더피플-사업-파트장">원더피플/에이스톰 — 사업팀 파트장</div>
+          <div class="card-wm" aria-hidden="true" data-i18n="56만">56만+</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog" data-i18n="슈퍼피플">슈퍼피플<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p data-i18n="스팀-중국-서비스의-Live-ops">스팀 중국 서비스의 Live-ops를 맡아 <span class="nb">Douyu·KOOK</span> 채널 운영, 스트리밍 이벤트, VOC 수집, <span class="nb">지표 분석·경영 보고까지</span> 이어 갔습니다.</p>
+            <div class="card-tags"><span class="tag" data-i18n="중국-서비스">중국 서비스</span><span class="tag">Live Ops</span><span class="tag" data-i18n="이벤트-콘텐츠">이벤트·콘텐츠</span><span class="tag" data-i18n="지표-분석">지표 분석</span></div>
+            <p class="card-rights" data-i18n="게임-명칭-이미지의-상표와-3">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다.</p>
+          </div>
+        </article>
+      </li>
     </ul>
   </div>
 </section>
@@ -1368,6 +1386,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <!-- 읽는 순서 = 본문(판단·행동·결과) → 대표 근거 → 보조 사례.
          근거를 앞에 두면 핵심 판단을 늦게 만나게 된다(Codex R6). -->
     <dl class="wdlg-rows" id="wdlgR"></dl>
+    <div class="wdlg-gal" id="wdlgG" hidden></div>
     <div class="wdlg-src" id="wdlgN" hidden></div>
     <details class="wdlg-more" id="wdlgMore" hidden></details>
   </div>
@@ -1735,7 +1754,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
-  wonderpeople: [['조직 관리 (수습 평가안)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['원더피플 x 원티드 콜라보 기획', '509a5cd4e8e44f1c907ec1cfabb87855']],
+  wonderpeople: [['조직 관리 (수습 평가안)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['원더피플 x 원티드 콜라보 기획', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA 성공요인 분석(타사 벤치마크)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['친구 시스템 기획', '13f2864c7af74918b5a956367ddfdcb6'], ['상점 시스템 개편 기획', '7298379e8a254d63b64747242afe60ff'], ['밸런스 기획', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['주요 이슈 지표 분석', 'c2899733fed94b618af970a0796a7e6c'], ['프로젝트 별 포스트모템', '271affb46a12423bbb26dd3cdc183ae0'], ['마일스톤 협의', '9a16f26d31cf438482942ce4baa00001']],
   netmarble: [['튜토리얼 Flow 기획', '47f569402610444e90b6944e84a2d235']],
@@ -1832,9 +1851,7 @@ const WORKS = {
     r:[['퍼블리셔 기술 연동','유료 재화 구매 연동 · 쿠폰 시스템 연동 · 서버 선택창 UI/플로우 기획 · 프로모션 상품 기능 추가'],
        ['지표 → 개선 제안','주간 판매 현황을 분석해 상품을 제안하고, 라이브 지표를 분석해 허들 개선을 제안'],
        ['검증·리서치','FGT · 사내 테스트'],
-       ['국내 심의','국내 심의 및 내용 수정 신고 진행'],
-       ['함께 맡은 프로젝트','슈퍼피플(스팀 중국 서비스) — 런칭·라이브 서비스 · 이벤트 기획·진행 · 유료화 상품 기획·인게임 상점 개편 · EA 이후 90일 운영 지표 분석(DAU·신규·리텐션·플레이 시간·방송 지표, 경쟁작 비교)과 경영기획실 보고 — 보고 후 밸런스 패치팀 업무 이관으로 연결 · 스팀⁠·⁠중국 커뮤니티 5채널(Weibo·Bilibili·WeChat·QQ·KOOK) · CS·모니터링 외주사 관리 · 불법 프로그램 대응'],
-       ['슈퍼피플 성과','중국 신규 56만+ · 중국 DAU 피크 7.1만']],
+       ['국내 심의','국내 심의 및 내용 수정 신고 진행']],
     n:[{t:'퍼블리셔 규격 시스템 재정의', id:'3d559de72804819f9a88c951cbc10f9a'},
        {t:'유료재화 구매 시스템 연동', id:'49043d5d2bfa44d18384126bbbd86f14'},
        {t:'쿠폰 시스템 연동', id:'2ade8f618bb945a6b0c0f6a711133b55'},
@@ -1860,6 +1877,22 @@ const WORKS = {
     n:[{t:'인게임 재화/BM 개선', id:'f6a1be10d1d645d48f62aa02e72198f2'},
        {t:'소프트런칭 비교 분석', id:'8cbbe93738e54e0d99020f2f6d03822f'},
        {t:'평점 관리 시스템 추가', id:'87c69184413f4cb78d66af21a98de32f'}] },
+  /* g(상세창 이미지)는 이 항목에만 있는 선택 필드다 — 공개 승인된 가공본만(WO-34: 눈금 가림·추모 표기 제거·닉네임 가림). */
+  superpeople: { m:'원더피플/에이스톰 · 사업팀 — 파트장', t:'슈퍼피플',
+    s:[['56만+','중국 신규'],['7.1만','중국 DAU 피크']],
+    r:[['서비스','스팀 중국 서비스(PC 배틀로얄 슈팅) 런칭·라이브 서비스'],
+       ['채널 운영','Douyu·KOOK·QQ·WeiBo·Bilibili·WeChat 커뮤니티 운영, 서비스 채널에 영상 콘텐츠 등록, 채널 관리로 바이럴 유도·VOC 지속 수령'],
+       ['스트리밍 이벤트','이벤트 신청 유저와 운영자 캐릭터 슈퍼걸(超击小妹)이 함께 플레이하는 스트리밍으로 참여자·시청자 관심 유도, KOOK으로 실시간 소통'],
+       ['유저 콘텐츠','유저 하이라이트 영상을 제보받아 Douyu 채널에 시리즈로 업데이트(3기·4기 확인), 선정 유저 상품 지급'],
+       ['상점·이벤트','인게임 상점 개편 · 이벤트 기획·진행 · 유료화 상품 기획'],
+       ['지표 분석·보고','EA 이후 90일 운영 지표 분석(DAU·신규·리텐션·플레이 시간·방송 지표, 경쟁작 비교)·경영기획실 보고 → 밸런스 패치팀 업무 이관으로 연결'],
+       ['운영 관리','CS·모니터링 외주사 관리 · 불법 프로그램 대응']],
+    g:[{ src:'works/superpeople/timeline.jpg', cap:'업데이트·이벤트·토너먼트를 지표 위에 겹쳐 본 90일 운영 리뷰' },
+       { src:'works/superpeople/douyu-event.jpg', cap:'KOOK 스트리밍 이벤트 — 슈퍼걸(超击小妹)과 함께 플레이' },
+       { src:'works/superpeople/voc.jpg', cap:'채널별(KOOK·Douyu·QQ) 유저 건의 로그와 요약' },
+       { src:'works/superpeople/ops-log.jpg', cap:'일자별 이슈·업데이트·이벤트·VOC 운영 일지' }],
+    l:[{ href:'https://v.douyu.com/show/NVm0WKzKdaQMJeBP', label:'Douyu 이벤트 하이라이트' },
+       { href:'https://v.douyu.com/show/jNBdvnrxRzBvE2yw', label:'유저 하이라이트' }] },
   // 개인 프로덕트 — v(시연 영상)·l(외부 링크)은 이 항목에만 있는 선택 필드다.
   budget: { m:'개인 프로덕트 · 기획 · 개발 · 운영', t:'우리집 가계부',
     s:[['222/222','jsdom 테스트'],['56/56','레이아웃 테스트']],
@@ -1868,7 +1901,7 @@ const WORKS = {
        ['만든 방식','AI로 혼자 만들어 매일 돌리고, 라이트 체험판까지 외부 배포']],
     v:{ src:'media/budget-demo.webp', still:'works/budget.jpg', alt:'우리집 가계부 폰 화면 시연',
         cap:'가상 데이터로 촬영한 시연 — 실제 가계 수치가 아닙니다.' },
-    l:{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'라이트 체험판 열기' } }
+    l:[{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'라이트 체험판 열기' }] }
 };
 /* 스크롤 힌트 — 패널이 끝까지 내려가면 하단 그라데이션을 지운다(CSS .at-end). */
 document.querySelectorAll('.wdlg-in').forEach(el => {
@@ -1893,7 +1926,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
   const wS = document.getElementById('wdlgS'), wR = document.getElementById('wdlgR');
   const wF = document.getElementById('wdlgF'), wL = document.getElementById('wdlgL');
-  const wN = document.getElementById('wdlgN');
+  const wN = document.getElementById('wdlgN'), wG = document.getElementById('wdlgG');
   let opener = null;
   function modalLock(on){
     const h = document.documentElement;
@@ -1930,8 +1963,25 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     wF.replaceChildren(img, cap);
     wF.hidden = false;
   }
+  /* 상세창 이미지 — 시연 영상과 마찬가지로 상세를 열 때 처음 <img>를 만든다 */
+  function fillGallery(g){
+    if (!g){ wG.replaceChildren(); wG.hidden = true; return; }
+    wG.replaceChildren(...g.map(it => {
+      const fig = document.createElement('figure');
+      fig.className = 'wdlg-fig';
+      const img = document.createElement('img');
+      img.src = it.src; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      const cap = document.createElement('figcaption');
+      cap.textContent = it.cap;
+      fig.append(img, cap);
+      return fig;
+    }));
+    wG.hidden = false;
+  }
   function fillLink(l){
-    if (!l){ wL.replaceChildren(); return; }
+    wL.replaceChildren(...(l || []).map(pill));
+  }
+  function pill(l){
     const a = document.createElement('a');
     a.className = 'pill pill--dark pill--arrow pill--ur';
     a.href = l.href; a.target = '_blank'; a.rel = 'noopener';
@@ -1947,7 +1997,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     use.setAttribute('href', '#i-arrup');
     svg.append(use); badge.append(svg); inner.append(sr, badge); a.append(inner);
-    wL.replaceChildren(a);
+    return a;
   }
   /* 근거·과정(선택 필드 n) — 카드당 최대 4개. 새 탭 + rel=noopener noreferrer + 외부 아이콘.
      href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
@@ -2082,6 +2132,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     fill(wR, w.r, ['dt', 'dd']);
     fillMedia(w.v);
     fillLink(w.l);
+    fillGallery(w.g);
     fillMore(w.x);
     fillNotion(w.n);
     modalLock(true);

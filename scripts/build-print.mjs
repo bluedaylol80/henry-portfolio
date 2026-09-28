@@ -6,7 +6,7 @@
  * 렌더된 DOM 텍스트를 그대로 읽어 조립한다. 대표 사례 6항목은 상세창을 실제로 열어서 읽는다.
  * 근거는 상세창에서 읽은 Notion 링크 목록으로 싣는다.
  *
- * 판형은 16:9 가로 슬라이드 15장이다(WO-24). 이미지는 site/pdf/img/의 사본만 쓴다
+ * 판형은 16:9 가로 슬라이드 16장이다(WO-24 15장 + WO-34 슈퍼피플 1장). 이미지는 site/pdf/img/의 사본만 쓴다
  * (scripts/build-pdf-img.mjs가 만든다). 캡처는 잘라내지 않고 통째로 넣는다.
  *
  * 사전 준비: python -m http.server 8787 --bind 127.0.0.1 --directory site
@@ -113,6 +113,12 @@ async function scrape(lang) {
           [t(dt), t(document.querySelectorAll('#wdlgMore dd')[i])]) },
       evHead: t(document.querySelector('#wdlgN h4')),
       ev: [...document.querySelectorAll('#wdlgN .ev-card')].map(a => ({ href: a.href, title: t(a.querySelector('.ev-t')) })),
+      /* 상세창 이미지·외부 링크(WO-34 슈퍼피플) — 캡션·링크 문구도 사이트에서 읽는다 */
+      gal: [...document.querySelectorAll('#wdlgG figure')].map(f => ({
+        file: f.querySelector('img').getAttribute('src').split('/').pop(), cap: t(f.querySelector('figcaption')) })),
+      links: [...document.querySelectorAll('#wdlgL a')].map(a => {
+        const c = a.cloneNode(true); c.querySelectorAll('.sr-only').forEach(n => n.remove())
+        return { href: a.href, title: t(c) } }),
     }
   })
   const openDlg = async (k) => {
@@ -126,6 +132,7 @@ async function scrape(lang) {
   /* 성과 3장도 상세창에서 읽는다 — 본인 행동·근거 링크를 손으로 옮기지 않는다(Codex R11 D10) */
   base.res = {}
   for (const [, slug] of RESULTS) base.res[slug] = await openDlg(slug)
+  base.res[SP[1]] = await openDlg(SP[1])
   await browser.close()
   if (base.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + base.cases.length)
   // 한 줄 요약 + 6항목 = 7행(WO-19 13). 항목이 줄면 원고와 어긋난 것이라 실패시킨다.
@@ -135,11 +142,15 @@ async function scrape(lang) {
     if (!r || r.rows.length < 3) fail('성과 상세 행이 모자란다: ' + slug + ' ' + (r ? r.rows.length : 0))
     if (!r.ev.length) fail('성과 근거 링크가 없다: ' + slug)
   }
+  const sp = base.res[SP[1]]
+  if (base.works.length !== 7) fail('성과 카드가 7장이 아니다: ' + base.works.length)
+  if (sp.rows.length !== 7 || sp.gal.length < SP[2].length || sp.links.length !== 2)
+    fail(`슈퍼피플 상세가 발주서와 다르다: 행 ${sp.rows.length} · 이미지 ${sp.gal.length} · 링크 ${sp.links.length}`)
   return base
 }
 
 /* ---------- 인쇄 CSS — 16:9 가로 슬라이드, 사이트 토큰·Pretendard ---------- */
-const SLIDES = 15
+const SLIDES = 16
 const CSS = `
 @page{size:338.67mm 190.5mm;margin:0}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -283,6 +294,13 @@ html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 .ig--tall .ph:not(.ph--tall) img{height:28mm}
 .ph figcaption{padding:1.6mm 2.5mm;font-size:1rem;color:var(--muted);line-height:1.35;border-top:.4pt solid var(--line)}
 .ph figcaption b{display:block;font-weight:500;color:var(--fg)}
+/* 슈퍼피플(WO-34) — 행이 7개라 왼쪽 칸을 넓히고 행 간격을 줄인다 */
+.two--sp{grid-template-columns:1.25fr 1fr}
+.sp .kv th,.sp .kv td{padding-top:1.1mm;padding-bottom:1.1mm;line-height:1.38}
+.sp .res-b{margin-top:2.5mm}
+.sp .ig .ph img{height:40mm}
+.sp .ph--wide img{height:auto}
+.sp .evlist a{display:inline-block;margin-right:5mm}
 /* 성과 */
 .res-n{font-size:3.1rem;font-weight:600;letter-spacing:-.03em;line-height:1}
 .res-l{margin-top:2mm;font-size:.91rem;color:var(--muted);line-height:1.35;max-width:80mm}
@@ -387,14 +405,16 @@ const NAT_W = { 'chaos/ingame': 500, 'fivestars/prereg': 361, 'nanakage/mission_
                 chaos: 550, fivestars: 600, nanakage: 574, lyn: 600 }
 const capMM = (slug) => (NAT_W[slug] ? ` style="max-width:${(NAT_W[slug] * 1.5 * 25.4 / 96).toFixed(1)}mm"` : '')
 /* 대표 지표의 정의 라벨 — KO는 수치 근거표에서 그대로 읽고, EN만 여기서 옮긴다(Codex R11 D11) */
-const KPI_NUM = { dalcom:'11종', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국' }
+const KPI_NUM = { dalcom:'11종', lyn:'183억', chaos:'98억', nightwalker:'33만+', fivestars:'24억', nanakage:'7개국', superpeople:'56만+' }
 const KPI_DEF_EN = { dalcom:'Led app services for 11 SuperStar titles',
                      lyn:'Revenue', chaos:'Revenue', nightwalker:'Cumulative new users in Korea',
+                     superpeople:'Cumulative new users in China',
                      fivestars:'Revenue',
                      nanakage:'Soft-launch countries (Indonesia, Hong Kong, Philippines, Malaysia, Singapore, Thailand, Macau)' }
 /* 집계 기간 — KO는 근거표에서 읽고 EN만 옮긴다. 근거표가 '미상'이면 라벨에 기간을 달지 않는다 */
 const KPI_PER_EN = { dalcom:'Oct 2024 – Jul 2026', lyn:'cumulative through 2019',
-                     chaos:'service lifetime', fivestars:'first five months after launch' }
+                     chaos:'service lifetime', fivestars:'first five months after launch',
+                     superpeople:'2022-10-11 – 2023-01-08 (first 90 days after Early Access)' }
 /* 라벨에서만 떼는 괄호 주석 — 근거표에는 그대로 남는다(Codex R12 D11) */
 const KPI_DROP = [/\(기존 게시 승인분\)/g, /\s*\(previously approved for publication\)/g]
 const KPI_TBL = (() => {
@@ -431,6 +451,8 @@ const CASE_SPLIT = { case1: 5, case2: 4, case3: 4 }
 const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
                  [4, 'fivestars', ['fivestars/prereg']],
                  [5, 'nanakage', ['nanakage/update_plan', 'nanakage/mission_ui']]]
+/* 슈퍼피플 1쪽(WO-34 §3) — 성과 쪽 뒤. 이미지는 상세창 가공본 중 앞 3장(타임라인·이벤트·VOC) */
+const SP = [6, 'superpeople', ['timeline.jpg', 'douyu-event.jpg', 'voc.jpg']]
 /* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
@@ -617,7 +639,25 @@ function render(lang, d) {
     })
   }
 
-  /* 13. 프로젝트 타임라인 — 2열 표 */
+  /* 13. 슈퍼피플 — 큰 KPI + 요약 + 상세창 행 + 외부 링크 / 상세창 이미지 3장(캡션은 사이트 figcaption) */
+  const superpeople = (() => {
+    const [wi, slug, files] = SP
+    const w = d.works[wi], r = d.res[slug]
+    const cap = f => { const g = r.gal.find(x => x.file === f); if (!g) fail('슈퍼피플 이미지 캡션이 없다: ' + f); return g.cap }
+    const fig = (f, cls) => `<figure class="ph${cls}"><img src="${IMG}superpeople/${f}" alt=""><figcaption>${esc(cap(f))}</figcaption></figure>`
+    return slide({
+      cls: 'res sp', eyebrow: `${l.results} · ${w.title}`, who: r.dlgMeta, rights: w.rights,
+      body: `<div class="two two--top two--sp">
+        <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(kpiDef(slug))}</p>
+          <ul class="res-b"><li>${nw(w.summary)}</li></ul>
+          ${kv(resRows(slug, r.rows))}
+          <div class="evlist">${r.links.map(a => `<a class="go" href="${esc(a.href)}">${esc(a.title)} ↗</a>`).join('')}</div></div>
+        <div class="ig">${fig(files[0], ' ph--wide')}${fig(files[1], '')}${fig(files[2], '')}</div>
+      </div>`,
+    })
+  })()
+
+  /* 14. 프로젝트 타임라인 — 2열 표 */
   const tlRows = rows => `<table class="tl"><colgroup><col><col><col></colgroup>
     <thead><tr><th>${esc(l.tlCompany)}</th><th>${esc(l.tlPeriod)}</th><th style="text-align:right">${esc(l.tlKpi)}</th></tr></thead>
     <tbody>${rows.map(r => `<tr><td><b>${esc(r.company).replace('/', '/<wbr>')}</b><span class="sub">${esc(r.titles)}</span></td>
@@ -630,7 +670,7 @@ function render(lang, d) {
       <p class="foot">${esc(d.careerFoot)}</p>`,
   })
 
-  /* 14. AI 프로토타입 2 + 가계부 1줄 */
+  /* 15. AI 프로토타입 2 + 가계부 1줄 */
   const proto = slide({
     eyebrow: l.proto, who: d.protoLede,
     rights: l.rightsProto,
@@ -645,7 +685,7 @@ function render(lang, d) {
         <a class="go" href="${esc(d.lab.href)}">${esc(l.open)} ↗</a></p>` : ''}`,
   })
 
-  /* 15. 연락 */
+  /* 16. 연락 */
   /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   const contact = slide({
@@ -666,7 +706,7 @@ function render(lang, d) {
     caseOverview(d.cases[0], 0), caseExec(d.cases[0], 0),
     caseOverview(d.cases[1], 1), caseExec(d.cases[1], 1),
     caseOverview(d.cases[2], 2), caseExec(d.cases[2], 2),
-    ...RESULTS.map(result), timeline, proto, contact]
+    ...RESULTS.map(result), superpeople, timeline, proto, contact]
   if (body.length !== SLIDES) fail('슬라이드가 ' + SLIDES + '장이 아니다: ' + body.length)
 
   return `<!doctype html>

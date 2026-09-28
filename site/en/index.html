@@ -513,8 +513,13 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .wdlg-fig img{display:block;margin-inline:auto;width:auto;max-width:100%;max-height:min(46vh,22rem);
   border-radius:var(--r-card-sm);box-shadow:0 12px 30px rgba(17,17,17,.14)}
 .wdlg-fig figcaption{text-align:center;font-size:.75rem;line-height:1.5;color:rgba(17,17,17,.5)}
-.wdlg-cta{margin-top:2rem}
+.wdlg-cta{margin-top:2rem;display:flex;flex-wrap:wrap;gap:.75rem}
 .wdlg-cta:empty{display:none}
+/* 상세창 이미지(선택 필드 g) — 시연 영상 칸과 같은 틀. 캡처는 글자가 있어 높이 상한을 풀고 폭에 맞춘다 */
+.wdlg-gal{margin-top:1.75rem;display:grid;gap:1.75rem}
+.wdlg-gal[hidden]{display:none}
+.wdlg-gal .wdlg-fig{margin-top:0}
+.wdlg-gal .wdlg-fig img{max-height:none}
 /* 근거·과정 링크 — 카드 앞면이 아니라 다이얼로그 안에만 둔다(.card-open::after{inset:0} 함정). */
 .wdlg-src{margin-top:1.75rem;border-top:1px solid var(--line);padding-top:1.25rem}
 .wdlg-src[hidden]{display:none}
@@ -1014,6 +1019,19 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </div>
         </article>
       </li>
+      <li data-reveal style="--rd:540ms;--ry:48px">
+        <article class="card">
+          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
+          <div class="card-meta">Wonderpeople/Acestorm — Part Lead, Business Team</div>
+          <div class="card-wm" aria-hidden="true">560K+</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog">Super People<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p>Ran live ops for the China service on Steam — <span class="nb">Douyu and KOOK</span> channels, streaming events and VOC collection, through <span class="nb">metrics analysis and management reporting.</span></p>
+            <div class="card-tags"><span class="tag">China service</span><span class="tag">Live Ops</span><span class="tag">Events & content</span><span class="tag">Metrics analysis</span></div>
+            <p class="card-rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
+          </div>
+        </article>
+      </li>
     </ul>
   </div>
 </section>
@@ -1368,6 +1386,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <!-- 읽는 순서 = 본문(판단·행동·결과) → 대표 근거 → 보조 사례.
          근거를 앞에 두면 핵심 판단을 늦게 만나게 된다(Codex R6). -->
     <dl class="wdlg-rows" id="wdlgR"></dl>
+    <div class="wdlg-gal" id="wdlgG" hidden></div>
     <div class="wdlg-src" id="wdlgN" hidden></div>
     <details class="wdlg-more" id="wdlgMore" hidden></details>
   </div>
@@ -1735,7 +1754,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
-  wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855']],
+  wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA success-factor analysis (competitor benchmark) (KO)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['Friend system design (KO)', '13f2864c7af74918b5a956367ddfdcb6'], ['Shop system rework design (KO)', '7298379e8a254d63b64747242afe60ff'], ['Balance design (KO)', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['Metric analysis of major issues (KO)', 'c2899733fed94b618af970a0796a7e6c'], ['Postmortems by project (KO)', '271affb46a12423bbb26dd3cdc183ae0'], ['Milestone alignment (KO)', '9a16f26d31cf438482942ce4baa00001']],
   netmarble: [['Tutorial flow design (KO)', '47f569402610444e90b6944e84a2d235']],
@@ -1832,9 +1851,7 @@ const WORKS = {
     r:[['Publishing integration','Paid-currency purchase integration · coupon system integration · server-select UI/flow design · added promotional product feature'],
        ['Metrics → improvement proposals','Analyzed weekly sales to propose products, and live metrics to propose fixes for player hurdles'],
        ['Validation & research','FGT · internal tests'],
-       ['Korea content rating','Handled the Korean content rating and content-change filings'],
-       ['Also ran','Super People (Steam, China service) — launched it and ran live ops · planned and ran events · planned monetization products and revamped the in-game shop · analyzed 90-day post-Early Access metrics (DAU, new users, retention, playtime, streaming vs competitors) and reported to the head of management planning, leading to issues being handed to the balance patch team · ran 5 China community channels (Weibo, Bilibili, WeChat, QQ, KOOK) · managed CS/monitoring vendors · handled cheat response'],
-       ['Super People results','560K+ new users (China) · peak China DAU 71K']],
+       ['Korea content rating','Handled the Korean content rating and content-change filings']],
     n:[{t:'Redefining the systems to publisher spec (KO)', id:'3d559de72804819f9a88c951cbc10f9a'},
        {t:'Paid-currency purchase system integration', id:'49043d5d2bfa44d18384126bbbd86f14'},
        {t:'Coupon system integration', id:'2ade8f618bb945a6b0c0f6a711133b55'},
@@ -1860,6 +1877,22 @@ const WORKS = {
     n:[{t:'In-game currency/BM improvements', id:'f6a1be10d1d645d48f62aa02e72198f2'},
        {t:'Soft launch comparison', id:'8cbbe93738e54e0d99020f2f6d03822f'},
        {t:'Added rating management system', id:'87c69184413f4cb78d66af21a98de32f'}] },
+  /* g(상세창 이미지)는 이 항목에만 있는 선택 필드다 — 공개 승인된 가공본만(WO-34: 눈금 가림·추모 표기 제거·닉네임 가림). */
+  superpeople: { m:'Wonderpeople/Acestorm · Business Team — Part Lead', t:'Super People',
+    s:[['560K+','new users (China)'],['71K','peak China DAU']],
+    r:[['Service','Launched and ran live service for the China service on Steam (PC battle royale shooter)'],
+       ['Channels','Ran communities on Douyu, KOOK, QQ, WeiBo, Bilibili and WeChat, posted video content to the service channels, and managed the channels to drive virality and keep VOC coming in'],
+       ['Streaming events','Streams where event applicants played alongside the operator character Super Girl (超击小妹) to draw participants and viewers, with real-time talk on KOOK'],
+       ['User content','Collected user highlight clips and posted them as a series on the Douyu channel (seasons 3 and 4 confirmed), with prizes for selected users'],
+       ['Shop & events','Revamped the in-game shop · planned and ran events · planned monetization products'],
+       ['Metrics & reporting','Analyzed 90-day post-Early Access metrics (DAU, new users, retention, playtime, streaming vs competitors) and reported to the head of management planning, leading to issues being handed to the balance patch team'],
+       ['Operations','Managed CS/monitoring vendors · handled cheat response']],
+    g:[{ src:'../works/superpeople/timeline.jpg', cap:'90-day live-ops review with updates, events and tournaments overlaid on the metrics' },
+       { src:'../works/superpeople/douyu-event.jpg', cap:'KOOK streaming event — playing alongside Super Girl (超击小妹)' },
+       { src:'../works/superpeople/voc.jpg', cap:'User suggestion log by channel (KOOK, Douyu, QQ) with a summary' },
+       { src:'../works/superpeople/ops-log.jpg', cap:'Daily ops log of issues, updates, events and VOC' }],
+    l:[{ href:'https://v.douyu.com/show/NVm0WKzKdaQMJeBP', label:'Douyu event highlights' },
+       { href:'https://v.douyu.com/show/jNBdvnrxRzBvE2yw', label:'User highlights' }] },
   // 개인 프로덕트 — v(시연 영상)·l(외부 링크)은 이 항목에만 있는 선택 필드다.
   budget: { m:'Personal product · design · development · operations', t:'Our Household Budget',
     s:[['222/222','jsdom tests'],['56/56','Layout tests']],
@@ -1868,7 +1901,7 @@ const WORKS = {
        ['How it was built','Built solo with AI, used daily, with a lite demo released publicly']],
     v:{ src:'../media/budget-demo.webp', still:'../works/budget.jpg', alt:'Our Household Budget phone demo',
         cap:'Demo recorded with dummy data — not real household figures.' },
-    l:{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'Open the lite demo (Korean)' } }
+    l:[{ href:'https://bluedaylol80.github.io/family-budget-lite/', label:'Open the lite demo (Korean)' }] }
 };
 /* 스크롤 힌트 — 패널이 끝까지 내려가면 하단 그라데이션을 지운다(CSS .at-end). */
 document.querySelectorAll('.wdlg-in').forEach(el => {
@@ -1893,7 +1926,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
   const wM = document.getElementById('wdlgM'), wT = document.getElementById('wdlgT');
   const wS = document.getElementById('wdlgS'), wR = document.getElementById('wdlgR');
   const wF = document.getElementById('wdlgF'), wL = document.getElementById('wdlgL');
-  const wN = document.getElementById('wdlgN');
+  const wN = document.getElementById('wdlgN'), wG = document.getElementById('wdlgG');
   let opener = null;
   function modalLock(on){
     const h = document.documentElement;
@@ -1930,8 +1963,25 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     wF.replaceChildren(img, cap);
     wF.hidden = false;
   }
+  /* 상세창 이미지 — 시연 영상과 마찬가지로 상세를 열 때 처음 <img>를 만든다 */
+  function fillGallery(g){
+    if (!g){ wG.replaceChildren(); wG.hidden = true; return; }
+    wG.replaceChildren(...g.map(it => {
+      const fig = document.createElement('figure');
+      fig.className = 'wdlg-fig';
+      const img = document.createElement('img');
+      img.src = it.src; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      const cap = document.createElement('figcaption');
+      cap.textContent = it.cap;
+      fig.append(img, cap);
+      return fig;
+    }));
+    wG.hidden = false;
+  }
   function fillLink(l){
-    if (!l){ wL.replaceChildren(); return; }
+    wL.replaceChildren(...(l || []).map(pill));
+  }
+  function pill(l){
     const a = document.createElement('a');
     a.className = 'pill pill--dark pill--arrow pill--ur';
     a.href = l.href; a.target = '_blank'; a.rel = 'noopener';
@@ -1947,7 +1997,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     use.setAttribute('href', '#i-arrup');
     svg.append(use); badge.append(svg); inner.append(sr, badge); a.append(inner);
-    wL.replaceChildren(a);
+    return a;
   }
   /* 근거·과정(선택 필드 n) — 카드당 최대 4개. 새 탭 + rel=noopener noreferrer + 외부 아이콘.
      href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
@@ -2082,6 +2132,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     fill(wR, w.r, ['dt', 'dd']);
     fillMedia(w.v);
     fillLink(w.l);
+    fillGallery(w.g);
     fillMore(w.x);
     fillNotion(w.n);
     modalLock(true);

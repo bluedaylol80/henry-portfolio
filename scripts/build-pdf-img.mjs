@@ -3,6 +3,7 @@
  *
  * 두 갈래다.
  *  ① 사진형 키 비주얼 6장: site/works/* → 폭 ≤1600으로 재인코딩한 사본.
+ *  ③ 슈퍼피플 상세창 가공본: site/works/superpeople/*.jpg 복사(WO-34).
  *  ② 프로토타입 2장(deco·ssjproto): site/works의 옛 캡처를 복사하지 않고,
  *     체험판 페이지를 실브라우저로 직접 열어 그 자리에서 캡처한다.
  *     옛 캡처에는 개발용 표시(DEV·규칙 탭·미저장 경고)가 박혀 있었고, 그걸 복사하는 한
@@ -13,7 +14,7 @@
  * Usage: node scripts/build-pdf-img.mjs
  */
 import puppeteer from 'puppeteer-core'
-import { writeFileSync, mkdirSync, readFileSync } from 'node:fs'
+import { writeFileSync, mkdirSync, readFileSync, readdirSync, copyFileSync } from 'node:fs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const BASE = 'http://127.0.0.1:8787'
@@ -105,6 +106,13 @@ await page.goto('about:blank')
 for (const file of SRC) {
   const mime = file.endsWith('.webp') ? 'image/webp' : 'image/jpeg'
   save(file.replace(/\.\w+$/, ''), await shrink(readFileSync('site/works/' + file), mime))
+}
+
+/* ③ 슈퍼피플 상세창 가공본(WO-34) — 사이트용 사본이 이미 폭 ≤1600 JPEG라 그대로 복사한다 */
+mkdirSync('site/pdf/img/superpeople', { recursive: true })
+for (const f of readdirSync('site/works/superpeople').filter(f => f.endsWith('.jpg'))) {
+  copyFileSync('site/works/superpeople/' + f, 'site/pdf/img/superpeople/' + f)
+  console.log('site/pdf/img/superpeople/' + f + ' — 사이트 가공본 복사')
 }
 
 for (const s of SHOTS) {

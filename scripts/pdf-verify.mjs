@@ -5,7 +5,7 @@
 import puppeteer from 'puppeteer-core'
 import { BANNED as BAD } from './pdf-banned.mjs'
 /* EN 표지·연락 장의 /henry-portfolio/en/ 은 이 브랜치가 배포돼야 생기는 주소다 — 미배포 EN 경로는 링크 검사에서 허용한다(Codex R12 N1) */
-const PAGES = 15
+const PAGES = 16
 const LINKS_MIN = 19
 const b = await puppeteer.launch({ executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe', headless:'new', args:['--no-sandbox'] })
 const p = await b.newPage()
@@ -28,7 +28,7 @@ for (const lang of ['ko','en']) {
   }, lang)
   const all = r.all.join(' ')
   const hits = BAD.filter(w => all.includes(w))
-  /* 16:9 슬라이드 15장이 정본이다(WO-24). "이미지 대기"는 채택 전 빈 슬롯이라 최종본에서는 0이어야 한다 */
+  /* 16:9 슬라이드 16장이 정본이다(WO-24 15장 + WO-34 슈퍼피플). "이미지 대기"는 채택 전 빈 슬롯이라 최종본에서는 0이어야 한다 */
   const pend = (all.match(/이미지 대기/g) || []).length
   console.log(`\n== ${lang} — ${r.n}쪽${r.n === PAGES ? '' : ` (기대 ${PAGES}쪽)`} · 링크 주석 ${r.links}개 · 금지어 ${hits.length ? hits.join(',') : 0} · 이미지 대기 ${pend}개`)
   r.heads.forEach((h, i) => console.log(`  p${i+1}: ${h}`))

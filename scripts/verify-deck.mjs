@@ -1,4 +1,4 @@
-/* WO-29·30 판정 — 덱 17장 렌더 · 콘솔 · 조작 · 비율 · 금지어 · 파일 크기 · 색상 대비 검산 */
+/* WO-29·30·34 판정 — 덱 18장 렌더 · 콘솔 · 조작 · 비율 · 금지어 · 파일 크기 · 색상 대비 검산 */
 import puppeteer from 'puppeteer-core'
 import { mkdirSync, statSync, readFileSync } from 'node:fs'
 import { hits as banHits } from '../scripts/pdf-banned.mjs'
@@ -71,12 +71,12 @@ async function open(url, w, h) {
   return { page, msgs }
 }
 
-/* --- 1. site/deck 17장 렌더 1920×1080 --- */
+/* --- 1. site/deck 18장 렌더 1920×1080 --- */
 {
   const { page, msgs } = await open('http://127.0.0.1:8787/deck/', 1920, 1080)
   const n = await page.$$eval('.s', e => e.length)
-  if (n !== 17) bad.push('슬라이드 수 ' + n)
-  for (let i = 1; i <= 17; i++) {
+  if (n !== 18) bad.push('슬라이드 수 ' + n)
+  for (let i = 1; i <= 18; i++) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
     await sleep(700)
     await page.screenshot({ path: `${OUT}/ko-${String(i).padStart(2, '0')}.png` })
@@ -183,7 +183,7 @@ for (const [path, nm] of [['/', 'site-ko-hero-links'], ['/en/', 'site-en-hero-li
   await page.setViewport({ width: 1920, height: 1080 })
   await page.goto('file:///D:/Github/henry-portfolio/site/henry-lim-portfolio-deck.html', { waitUntil: 'networkidle2' })
   await sleep(1500)
-  for (const i of [1, 5, 12, 17]) {
+  for (const i of [1, 5, 12, 14, 18]) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
     await sleep(700)
     await page.screenshot({ path: `${OUT}/single-${String(i).padStart(2, '0')}.png` })
@@ -230,5 +230,5 @@ if (fails.length) bad.push('대비 미달 ' + fails.length + '건: ' +
   fails.slice(0, 6).map(f => `${f.slide}장 ${f.cls} ${f.ratio}`).join(' | '))
 
 console.log('\n단일 파일 ' + mb.toFixed(2) + 'MB')
-console.log(bad.length ? 'FAIL\n - ' + bad.join('\n - ') : 'PASS — 17장 렌더·콘솔 0·조작·비율·금지어 0·크기·대비 OK')
+console.log(bad.length ? 'FAIL\n - ' + bad.join('\n - ') : 'PASS — 18장 렌더·콘솔 0·조작·비율·금지어 0·크기·대비 OK')
 process.exit(bad.length ? 1 : 0)
