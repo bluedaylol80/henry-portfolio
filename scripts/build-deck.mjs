@@ -89,6 +89,7 @@ async function scrape() {
         rights: t(c.querySelector('.card-rights')),
       })),
       canonical: document.querySelector('link[rel=canonical]').href,
+      hub: document.querySelector('[data-notion-hub]').href,
       lab: (() => { const c = document.querySelector('#lab .card'); if (!c) return null
         return { title: t(c.querySelector('.card-bot h3')).replace(/\s*(상세 보기|View details)\s*$/, ''),
           summary: t(c.querySelector('.card-bot > p')), href: c.querySelector('.card-cta a').href } })(),
@@ -150,7 +151,8 @@ const L = {
   skills: '역량 4분류', top3: '대표 사례 3', judge: '판단', exec: '실행', numbers: '숫자로 증명',
   results: '성과', method: '업무 방식', proto: 'AI 프로토타입', companies: '회사별 상세', contact: '연락',
   caseN: n => `사례 ${n}`, evidence: '근거', demo: '체험판', open: '열기',
-  email: '이메일', site: '사이트', notion: 'Notion 이력', pdf: '포트폴리오 PDF', issued: '발행일',
+  email: '이메일', site: '사이트', pdf: '포트폴리오 PDF', issued: '발행일',
+  web: '포트폴리오 웹', cvKo: '이력서(KO)', cvEn: 'Resume(EN)', cv: '이력서', caseRep: 'Notion 대표 사례',
   before: '변경 전', after: '변경 후', decision: '결정 범위', deferred: '미룬 것', outcome: '결과·상태',
   act: '본인 행동', lab: '개인 프로덕트', period: '기간',
   full: '문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.',
@@ -159,6 +161,33 @@ const L = {
   rightsPlain: '게임 명칭은 각 권리자의 상표입니다.',
   rightsNW: '나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.',
   rightsProto: '화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.',
+}
+/* 덱의 바깥 링크는 전부 이 표 한곳에 둔다(본부장 결재 09-29).
+   빌드 때 사이트 canonical·Notion 허브·HUB 상수와 대조해 하나라도 어긋나면 빌드를 멈춘다(checkLinks). */
+const LINK = {
+  web: 'https://bluedaylol80.github.io/henry-portfolio/',
+  webEn: 'https://bluedaylol80.github.io/henry-portfolio/en/',
+  cvKo: 'https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5',
+  cvEn: 'https://limhenry.notion.site/3e859de7280481fcb58ece40d5a8be50',
+  caseRep: 'https://limhenry.notion.site/71b99dcfd07f4493b019bfb4bac2acab',
+  pdfKo: 'https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-ko.pdf',
+  pdfEn: 'https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-en.pdf',
+}
+function checkLinks(d) {
+  const en = readFileSync('site/en/index.html', 'utf8')
+  const pick = (re, nm) => (en.match(re) || fail('EN 사이트에서 ' + nm + '을(를) 못 읽었다'))[1]
+  if (d.hub !== HUB) fail(`사이트 Notion 허브가 HUB 상수와 다르다: ${d.hub} ≠ ${HUB}`)
+  const want = {
+    web: d.canonical, webEn: pick(/<link rel="canonical" href="([^"]+)"/, 'canonical'),
+    cvKo: HUB, cvEn: pick(/data-notion-hub href="([^"]+)"/, 'Notion 이력서'),
+    pdfKo: d.canonical + 'henry-lim-portfolio-ko.pdf', pdfEn: d.canonical + 'henry-lim-portfolio-en.pdf',
+  }
+  for (const k of Object.keys(LINK)) {
+    if (k === 'caseRep') { if (!/^https:\/\/limhenry\.notion\.site\/[0-9a-f]{32}$/.test(LINK[k]) || !LINK[k].startsWith(NOTION)) fail('덱 링크 caseRep 형식이 Notion 공개 페이지가 아니다: ' + LINK[k]); continue }
+    if (!(k in want)) fail('덱 링크 ' + k + '의 대조 기준이 없다')
+    if (LINK[k] !== want[k]) fail(`덱 링크 ${k}가 사이트와 다르다: ${LINK[k]} ≠ ${want[k]}`)
+  }
+  for (const k of ['pdfKo', 'pdfEn']) { try { statSync('site/' + LINK[k].slice(d.canonical.length)) } catch { fail('덱 링크 ' + k + '의 PDF가 site/에 없다') } }
 }
 /* 채택 캡처의 캡션 — 인쇄 빌더와 같은 문구를 쓴다(원본 폴더명·내부 문서명은 쓰지 않는다) */
 const CAPS = {
@@ -249,6 +278,9 @@ const EXEC_ICONS = { [L.act]: 'hand', [L.deferred]: 'clock', [L.outcome]: 'check
 /* ============================ 3. 자산 (상대 경로 / base64) ============================ */
 const IMG_DIR = 'site/pdf/img/'
 const FONT = 'site/deck/fonts/SUIT-Variable.woff2'
+/* 1·18장 캔버스 모션 — 외부 라이브러리 없이 덱 HTML에 그대로 인라인한다(단일 파일 오프라인 동작) */
+const MOTION_JS = readFileSync('scripts/deck-motion.js', 'utf8')
+if (/<\/script/i.test(MOTION_JS)) fail('deck-motion.js에 </script>가 있다')
 const b64 = (p, mime) => `data:${mime};base64,` + readFileSync(p).toString('base64')
 const makeAssets = inline => ({
   img: slug => (inline ? b64(IMG_DIR + slug + '.jpg', 'image/jpeg') : '../pdf/img/' + slug + '.jpg'),
@@ -382,25 +414,20 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .cover .hl{margin-top:44px;font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.02em}
 .cover .ct{margin-top:44px;font-size:24px;line-height:1.9;color:var(--m60)}
 .cover .ct b{display:inline-block;min-width:212px;color:var(--tx);font-weight:600}
-.mg{width:100%;height:820px}
-/* 흐름 모션 — 왼쪽의 흩어진 점(요구)이 렌즈를 지나 오른쪽 정렬된 흐름선(실행)으로 */
-.mg .lane{stroke:#fff;stroke-opacity:.16;stroke-width:1.5;fill:none}
-.mg .lens{stroke:#fff;stroke-opacity:.3;stroke-width:2;fill:none}
-.mg .lens2{stroke:var(--sub);stroke-opacity:.5;stroke-width:2;fill:none}
-.mg .dot{transform:translate(var(--x2),var(--y1))}
-.mg .dot circle{fill:#fff;fill-opacity:var(--o,.28)}
-.mg .dot--sub circle{fill:#E62B1E;fill-opacity:.9}
-@media (prefers-reduced-motion:no-preference){
-  .mg .dot{animation:drift var(--dur,12s) linear var(--d,0s) infinite}
-}
-@keyframes drift{
-  0%{transform:translate(var(--x0),var(--y0)) scale(.55);opacity:0}
-  10%{opacity:1}
-  46%{transform:translate(430px,var(--ym)) scale(1);opacity:1}
-  62%{transform:translate(600px,var(--y1)) scale(.95)}
-  92%{opacity:1}
-  100%{transform:translate(1020px,var(--y1)) scale(.8);opacity:0}
-}
+/* 1·18장 모션(본부장 결재 09-29: 표지=C3 키네틱 타임라인 · 마지막 장=E3 궤도) — scripts/deck-motion.js.
+   캔버스는 1920×1080 스테이지 좌표 그대로 깔고 글자 아래에 둔다. 포인터를 받지 않아 링크 클릭을 가로채지 않는다. */
+.mo{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;pointer-events:none}
+.cover>div{position:relative;z-index:1}
+.cover .hl{position:relative}
+.hl .ln{display:block}
+.hl .w{white-space:nowrap}
+.hl .ch{display:inline-block}
+.caret{position:absolute;width:4px;border-radius:2px;background:var(--sub);opacity:0;pointer-events:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ct .sep{color:var(--m38);margin:0 .5em}
+.ct a,.lk a{text-decoration:underline;text-decoration-color:var(--m38);text-underline-offset:5px}
+.lk{position:absolute;left:96px;bottom:36px;z-index:1;font-size:22px;line-height:1.35;color:var(--m60)}
+.lk .sep{color:var(--m38);margin:0 .6em}
 /* Career milestone */
 .msb{display:flex;gap:14px}
 .msb div{border:1px solid var(--m12);border-radius:16px;padding:16px 22px;background:var(--panel)}
@@ -533,34 +560,29 @@ function render(d, A) {
   ${o.rights ? `<p class="rights">${esc(o.rights)}</p>` : ''}
 </section>`
 
-  /* --- 1. 표지 --- */
-  const DOTS = 44
-  const rnd = (() => { let s = 20260910; return () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648 })()
-  const LANES_Y = [120, 220, 320, 420, 520, 620, 720]
-  const dots = Array.from({ length: DOTS }, (_, i) => {
-    const y0 = 40 + rnd() * 760, lane = LANES_Y[i % LANES_Y.length]
-    const ym = y0 * 0.3 + lane * 0.7
-    const sub = i % 7 === 3 && i < 44
-    return `<g class="dot${sub ? ' dot--sub' : ''}" style="--x0:${(rnd() * 90).toFixed(0)}px;--y0:${y0.toFixed(0)}px;--ym:${ym.toFixed(0)}px;--y1:${lane}px;--x2:${(620 + rnd() * 60).toFixed(0)}px;--d:${(-rnd() * 12).toFixed(1)}s;--dur:${(11 + rnd() * 3).toFixed(1)}s;--o:${(0.2 + rnd() * 0.15).toFixed(2)}"><circle r="${sub ? 7 : 5}"/></g>`
-  }).join('')
-  const motion = (h) => `<svg class="mg" viewBox="0 0 1040 840" style="height:${h}px" aria-hidden="true" focusable="false">
-    <g>${LANES_Y.map(y => `<path class="lane" d="M640 ${y} H1010"/>`).join('')}</g>
-    <path class="lens" d="M430 90 C 530 300 530 540 430 750"/>
-    <path class="lens2" d="M430 300 C 470 380 470 460 430 540"/>
-    ${dots}</svg>`
+  /* --- 1. 표지 --- C3 키네틱 타임라인: 헤드라인은 글자 단위로 쪼개 캔버스 선과 같은 박자로 등장시킨다.
+     화면 낭독기는 쪼갠 글자 대신 .sr의 한 문장을 읽는다. data-d = 등장 시작(ms) */
+  if (d.h1.length !== 3) fail('표지 헤드라인이 3줄이 아니다(C3 타이밍은 3줄 기준): ' + d.h1.length)
+  const ext = (href, txt) => `<a href="${esc(href)}" target="_blank" rel="noopener">${txt}</a>`
+  const SEP = '<span class="sep" aria-hidden="true">·</span>'
+  const chars = d.h1.map(line => `<span class="ln">${line.split(' ').map(w =>
+    `<span class="w">${[...w].map(c => `<span class="ch">${esc(c)}</span>`).join('')}</span>`).join(' ')}</span>`).join('')
   const cover = `
-<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="표지 — ${esc(d.brand)}" data-bg="#26262B">
+<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="표지 — ${esc(d.brand)}" data-bg="#26262B" data-mo="C3">
+  <canvas class="mo" aria-hidden="true"></canvas>
   <div>
-    <p class="eb">${esc(L.cover)}</p>
-    <p class="nm" style="margin-top:26px">${esc(d.brand)}</p>
-    <p class="rl">${esc(d.role)}</p>
-    <p class="hl">${d.h1.map(esc).join('<br>')}</p>
-    <div class="ct">
+    <p class="eb" data-d="0">${esc(L.cover)}</p>
+    <p class="nm" style="margin-top:26px" data-d="80">${esc(d.brand)}</p>
+    <p class="rl" data-d="160">${esc(d.role)}</p>
+    <p class="hl"><span class="sr">${esc(d.h1.join(' '))}</span><span aria-hidden="true">${chars}</span><i class="caret"></i></p>
+    <div class="ct" data-d="900">
       <p><b>${L.email}</b>${MAIL}</p>
-      <p><b>${L.site}</b>${esc(d.canonical.replace(/^https?:\/\//, ''))}</p>
+      <p><b>${L.site}</b>${esc(LINK.web.replace(/^https?:\/\//, ''))}</p>
     </div>
   </div>
-  <div>${motion(820)}</div>
+  <div></div>
+  <p class="lk" data-d="1000">${[[LINK.web, L.web], [LINK.cvKo, L.cvKo], [LINK.cvEn, L.cvEn], [LINK.caseRep, L.caseRep]]
+    .map(([h, t]) => ext(h, esc(t) + ' ↗')).join(SEP)}</p>
 </section>`
 
   /* --- 2. 한눈에 --- */
@@ -866,20 +888,22 @@ function render(d, A) {
   /* --- 18. 연락 --- */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   const contact = `
-<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락 — ${esc(d.brand)}" data-bg="#26262B">
+<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락 — ${esc(d.brand)}" data-bg="#26262B" data-mo="E3">
+  <canvas class="mo" aria-hidden="true"></canvas>
   <div>
-    <p class="eb">${esc(L.contact)}</p>
-    <p class="nm" style="margin-top:26px;font-size:72px">${esc(d.brand)}</p>
-    <p class="rl">${esc(d.role)}</p>
+    <p class="eb" data-d="0">${esc(L.contact)}</p>
+    <p class="nm" style="margin-top:26px;font-size:72px" data-d="80">${esc(d.brand)}</p>
+    <p class="rl" data-d="160">${esc(d.role)}</p>
     <div class="ct" style="margin-top:40px">
-      <p><b>${L.email}</b><a href="mailto:${MAIL}">${MAIL}</a></p>
-      <p><b>${L.site}</b><a href="${esc(d.canonical)}" target="_blank" rel="noopener">${esc(d.canonical.replace(/^https?:\/\//, ''))}</a></p>
-      <p><b>${L.notion}</b><a href="${esc(HUB)}" target="_blank" rel="noopener">${L.open} ↗</a></p>
-      <p><b>${L.pdf}</b><a href="${esc(d.canonical + 'henry-lim-portfolio-ko.pdf')}" target="_blank" rel="noopener">${L.open} ↗</a></p>
+      <p data-d="300"><b>${L.email}</b><a href="mailto:${MAIL}">${MAIL}</a></p>
+      <p data-d="380"><b>${L.web}</b>${ext(LINK.web, 'KO ↗')}${SEP}${ext(LINK.webEn, 'EN ↗')}</p>
+      <p data-d="460"><b>${L.cv}</b>${ext(LINK.cvKo, esc(L.cvKo) + ' ↗')}${SEP}${ext(LINK.cvEn, esc(L.cvEn) + ' ↗')}</p>
+      <p data-d="540"><b>${L.caseRep}</b>${ext(LINK.caseRep, L.open + ' ↗')}</p>
+      <p data-d="620"><b>${L.pdf}</b>${ext(LINK.pdfKo, 'KO ↗')}${SEP}${ext(LINK.pdfEn, 'EN ↗')}</p>
     </div>
-    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
+    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-d="760">${esc(L.issued)} ${TODAY} · ${esc(legal)}</p>
   </div>
-  <div>${motion(640)}</div>
+  <div></div>
 </section>`
 
   const body = [cover, glance, milestone, skills, top3,
@@ -912,11 +936,12 @@ ${body.join('\n')}
 <div class="bar" id="bar"></div>
 <p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / ${SLIDES}</p>
 </div></div>
+<script>${MOTION_JS}</script>
 <script>
 (function(){
   var stage=document.getElementById('stage'),bar=document.getElementById('bar'),cnt=document.getElementById('cnt')
   var ss=[].slice.call(stage.querySelectorAll('.s')),N=ss.length,cur=-1
-  function fit(){stage.style.setProperty('--s',Math.min(innerWidth/1920,innerHeight/1080))}
+  function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.setProperty('--s',s);DeckMotion.fit(s)}
   function show(i,push){
     i=Math.max(0,Math.min(N-1,i)); if(i===cur)return; cur=i
     ss.forEach(function(s,k){s.classList.toggle('on',k===i);if(k===i){s.removeAttribute('inert')}else{s.setAttribute('inert','')}})
@@ -927,6 +952,7 @@ ${body.join('\n')}
     bar.style.width=((i+1)/N*100)+'%'
     cnt.innerHTML='<em>'+(i+1)+'</em> / '+N
     if(push!==false){history.replaceState(null,'','#'+(i+1))}
+    DeckMotion.show(ss[i])
   }
   function fromHash(){var n=parseInt((location.hash||'').slice(1),10);return isFinite(n)&&n>=1&&n<=N?n-1:0}
   addEventListener('resize',fit); addEventListener('hashchange',function(){show(fromHash(),false)})
@@ -961,6 +987,7 @@ ${body.join('\n')}
 
 /* ============================ 6. 실행 ============================ */
 const d = await scrape()
+checkLinks(d)
 const A_rel = makeAssets(false), A_inline = makeAssets(true)
 const page = render(d, A_rel)
 const single = render(d, A_inline)
