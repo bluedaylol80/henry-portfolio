@@ -313,6 +313,10 @@ html[lang="ko"] .clock-t{order:4}
 .cards>li{display:flex}
 .cards>li>.card{flex:1}
 @media (min-width:768px){.cards{grid-template-columns:repeat(2,1fr)}}
+/* 2열 구간에서 카드 수가 홀수면 마지막 카드를 두 칸으로 편다 — 빈 칸 하나가 남지 않게(WO-34 후속) */
+@media (min-width:768px){.cards>li:last-child:nth-child(odd){grid-column:1/-1}
+  /* 넓어진 카드는 가로로 더 잘린다 — 키 아트의 로고가 위쪽에 있어 위를 기준으로 맞춘다 */
+  .cards>li:last-child:nth-child(odd) .card-shot{background-position:center top}}
 .card{position:relative;display:flex;flex-direction:column;min-height:22rem;overflow:hidden;border-radius:var(--r-card);
   background:var(--ink);padding:1.5rem;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.05);transition:transform .45s var(--e-hover)}
 @media (min-width:640px){.card{min-height:26rem;padding:2rem}}
@@ -995,6 +999,19 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       </li>
       <li data-reveal style="--rd:360ms;--ry:48px">
         <article class="card">
+          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
+          <div class="card-meta" data-i18n="원더피플-사업-파트장">원더피플/에이스톰 — 사업팀 파트장</div>
+          <div class="card-wm" aria-hidden="true" data-i18n="56만">56만+</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog" data-i18n="슈퍼피플">슈퍼피플<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p data-i18n="스팀-중국-서비스의-Live-ops">스팀 중국 서비스의 Live-ops를 맡아 <span class="nb">Douyu·KOOK</span> 채널 운영, 스트리밍 이벤트, VOC 수집, <span class="nb">지표 분석·경영 보고까지</span> 이어 갔습니다.</p>
+            <div class="card-tags"><span class="tag" data-i18n="중국-서비스">중국 서비스</span><span class="tag">Live Ops</span><span class="tag" data-i18n="이벤트-콘텐츠">이벤트·콘텐츠</span><span class="tag" data-i18n="지표-분석">지표 분석</span></div>
+            <p class="card-rights" data-i18n="게임-명칭-이미지의-상표와-3">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다.</p>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:450ms;--ry:48px">
+        <article class="card">
           <div class="card-shot" data-shot="fivestars" aria-hidden="true"></div>
           <div class="card-meta" data-i18n="스카이피플-사업-팀장">스카이피플 — 사업팀 팀장</div>
           <div class="card-wm" aria-hidden="true" data-i18n="24억">24억</div>
@@ -1006,7 +1023,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </div>
         </article>
       </li>
-      <li data-reveal style="--rd:450ms;--ry:48px">
+      <li data-reveal style="--rd:540ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="nanakage" aria-hidden="true"></div>
           <div class="card-meta" data-i18n="넵튠-레전드-개발PM">넵튠 레전드 — 개발PM</div>
@@ -1016,19 +1033,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <p data-i18n="개발-PM으로-콘텐츠-순환">개발PM으로 콘텐츠 순환·BM·트래킹 등 핵심 시스템을 기획하고, 7개국 소프트런칭에서 <span class="nb">한국·미국·대만</span> 그랜드런칭까지 이끌었습니다.</p>
             <div class="card-tags"><span class="tag" data-i18n="개발PM">개발PM</span><span class="tag" data-i18n="시스템-기획">시스템 기획</span><span class="tag" data-i18n="소프트런칭">소프트런칭</span></div>
             <p class="card-rights" data-i18n="게임-명칭-이미지의-상표와-5">게임 명칭·이미지의 상표와 저작권은 넵튠 레전드에 있습니다.</p>
-          </div>
-        </article>
-      </li>
-      <li data-reveal style="--rd:540ms;--ry:48px">
-        <article class="card">
-          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
-          <div class="card-meta" data-i18n="원더피플-사업-파트장">원더피플/에이스톰 — 사업팀 파트장</div>
-          <div class="card-wm" aria-hidden="true" data-i18n="56만">56만+</div>
-          <div class="card-bot">
-            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog" data-i18n="슈퍼피플">슈퍼피플<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p data-i18n="스팀-중국-서비스의-Live-ops">스팀 중국 서비스의 Live-ops를 맡아 <span class="nb">Douyu·KOOK</span> 채널 운영, 스트리밍 이벤트, VOC 수집, <span class="nb">지표 분석·경영 보고까지</span> 이어 갔습니다.</p>
-            <div class="card-tags"><span class="tag" data-i18n="중국-서비스">중국 서비스</span><span class="tag">Live Ops</span><span class="tag" data-i18n="이벤트-콘텐츠">이벤트·콘텐츠</span><span class="tag" data-i18n="지표-분석">지표 분석</span></div>
-            <p class="card-rights" data-i18n="게임-명칭-이미지의-상표와-3">게임 명칭·이미지의 상표와 저작권은 원더피플에 있습니다.</p>
           </div>
         </article>
       </li>

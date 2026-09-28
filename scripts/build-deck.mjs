@@ -68,7 +68,9 @@ async function scrape() {
       skills: all('#skills .row-li', r => ({ title: t(r.querySelector('.row-title')), note: t(r.querySelector('.row-note')),
         cases: [...r.querySelectorAll('.row-case')].map(t) })),
       worksTitle: t(document.querySelector('#works .h2')),
-      works: all('#works .card', c => ({ meta: t(c.querySelector('.card-meta')), kpi: t(c.querySelector('.card-wm')),
+      /* key = 상세창 키(data-work) — 카드 순서가 바뀌어도 위치 번호에 기대지 않는다(WO-34 후속) */
+      works: all('#works .card', c => ({ key: c.querySelector('.card-open').dataset.work,
+        meta: t(c.querySelector('.card-meta')), kpi: t(c.querySelector('.card-wm')),
         title: t(c.querySelector('.card-bot h3')).replace(/\s*(상세 보기|View details)\s*$/, ''),
         summary: t(c.querySelector('.card-bot > p')), rights: t(c.querySelector('.card-rights')) })),
       careerTitle: t(document.querySelector('#career .h2')),
@@ -118,7 +120,7 @@ async function scrape() {
   }
   for (const c of d.cases) Object.assign(c, await openDlg(c.work))
   d.res = {}
-  for (const [, slug] of RESULTS) d.res[slug] = await openDlg(slug)
+  for (const [slug] of RESULTS) d.res[slug] = await openDlg(slug)
   /* 사례 2 흐름도의 소프트런칭 3개국은 린 상세창에 있다(8장 D6) */
   for (const slug of EXTRA_DLG) d.res[slug] = await openDlg(slug)
   await browser.close()
@@ -130,7 +132,7 @@ async function scrape() {
   if (d.proto.length !== 2) fail('프로토타입 카드가 2장이 아니다: ' + d.proto.length)
   if (d.stats.length !== 4) fail('숫자 패널이 4칸이 아니다: ' + d.stats.length)
   for (const c of d.cases) if (c.rows.length < 7) fail('사례 상세 행이 모자란다: ' + c.title + ' ' + c.rows.length)
-  for (const [, slug] of RESULTS) {
+  for (const [slug] of RESULTS) {
     const r = d.res[slug]
     if (!r || r.rows.length < 3) fail('성과 상세 행이 모자란다: ' + slug)
     if (!r.ev.length) fail('성과 근거 링크가 없다: ' + slug)
@@ -212,9 +214,8 @@ const kpiLabel2 = slug => {
   return esc(dd) + (per && per !== '미상' ? '<br>' + esc(per) : '')
 }
 const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
-const WORK_IX = { dalcom: 0, lyn: 1, chaos: 2, nightwalker: 3, fivestars: 4, nanakage: 5, superpeople: 6 }
-const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan']], [4, 'fivestars', ['fivestars/prereg']],
-                 [5, 'nanakage', ['nanakage/update_plan']]]
+const RESULTS = [['chaos', ['chaos/event_ui_plan']], ['fivestars', ['fivestars/prereg']],
+                 ['nanakage', ['nanakage/update_plan']]]
 const EXTRA_DLG = ['lyn', 'superpeople']
 /* 14장 슈퍼피플(WO-34 §3) — 이미지 2장(가공본)과 흐름 5칸. 칸 이름은 발주서 문안 그대로다 */
 const SP_SHOTS = ['timeline.jpg', 'douyu-event.jpg']
@@ -466,8 +467,8 @@ function render(d, A) {
   const nw = v => esc(v).split(' ').map(w => (/\d/.test(w) ? `<span class="nn">${w}</span>` : w)).join(' ')
   const per = s => (s.match(PERIOD) || [''])[0]
   const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
-  const kpiOf = slug => d.works[WORK_IX[slug]].kpi
-  const workOf = slug => d.works[WORK_IX[slug]]
+  const workOf = slug => d.works.find(w => w.key === slug) || fail('성과 카드가 없다: ' + slug)
+  const kpiOf = slug => workOf(slug).kpi
   const icon = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`
   const arrow = cls => `<div class="farr ${cls || ''}">${icon('arrow')}</div>`
   /* 발표용 요약 — 첫 문장부터 n문장까지만 남긴다. 자르기만 하고 고쳐 쓰지 않는다(사실 왜곡 금지). */
@@ -768,10 +769,10 @@ function render(d, A) {
   /* --- 13. 성과 3장 --- */
   const results = slide({
     aria: '성과 — 카오스크로니클 · Five Stars · Shadow Seven', eyebrow: L.results,
-    title: RESULTS.map(([wi]) => d.works[wi].title).join(' · '), hcls: 'h--sm',
-    rights: mergeRights(RESULTS.map(([wi]) => d.works[wi].rights)),
-    body: `<div class="g3">${RESULTS.map(([wi, slug, shots]) => {
-      const w = d.works[wi], r = d.res[slug]
+    title: RESULTS.map(([slug]) => workOf(slug).title).join(' · '), hcls: 'h--sm',
+    rights: mergeRights(RESULTS.map(([slug]) => workOf(slug).rights)),
+    body: `<div class="g3">${RESULTS.map(([slug, shots]) => {
+      const w = workOf(slug), r = d.res[slug]
       /* 발주서 §2 — 키 비주얼 + 캡처 1 + 역할·판단·결과 3줄 + 근거 링크(D7·D8) */
       const rowOf = k => { const x = r.rows.find(y => y[0] === k)
         if (!x) fail(`${slug} 상세에 '${k}' 행이 없다`)
@@ -850,7 +851,7 @@ function render(d, A) {
   })
 
   /* --- 17. 회사별 상세 --- */
-  const KPI_BY_CO = [['달콤', 0], ['넥슨', 1], ['원더피플', 3], ['스카이피플', 4], ['넵튠', 5]]
+  const KPI_BY_CO = [['달콤', 'dalcom'], ['넥슨', 'lyn'], ['원더피플', 'nightwalker'], ['스카이피플', 'fivestars'], ['넵튠', 'nanakage']]
   const companies = slide({
     aria: '회사별 상세 — 10개 회사', eyebrow: L.companies, title: d.careerTitle, hcls: 'h--sm',
     rights: L.rightsPlain + ' ' + d.careerFoot,
@@ -858,7 +859,7 @@ function render(d, A) {
       const hit = KPI_BY_CO.find(([k]) => r.company.includes(k))
       if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
       return `<div class="cor"><b>${esc(r.company)}</b>
-        <span class="k">${hit ? ba(d.works[hit[1]].kpi) : ''}</span>
+        <span class="k">${hit ? ba(kpiOf(hit[1])) : ''}</span>
         <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}</p></div>` }).join('')}</div>`,
   })
 

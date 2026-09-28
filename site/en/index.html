@@ -313,6 +313,10 @@ html[lang="ko"] .clock-t{order:4}
 .cards>li{display:flex}
 .cards>li>.card{flex:1}
 @media (min-width:768px){.cards{grid-template-columns:repeat(2,1fr)}}
+/* 2열 구간에서 카드 수가 홀수면 마지막 카드를 두 칸으로 편다 — 빈 칸 하나가 남지 않게(WO-34 후속) */
+@media (min-width:768px){.cards>li:last-child:nth-child(odd){grid-column:1/-1}
+  /* 넓어진 카드는 가로로 더 잘린다 — 키 아트의 로고가 위쪽에 있어 위를 기준으로 맞춘다 */
+  .cards>li:last-child:nth-child(odd) .card-shot{background-position:center top}}
 .card{position:relative;display:flex;flex-direction:column;min-height:22rem;overflow:hidden;border-radius:var(--r-card);
   background:var(--ink);padding:1.5rem;color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.05);transition:transform .45s var(--e-hover)}
 @media (min-width:640px){.card{min-height:26rem;padding:2rem}}
@@ -995,6 +999,19 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       </li>
       <li data-reveal style="--rd:360ms;--ry:48px">
         <article class="card">
+          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
+          <div class="card-meta">Wonderpeople/Acestorm — Part Lead, Business Team</div>
+          <div class="card-wm" aria-hidden="true">560K+</div>
+          <div class="card-bot">
+            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog">Super People<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
+            <p>Ran live ops for the China service on Steam — <span class="nb">Douyu and KOOK</span> channels, streaming events and VOC collection, through <span class="nb">metrics analysis and management reporting.</span></p>
+            <div class="card-tags"><span class="tag">China service</span><span class="tag">Live Ops</span><span class="tag">Events & content</span><span class="tag">Metrics analysis</span></div>
+            <p class="card-rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
+          </div>
+        </article>
+      </li>
+      <li data-reveal style="--rd:450ms;--ry:48px">
+        <article class="card">
           <div class="card-shot" data-shot="fivestars" aria-hidden="true"></div>
           <div class="card-meta">Skypeople — Team Lead, Business Team</div>
           <div class="card-wm" aria-hidden="true">₩2.4B</div>
@@ -1006,7 +1023,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </div>
         </article>
       </li>
-      <li data-reveal style="--rd:450ms;--ry:48px">
+      <li data-reveal style="--rd:540ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="nanakage" aria-hidden="true"></div>
           <div class="card-meta">Neptune Legend — Development PM</div>
@@ -1016,19 +1033,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
             <p>As development PM I designed the core systems — content loop, monetization, tracking — and took the game from a 7-market soft launch to the Korea, US and Taiwan grand launch.</p>
             <div class="card-tags"><span class="tag">Development PM</span><span class="tag">System design</span><span class="tag">Soft launch</span></div>
             <p class="card-rights">Game names and images are trademarks and copyrighted works of Neptune Legend.</p>
-          </div>
-        </article>
-      </li>
-      <li data-reveal style="--rd:540ms;--ry:48px">
-        <article class="card">
-          <div class="card-shot" data-shot="superpeople/douyu-event" aria-hidden="true"></div>
-          <div class="card-meta">Wonderpeople/Acestorm — Part Lead, Business Team</div>
-          <div class="card-wm" aria-hidden="true">560K+</div>
-          <div class="card-bot">
-            <h3><button class="card-open" type="button" data-work="superpeople" aria-haspopup="dialog">Super People<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
-            <p>Ran live ops for the China service on Steam — <span class="nb">Douyu and KOOK</span> channels, streaming events and VOC collection, through <span class="nb">metrics analysis and management reporting.</span></p>
-            <div class="card-tags"><span class="tag">China service</span><span class="tag">Live Ops</span><span class="tag">Events & content</span><span class="tag">Metrics analysis</span></div>
-            <p class="card-rights">Game names and images are trademarks and copyrighted works of Wonderpeople.</p>
           </div>
         </article>
       </li>

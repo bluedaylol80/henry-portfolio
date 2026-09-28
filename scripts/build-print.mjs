@@ -68,7 +68,8 @@ async function scrape(lang) {
       skills: all('#skills .row-li', r => ({ title: t(r.querySelector('.row-title')), note: t(r.querySelector('.row-note')),
         cases: [...r.querySelectorAll('.row-case')].map(t) })),
       worksTitle: t(document.querySelector('#works .h2')),
-      works: all('#works .card', c => ({
+      /* key = 상세창 키(data-work) — 카드 순서가 바뀌어도 빌더가 위치 번호에 기대지 않게 한다(WO-34 후속) */
+      works: all('#works .card', c => ({ key: c.querySelector('.card-open').dataset.work,
         meta: t(c.querySelector('.card-meta')), kpi: t(c.querySelector('.card-wm')),
         title: t(c.querySelector('.card-bot h3')).replace(/\s*(상세 보기|View details)\s*$/, ''),
         summary: t(c.querySelector('.card-bot > p')), rights: t(c.querySelector('.card-rights')),
@@ -131,20 +132,20 @@ async function scrape(lang) {
   for (const c of base.cases) Object.assign(c, await openDlg(c.work))
   /* 성과 3장도 상세창에서 읽는다 — 본인 행동·근거 링크를 손으로 옮기지 않는다(Codex R11 D10) */
   base.res = {}
-  for (const [, slug] of RESULTS) base.res[slug] = await openDlg(slug)
-  base.res[SP[1]] = await openDlg(SP[1])
+  for (const [slug] of RESULTS) base.res[slug] = await openDlg(slug)
+  base.res[SP[0]] = await openDlg(SP[0])
   await browser.close()
   if (base.cases.length !== 3) fail('대표 사례가 3장이 아니다: ' + base.cases.length)
   // 한 줄 요약 + 6항목 = 7행(WO-19 13). 항목이 줄면 원고와 어긋난 것이라 실패시킨다.
   for (const c of base.cases) if (c.rows.length < 7) fail('사례 상세 행이 모자란다: ' + c.title + ' ' + c.rows.length)
-  for (const [, slug] of RESULTS) {
+  for (const [slug] of RESULTS) {
     const r = base.res[slug]
     if (!r || r.rows.length < 3) fail('성과 상세 행이 모자란다: ' + slug + ' ' + (r ? r.rows.length : 0))
     if (!r.ev.length) fail('성과 근거 링크가 없다: ' + slug)
   }
-  const sp = base.res[SP[1]]
+  const sp = base.res[SP[0]]
   if (base.works.length !== 7) fail('성과 카드가 7장이 아니다: ' + base.works.length)
-  if (sp.rows.length !== 7 || sp.gal.length < SP[2].length || sp.links.length !== 2)
+  if (sp.rows.length !== 7 || sp.gal.length < SP[1].length || sp.links.length !== 2)
     fail(`슈퍼피플 상세가 발주서와 다르다: 행 ${sp.rows.length} · 이미지 ${sp.gal.length} · 링크 ${sp.links.length}`)
   return base
 }
@@ -442,17 +443,18 @@ const kpiLabel = (lang, slug) => {
 const COMPANY_TOK = { dalcom:['달콤','Dalcom'], lyn:['넥슨','Nexon'], chaos:['넥슨','Nexon'],
                       nightwalker:['원더피플','Wonderpeople'], fivestars:['스카이피플','Skypeople'],
                       nanakage:['넵튠','Neptune'] }
-const KPI_OF = [['달콤', 0], ['Dalcom', 0], ['넥슨', 1], ['Nexon', 1], ['원더피플', 3], ['Wonderpeople', 3],
-                ['스카이피플', 4], ['Skypeople', 4], ['넵튠', 5], ['Neptune', 5]]
+const KPI_OF = [['달콤', 'dalcom'], ['Dalcom', 'dalcom'], ['넥슨', 'lyn'], ['Nexon', 'lyn'],
+                ['원더피플', 'nightwalker'], ['Wonderpeople', 'nightwalker'],
+                ['스카이피플', 'fivestars'], ['Skypeople', 'fivestars'], ['넵튠', 'nanakage'], ['Neptune', 'nanakage']]
 /* 사례별 키 비주얼과 상세 행 분할점(개요 슬라이드가 가져가는 행 수) — 사례 1만 '결정 범위'가 있어 5행이다 */
 const CASE_IMG = { case1: 'dalcom', case2: 'lyn', case3: 'nightwalker' }
 const CASE_SPLIT = { case1: 5, case2: 4, case3: 4 }
-/* 성과 슬라이드 3장이 쓰는 #works 인덱스와 키 비주얼 */
-const RESULTS = [[2, 'chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
-                 [4, 'fivestars', ['fivestars/prereg']],
-                 [5, 'nanakage', ['nanakage/update_plan', 'nanakage/mission_ui']]]
-/* 슈퍼피플 1쪽(WO-34 §3) — 성과 쪽 뒤. 이미지는 상세창 가공본 중 앞 3장(타임라인·이벤트·VOC) */
-const SP = [6, 'superpeople', ['timeline.jpg', 'douyu-event.jpg', 'voc.jpg']]
+/* 성과 슬라이드 3장이 쓰는 카드 키와 키 비주얼 */
+const RESULTS = [['chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
+                 ['fivestars', ['fivestars/prereg']],
+                 ['nanakage', ['nanakage/update_plan', 'nanakage/mission_ui']]]
+/* 슈퍼피플 1쪽(WO-34 §3) — 카드 순서대로 카오스 쪽과 Five Stars 쪽 사이. 이미지는 상세창 가공본 앞 3장 */
+const SP = ['superpeople', ['timeline.jpg', 'douyu-event.jpg', 'voc.jpg']]
 /* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
 const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
@@ -466,9 +468,10 @@ function render(lang, d) {
   const IMG = lang === 'en' ? '../img/' : 'img/'
   const kv = rows => `<table class="kv"><colgroup><col><col></colgroup>${
     rows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${esc(pr(v))}</td></tr>`).join('')}</table>`
+  const W = (key) => d.works.find(w => w.key === key) || fail('성과 카드가 없다: ' + key)
   const kpiFor = (company) => {
     const hit = KPI_OF.find(([k]) => company.includes(k))
-    return hit ? d.works[hit[1]].kpi : ''
+    return hit ? W(hit[1]).kpi : ''
   }
   const kpiDef = (slug) => kpiLabel(lang, slug)
   const per = s => (s.match(PERIOD) || [''])[0]
@@ -483,7 +486,7 @@ function render(lang, d) {
     return ''
   }
   /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구·키 비주얼 제목이 여기서 나온다 */
-  const workOf = (meta) => d.works[(KPI_OF.find(([k]) => meta.includes(k)) || [, 0])[1]]
+  const workOf = (meta) => W((KPI_OF.find(([k]) => meta.includes(k)) || [, 'dalcom'])[1])
   const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
       <figcaption>${esc(cap)}</figcaption></figure>`
   const tile = (slug, cap, cls = '') => `<figure class="ph${cls}"${capMM(slug)}>
@@ -508,7 +511,7 @@ function render(lang, d) {
   /* 세 회사 문구를 이어 붙이면 같은 문장이 세 번 반복돼 한 줄로 뭉갠 것처럼 읽혔다(WO-24 ④).
      문안을 손으로 새로 쓰지 않고, 세 문장의 공통 앞뒤를 잘라 회사 이름만 묶는다. */
   const coverRights = (() => {
-    const ss = [...new Set([d.works[0].rights, d.works[1].rights, d.works[3].rights])]
+    const ss = [...new Set(['dalcom', 'lyn', 'nightwalker'].map(k => W(k).rights))]
     if (ss.length < 2) return ss.join(' ')
     let p = 0, s = 0
     while (ss.every(x => x[p] === ss[0][p]) && p < ss[0].length - 1) p++
@@ -528,8 +531,8 @@ function render(lang, d) {
     <p><b>${esc(l.notion)}</b> <a href="${esc(HUB)}">${esc(l.notion)} ↗</a></p>
   </div>
   <p class="issued">${esc(l.issued)} ${TODAY}</p>
-  <div class="strip">${[0, 1, 3].map((i, k) =>
-    `<figure><img src="${IMG}${['dalcom', 'lyn', 'nightwalker'][k]}.jpg" alt=""><figcaption>${esc(d.works[i].title)}</figcaption></figure>`).join('')}</div>
+  <div class="strip">${['dalcom', 'lyn', 'nightwalker'].map(k =>
+    `<figure><img src="${IMG}${k}.jpg" alt=""><figcaption>${esc(W(k).title)}</figcaption></figure>`).join('')}</div>
   <p class="rights">${esc(coverRights)}</p>
 </section>`
 
@@ -613,7 +616,7 @@ function render(lang, d) {
     })
   }
 
-  /* 10·11·12. 성과 3장 — 큰 KPI + 정의 라벨 + 참여 기간·직위 + 상세창의 본인 행동 표 + 근거 링크.
+  /* 10·12·13. 성과 3장 — 큰 KPI + 정의 라벨 + 참여 기간·직위 + 상세창의 본인 행동 표 + 근거 링크.
      본문은 손으로 옮기지 않는다 — 상세창에서 읽은 행을 그대로 싣는다(Codex R11 D10). */
   /* 사이트에는 있지만 인쇄물 배포가 막힌 항목이 섞여 있다 — 그 행만 빼고 나머지는 그대로 싣는다 */
   const resRows = (slug, rows) => rows.filter(([k, v]) => {
@@ -621,8 +624,8 @@ function render(lang, d) {
     if (h.length) console.log(`  인쇄 제외(${lang} ${slug}): ${k} — 금지어 ${h.join(',')}`)
     return !h.length
   })
-  const result = ([wi, slug, shots]) => {
-    const w = d.works[wi], r = d.res[slug]
+  const result = ([slug, shots]) => {
+    const w = W(slug), r = d.res[slug]
     const pp = projPeriod(w, r)
     const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
     return slide({
@@ -639,10 +642,10 @@ function render(lang, d) {
     })
   }
 
-  /* 13. 슈퍼피플 — 큰 KPI + 요약 + 상세창 행 + 외부 링크 / 상세창 이미지 3장(캡션은 사이트 figcaption) */
+  /* 11. 슈퍼피플(카드 순서: 카오스 → 나이트워커 → 슈퍼피플 → Five Stars) — 큰 KPI + 요약 + 상세창 행 + 외부 링크 / 상세창 이미지 3장(캡션은 사이트 figcaption) */
   const superpeople = (() => {
-    const [wi, slug, files] = SP
-    const w = d.works[wi], r = d.res[slug]
+    const [slug, files] = SP
+    const w = W(slug), r = d.res[slug]
     const cap = f => { const g = r.gal.find(x => x.file === f); if (!g) fail('슈퍼피플 이미지 캡션이 없다: ' + f); return g.cap }
     const fig = (f, cls) => `<figure class="ph${cls}"><img src="${IMG}superpeople/${f}" alt=""><figcaption>${esc(cap(f))}</figcaption></figure>`
     return slide({
@@ -706,7 +709,7 @@ function render(lang, d) {
     caseOverview(d.cases[0], 0), caseExec(d.cases[0], 0),
     caseOverview(d.cases[1], 1), caseExec(d.cases[1], 1),
     caseOverview(d.cases[2], 2), caseExec(d.cases[2], 2),
-    ...RESULTS.map(result), superpeople, timeline, proto, contact]
+    result(RESULTS[0]), superpeople, result(RESULTS[1]), result(RESULTS[2]), timeline, proto, contact]
   if (body.length !== SLIDES) fail('슬라이드가 ' + SLIDES + '장이 아니다: ' + body.length)
 
   return `<!doctype html>
