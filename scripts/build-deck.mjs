@@ -76,8 +76,10 @@ async function scrape() {
       careerTitle: t(document.querySelector('#career .h2')),
       career: all('#career .row-li', r => ({ company: t(r.querySelector('.row-title')), titles: t(r.querySelector('.row-note')),
         sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')),
-        /* 서비스 방향성 제시 근거(WO-38) — 달콤 행만 첫 근거 칩을 회사별 상세에 싣는다 */
-        ev: (r.querySelector('.row-links[data-links="dalcom"] a') || {}).href || '' })),
+        /* 서비스 방향성 근거(WO-39) — 달콤 행만 앞 근거 칩 2개(2025 계획·2026 상반기)를 회사별 상세에 싣는다 */
+        ev: [...r.querySelectorAll('.row-links[data-links="dalcom"] a')].slice(0, 2).map(a => {
+          const c = a.cloneNode(true); c.querySelectorAll('.sr-only').forEach(n => n.remove())
+          return { href: a.href, label: t(c) } }) })),
       careerFoot: t(document.querySelector('#career .row-foot')),
       protoTitle: t(document.querySelector('#proto .h2')),
       protoLede: t(document.querySelector('#proto .proto-lede')),
@@ -886,7 +888,7 @@ function render(d, A) {
       if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
       return `<div class="cor"><b>${esc(r.company)}</b>
         <span class="k">${hit ? ba(kpiOf(hit[1])) : ''}</span>
-        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}${r.ev ? ' ' + ext(r.ev, L.evidence + ' ↗') : ''}</p></div>` }).join('')}</div>`,
+        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}${r.ev.length ? ' ' + r.ev.map(e => ext(e.href, esc(e.label) + ' ↗')).join(' ') : ''}</p></div>` }).join('')}</div>`,
   })
 
   /* --- 18. 연락 --- */

@@ -363,6 +363,32 @@
    "process": "Request confirmed → minigames first, webview next → brief + AI prototype → all shipped"
   }
  },
+ "3ea59de7280481fa8ce7c7d31329890a": {
+  "title": "2025 라이브 사업 계획 — 방향 4틀·운영 모델",
+  "summary": "2024 운영 분석을 근거로 2025 방향 4틀과 월 단위 운영 모델을 세워 정기 상품·시즌 운영으로 연결",
+  "process": "2024 아티스트 활동·프로모션 성과 분석 → 방향 4틀 → 운영 모델(월 단위 루틴 · 격월 6테마 캘린더) → 요약 3축 → 실행(정기 상품 개편 · 2025 시즌 운영 · 이벤트 형식 정리)",
+  "period": "December 1, 2024 → December 31, 2025",
+  "tools": "notion · figma · 2024 운영 분석을 근거로 2025 방향 4틀과 월 단위 운영 모델을 세워 정기 상품·시즌 운영으로 연결 · 타이틀 일괄 운영 → 2025 운영 모델 전후 비교",
+  "img": "3ea59de7280481fa8ce7c7d31329890a.jpg",
+  "en": {
+   "title": "2025 live business plan",
+   "summary": "Set the 2025 direction and a monthly operating model from 2024 analysis, then ran it through recurring products and seasons",
+   "process": "2024 analysis → four frames → monthly routine + bi-monthly themes → 3-axis summary → execution"
+  }
+ },
+ "3c959de728048034ba6bd2f6fdf31008": {
+  "title": "2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축",
+  "summary": "2025-11 만족도 조사와 팬덤 행동 분석으로 제품 GAP을 진단하고 2026 상반기 방향 4축을 제시해 이벤트 복귀로 연결",
+  "process": "2025-11 만족도 조사 → 팬덤 4단계 정리 → 현재 서비스 GAP 진단 → 방향 4축 → 실행(이벤트 복귀 · 꾸미기 프로토타입)",
+  "period": "October 1, 2025 → May 29, 2026",
+  "tools": "Google Sheet · figma · claude code · codex",
+  "img": "3c959de728048034ba6bd2f6fdf31008.jpg",
+  "en": {
+   "title": "2026 H1 direction",
+   "summary": "Diagnosed the product gap from the Nov 2025 survey and fandom behavior, set four H1 axes and led into returning events",
+   "process": "Survey → fandom 4 stages → gap diagnosis → four axes → events + prototype"
+  }
+ },
  "3d559de728048112b3c9ec7998d34e14": {
   "title": "정기 상품 정책 개편 제안",
   "summary": "판매 제한과 확률형 카드팩으로 상품 구성을 바꿔 실서비스 상점에 적용했다",
@@ -381,7 +407,7 @@
   "summary": "타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다",
   "process": "11→7 재편기에 세 조직 유지 부담 → 두 조직·라이브와 QA 페어 선택 → 재편 실행과 채용·운영안 작성 → 7개 타이틀 2026.07까지 운영",
   "period": "March 1, 2025 → July 31, 2026",
-  "tools": "notion · 타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다 · 서비스 5개 종료와 SSWO 합류로 타이틀이 11개에서 7개로 바뀌는 시기에, 라이브기획 12명·개발기획 4명·QA 6명으로 나뉜 조직을 라이브기획 7명과 QA 6명의 두 조직으로 재편함. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해 기획·검수를 함께 관리함. · 재편된 구조로 기획·QA·CS를 통합 관리하며 7개 타이틀을 2026년 7월까지 운영",
+  "tools": "notion · 타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다 · 서비스 5개 종료와 SSWO 합류로 타이틀이 11개에서 7개로 바뀌는 시기에, 라이브기획 12명·개발기획 4명·QA 8명(24명)으로 나뉜 조직을 라이브기획 7명과 QA 6명(13명)의 두 조직으로 재편함. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해 기획·검수를 함께 관리함. · 재편된 구조로 기획·QA·CS를 통합 관리하며 7개 타이틀을 2026년 7월까지 운영",
   "img": "3d559de72804813fac33d543e20c1a0a.jpg",
   "en": {
    "title": "Restructuring with design, QA and CS under one lead",

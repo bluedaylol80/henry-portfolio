@@ -304,6 +304,7 @@ html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 .sp .ig .ph img{height:40mm}
 .sp .ph--wide img{height:auto}
 .sp .evlist a{display:inline-block;margin-right:5mm}
+.ig--proto>.evlist a{display:inline-block;margin-right:5mm}   /* 사례 1 근거 5건(WO-39) — 줄 단위로 쌓으면 슬라이드가 넘친다 */
 /* 성과 */
 .res-n{font-size:3.1rem;font-weight:600;letter-spacing:-.03em;line-height:1}
 .res-l{margin-top:2mm;font-size:.91rem;color:var(--muted);line-height:1.35;max-width:80mm}

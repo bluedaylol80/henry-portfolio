@@ -7,8 +7,8 @@
     "36359de7… 만족도 설문 요약",
     "1f999a8d… SSPH 3"
   ],
-  "total": 33,
-  "publicCount": 33,
+  "total": 35,
+  "publicCount": 35,
   "results": [
     {
       "group": "허브",
@@ -328,6 +328,28 @@
       "reason": "본문 블록 렌더(2026-09-08 WO-16 실브라우저 확인)",
       "status": 200,
       "blocks": 11
+    },
+    {
+      "group": "달콤소프트",
+      "label": "2025 라이브 사업 계획 — 방향 4틀·운영 모델",
+      "id": "3ea59de7280481fa8ce7c7d31329890a",
+      "url": "https://limhenry.notion.site/3ea59de7280481fa8ce7c7d31329890a",
+      "public": true,
+      "title": "2025 라이브 사업 계획 — 방향 4틀·운영 모델",
+      "reason": "본문 블록 렌더(2026-09-29 WO-39 비로그인 HTTP 200·익명 loadPageChunk 87블록·이미지 전부 로드)",
+      "status": 200,
+      "blocks": 87
+    },
+    {
+      "group": "달콤소프트",
+      "label": "2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축",
+      "id": "3c959de728048034ba6bd2f6fdf31008",
+      "url": "https://limhenry.notion.site/3c959de728048034ba6bd2f6fdf31008",
+      "public": true,
+      "title": "2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축",
+      "reason": "본문 블록 렌더(2026-09-29 WO-39 비로그인 HTTP 200·익명 loadPageChunk 122블록·이미지 전부 로드)",
+      "status": 200,
+      "blocks": 122
     },
     {
       "group": "달콤소프트",
