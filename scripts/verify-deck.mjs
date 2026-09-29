@@ -76,6 +76,9 @@ async function open(url, w, h) {
   const { page, msgs } = await open('http://127.0.0.1:8787/deck/', 1920, 1080)
   const n = await page.$$eval('.s', e => e.length)
   if (n !== 18) bad.push('슬라이드 수 ' + n)
+  /* 나이트워커 수치 — 원천 문서 값(09-29 본부장 확정). 옛 값이 돌아오면 실패 */
+  const body = await page.evaluate(() => document.body.textContent)
+  if (!body.includes('DAU 6.4만') || !body.includes('D+1 52~56%') || /6\.3만|약 50%/.test(body)) bad.push('나이트워커 수치(DAU 6.4만·D+1 52~56%) 불일치')
   for (let i = 1; i <= 18; i++) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
     await sleep(700)
