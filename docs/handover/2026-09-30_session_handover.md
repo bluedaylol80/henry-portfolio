@@ -3,7 +3,9 @@
 ## TL;DR
 1. 공개 사이트 8회 배포(main `217711a` → `c58c0f4`): 헤드라인 개편·이력서 기준 용어 통일·슈퍼피플 카드·덱 18장(C3/E3 모션)·전 매체 링크·달콤 디렉터/서비스 방향성·띄어쓰기·Search Console 인증.
 2. 노션: 이력서 KO(허브 0e48e826…)/EN(3e859de7…), 대표 사례 6페이지 카드뉴스+결과 지표, 나라카 분석 재구성, 서비스 방향성 2페이지(2025 사업 계획 `3ea59de7…` / 2026 상반기 `3c959de7…`, 09-30 원문 어휘 재작성).
-3. **미배포 커밋 2개 대기**: `dc5332e`(WO-40 원문 어휘 재작성 근거 카드·PDF·덱) + WO-41(조직 재편 개편 후=기획·QA·CS 통합 1팀 리더 본인, 노션 본부장 수정분 동기화, PDF 버튼→발표자료, "A4 인쇄용 요약본" 삭제). 본부장 "올려줘" 후 ff-merge main → push → 라이브 바이트 대조.
+3. **09-30 9차 배포 완료 main `97382e5`**: WO-40 원문 어휘 재작성 + WO-41(조직 재편 개편 후=기획·QA·CS 통합 1팀 13명·리더 본인, 본부장 노션 수정분 동기화, "포트폴리오 PDF 열기"→"발표자료 열기"(/deck/), "A4 인쇄용 요약본" 삭제). 라이브 바이트 일치 확인.
+4. **다음 세션 첫 작업**: 헤드헌터 Word 이력서 조직 문장 수정본이 `scratchpad/resume/`(세션별 임시 폴더라 사라질 수 있음 — 원고 `resume_en_docx.md` 두 문장: "13 in one combined design·QA·CS team that I led" / "into one combined design·QA·CS team (13, led by me)")에만 있고 OneDrive는 옛 버전. Word를 닫은 상태에서 재생성(uv run --with python-docx build_docx.py) → PDF 변환 → `OneDrive/내 자료 모음/Henry_Lim_Resume_EN_2026.docx/.pdf` 덮어쓰기.
+5. 본부장 결정 필요: 노션 「2026 상반기 방향성」 페이지에 ✅ 업무 프로세스 체인 줄이 없어(본부장이 이미지로 대체) 사이트 근거 카드의 과정 줄이 문서 첫 불릿으로 표시됨 — 체인 줄 복원 또는 빌더 규칙 변경.
 
 ## 배포 절차
 `git checkout main && git merge --ff-only feat/deck-2026-09 && git push origin main && git push origin feat/deck-2026-09` → 라이브 `/`·`/en/`·`/deck/` 바이트 = site/ 로컬 · PDF 2종·evidence/index.json 200. 푸시 전 검문: diff에 전화번호·토큰·`C:\Users` 0.
