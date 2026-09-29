@@ -407,7 +407,6 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .case-bot{margin-top:auto;display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.25rem}
 .case-state{display:inline-flex;border-radius:var(--r-pill);background:var(--ink);color:#fff;
   padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
-.cases-go{margin-top:2rem;text-align:center;font-size:.875rem}
 .case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
   padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
 /* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
@@ -894,7 +893,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <ul class="cases">
       <li data-reveal style="--rd:0ms;--ry:32px">
         <article class="case">
-          <p class="case-meta">Dalcomsoft · Live Game Design Team — Team Lead</p>
+          <p class="case-meta">Dalcomsoft · Team Lead, Live Game Design · Live Director</p>
           <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog">Shipped the events users asked for, minigames&nbsp;first<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt>Problem</dt><dd>The satisfaction survey asked for the old webview events back</dd></div>
@@ -932,7 +931,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         </article>
       </li>
     </ul>
-    <p class="cases-go" data-reveal style="--rd:280ms"><button class="alink" type="button" data-scroll="proto"><span>Jump to the demos<svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></span></button></p>
   </div>
 </section>
 
@@ -949,7 +947,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:0ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="dalcom" aria-hidden="true"></div>
-          <div class="card-meta">Dalcomsoft · Live Game Design Team — Team Lead</div>
+          <div class="card-meta">Dalcomsoft · Team Lead, Live Game Design · Live Director</div>
           <div class="card-wm card-wm--long" aria-hidden="true">11 titles</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog">Multi-title live operations and user‑led product work<span class="sr-only"> View details</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
@@ -1125,8 +1123,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title">Dalcomsoft</h3>
           <p class="row-note row-note--mobile-hide">Led app services for 11 SuperStar titles (K-pop IP)</p>
-          <p class="row-sub">Team Lead, Live Game Design<span class="sep"> · </span><span class="nb">2024.10 – 2026.07</span></p>
-          <p class="row-impact">Reshaped 11 titles to 7: retired 5, launched SSWO, and automated SKU management across the seven remaining projects with Google Apps Script</p>
+          <p class="row-sub">Team Lead, Live Game Design · Live Director<span class="sep"> · </span><span class="nb">2024.10 – 2026.07</span></p>
+          <p class="row-impact"><strong>Service direction</strong> (2025 plan · 2026 H1) → dev milestones · data-driven Live-ops → system &amp; workflow revamps</p>
+          <p class="row-evb">Evidence (Notion, KO)</p>
+          <p class="row-links" data-links="dalcom"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
@@ -1759,6 +1759,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
+  dalcom: [['Service direction — 2025 plan · 2026 H1 (KO)', '3ea59de7280481fa8ce7c7d31329890a'], ['From user research to shipped events (KO)', '3d559de7280481dba20ee12a62cb7d69'], ['Recurring product policy rework (KO)', '3d559de728048112b3c9ec7998d34e14']],
   wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA success-factor analysis (competitor benchmark) (KO)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['Friend system design (KO)', '13f2864c7af74918b5a956367ddfdcb6'], ['Shop system rework design (KO)', '7298379e8a254d63b64747242afe60ff'], ['Balance design (KO)', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['Metric analysis of major issues (KO)', 'c2899733fed94b618af970a0796a7e6c'], ['Postmortems by project (KO)', '271affb46a12423bbb26dd3cdc183ae0'], ['Milestone alignment (KO)', '9a16f26d31cf438482942ce4baa00001']],
@@ -1778,7 +1779,7 @@ document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HU
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
 const WORKS = {
   /* 대표 사례 3 — 원고 v0.5 공개 문안 그대로. 사례는 숫자가 아니라 서사라 s[]는 비운다. */
-  case1: { m:'Dalcomsoft · Live Game Design Team — Team Lead', t:'From survey request to shipped events',
+  case1: { m:'Dalcomsoft · Team Lead, Live Game Design · Live Director', t:'From survey request to shipped events',
     s:[],
     r:[['In one line','Turned the survey request for webview events into shipped in-game minigames and webview events'],
        ['Period & role','Employed 2024.10 – 2026.07 · Team Lead, Live Game Design (live director) · case period: survey 2025.11 → launch 2026.05'],
@@ -1820,7 +1821,7 @@ const WORKS = {
        {t:'Coupon system integration', id:'2ade8f618bb945a6b0c0f6a711133b55'},
        {t:'Server-select UI/flow design', id:'581e150745124f13b3d6d3721841b1c2'},
        {t:'Added promotional product feature', id:'39a59de7280481888c8dff7c54446d1f'}] },
-  dalcom: { m:'Dalcomsoft · Live Game Design Team — Team Lead', t:'Multi-title live operations and user-led product work',
+  dalcom: { m:'Dalcomsoft · Team Lead, Live Game Design · Live Director', t:'Multi-title live operations and user-led product work',
     s:[['11 titles','Led app services for 11 SuperStar titles']],
     r:[['Lead case','Connected the survey request for webview events to shipped in-game minigames → the decoration event → the 10th anniversary webview event. The full story is in the cases section above.'],
        ['Live portfolio','Audited the 11 titles I inherited, ran 5 sunsets alongside the new SSWO launch, and operated the final 7'],

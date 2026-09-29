@@ -407,7 +407,6 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .case-bot{margin-top:auto;display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.25rem}
 .case-state{display:inline-flex;border-radius:var(--r-pill);background:var(--ink);color:#fff;
   padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
-.cases-go{margin-top:2rem;text-align:center;font-size:.875rem}
 .case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
   padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
 /* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
@@ -894,7 +893,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <ul class="cases">
       <li data-reveal style="--rd:0ms;--ry:32px">
         <article class="case">
-          <p class="case-meta" data-i18n="달콤소프트-라이브기획팀-팀장">달콤소프트 · 라이브기획팀 — 팀장</p>
+          <p class="case-meta" data-i18n="달콤소프트-라이브기획팀-팀장">달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터</p>
           <h3 class="case-t"><button class="card-open" type="button" data-work="case1" aria-haspopup="dialog" data-i18n="만족도-조사의-웹뷰-이벤트">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
           <dl class="case-steps">
               <div><dt data-i18n="문제">문제</dt><dd data-i18n="만족도-조사에서-예전-웹뷰">만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다</dd></div>
@@ -932,7 +931,6 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         </article>
       </li>
     </ul>
-    <p class="cases-go" data-reveal style="--rd:280ms"><button class="alink" type="button" data-scroll="proto"><span data-i18n="체험판-바로가기">체험판 바로가기<svg class="ic" aria-hidden="true"><use href="#i-arr"/></svg></span></button></p>
   </div>
 </section>
 
@@ -949,7 +947,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <li data-reveal style="--rd:0ms;--ry:48px">
         <article class="card">
           <div class="card-shot" data-shot="dalcom" aria-hidden="true"></div>
-          <div class="card-meta" data-i18n="달콤소프트-라이브기획팀-팀장">달콤소프트 · 라이브기획팀 — 팀장</div>
+          <div class="card-meta" data-i18n="달콤소프트-라이브기획팀-팀장">달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터</div>
           <div class="card-wm card-wm--long" aria-hidden="true" data-i18n="11종">11종</div>
           <div class="card-bot">
             <h3><button class="card-open" type="button" data-work="dalcom" aria-haspopup="dialog" data-i18n="멀티-타이틀-라이브-운영과">멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선<span class="sr-only" data-i18n="상세-보기"> 상세 보기</span><svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg></button></h3>
@@ -1125,8 +1123,10 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="달콤소프트">달콤소프트</h3>
           <p class="row-note row-note--mobile-hide" data-i18n="SuperStar-시리즈-11종-앱">SuperStar 시리즈 11종 앱 서비스 총괄 (K-pop IP)</p>
-          <p class="row-sub" data-i18n="라이브기획팀-팀장-2024-10">라이브기획팀 팀장<span class="sep"> · </span><span class="nb">2024.10 – 2026.07</span></p>
-          <p class="row-impact" data-i18n="11개-5개-종료-SSWO">11개 → 5개 종료·SSWO 런칭 → 7개 재편, Google Apps Script로 7개 SKU 자동화 도입</p>
+          <p class="row-sub" data-i18n="라이브기획팀-팀장-2024-10">라이브기획팀 팀장 · 라이브 디렉터<span class="sep"> · </span><span class="nb">2024.10 – 2026.07</span></p>
+          <p class="row-impact" data-i18n="서비스-방향성-제시-2025"><strong>서비스 방향성 제시</strong>(2025 라이브 사업 계획·2026 상반기 방향성) → 개발 마일스톤 관리·지표 기반 Live-ops → 인게임 시스템 개편·업무 프로세스 개선</p>
+          <p class="row-evb" data-i18n="근거-과정-Notion">근거·과정 (Notion)</p>
+          <p class="row-links" data-links="dalcom"></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
@@ -1759,6 +1759,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
+  dalcom: [['서비스 방향성 제시', '3ea59de7280481fa8ce7c7d31329890a'], ['사용자 조사 기반 이벤트 복귀', '3d559de7280481dba20ee12a62cb7d69'], ['정기 상품 정책 개편 제안', '3d559de728048112b3c9ec7998d34e14']],
   wonderpeople: [['조직 관리 (수습 평가안)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['원더피플 x 원티드 콜라보 기획', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA 성공요인 분석(타사 벤치마크)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['친구 시스템 기획', '13f2864c7af74918b5a956367ddfdcb6'], ['상점 시스템 개편 기획', '7298379e8a254d63b64747242afe60ff'], ['밸런스 기획', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['주요 이슈 지표 분석', 'c2899733fed94b618af970a0796a7e6c'], ['프로젝트별 포스트모템', '271affb46a12423bbb26dd3cdc183ae0'], ['마일스톤 협의', '9a16f26d31cf438482942ce4baa00001']],
@@ -1778,7 +1779,7 @@ document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HU
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위 · §2 B1~B9 · §3 A2. 창작·추가 수치 금지. */
 const WORKS = {
   /* 대표 사례 3 — 원고 v0.5 공개 문안 그대로. 사례는 숫자가 아니라 서사라 s[]는 비운다. */
-  case1: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'만족도 조사 요구를 실제 출시로',
+  case1: { m:'달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터', t:'만족도 조사 요구를 실제 출시로',
     s:[],
     r:[['한 줄 요약','만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다'],
        ['기간·역할','재직 2024.10 – 2026.07 · 라이브기획팀 팀장(라이브 디렉터) · 사건 기간 2025.11 조사 → 2026.05 출시'],
@@ -1820,7 +1821,7 @@ const WORKS = {
        {t:'쿠폰 시스템 연동', id:'2ade8f618bb945a6b0c0f6a711133b55'},
        {t:'서버 선택창 UI/플로우 기획', id:'581e150745124f13b3d6d3721841b1c2'},
        {t:'프로모션 상품 기능 추가', id:'39a59de7280481888c8dff7c54446d1f'}] },
-  dalcom: { m:'달콤소프트 · 라이브기획팀 — 팀장', t:'멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선',
+  dalcom: { m:'달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터', t:'멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선',
     s:[['11종','SuperStar 시리즈 타이틀 11종 앱 서비스 총괄']],
     r:[['핵심 사례','만족도 조사에서 나온 웹뷰 이벤트 복귀 요구를 인게임 미니게임 → 꾸미기 이벤트 → 10주년 웹뷰 이벤트 출시로 연결 — 위의 대표 사례 섹션에서 전체 과정을 볼 수 있다'],
        ['운영 포트폴리오','입사 당시 11개 타이틀을 분석하고, 5개 서비스 종료와 SSWO 신규 런칭을 병행해 최종 7개 타이틀을 운영'],

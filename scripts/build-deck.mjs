@@ -75,7 +75,9 @@ async function scrape() {
         summary: t(c.querySelector('.card-bot > p')), rights: t(c.querySelector('.card-rights')) })),
       careerTitle: t(document.querySelector('#career .h2')),
       career: all('#career .row-li', r => ({ company: t(r.querySelector('.row-title')), titles: t(r.querySelector('.row-note')),
-        sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')) })),
+        sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')),
+        /* 서비스 방향성 제시 근거(WO-38) — 달콤 행만 첫 근거 칩을 회사별 상세에 싣는다 */
+        ev: (r.querySelector('.row-links[data-links="dalcom"] a') || {}).href || '' })),
       careerFoot: t(document.querySelector('#career .row-foot')),
       protoTitle: t(document.querySelector('#proto .h2')),
       protoLede: t(document.querySelector('#proto .proto-lede')),
@@ -884,7 +886,7 @@ function render(d, A) {
       if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
       return `<div class="cor"><b>${esc(r.company)}</b>
         <span class="k">${hit ? ba(kpiOf(hit[1])) : ''}</span>
-        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}</p></div>` }).join('')}</div>`,
+        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}${r.ev ? ' ' + ext(r.ev, L.evidence + ' ↗') : ''}</p></div>` }).join('')}</div>`,
   })
 
   /* --- 18. 연락 --- */
