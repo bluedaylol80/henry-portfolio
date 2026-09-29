@@ -351,14 +351,14 @@
   }
  },
  "3d559de7280481dba20ee12a62cb7d69": {
-  "title": "사용자 조사 기반 이벤트 복귀",
+  "title": "사용자 조사 기반 웹 이벤트 적용",
   "summary": "만족도 조사의 웹뷰 이벤트 복귀 요구를 미니게임부터 순서를 잡아 출시까지 끌고 갔다",
   "process": "웹뷰 이벤트 복귀 요구 확인 → 미니게임 먼저·웹뷰 확장 순서 선택 → 기획서·AI 프로토타입 제작 → 미니게임·꾸미기·10주년 웹뷰 출시",
   "period": "November 1, 2025 → May 23, 2026",
   "tools": "notion",
   "img": "3d559de7280481dba20ee12a62cb7d69.jpg",
   "en": {
-   "title": "From user research to shipped events",
+   "title": "User research to web events",
    "summary": "Took the survey request for webview events and shipped it, minigames first",
    "process": "Request confirmed → minigames first, webview next → brief + AI prototype → all shipped"
   }
@@ -377,9 +377,9 @@
   }
  },
  "3c959de728048034ba6bd2f6fdf31008": {
-  "title": "2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축",
-  "summary": "만족도 설문으로 현재 서비스의 핵심 GAP을 확인하고 2026 상반기 방향 4축(3대 핵심 전략 방향)을 제시",
-  "process": "만족도 설문 → 아이돌 팬덤의 성향 → 현재 서비스의 핵심 GAP → 3대 핵심 전략 방향(방향 4축) → 2026년 상반기 로드맵 → 꾸미기 이벤트 · 웹뷰 이벤트",
+  "title": "2026 상반기 방향성",
+  "summary": "데이터와 VOC로 제품 방향을 정하고, 프로토타입과 개발 마일스톤으로 실행하였습니다. - 달콤소프트 경력의 핵심으로 지표 하락과 반복 이벤트의 한계를 문제로 정의하고, 만족도 조사로 사용자의 요구를 확인한 뒤, 2026 제품 방향성·웹뷰 부활·꾸미기 이벤트를 설계하고 프로토타입과 개발 마일스톤까지 연결한 경험입니다.",
+  "process": "각 프로젝트의 분석을 통해 이탈이 점차 높아지고 있고, 장기 서비스 프로젝트였기에 가장 높은 비중의 기존 유저들에 대한 복귀를 더 높은 방향으로 제안해야 하는 상황인 점을 체크함 (상세 지표가 아닌 추이 이미지 입니다)",
   "period": "October 1, 2025 → May 29, 2026",
   "tools": "Google Sheet · figma · claude code · codex",
   "img": "3c959de728048034ba6bd2f6fdf31008.jpg",
@@ -392,27 +392,27 @@
  "3d559de728048112b3c9ec7998d34e14": {
   "title": "정기 상품 정책 개편 제안",
   "summary": "판매 제한과 확률형 카드팩으로 상품 구성을 바꿔 실서비스 상점에 적용했다",
-  "process": "2025-07-22 IVE부터 적용 시작 → 08-06 R팩 제외 의견 검토 → 09 중순 5개 그룹 전환 완료 → 2026-05 정책 문서화",
+  "process": "2025-07-22 IVE부터 적용 시작 → 08-06 R팩 제외 의견 검토 → 09 중순 5개 그룹 전환 완료",
   "period": "July 1, 2025 → May 31, 2026",
   "tools": "notion",
   "img": "3d559de728048112b3c9ec7998d34e14.jpg",
   "en": {
    "title": "Recurring product policy rework",
    "summary": "Live store lineup switched to a purchase cap and a probability card pack",
-   "process": "Applied 2025-07-22 (IVE) → cap reviewed 08-06 → 5 groups by mid-Sep → documented 2026-05"
+   "process": "Applied 2025-07-22 (IVE) → cap reviewed 08-06 → 5 groups by mid-Sep"
   }
  },
  "3d559de72804813fac33d543e20c1a0a": {
   "title": "조직 재편과 기획·QA·CS 통합 운영",
-  "summary": "타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다",
-  "process": "11→7 재편기에 세 조직 유지 부담 → 두 조직·라이브와 QA 페어 선택 → 재편 실행과 채용·운영안 작성 → 7개 타이틀 2026.07까지 운영",
+  "summary": "타이틀이 줄어드는 시기에 투입 인력을 줄이고 효율성 확보",
+  "process": "비효율적인 프로젝트 유지비 발생 → 조직 현황 확인 → 재편 실행과 채용·운영안 제안 → 구조 조정을 통해 효율적인 라이브 진행",
   "period": "March 1, 2025 → July 31, 2026",
-  "tools": "notion · 타이틀이 줄어드는 시기에 세 조직을 두 조직으로 줄이고 검수까지 함께 맡았다 · 서비스 5개 종료와 SSWO 합류로 타이틀이 11개에서 7개로 바뀌는 시기에, 라이브기획 12명·개발기획 4명·QA 8명(24명)으로 나뉜 조직을 라이브기획 7명과 QA 6명(13명)의 두 조직으로 재편함. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해 기획·검수를 함께 관리함. · 재편된 구조로 기획·QA·CS를 통합 관리하며 7개 타이틀을 2026년 7월까지 운영",
+  "tools": "notion · 타이틀이 줄어드는 시기에 투입 인력을 줄이고 효율성 확보 · 재편된 구조로 기획·QA·CS를 통합 관리하며 7개 타이틀을 2026년 7월까지 운영 · 적용 사례 Superstar 7개 타이틀 기획·QA·CS 조직 / 2025년 3월 ~ 2026년 7월 (계획 2025.03 → 실행 2025.04~05)",
   "img": "3d559de72804813fac33d543e20c1a0a.jpg",
   "en": {
    "title": "Restructuring with design, QA and CS under one lead",
-   "summary": "Cut three teams to two as the titles shrank, and took on QA as well",
-   "process": "Three teams too many at 11 → 7 → chose two teams with live/QA pairs → 7 titles to 2026.07"
+   "summary": "Reduced staffing as titles shrank and secured efficiency",
+   "process": "Costly per-project upkeep → org review → restructure, hiring and ops plans → leaner live operation"
   }
  },
  "3d559de72804810faa75ca85ef0a25a0": {

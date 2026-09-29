@@ -228,7 +228,6 @@ html[lang="ko"] .clock-t{order:4}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero-pdf{margin-top:-.75rem;font-size:.8125rem}
 .hero-pdf .alink>span{gap:.35rem;align-items:center;opacity:.75}
-.hero-pdf .alink+.alink{margin-left:1.25rem}
 .hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
 @media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end}}
 .hero .pill--outline .pill-in{border-color:rgba(17,17,17,.18)}
@@ -779,7 +778,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <span class="pill-in" data-i18n="연락처-확인하기">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
         </a>
       </div>
-      <p class="hero-pdf" data-reveal data-gate="ready" style="--rd:800ms"><a class="alink" href="henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener"><span data-i18n="포트폴리오-PDF">포트폴리오 PDF<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a><a class="alink" href="deck/" target="_blank" rel="noopener"><span data-i18n="발표자료">발표자료<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></p>
+      <p class="hero-pdf" data-reveal data-gate="ready" style="--rd:800ms"><a class="alink" href="deck/" target="_blank" rel="noopener"><span data-i18n="발표자료-열기">발표자료 열기<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></p>
     </div>
 
     <div class="hero-r">
@@ -1282,7 +1281,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">03</span>
         <div class="row-body">
           <h3 class="row-title" data-i18n="조직-인력-운영">조직·인력 운영</h3>
-          <p class="row-note" data-i18n="채용-팀-구조-담당-배치">리크루트·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 24명을 두 조직 13명으로 재편해 7개 타이틀 운영을 유지하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 세팅했습니다.</p>
+          <p class="row-note" data-i18n="채용-팀-구조-담당-배치">리크루트·팀 구조·담당 배치입니다. 달콤소프트에서 세 조직 24명을 기획·QA·CS 통합 한 팀 13명(팀장 본인)으로 재편해 7개 타이틀 운영을 유지하며 QA 팀장을 겸임했고, 스카이피플에서는 사업·운영 조직을 처음부터 세팅했습니다.</p>
           <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-조직-재편-함께-보기">사례 — 조직 재편(달콤 상세창 "함께&nbsp;보기")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog" data-i18n="성과-스카이피플-조직-셋업">성과 — 스카이피플 조직 세팅</button></p>
         </div>
       </div></li>
@@ -1363,8 +1362,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <h3>Elsewhere</h3>
         <ul>
           <li><a class="alink" data-notion-hub href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener noreferrer"><span data-i18n="Notion-이력서">Notion 이력서<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></li>
-          <li data-pdf-slot><a class="alink" href="henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener"><span data-i18n="포트폴리오-PDF">포트폴리오 PDF<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></li>
-          <li><a class="alink" href="deck/" target="_blank" rel="noopener"><span data-i18n="발표자료">발표자료<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></li>
+          <li><a class="alink" href="deck/" target="_blank" rel="noopener"><span data-i18n="발표자료-열기">발표자료 열기<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a></li>
           <li><a class="alink" data-lang-link href="en/" hreflang="en"><span>English</span></a></li>
           <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
         </ul>
@@ -1414,12 +1412,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </span>
         </dd>
       </div>
-      <div data-pdf-slot>
-        <dt data-i18n="포트폴리오-PDF">포트폴리오 PDF</dt>
+      <div>
+        <dt data-i18n="발표자료">발표자료</dt>
         <dd>
-          <span class="contact-val" data-i18n="A4-인쇄용-요약본">A4 인쇄용 요약본</span>
           <span class="contact-acts">
-            <a class="pill pill--outline" href="henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener"><span class="pill-in" data-i18n="PDF-열기">PDF 열기<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a>
+            <a class="pill pill--outline" href="deck/" target="_blank" rel="noopener"><span class="pill-in" data-i18n="발표자료-열기">발표자료 열기<span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></span></a>
           </span>
         </dd>
       </div>
@@ -1759,7 +1756,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
-  dalcom: [['2025 라이브 사업 계획', '3ea59de7280481fa8ce7c7d31329890a'], ['2026 상반기 방향성', '3c959de728048034ba6bd2f6fdf31008'], ['사용자 조사 기반 이벤트 복귀', '3d559de7280481dba20ee12a62cb7d69']],
+  dalcom: [['2025 라이브 사업 계획', '3ea59de7280481fa8ce7c7d31329890a'], ['2026 상반기 방향성', '3c959de728048034ba6bd2f6fdf31008'], ['사용자 조사 기반 웹 이벤트 적용', '3d559de7280481dba20ee12a62cb7d69']],
   wonderpeople: [['조직 관리 (수습 평가안)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['원더피플 x 원티드 콜라보 기획', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA 성공요인 분석(타사 벤치마크)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['친구 시스템 기획', '13f2864c7af74918b5a956367ddfdcb6'], ['상점 시스템 개편 기획', '7298379e8a254d63b64747242afe60ff'], ['밸런스 기획', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['주요 이슈 지표 분석', 'c2899733fed94b618af970a0796a7e6c'], ['프로젝트별 포스트모템', '271affb46a12423bbb26dd3cdc183ae0'], ['마일스톤 협의', '9a16f26d31cf438482942ce4baa00001']],
@@ -1792,10 +1789,10 @@ const WORKS = {
        ['증거','Notion 「만족도 설문 관련 요약」 · Notion 「decoration_event」 · 체험판 2종(꾸미기 프로토 · SSJ 10주년 웹뷰)']],
     x:{ s:'함께 보기 — 같은 기간의 보조 사례 2건',
         r:[['정기 상품 정책 개편 제안','고효율 상품이 무제한으로 팔리며 상품 간 형평성이 흔들렸다. 개편된 상품 구성은 2025‑07‑22 IVE부터 적용을 시작해(08‑05 신규 구성 전환) 2025‑09 중순 5개 그룹 전환을 마쳤고, 적용 중이던 2025‑08‑06 「R팩 제외에 대한 의견」⁠으로 판매 제한 방향을 검토했다. 2026‑05 「주차별 정기 상품 정책」⁠으로 문서화했다.'],
-           ['조직 재편과 기획·QA·CS 통합 운영','타이틀이 11개에서 7개로 바뀌는 시기에 세 조직 24명을 두 조직 13명으로 재편하는 안을 제안했다. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해, 프로세스·표준화 이슈 공유가 빨라지면서 프로젝트당 기획 투입을 1.45에서 1.00으로 낮추고도 누수 없이 7개 타이틀을 2026년 7월까지 운영했다.']] },
-    n:[{t:'사용자 조사 기반 이벤트 복귀', id:'3d559de7280481dba20ee12a62cb7d69'},
-       {t:'2025 라이브 사업 계획 — 방향 4틀·운영 모델', id:'3ea59de7280481fa8ce7c7d31329890a'},
-       {t:'2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축', id:'3c959de728048034ba6bd2f6fdf31008'},
+           ['조직 재편과 기획·QA·CS 통합 운영','타이틀이 11개에서 7개로 바뀌는 시기에 세 조직 24명을 기획·QA·CS 통합 한 팀 13명(팀장 본인)으로 재편하는 안을 제안했다. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해, 프로세스·표준화 이슈 공유가 빨라지면서 프로젝트당 기획 투입을 1.45에서 1.00으로 낮추고도 누수 없이 7개 타이틀을 2026년 7월까지 운영했다.']] },
+    n:[{t:'사용자 조사 기반 웹 이벤트 적용', id:'3d559de7280481dba20ee12a62cb7d69'},
+       {t:'2025 라이브 사업 계획', id:'3ea59de7280481fa8ce7c7d31329890a'},
+       {t:'2026 상반기 방향성', id:'3c959de728048034ba6bd2f6fdf31008'},
        {t:'정기 상품 정책 개편 제안', id:'3d559de728048112b3c9ec7998d34e14'},
        {t:'조직 재편과 기획·QA·CS 통합 운영', id:'3d559de72804813fac33d543e20c1a0a'}] },
   case2: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'소프트런칭 지표를 출시 전 개선으로',
@@ -1834,9 +1831,9 @@ const WORKS = {
        ['자동화·프로세스','스토어 product ID 명세서 자동 반영(Google Apps Script) · 7개 프로젝트 SKU 자동화 · 메일/Slack/Notion 통합 업무현황판 · SM 음원 정산 자동화'],
        ['계약·라이선스','QA 외주사 컨택·정산·계약 조정 · 중국 서비스 라이선스 계약 검토'],
        ['리스크 관리','상품 어뷰징을 당일 차단하고 회수·보상을 단일 결재로 정리 · 5단계 사후 SOP 문서화']],
-    n:[{t:'2025 라이브 사업 계획 — 방향 4틀·운영 모델', id:'3ea59de7280481fa8ce7c7d31329890a'},
-       {t:'2026 상반기 방향성 — 만족도 조사 기반 제품 방향 4축', id:'3c959de728048034ba6bd2f6fdf31008'},
-       {t:'사용자 조사 기반 이벤트 복귀', id:'3d559de7280481dba20ee12a62cb7d69'},
+    n:[{t:'2025 라이브 사업 계획', id:'3ea59de7280481fa8ce7c7d31329890a'},
+       {t:'2026 상반기 방향성', id:'3c959de728048034ba6bd2f6fdf31008'},
+       {t:'사용자 조사 기반 웹 이벤트 적용', id:'3d559de7280481dba20ee12a62cb7d69'},
        {t:'정기 상품 정책 개편 제안', id:'3d559de728048112b3c9ec7998d34e14'},
        {t:'조직 재편과 기획·QA·CS 통합 운영', id:'3d559de72804813fac33d543e20c1a0a'}] },
   lyn: { m:'넥슨 코리아 · 모바일사업실 — 팀장', t:'린',

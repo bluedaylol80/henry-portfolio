@@ -38,8 +38,9 @@ for (const lang of ['ko','en']) {
   if (pend) bad.push(`${lang} 이미지 대기 ${pend}개`)
   /* 09-29 본부장 확정 수치 — 나이트워커(2023 리뷰 p.5·p.17 원천 값)·달콤 조직 재편(개편 전 QA 8명, 24명→13명,
      프로젝트당 기획 투입 16÷11=1.45 → 7÷7=1.00). 옛 값(비례 기대 20명 틀 포함)이 돌아오면 실패. EN 인쇄본엔 보조 사례 본문이 없어 1.45는 KO만 확인 */
-  const FIX = { ko: { want: ['6.4만', '52~56%', '24명', '1.45에서 1.00'], old: ['6.3만', '약 50%', '22명', '비례 기대', '(20명)'] },
-                en: { want: ['64K', '52–56%', '24 people'], old: ['63K', '~50%', '22 people', 'proportional', '(20)'] } }[lang]
+  /* 09-30 본부장 확정: 개편 후 = 기획·QA·CS 통합 1팀(리더 본인) — "두 조직"·"across two"가 돌아오면 실패(WO-41) */
+  const FIX = { ko: { want: ['6.4만', '52~56%', '24명', '1.45에서 1.00', '통합 한 팀 13명'], old: ['6.3만', '약 50%', '22명', '비례 기대', '(20명)', '두 조직', '2조직', '2개 조직'] },
+                en: { want: ['64K', '52–56%', '24 people', 'one combined design·QA·CS team'], old: ['63K', '~50%', '22 people', 'proportional', '(20)', 'two teams', '13 across two'] } }[lang]
   const fxMiss = FIX.want.filter(w => !all.includes(w)), fxOld = FIX.old.filter(w => all.includes(w))
   if (fxMiss.length || fxOld.length) bad.push(`${lang} 확정 수치 누락 ${fxMiss.join(',') || 0} · 옛 값 ${fxOld.join(',') || 0}`)
 }

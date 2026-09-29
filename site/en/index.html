@@ -228,7 +228,6 @@ html[lang="ko"] .clock-t{order:4}
 .cta-row{display:flex;flex-wrap:wrap;gap:.75rem}
 .hero-pdf{margin-top:-.75rem;font-size:.8125rem}
 .hero-pdf .alink>span{gap:.35rem;align-items:center;opacity:.75}
-.hero-pdf .alink+.alink{margin-left:1.25rem}
 .hero-r{display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
 @media (min-width:1024px){.hero-r{grid-column:span 5;align-items:flex-end}}
 .hero .pill--outline .pill-in{border-color:rgba(17,17,17,.18)}
@@ -779,7 +778,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           <span class="pill-in">Get in touch<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
         </a>
       </div>
-      <p class="hero-pdf" data-reveal data-gate="ready" style="--rd:800ms"><a class="alink" href="../henry-lim-portfolio-en.pdf" target="_blank" rel="noopener"><span>Portfolio PDF<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (opens in a new window)</span></span></a><a class="alink" href="../deck/" target="_blank" rel="noopener"><span>Deck<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (opens in a new window)</span></span></a></p>
+      <p class="hero-pdf" data-reveal data-gate="ready" style="--rd:800ms"><a class="alink" href="../deck/" target="_blank" rel="noopener"><span>Open deck<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only"> (opens in a new window)</span></span></a></p>
     </div>
 
     <div class="hero-r">
@@ -1282,7 +1281,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="row-i">03</span>
         <div class="row-body">
           <h3 class="row-title">Team & hiring</h3>
-          <p class="row-note">Recruiting, team structure and who owns what. At Dalcomsoft I restructured 24 people across three teams into 13 across two, keeping all 7 titles running, while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
+          <p class="row-note">Recruiting, team structure and who owns what. At Dalcomsoft I restructured 24 people across three teams into one combined design·QA·CS team (13, led by me), keeping all 7 titles running, while holding the QA lead role; at Skypeople I set up the business and operations teams from scratch.</p>
           <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog">Case — restructuring (in the Dalcomsoft detail, "Also from the same period")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog">Work — Skypeople org setup</button></p>
         </div>
       </div></li>
@@ -1363,8 +1362,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <h3>Elsewhere</h3>
         <ul>
           <li><a class="alink" data-notion-hub href="https://limhenry.notion.site/3e859de7280481fcb58ece40d5a8be50" target="_blank" rel="noopener noreferrer"><span>Notion resume<span class="sr-only"> (opens in a new window)</span></span></a></li>
-          <li data-pdf-slot><a class="alink" href="../henry-lim-portfolio-en.pdf" target="_blank" rel="noopener"><span>Portfolio PDF<span class="sr-only"> (opens in a new window)</span></span></a></li>
-          <li><a class="alink" href="../deck/" target="_blank" rel="noopener"><span>Deck<span class="sr-only"> (opens in a new window)</span></span></a></li>
+          <li><a class="alink" href="../deck/" target="_blank" rel="noopener"><span>Open deck<span class="sr-only"> (opens in a new window)</span></span></a></li>
           <li><a class="alink" data-lang-link href="../" hreflang="ko"><span>Korean</span></a></li>
           <li><a class="alink" href="https://github.com/bluedaylol80" target="_blank" rel="noopener noreferrer"><span>GitHub</span></a></li>
         </ul>
@@ -1414,12 +1412,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
           </span>
         </dd>
       </div>
-      <div data-pdf-slot>
-        <dt>Portfolio PDF</dt>
+      <div>
+        <dt>Deck</dt>
         <dd>
-          <span class="contact-val">A4 print summary</span>
           <span class="contact-acts">
-            <a class="pill pill--outline" href="../henry-lim-portfolio-en.pdf" target="_blank" rel="noopener"><span class="pill-in">Open the PDF<span class="sr-only"> (opens in a new window)</span></span></a>
+            <a class="pill pill--outline" href="../deck/" target="_blank" rel="noopener"><span class="pill-in">Open deck<span class="sr-only"> (opens in a new window)</span></span></a>
           </span>
         </dd>
       </div>
@@ -1759,7 +1756,7 @@ function notionLink(label, id){
 }
 /* #career 행 근거 링크 — 마크업이 아니라 여기서 만든다(회사당 최대 3개). */
 const CAREER_LINKS = {
-  dalcom: [['2025 live business plan (KO)', '3ea59de7280481fa8ce7c7d31329890a'], ['2026 H1 direction (KO)', '3c959de728048034ba6bd2f6fdf31008'], ['From user research to shipped events (KO)', '3d559de7280481dba20ee12a62cb7d69']],
+  dalcom: [['2025 live business plan (KO)', '3ea59de7280481fa8ce7c7d31329890a'], ['2026 H1 direction (KO)', '3c959de728048034ba6bd2f6fdf31008'], ['User research to web events (KO)', '3d559de7280481dba20ee12a62cb7d69']],
   wonderpeople: [['Team management (probation evaluation plan) (KO)', 'f1fa5736d25f4b3798fa3849a66d5863'], ['Wonderpeople x Wanted collaboration plan (KO)', '509a5cd4e8e44f1c907ec1cfabb87855'], ['NARAKA success-factor analysis (competitor benchmark) (KO)', 'f5342b17ebb049debf98ff5478f0b01a']],
   neowiz: [['Friend system design (KO)', '13f2864c7af74918b5a956367ddfdcb6'], ['Shop system rework design (KO)', '7298379e8a254d63b64747242afe60ff'], ['Balance design (KO)', '34f448cf443b415181d7d8fe05f2d7b0']],
   nexon: [['Metric analysis of major issues (KO)', 'c2899733fed94b618af970a0796a7e6c'], ['Postmortems by project (KO)', '271affb46a12423bbb26dd3cdc183ae0'], ['Milestone alignment (KO)', '9a16f26d31cf438482942ce4baa00001']],
@@ -1792,10 +1789,10 @@ const WORKS = {
        ['Evidence','Notion "Satisfaction survey summary" · Notion "decoration_event" · 2 demos (decoration prototype · SSJ 10th anniversary webview)']],
     x:{ s:'Also from the same period — 2 supporting cases',
         r:[['Recurring product policy rework (KO)','A high-yield pack sold without a cap and unbalanced the lineup. The reworked lineup started rolling out with IVE on 2025-07-22 (switched to the new lineup on 08-05); while the rollout was under way I reviewed the purchase-cap direction on 2025-08-06 in the note "R pack exclusion", and the rollout was completed across five groups by mid-September 2025. It was documented in May 2026 as the weekly recurring product policy.'],
-           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 24 people across three teams into 13 across two. Each project got a live owner paired with a QA owner and I took the QA lead role as well; with process and standardization issues shared faster, we cut planning headcount per title from 1.45 to 1.00 and still ran 7 titles through July 2026 with no gaps.']] },
-    n:[{t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
-       {t:'2025 live business plan — frames · ops model (KO)', id:'3ea59de7280481fa8ce7c7d31329890a'},
-       {t:'2026 H1 direction — 4 product axes (KO)', id:'3c959de728048034ba6bd2f6fdf31008'},
+           ['Restructuring with design, QA and CS under one lead (KO)','While titles went from 11 to 7 I proposed restructuring 24 people across three teams into one combined design·QA·CS team (13, led by me). Each project got a live owner paired with a QA owner and I took the QA lead role as well; with process and standardization issues shared faster, we cut planning headcount per title from 1.45 to 1.00 and still ran 7 titles through July 2026 with no gaps.']] },
+    n:[{t:'User research to web events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
+       {t:'2025 live business plan (KO)', id:'3ea59de7280481fa8ce7c7d31329890a'},
+       {t:'2026 H1 direction (KO)', id:'3c959de728048034ba6bd2f6fdf31008'},
        {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
        {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
   case2: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Soft launch metrics into pre‑launch fixes',
@@ -1834,9 +1831,9 @@ const WORKS = {
        ['Automation & process','Auto-synced store product ID specs (Google Apps Script) · SKU automation across 7 projects · unified mail/Slack/Notion work dashboard · automated SM music settlement'],
        ['Contracts & licensing','QA vendor contact, settlement and contract adjustments · reviewed the China service license contract'],
        ['Risk management','Blocked product abuse the same day and closed clawback and compensation in a single approval · documented a 5-step follow-up SOP']],
-    n:[{t:'2025 live business plan — frames · ops model (KO)', id:'3ea59de7280481fa8ce7c7d31329890a'},
-       {t:'2026 H1 direction — 4 product axes (KO)', id:'3c959de728048034ba6bd2f6fdf31008'},
-       {t:'From user research to shipped events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
+    n:[{t:'2025 live business plan (KO)', id:'3ea59de7280481fa8ce7c7d31329890a'},
+       {t:'2026 H1 direction (KO)', id:'3c959de728048034ba6bd2f6fdf31008'},
+       {t:'User research to web events (KO)', id:'3d559de7280481dba20ee12a62cb7d69'},
        {t:'Recurring product policy rework (KO)', id:'3d559de728048112b3c9ec7998d34e14'},
        {t:'Restructuring with design, QA and CS under one lead (KO)', id:'3d559de72804813fac33d543e20c1a0a'}] },
   lyn: { m:'Nexon Korea · Mobile Business Division — Team Lead', t:'Lyn',
