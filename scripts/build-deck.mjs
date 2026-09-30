@@ -239,10 +239,12 @@ const C1 = {
     eyebrow: '사례 1 · 실행', title: '2026년 개선 방향성 제안을 프로토타입 제작과 실제 출시로 연결',
     tl: [['2025.12', '미니게임 v1', '기존 시스템으로 바로 적용할 수 있는 형식부터'],
          ['2026.01', '미니게임 v2', '타이틀별 순차 적용'],
-         /* 설명이 배열이면 줄바꿈으로 잇는다(줄 끝에 '·'가 매달리지 않게 — 조종석 지시 09-30) */
-         ['2026.04.30 – 05.23', '꾸미기 이벤트', ['뷰잉 및 전시 경험 강화 · SuperStar STAYC 신규 그룹 런칭에 맞춰 핵심 기능만 출시', 'Wireframe은 Claude Code 활용']],
-         ['~2026.05', '10주년 웹뷰 이벤트', ['SuperStar JYP Nation · 웹뷰 이벤트 부활', '프로토타입은 Codex 활용']]],
+         /* 설명이 배열이면 가운뎃점 자리를 줄바꿈으로 잇는다(구절 단위 한 줄씩 — 조종석 지시 09-30).
+            줄이 다시 배열이면 조각마다 줄바꿈 금지 — 칸이 좁으면 조각 사이에서만 끊긴다 */
+         ['2026.04.30 – 05.23', '꾸미기 이벤트', ['뷰잉 및 전시 경험 강화', ['SuperStar STAYC 신규 그룹 런칭에 맞춰', '핵심 기능만 출시'], 'Wireframe은 Claude Code 활용']],
+         ['~2026.05', '10주년 웹뷰 이벤트', ['SuperStar JYP Nation', '웹뷰 이벤트 부활', '프로토타입은 Codex 활용']]],
     evFirst: '2026 상반기 방향성',
+    areas: ['출시 타임라인', '결과', '프로토타입'],
   },
 }
 /* 4장 역량 4분류 — 덱 전용(WO-42 추가, 본부장 지시 09-30). 사이트 #skills 본문은 그대로 둔다.
@@ -776,29 +778,45 @@ function render(d, A) {
   const c1ev = [...c1.ev].sort((a, b) => (b.title === R.evFirst) - (a.title === R.evFirst))
   if (c1ev[0].title !== R.evFirst) fail(`사례 1 근거에 「${R.evFirst}」가 없다`)
   const [c1num, c1lab] = launched
-  /* '미룬 것'은 둘째 문장(꾸미기 이벤트 범위)만 싣는다 — 첫 문장은 6·7장 흐름과 겹친다. 문장 선택만, 고쳐 쓰지 않는다 */
-  const c1deferred = sentsOf(c1row(L.deferred))[1] || fail('사례 1 미룬 것에 둘째 문장이 없다')
+  /* 출시 항목 라벨은 숫자 옆 좁은 칸이라 항목마다 줄을 바꾼다(줄 끝 '·' 매달림 방지) */
+  /* 8장은 세 영역으로 나눈다(WO-42 추가 2): ① 출시 타임라인(위 전체 폭) ② 결과(아래 왼쪽) ③ 프로토타입(아래 오른쪽).
+     '미룬 것'·안내 줄은 싣지 않는다 — 같은 내용이 타임라인 3번에 있다. 영역 라벨은 7장 '개발 방향 적용' 라벨과 같은 모양 */
+  const areaLabel = t => `<p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(t)}</p>`
+  const nat = [natural('deco'), natural('ssjproto')].map(({ w, h }) => (w / h).toFixed(3))
   const c1run = slide({
     aria: `${R.eyebrow} — ${R.title}`, eyebrow: R.eyebrow, title: R.title, hcls: 'h--sm',
     rights: L.rightsProto,
-    body: `<div class="g2" style="grid-template-columns:1fr 860px">
-      <div style="display:flex;flex-direction:column;min-height:0">
-        <ol style="display:flex;flex-direction:column">${R.tl.map(([dt, nm, x], k) => `
-          <li style="list-style:none;position:relative;padding:0 0 ${k === R.tl.length - 1 ? 0 : 10}px 44px">
-            ${k < R.tl.length - 1 ? '<span style="position:absolute;left:7px;top:22px;bottom:-10px;width:2px;background:var(--sub)"></span>' : ''}
-            <span style="position:absolute;left:0;top:9px;width:16px;height:16px;border-radius:50%;background:var(--sub)"></span>
-            <p style="font-size:24px;line-height:1.4"><b style="font-weight:800">${esc(dt)}</b><span style="margin:0 .5em;color:var(--m60)">·</span><b style="font-weight:700">${esc(nm)}</b></p>
-            <p style="margin-top:2px;font-size:22px;line-height:1.4;color:var(--m60)">${[].concat(x).map(esc).join('<br>')}</p>
-          </li>`).join('')}</ol>
-        <div style="margin-top:26px;display:flex;align-items:flex-end;gap:22px">
-          <p class="n n--sm">${ba(c1num)}</p><p class="nl" style="margin-bottom:6px">${esc(c1lab)}</p></div>
-        <div class="row" style="margin-top:16px"><span class="ico ico--sm">${icon(EXEC_ICONS[L.deferred])}</span>
-          <div><p class="rt">${esc(L.deferred)}</p><p>${esc(c1deferred)}</p></div></div>
-        <p style="margin-top:8px;margin-bottom:16px;font-size:22px;color:var(--m60)">${esc(L.full)}</p>
-        ${evList(c1ev)}
+    body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:24px">
+      <div>
+        ${areaLabel(R.areas[0])}
+        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 24px">${R.tl.map((_, k) => `
+          <div style="position:relative;height:28px">
+            <span style="position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--sub)"></span>
+            ${k < R.tl.length - 1 ? '<span style="position:absolute;left:18px;right:-24px;top:12px;height:2px;background:var(--sub)"></span>' : ''}
+          </div>`).join('')}${R.tl.map(([dt, nm, x]) => `
+          <div class="pn" style="padding:16px 24px;border-radius:20px">
+            <p style="font-size:22px;font-weight:800;line-height:1.35">${esc(dt)}</p>
+            <p style="margin-top:4px;font-size:28px;font-weight:700;line-height:1.3">${esc(nm)}</p>
+            <p style="margin-top:8px;font-size:22px;line-height:1.45;color:var(--m60)">${[].concat(x).map(ln => (Array.isArray(ln) ? ln.map(g => `<span style="white-space:nowrap">${esc(g)}</span>`).join(' ') : esc(ln))).join('<br>')}</p>
+          </div>`).join('')}</div>
       </div>
-      <div style="display:grid;grid-template-rows:1fr 1fr;gap:24px;min-height:0">
-        ${shot('deco', d.proto[0].title, 'min-height:0')}${shot('ssjproto', d.proto[1].title, 'min-height:0')}</div>
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:560px 1fr;gap:28px">
+        <div style="display:flex;flex-direction:column;min-height:0">
+          ${areaLabel(R.areas[1])}
+          <div class="pn" style="margin-top:12px;flex:1;min-height:0;display:flex;flex-direction:column;padding:22px 30px">
+            <div style="display:flex;align-items:flex-end;gap:20px"><p class="n n--sm" style="flex:none">${ba(c1num)}</p>
+              <p class="nl" style="margin-bottom:4px">${c1lab.split(' · ').map(esc).join('<br>')}</p></div>
+            <div class="ev" style="padding-top:16px"><b>${L.evidence}</b>
+              <div style="display:flex;flex-direction:column;gap:2px">${c1ev.map(e =>
+                `<a href="${esc(e.href)}" target="_blank" rel="noopener" style="margin-right:0;align-self:flex-start">${esc(e.title)} ↗</a>`).join('')}</div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;min-height:0">
+          ${areaLabel(R.areas[2])}
+          <div style="margin-top:12px;flex:1;min-height:0;display:grid;grid-template-columns:${nat[0]}fr ${nat[1]}fr;gap:20px">
+            ${shot('deco', d.proto[0].title, 'min-height:0')}${shot('ssjproto', d.proto[1].title, 'min-height:0')}</div>
+        </div>
+      </div>
     </div>`,
   })
 
