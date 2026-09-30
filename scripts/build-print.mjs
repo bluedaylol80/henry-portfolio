@@ -48,7 +48,7 @@ async function scrape(lang) {
     const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
     const all = (sel, f) => [...document.querySelectorAll(sel)].map(f)
     return {
-      brand: t(document.querySelector('.hdr .brand')),
+      brand: t(document.querySelector('.hdr .brand .nm')), /* 이름만 — 국문 헤더의 (임현택)은 덱·PDF에 싣지 않는다 */
       role: t(document.querySelector('.hero .eyebrow')),
       h1: all('.h1 .line>span', t),
       sub: t(document.querySelector('.hero-sub')),
