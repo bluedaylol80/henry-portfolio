@@ -73,6 +73,9 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 서브컬러 칩 — 면을 채우면 흰 글자가 4.5:1을 못 넘는다(빨강/흰 4.44:1).
    그래서 빨강은 테두리(선)로만 쓰고 글자는 텍스트색으로 둔다. */
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
+/* 수행 회사 버튼(4장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
+.cobtn{display:inline-block;border:2px solid var(--tx);border-radius:12px;padding:8px 18px;
+  font-size:22px;font-weight:700;line-height:1.35;color:var(--tx);background:var(--panel)}
 /* 캡처 */
 .shot{background:var(--shot);border:1px solid var(--m12);border-radius:20px;overflow:hidden;
   display:flex;flex-direction:column;min-height:0;position:relative}
@@ -119,7 +122,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .cover .hl{margin-top:44px;font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.02em}
 .cover .ct{margin-top:44px;font-size:24px;line-height:1.9;color:var(--m60)}
 .cover .ct b{display:inline-block;min-width:212px;color:var(--tx);font-weight:600}
-/* 1·18장 모션(본부장 결재 09-29: 표지=C3 키네틱 타임라인 · 마지막 장=E3 궤도) — scripts/deck-motion.js.
+/* 1·19장 모션(본부장 결재 09-29: 표지=C3 키네틱 타임라인 · 마지막 장=E3 궤도) — scripts/deck-motion.js.
    캔버스는 1920×1080 스테이지 좌표 그대로 깔고 글자 아래에 둔다. 포인터를 받지 않아 링크 클릭을 가로채지 않는다. */
 .mo{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;pointer-events:none}
 .cover>div{position:relative;z-index:1}
@@ -287,9 +290,9 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 </section>
 
 <section class="s" role="group" aria-roledescription="slide"
-  aria-label="역량 4분류 — 라이브 서비스의 핵심 업무" data-bg="#F5F5F5">
+  aria-label="역량 4분류 — 보유 핵심 역량" data-bg="#F5F5F5">
   <p class="eb">역량 4분류</p>
-  <h2 class="h">라이브 서비스의 핵심 업무</h2>
+  <h2 class="h">보유 핵심 역량</h2>
   
   <div class="bd"><div class="g4">
       <div class="pn" style="display:flex;flex-direction:column">
@@ -297,28 +300,32 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">제품 판단·마일스톤</h3></div>
         <p style="margin-top:20px;font-size:26px;line-height:1.55">조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤으로 실행까지 끌고 가는 디렉터·PM 역할입니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 사용자 조사 기반 이벤트 복귀</span><span class="chip">사례 — 소프트런칭 지표 → 개선 과제</span></div>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">수행 회사</span><span class="cobtn">달콤소프트</span><span class="cobtn">넥슨 코리아</span><span class="cobtn">네오위즈</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l-1 5 5-1"/><path d="M9 15l-3-3c3-7 8-9 12-9 0 4-2 9-9 12z"/><circle cx="14.5" cy="9.5" r="1.6"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">출시·라이브 실행</h3></div>
         <p style="margin-top:20px;font-size:26px;line-height:1.55">소프트런칭부터 런칭·라이브 서비스·서비스 종료까지, A~Z 모든 단계를 직접 진행했습니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 퍼블리셔 규격 시스템 재정의</span><span class="chip">성과 — 카오스크로니클 서비스 종료</span></div>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">수행 회사</span><span class="cobtn">넥슨 코리아</span><span class="cobtn">넵튠 레전드</span><span class="cobtn">원더피플/에이스톰</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5"/><path d="M16 5.6a3.2 3.2 0 010 5.6M18 20c0-2.4-.9-4.2-2.3-5.3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">조직·인력 운영</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">리크루트·팀 구조·담당 배치입니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">사례 — 조직 재편(달콤 상세창 "함께 보기")</span><span class="chip">성과 — 스카이피플 조직 세팅</span></div>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">인력 리크루트부터 인력 배치, MM을 활용한 조직 세팅과 인력 효율 개선</p>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">수행 회사</span><span class="cobtn">달콤소프트</span><span class="cobtn">스카이피플</span></div>
       </div>
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.5 7.5l2.2 1.3M17.3 15.2l2.2 1.3M4.5 16.5l2.2-1.3M17.3 8.8l2.2-1.3"/></svg></span>
           <h3 style="font-size:32px;font-weight:700">운영 표준화</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">반복 업무를 규칙·자동화로 만든 일입니다.</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap"><span class="chip">성과 — SKU 자동화·어뷰징 SOP</span></div>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">반복, 비효율적인 업무를 규칙과 프로세스를 재정비하여 효율화</p>
+        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">수행 회사</span><span class="cobtn">달콤소프트</span></div>
       </div></div></div>
   <p class="rights">게임 명칭은 각 권리자의 상표입니다.</p>
 </section>
@@ -330,21 +337,21 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <p class="lede">문제 → 판단 → 행동 → 결과 순서로 씁니다. 각 장의 근거 링크에서 근거까지 볼 수 있습니다.</p>
   <div class="bd"><div class="g3" style="align-items:start"><div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터</p>
-        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3">만족도 조사 요구를 실제 출시로</h3>
+        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">지표 분석·유저 VOC를 2026 방향성 제안으로</h3>
         <p class="n n--sm" style="margin-top:28px">출시 <span class="nn">3건</span></p>
         <p class="nl">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p>
-        <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다</p>
+        <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">지표 분석과 만족도 설문(유저 VOC)으로 2026 상반기 방향성을 제안하고, 프로토타입 제작과 실제 출시로 연결하다</p>
         <p style="margin-top:28px"><span class="chip chip--sub">실제 출시</span></p>
       </div><div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">넥슨 코리아 · 모바일사업실 — 팀장</p>
-        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3">소프트런칭 지표를 출시 전 개선으로</h3>
+        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">소프트런칭 지표를 출시 전 개선으로</h3>
         <p class="n n--sm" style="margin-top:28px"><span class="nn">183억</span></p>
         <p class="nl">매출 · 2019년 누적</p>
         <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">3개국 소프트런칭 지표로 상품·재화·초반 동선 개선안을 정리해 글로벌 출시에 들어가다</p>
         <p style="margin-top:28px"><span class="chip chip--sub">프로젝트 실제 출시</span></p>
       </div><div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">원더피플/에이스톰 · 사업팀 — 파트장</p>
-        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3">중국 서비스 흐름을 한국 규격으로</h3>
+        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">중국 서비스 흐름을 한국 규격으로</h3>
         <p class="n n--sm" style="margin-top:28px"><span class="nn">33만+</span></p>
         <p class="nl">한국 신규 유저 누적</p>
         <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">중국 서비스의 결제·서버 선택 흐름을 한국 퍼블리셔 규격으로 다시 정의하다</p>
@@ -354,50 +361,125 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 </section>
 
 <section class="s" role="group" aria-roledescription="slide"
-  aria-label="사례 1 판단 — 만족도 조사 요구를 실제 출시로" data-bg="#F5F5F5">
-  <p class="eb">사례 1 · 판단</p>
-  <h2 class="h">만족도 조사 요구를 실제 출시로</h2>
-  <p class="lede">달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터</p>
-  <div class="bd"><div class="g2" style="grid-template-columns:1fr 660px">
-        <div style="display:flex;flex-direction:column;min-height:0">
-          <div class="flow"><div class="fs"><b>문제</b><p>만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>판단</b><p>인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs"><b>결정 범위</b><p>대응 순서와 이벤트 범위(MVP)는 본인이 정했고, 개발 일정과 출시일은 개발팀·경영진 협의로 확정했다.</p></div></div>
-        </div>
-        <div style="display:flex;flex-direction:column;min-height:0">
-          <figure class="shot" style="flex:1;min-height:0">
-      <img src="../pdf/img/dalcom.jpg" alt="멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선" style="max-width:1073px;max-height:787px">
-      <figcaption>멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선</figcaption></figure>
-          <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
-            <p class="n n--sm">출시 <span class="nn">3건</span></p>
-            <p class="nl" style="margin-bottom:10px">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p></div>
-        </div>
-      </div></div>
-  <p class="rights">게임 명칭·이미지의 상표와 저작권은 달콤소프트에 있습니다.</p>
+  aria-label="사례 1 · 진단 — 지표 분석·유저 VOC를 2026 방향성 제안으로" data-bg="#F5F5F5">
+  <p class="eb">사례 1 · 진단</p>
+  <h2 class="h">지표 분석·유저 VOC를 2026 방향성 제안으로</h2>
+  <p class="lede">달콤소프트 · 라이브기획팀 팀장 · 라이브 디렉터 · 2025.11 만족도 설문 → 2026.05 출시</p>
+  <div class="bd"><div class="g2" style="grid-template-columns:1fr 820px">
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <div style="display:flex;flex-direction:column;gap:16px"><div class="fs" style="padding:18px 26px"><b>유저 VOC — 만족도 설문</b><ul style="margin-top:6px;display:flex;flex-direction:column;gap:6px"><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>각 프로젝트 별 인게임 팝업 배너 설문 · 6개 타이틀 · 한·영·일</li><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>수집·꾸미기·전시 요구 반복</li><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>예전에 있던 웹뷰 이벤트의 복귀 요구</li></ul></div><div class="fs" style="padding:18px 26px"><b>지표 분석 — 사업적 관점</b><ul style="margin-top:6px;display:flex;flex-direction:column;gap:6px"><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>이벤트 곡 업데이트만으로는 Retention 유지 한계</li><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>상위 유저는 '수집/테마 완성'에 높은 가치를 부여</li></ul></div><div class="fs" style="padding:18px 26px"><b>개발/프로덕트 관점</b><ul style="margin-top:6px;display:flex;flex-direction:column;gap:6px"><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>현재 UI는 감상이 아닌 관리(List) 중심의 어드민 형태</li><li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>다수의 아티스트, 앨범 구조로 인한 정보 피로도 높음</li></ul></div></div>
+        <div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+        <div class="fs" style="border:2px solid var(--sub);padding:20px 26px">
+          <p style="font-size:28px;font-weight:800">현재 서비스의 핵심 GAP</p>
+          <p style="margin-top:6px">“우리가 잘하는 것”과 “팬이 원하는 것”의 교집합을 제품으로 만든다</p></div>
+      </div>
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <figure class="shot" style="flex:none">
+      <img src="../pdf/img/direction/gap.jpg" alt="원문 발췌 · 「SuperStar 2026 — 2026 상반기 라이브 프로젝트 방향성」 · 현재 서비스의 핵심 GAP" style="max-width:920px;max-height:640px">
+      <figcaption>원문 발췌 · 「SuperStar 2026 — 2026 상반기 라이브 프로젝트 방향성」 · 현재 서비스의 핵심 GAP</figcaption></figure>
+        <p style="margin-top:14px;font-size:22px;color:var(--m60)">설문 수치 장표는 비공개</p>
+      </div>
+    </div></div>
+  <p class="rights">화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.</p>
 </section>
 
 <section class="s" role="group" aria-roledescription="slide"
-  aria-label="사례 1 실행 — 만족도 조사 요구를 실제 출시로" data-bg="#F5F5F5">
+  aria-label="사례 1 · 방향 제안 — 3대 핵심 전략 방향으로 2026년 개발 방향 제시" data-bg="#F5F5F5">
+  <p class="eb">사례 1 · 방향 제안</p>
+  <h2 class="h">3대 핵심 전략 방향으로 2026년 개발 방향 제시</h2>
+  <p class="lede">「SuperStar 2026 — 2026 상반기 라이브 프로젝트 방향성」 작성 · 방향 4축(원문 3대 핵심 전략 방향)</p>
+  <div class="bd"><div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+        <div class="pn" style="padding:24px 26px;display:flex;flex-direction:column">
+          <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">수집 완성</p>
+          <p style="margin-top:6px;font-size:22px;color:var(--m60)">1. 수집 구조의 재정의</p>
+          <p style="margin-top:14px;font-size:28px;font-weight:700;line-height:1.35">"단순 획득에서 완성하는 경험으로"</p>
+          <p style="margin-top:10px;font-size:24px;line-height:1.45">도감을 채우고 완성하는 성취감 · 단기/장기 목표 보상 설계</p>
+          
+        </div>
+        <div class="pn" style="padding:24px 26px;display:flex;flex-direction:column">
+          <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">감상/전시</p>
+          <p style="margin-top:6px;font-size:22px;color:var(--m60)">2. 뷰잉 및 전시 경험 강화</p>
+          <p style="margin-top:14px;font-size:28px;font-weight:700;line-height:1.35">"작은 썸네일에서 감상 가능한 화면으로"</p>
+          <p style="margin-top:10px;font-size:24px;line-height:1.45">큰 화면 감상 UI · 꾸미기(Deco)</p>
+          <p style="margin-top:auto;padding-top:14px"><span class="chip chip--sub">꾸미기 이벤트로 실행</span></p>
+        </div>
+        <div class="pn" style="padding:24px 26px;display:flex;flex-direction:column">
+          <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">개인화</p>
+          <p style="margin-top:6px;font-size:22px;color:var(--m60)">3. 개인화 &amp; 커뮤니티</p>
+          <p style="margin-top:14px;font-size:28px;font-weight:700;line-height:1.35">My Artist Mode</p>
+          <p style="margin-top:10px;font-size:24px;line-height:1.45">엔터 전체 vs 내 아티스트</p>
+          
+        </div>
+        <div class="pn" style="padding:24px 26px;display:flex;flex-direction:column">
+          <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">커뮤니티</p>
+          <p style="margin-top:6px;font-size:22px;color:var(--m60)">3. 개인화 &amp; 커뮤니티</p>
+          <p style="margin-top:14px;font-size:28px;font-weight:700;line-height:1.35">"혼자 보는 수집에서, 서로 반응하는 공감으로"</p>
+          <p style="margin-top:10px;font-size:24px;line-height:1.45">덱/프로필 방문 · 아티스트 공통 미션</p>
+          
+        </div></div>
+      <div>
+        <p style="font-size:22px;font-weight:800;letter-spacing:.08em">개발 방향 적용</p>
+        <div class="frow" style="margin-top:12px"><div class="fs" style="padding:16px 22px;display:flex;align-items:center"><p style="font-size:24px;font-weight:700;line-height:1.4">2026년 상반기 로드맵</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs" style="padding:16px 22px;display:flex;align-items:center"><p style="font-size:24px;font-weight:700;line-height:1.4">마일스톤 배치를 통한 개발 일정 조정</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs" style="padding:16px 22px;display:flex;align-items:center"><p style="font-size:24px;font-weight:700;line-height:1.4">기획 방향과 프로토타입 제작</p></div><div class="farr "><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div><div class="fs" style="padding:16px 22px;display:flex;align-items:center"><p style="font-size:24px;font-weight:700;line-height:1.4">미니게임 → 꾸미기 이벤트 → 웹뷰 이벤트 순 출시</p></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px"><div class="fs" style="padding:18px 24px"><b>판단</b><p style="font-size:23px">개발 리소스가 제한된 상황이라, 기존 시스템으로 바로 적용할 수 있는 인게임 미니게임을 먼저 준비·적용하고, 별도 개발이 필요한 웹뷰 이벤트는 그 뒤에 확장하는 순서로 갔다.</p></div><div class="fs" style="padding:18px 24px"><b>결정 범위</b><p style="font-size:23px">대응 순서와 이벤트 범위(MVP)는 본인이 정했고, 개발 일정과 출시일은 개발팀·경영진 협의로 확정했다.</p></div></div>
+    </div></div>
+  <p class="rights">게임 명칭은 각 권리자의 상표입니다.</p>
+</section>
+
+<section class="s" role="group" aria-roledescription="slide"
+  aria-label="사례 1 · 실행 — 2026년 개선 방향성 제안을 프로토타입 제작과 실제 출시로 연결" data-bg="#F5F5F5">
   <p class="eb">사례 1 · 실행</p>
-  <h2 class="h h--sm">만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결</h2>
+  <h2 class="h h--sm">2026년 개선 방향성 제안을 프로토타입 제작과 실제 출시로 연결</h2>
   
   <div class="bd"><div class="g2" style="grid-template-columns:1fr 860px">
-        <div style="display:flex;flex-direction:column;min-height:0">
-          <div class="rows">
-            <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 12V6.5a1.6 1.6 0 013.2 0V12"/><path d="M11.2 11V5.2a1.6 1.6 0 013.2 0V12"/><path d="M14.4 12V7.8a1.6 1.6 0 013.2 0V15c0 3.3-2.4 6-6 6s-6-2.7-6-6v-2.6a1.6 1.6 0 013.2 0"/></svg></span>
-              <div><p class="rt">본인 행동</p><p>미니게임 v1·v2는 타이틀별로 순차 적용됐다(v1 2025‑12, v2 2026‑01). 신규 그룹 런칭에 맞춘 꾸미기 이벤트는 기획서 초안을 직접 쓰고 AI로 작동하는 프로토타입을 만들어 개발 전 협의에 썼고, 개발 일정에 맞춰 핵심 기능만 남기는 범위를 정했다.</p></div></div>
-            <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg></span>
-              <div><p class="rt">미룬 것</p><p>조사에서 함께 나온 수집 완성·감상/전시·개인화·커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다.</p></div></div>
-            <div class="row"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/></svg></span>
-              <div><p class="rt">결과·상태</p><p>실제 출시 — 미니게임 v1·v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.</p></div></div></div>
-          <p style="margin-top:18px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
-          <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69" target="_blank" rel="noopener">사용자 조사 기반 웹 이벤트 적용 ↗</a><a href="https://limhenry.notion.site/3ea59de7280481fa8ce7c7d31329890a" target="_blank" rel="noopener">2025 라이브 사업 계획 ↗</a><a href="https://limhenry.notion.site/3c959de728048034ba6bd2f6fdf31008" target="_blank" rel="noopener">2026 상반기 방향성 ↗</a><a href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14" target="_blank" rel="noopener">정기 상품 정책 개편 제안 ↗</a><a href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a" target="_blank" rel="noopener">조직 재편과 기획·QA·CS 통합 운영 ↗</a></div>
-        </div>
-        <div style="display:grid;grid-template-rows:1fr 1fr;gap:24px;min-height:0">
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <ol style="display:flex;flex-direction:column">
+          <li style="list-style:none;position:relative;padding:0 0 10px 44px">
+            <span style="position:absolute;left:7px;top:22px;bottom:-10px;width:2px;background:var(--sub)"></span>
+            <span style="position:absolute;left:0;top:9px;width:16px;height:16px;border-radius:50%;background:var(--sub)"></span>
+            <p style="font-size:24px;line-height:1.4"><b style="font-weight:800">2025.12</b><span style="margin:0 .5em;color:var(--m60)">·</span><b style="font-weight:700">미니게임 v1</b></p>
+            <p style="margin-top:2px;font-size:22px;line-height:1.4;color:var(--m60)">기존 시스템으로 바로 적용할 수 있는 형식부터</p>
+          </li>
+          <li style="list-style:none;position:relative;padding:0 0 10px 44px">
+            <span style="position:absolute;left:7px;top:22px;bottom:-10px;width:2px;background:var(--sub)"></span>
+            <span style="position:absolute;left:0;top:9px;width:16px;height:16px;border-radius:50%;background:var(--sub)"></span>
+            <p style="font-size:24px;line-height:1.4"><b style="font-weight:800">2026.01</b><span style="margin:0 .5em;color:var(--m60)">·</span><b style="font-weight:700">미니게임 v2</b></p>
+            <p style="margin-top:2px;font-size:22px;line-height:1.4;color:var(--m60)">타이틀별 순차 적용</p>
+          </li>
+          <li style="list-style:none;position:relative;padding:0 0 10px 44px">
+            <span style="position:absolute;left:7px;top:22px;bottom:-10px;width:2px;background:var(--sub)"></span>
+            <span style="position:absolute;left:0;top:9px;width:16px;height:16px;border-radius:50%;background:var(--sub)"></span>
+            <p style="font-size:24px;line-height:1.4"><b style="font-weight:800">2026.04.30 – 05.23</b><span style="margin:0 .5em;color:var(--m60)">·</span><b style="font-weight:700">꾸미기 이벤트</b></p>
+            <p style="margin-top:2px;font-size:22px;line-height:1.4;color:var(--m60)">뷰잉 및 전시 경험 강화 · SuperStar STAYC 신규 그룹 런칭에 맞춰 핵심 기능만 출시<br>Wireframe은 Claude Code 활용</p>
+          </li>
+          <li style="list-style:none;position:relative;padding:0 0 0px 44px">
+            
+            <span style="position:absolute;left:0;top:9px;width:16px;height:16px;border-radius:50%;background:var(--sub)"></span>
+            <p style="font-size:24px;line-height:1.4"><b style="font-weight:800">~2026.05</b><span style="margin:0 .5em;color:var(--m60)">·</span><b style="font-weight:700">10주년 웹뷰 이벤트</b></p>
+            <p style="margin-top:2px;font-size:22px;line-height:1.4;color:var(--m60)">SuperStar JYP Nation · 웹뷰 이벤트 부활<br>프로토타입은 Codex 활용</p>
+          </li></ol>
+        <div style="margin-top:26px;display:flex;align-items:flex-end;gap:22px">
+          <p class="n n--sm">출시 <span class="nn">3건</span></p><p class="nl" style="margin-bottom:6px">미니게임 v1·v2 · 꾸미기 이벤트 · 10주년 웹뷰 이벤트</p></div>
+        <div class="row" style="margin-top:16px"><span class="ico ico--sm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.4l3.4 2"/></svg></span>
+          <div><p class="rt">미룬 것</p><p>꾸미기 이벤트는 덱 확장·뽑기·육성 세부를 후속으로 미루고 핵심 기능만 출시했다.</p></div></div>
+        <p style="margin-top:8px;margin-bottom:16px;font-size:22px;color:var(--m60)">문장은 발표용으로 줄였습니다 · 전문은 사이트 상세에서 볼 수 있습니다.</p>
+        <div class="ev"><b>근거</b><a href="https://limhenry.notion.site/3c959de728048034ba6bd2f6fdf31008" target="_blank" rel="noopener">2026 상반기 방향성 ↗</a><a href="https://limhenry.notion.site/3d559de7280481dba20ee12a62cb7d69" target="_blank" rel="noopener">사용자 조사 기반 웹 이벤트 적용 ↗</a><a href="https://limhenry.notion.site/3ea59de7280481fa8ce7c7d31329890a" target="_blank" rel="noopener">2025 라이브 사업 계획 ↗</a><a href="https://limhenry.notion.site/3d559de728048112b3c9ec7998d34e14" target="_blank" rel="noopener">정기 상품 정책 개편 제안 ↗</a><a href="https://limhenry.notion.site/3d559de72804813fac33d543e20c1a0a" target="_blank" rel="noopener">조직 재편과 기획·QA·CS 통합 운영 ↗</a></div>
+      </div>
+      <div style="display:grid;grid-template-rows:1fr 1fr;gap:24px;min-height:0">
         <figure class="shot" style="min-height:0">
       <img src="../pdf/img/deco.jpg" alt="꾸미기 이벤트 기획·⁠와이어프레임" style="max-width:1480px;max-height:1470px">
       <figcaption>꾸미기 이벤트 기획·⁠와이어프레임</figcaption></figure><figure class="shot" style="min-height:0">
       <img src="../pdf/img/ssjproto.jpg" alt="SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입" style="max-width:1600px;max-height:739px">
       <figcaption>SuperStar JYP Nation 10주년 웹뷰 이벤트 프로토타입</figcaption></figure></div>
-      </div></div>
+    </div></div>
   <p class="rights">화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.</p>
 </section>
 
@@ -726,7 +808,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <div></div>
 </section>
 <div class="bar" id="bar"></div>
-<p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / 18</p>
+<p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / 19</p>
 </div></div>
 <script>/* 덱 1·18장 캔버스 모션 — build-deck.mjs가 덱 HTML에 그대로 인라인한다(외부 라이브러리 없음, 오프라인 동작).
    원형: loop/motion-lab/index.html. 본부장 결재(09-29) 표지 = C3 키네틱 타임라인 · 마지막 장 = E3 궤도(수미상관).

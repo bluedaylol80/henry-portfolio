@@ -1,10 +1,10 @@
-/* WO-29·30·34 판정 — 덱 18장 렌더 · 콘솔 · 조작 · 비율 · 금지어 · 파일 크기 · 색상 대비 검산 */
+/* WO-29·30·34·42 판정 — 덱 19장 렌더 · 콘솔 · 조작 · 비율 · 금지어 · 파일 크기 · 색상 대비 검산 */
 import puppeteer from 'puppeteer-core'
 import { mkdirSync, statSync, readFileSync } from 'node:fs'
 import { hits as banHits } from '../scripts/pdf-banned.mjs'
 
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
-const OUT = 'loop/shots28/deck'
+const OUT = 'loop/shots34/deck'
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 mkdirSync(OUT, { recursive: true })
 const bad = []
@@ -71,15 +71,15 @@ async function open(url, w, h) {
   return { page, msgs }
 }
 
-/* --- 1. site/deck 18장 렌더 1920×1080 --- */
+/* --- 1. site/deck 19장 렌더 1920×1080 --- */
 {
   const { page, msgs } = await open('http://127.0.0.1:8787/deck/', 1920, 1080)
   const n = await page.$$eval('.s', e => e.length)
-  if (n !== 18) bad.push('슬라이드 수 ' + n)
+  if (n !== 19) bad.push('슬라이드 수 ' + n)
   /* 나이트워커 수치 — 원천 문서 값(09-29 본부장 확정). 옛 값이 돌아오면 실패 */
   const body = await page.evaluate(() => document.body.textContent)
   if (!body.includes('DAU 6.4만') || !body.includes('D+1 52~56%') || /6\.3만|약 50%/.test(body)) bad.push('나이트워커 수치(DAU 6.4만·D+1 52~56%) 불일치')
-  for (let i = 1; i <= 18; i++) {
+  for (let i = 1; i <= 19; i++) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
     await sleep(700)
     await page.screenshot({ path: `${OUT}/ko-${String(i).padStart(2, '0')}.png` })
@@ -120,14 +120,14 @@ async function open(url, w, h) {
   await page.evaluate(() => { location.hash = '#12' }); await sleep(500)
   const h1 = await cur()
   if (!(k1 === 2 && k2 === 1 && c1 === 2 && c2 === 1 && h1 === 12)) bad.push(`조작 실패 k=${k1},${k2} click=${c1},${c2} hash=${h1}`)
-  /* 링크에 포커스가 있을 때 Enter는 장을 넘기지 않는다(D13) */
-  await page.evaluate(() => { location.hash = '#7' }); await sleep(600)
+  /* 링크에 포커스가 있을 때 Enter는 장을 넘기지 않는다(D13) — 근거 링크가 있는 사례 1 실행 장(8장) */
+  await page.evaluate(() => { location.hash = '#8' }); await sleep(600)
   const focused = await page.evaluate(() => { const a = document.querySelector('.s.on .ev a')
     if (!a) return false; a.focus(); return document.activeElement === a })
-  if (!focused) bad.push('7장 근거 링크에 포커스를 못 줬다')
+  if (!focused) bad.push('8장 근거 링크에 포커스를 못 줬다')
   await page.keyboard.press('Enter'); await sleep(600)
   const e1 = await cur()
-  if (e1 !== 7) bad.push('링크 포커스 상태의 Enter가 장을 넘겼다: ' + e1)
+  if (e1 !== 8) bad.push('링크 포커스 상태의 Enter가 장을 넘겼다: ' + e1)
   if (msgs.length) bad.push('콘솔 ' + msgs.length + '건: ' + msgs.slice(0, 5).join(' | '))
   await page.close()
 }
@@ -153,7 +153,7 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
   await page.close()
 }
 
-/* --- 2b. 동작 줄이기 — 1·18장 캔버스 모션이 완성 화면에서 멈춘다(rAF 정지 · 그림 불변 · 글자 전부 보임) --- */
+/* --- 2b. 동작 줄이기 — 1·19장 캔버스 모션이 완성 화면에서 멈춘다(rAF 정지 · 그림 불변 · 글자 전부 보임) --- */
 {
   const page = await browser.newPage()
   await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }])
@@ -161,7 +161,7 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
   await page.goto('http://127.0.0.1:8787/deck/#1', { waitUntil: 'networkidle2', timeout: 60000 })
   await sleep(1500)
   await page.screenshot({ path: `${OUT}/reduced-motion.png` })
-  for (const i of [1, 18]) {
+  for (const i of [1, 19]) {
     await page.evaluate(k => { location.hash = '#' + k }, i); await sleep(700)
     const snap = () => page.evaluate(() => document.querySelector('.s.on canvas.mo').toDataURL())
     const a = await snap(); await sleep(600); const b = await snap()
@@ -199,7 +199,7 @@ for (const [path, nm] of [['/', 'site-ko-hero-links'], ['/en/', 'site-en-hero-li
   await page.setViewport({ width: 1920, height: 1080 })
   await page.goto('file:///D:/Github/henry-portfolio/site/henry-lim-portfolio-deck.html', { waitUntil: 'networkidle2' })
   await sleep(1500)
-  for (const i of [1, 5, 12, 14, 18]) {
+  for (const i of [1, 5, 6, 7, 8, 13, 15, 19]) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
     await sleep(700)
     await page.screenshot({ path: `${OUT}/single-${String(i).padStart(2, '0')}.png` })
@@ -246,5 +246,5 @@ if (fails.length) bad.push('대비 미달 ' + fails.length + '건: ' +
   fails.slice(0, 6).map(f => `${f.slide}장 ${f.cls} ${f.ratio}`).join(' | '))
 
 console.log('\n단일 파일 ' + mb.toFixed(2) + 'MB')
-console.log(bad.length ? 'FAIL\n - ' + bad.join('\n - ') : 'PASS — 18장 렌더·콘솔 0·조작·비율·금지어 0·크기·대비 OK')
+console.log(bad.length ? 'FAIL\n - ' + bad.join('\n - ') : 'PASS — 19장 렌더·콘솔 0·조작·비율·금지어 0·크기·대비 OK')
 process.exit(bad.length ? 1 : 0)
