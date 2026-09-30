@@ -248,11 +248,11 @@ const C1 = {
   },
 }
 /* 4장 역량 4분류 — 덱 전용(WO-42 추가, 본부장 지시 09-30). 사이트 #skills 본문은 그대로 둔다.
-   note가 있으면 그 문장(글자 그대로)을, 없으면 사이트 첫 문장을 쓴다. co = 그 역량을 수행한 회사(경력 행 표기) */
+   note = 덱 전용 설명(글자 그대로, 네 칸 모두 명사형 끝맺음 — WO-42 추가 3). co = 그 역량을 수행한 회사(경력 행 표기) */
 const SKILLS_TITLE = '보유 핵심 역량'
 const SKILLS_DECK = {
-  '제품 판단·마일스톤': { co: ['달콤소프트', '넥슨 코리아', '네오위즈'] },
-  '출시·라이브 실행': { co: ['넥슨 코리아', '넵튠 레전드', '원더피플/에이스톰'] },
+  '제품 판단·마일스톤': { note: '조사·지표로 무엇을 만들지 정하고, 기획·개발 마일스톤으로 실행까지 끌고 가는 디렉터·PM 역할', co: ['달콤소프트', '넥슨 코리아', '네오위즈'] },
+  '출시·라이브 실행': { note: '소프트런칭부터 런칭·라이브 서비스·서비스 종료까지, A~Z 모든 단계를 직접 진행', co: ['넥슨 코리아', '넵튠 레전드', '원더피플/에이스톰'] },
   '조직·인력 운영': { note: '인력 리크루트부터 인력 배치, MM을 활용한 조직 세팅과 인력 효율 개선', co: ['달콤소프트', '스카이피플'] },
   '운영 표준화': { note: '반복, 비효율적인 업무를 규칙과 프로세스를 재정비하여 효율화', co: ['달콤소프트'] },
 }
@@ -702,7 +702,7 @@ function render(d, A) {
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico">${icon(SKILL_ICONS[i])}</span>
           <h3 style="font-size:32px;font-weight:700">${esc(s.title)}</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">${esc(skillOf(s).note || brief(s.note))}</p>
+        <p style="margin-top:20px;font-size:26px;line-height:1.55">${esc(skillOf(s).note)}</p>
         <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
           <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">${esc(L.doneBy)}</span>${
           skillOf(s).co.map(co => `<span class="cobtn">${esc(co)}</span>`).join('')}</div>
