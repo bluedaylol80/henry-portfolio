@@ -1071,6 +1071,16 @@ function render(d, A) {
 <title>${esc(d.brand)} — ${esc(L.doc)}</title>
 <meta name="description" content="${esc(d.h1.join(' '))}">
 <meta name="robots" content="noindex">
+<!-- Microsoft Clarity — 라이브 도메인에서만 수집(로컬·빌더 렌더·내려받은 덱 파일 제외) -->
+<script type="text/javascript">
+if (location.hostname === 'bluedaylol80.github.io') {
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "yatji6jh65");
+}
+</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%23E62B1E' d='M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z'/%3E%3C/svg%3E">
 <style>${css(A.font())}</style>
 </head>
