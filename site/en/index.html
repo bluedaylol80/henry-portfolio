@@ -1035,7 +1035,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       </li>
       <li data-reveal style="--rd:540ms;--ry:48px">
         <article class="card">
-          <div class="card-shot" data-shot="nanakage" aria-hidden="true"></div>
+          <div class="card-shot" data-shot="nanakage" data-ext="webp" aria-hidden="true"></div>
           <div class="card-meta">Neptune Legend — Development PM</div>
           <div class="card-wm card-wm--long" aria-hidden="true">7 markets</div>
           <div class="card-bot">
@@ -2223,6 +2223,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
    전부 없으면 아무 일도 일어나지 않고 카드는 빈 슬롯(=기존 잉크 카드) 그대로 남는다. */
 document.querySelectorAll('.card-shot').forEach(slot => {
   const exts = ['jpg', 'png', 'webp'];   // README.txt에 고지된 3종 (많이 넣을수록 빈 슬롯의 404 로그가 늘어난다)
+  if (slot.dataset.ext) exts.splice(0, exts.length, slot.dataset.ext);   // 확장자를 아는 슬롯은 한 번만 요청(빈 404 방지)
   const base = '../works/' + slot.dataset.shot + '.';
   (function probe(i){
     if (i >= exts.length) return;
