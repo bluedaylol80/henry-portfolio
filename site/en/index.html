@@ -234,6 +234,8 @@ html[lang="ko"] .clock-t{order:4}
 .hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
 @media (max-width:480px){.hero-sub{font-size:.9375rem;line-height:1.58}}
 @media (min-width:640px){.hero-sub{font-size:1.125rem}}
+.hs-br{display:none}
+@media (min-width:1024px){html[lang="ko"] .hero-sub{max-width:none}html[lang="ko"] .hs-br{display:inline}}
 /* 핵심 역량 칩 — 텍스트 칩이지 링크가 아니다. 390에서 줄바꿈 허용, hcard와 겹치지 않는다. */
 .hero-keys{display:flex;flex-wrap:wrap;gap:.5rem;max-width:38rem}
 .hero-keys li{display:inline-flex;border:1px solid rgba(17,17,17,.16);border-radius:var(--r-pill);

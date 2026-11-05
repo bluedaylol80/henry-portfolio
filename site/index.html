@@ -234,6 +234,8 @@ html[lang="ko"] .clock-t{order:4}
 .hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
 @media (max-width:480px){.hero-sub{font-size:.9375rem;line-height:1.58}}
 @media (min-width:640px){.hero-sub{font-size:1.125rem}}
+.hs-br{display:none}
+@media (min-width:1024px){html[lang="ko"] .hero-sub{max-width:none}html[lang="ko"] .hs-br{display:inline}}
 /* 핵심 역량 칩 — 텍스트 칩이지 링크가 아니다. 390에서 줄바꿈 허용, hcard와 겹치지 않는다. */
 .hero-keys{display:flex;flex-wrap:wrap;gap:.5rem;max-width:38rem}
 .hero-keys li{display:inline-flex;border:1px solid rgba(17,17,17,.16);border-radius:var(--r-pill);
@@ -774,7 +776,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <span class="line" style="--i:2"><span data-i18n="마일스톤으로-출시와-라이브까지"><span class="nb">마일스톤으로 출시와</span> <span class="nb">라이브까지 완주합니다.</span></span></span>
       </h1>
 
-      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms" data-i18n="PC-모바일-게임의-글로벌">PC·모바일 게임의 글로벌 출시와 Live-ops를 A부터 Z까지, PM·기획·디렉터 역할로 경험했습니다. 사용자 요구와 지표 분석을 제품 방향·개발 우선순위로 연결하고, 디렉터로서 개발·기획·사업·운영 업무를 직접 진행하며 조율했습니다. 최근에는 AI로 이벤트 프로토타입을 만들고 반복 업무를 자동화했습니다.</p>
+      <p class="hero-sub" data-reveal data-gate="ready" style="--rd:650ms" data-i18n="PC-모바일-게임의-글로벌">PC·모바일 게임의 글로벌 출시와 Live-ops를 A부터 Z까지,<br class="hs-br"> PM·기획·디렉터 역할로 경험했습니다.<br class="hs-br"> 사용자 요구와 지표 분석을 제품 방향·개발 우선순위로 연결하고,<br class="hs-br"> 디렉터로서 개발·기획·사업·운영 업무를 직접 진행하며 조율했습니다.<br class="hs-br"> 최근에는 AI로 이벤트 프로토타입을 만들고 반복 업무를 자동화했습니다.</p>
 
       <ul class="hero-keys" data-reveal data-gate="ready" style="--rd:700ms" data-i18n-attr="aria-label" aria-label="핵심 역량">
         <li data-i18n="제품-판단-마일스톤">제품 판단·마일스톤</li>
