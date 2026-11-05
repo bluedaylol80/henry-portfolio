@@ -1,6 +1,6 @@
-/* 덱 1·18장 캔버스 모션 — build-deck.mjs가 덱 HTML에 그대로 인라인한다(외부 라이브러리 없음, 오프라인 동작).
-   원형: loop/motion-lab/index.html. 본부장 결재(09-29) 표지 = C3 키네틱 타임라인 · 마지막 장 = E3 궤도(수미상관).
-   E3은 표지 C3과 한 벌로 읽히도록 C3의 어휘(흰 선 한 가닥 · 같은 라벨의 노드 5개 · 빨간 출시 노드 · 심전도 신호)로 다시 그렸다.
+/* 덱 1·19장 캔버스 모션 — build-deck.mjs가 덱 HTML에 그대로 인라인한다(외부 라이브러리 없음, 오프라인 동작).
+   원형: loop/motion-lab/v2.html. 본부장 결재 11-05: 표지=C4 · 마지막 장=E4
+   C4 신호 정렬(줄 다발이 모여 빨간 출시점) ↔ E4 잔향(한 줄이 다발로 펼쳐지고 빨간 점에서 파문) — 수미상관.
 
    규칙
    - 캔버스는 1920×1080 스테이지 좌표. 실해상도 = 스테이지 표시 크기 × DPR(최대 2). 창 크기가 바뀌면 다시 잡는다(fit).
@@ -16,40 +16,20 @@ var DeckMotion = (() => {
   const sstep = (a, b, x) => { x = clamp((x - a) / (b - a)); return x * x * (3 - 2 * x) }
   const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2
   const eout = x => 1 - Math.pow(1 - x, 3)
-  const frac = x => x - Math.floor(x)
-  /* 빨강 → 흰색 (마일스톤 점등 직후 잠깐 빨강) */
-  const mix = k => `rgb(${Math.round(lerp(230, 255, k))},${Math.round(lerp(43, 255, k))},${Math.round(lerp(30, 255, k))})`
+  const eback = x => { x = clamp(x); const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2) }
+  function rng(seed) { return () => { seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed)
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296 } }
   let ctx = null
 
-  /* 라벨 — 켜질 때 8px 아래에서 살짝 떠오르며 페이드인. 흰색 72%(차콜 위 약 9:1) */
-  function label(txt, x, y, a, align, base) {
-    if (a <= 0) return
-    ctx.font = '600 22px SUIT, sans-serif'; ctx.textAlign = align || 'center'; ctx.textBaseline = base || 'alphabetic'
-    ctx.fillStyle = `rgba(255,255,255,${.72 * a})`; ctx.fillText(txt, x, y + (1 - a) * 8)
-  }
   function ring(x, y, r, a, color, lw) {
     if (a <= 0) return
     ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.globalAlpha = a
     ctx.strokeStyle = color; ctx.lineWidth = lw || 2; ctx.stroke(); ctx.globalAlpha = 1
   }
   function dot(x, y, r, color, a) {
-    if (a != null && a <= 0) return
+    if ((a != null && a <= 0) || r <= 0) return
     ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.globalAlpha = a == null ? 1 : a
     ctx.fillStyle = color; ctx.fill(); ctx.globalAlpha = 1
-  }
-  /* 라이브 신호(심전도) — x0에서 len만큼, 파형은 e에 따라 흐른다. 점 사이를 2차 곡선으로 이어 매끄럽게.
-     stops = 가로 그라데이션 [위치, 불투명도]. C3·E3 공용 */
-  function ecg(x0, len, e, stops) {
-    if (len <= 0) return
-    const yAt = x => { const w = frac((x - e * .1) / 128) * 128
-      return (w > 44 && w < 78) ? -Math.sin((w - 44) / 34 * Math.PI * 2) * 20 * Math.sin((w - 44) / 34 * Math.PI) : 0 }
-    ctx.beginPath(); ctx.moveTo(x0, CY + yAt(0))
-    let qx = x0, qy = CY + yAt(0)
-    for (let x = 3; x <= len; x += 3) { const nx = x0 + x, ny = CY + yAt(x); ctx.quadraticCurveTo(qx, qy, (qx + nx) / 2, (qy + ny) / 2); qx = nx; qy = ny }
-    ctx.lineTo(qx, qy)
-    const g = ctx.createLinearGradient(x0, 0, x0 + 128, 0)
-    for (const [p, a] of stops) g.addColorStop(p, `rgba(255,255,255,${a})`)
-    ctx.strokeStyle = g; ctx.lineWidth = 2.5; ctx.stroke()
   }
 
   /* 포인터 — 스테이지 좌표로 환산해 부드럽게 따라간다 */
@@ -69,215 +49,132 @@ var DeckMotion = (() => {
     ptr.x = lerp(ptr.x, ptr.tx, k); ptr.y = lerp(ptr.y, ptr.ty, k); ptr.on = lerp(ptr.on, ptr.ton, k * .6)
     if (ptr.on < .002) ptr.fresh = true
   }
+  /* 포인터가 지나가면 줄이 손가락에 갈라지듯 비켜선다 — 위아래로 밀어냄. C4·E4 공용 */
+  const part = (x, y) => { const dx = x - ptr.x, dy = y - ptr.y, g = Math.exp(-(dx * dx + dy * dy) / 9800); return (dy >= 0 ? 1 : -1) * 30 * g * ptr.on }
+  /* 줄 다발의 왼쪽 끝을 흐리게 — 캔버스마다 한 번 만든다 */
+  const fades = new WeakMap()
+  const fadeOf = (xl) => { let g = fades.get(ctx); if (!g) { g = ctx.createLinearGradient(xl, 0, xl + 240, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, '#fff'); fades.set(ctx, g) } return g }
 
   const V = {}
 
-  /* C3 — 키네틱 타임라인: 엉킨 실(요구)이 직선(방향)으로 펴지고, 마일스톤 노드가 점등되며, 빨간 출시 노드 + 심전도(라이브).
-     헤드라인은 한 글자씩 빨간 커서와 함께 같은 박자로 */
+  /* C4 — 신호 정렬: 가는 줄 34가닥이 잡음(흩어진 요구)으로 떨다가, 왼쪽부터 쓸고 가는 전선 뒤로 잠잠해지며(방향),
+     게이트 3곳을 지날 때마다 다발이 좁아져(마일스톤) 한 줄로 모인다. 모인 점 = 빨간 출시점, 그 뒤로 빨간 신호가 계속 흐른다(라이브).
+     라벨 없음. 헤드라인은 낱말마다 마스크 아래에서 떠오른다(WT = 낱말 9개의 등장 시각, 그림의 단계와 같은 박자) */
   {
-    const K = 320, SX = new Float32Array(K), SY = new Float32Array(K), LX = new Float32Array(K)
-    for (let j = 0; j < K; j++) { // 엉킨 실타래 — 여러 주기의 사인을 겹친 리사주 곡선
-      const u = j / (K - 1)
-      SX[j] = 1070 + 150 * Math.sin(TAU * 2.3 * u + .4) + 55 * Math.sin(TAU * 7.7 * u) + 20 * Math.sin(TAU * 17 * u + 2)
-      SY[j] = CY + 210 * Math.sin(TAU * 1.7 * u + 1.1) + 80 * Math.sin(TAU * 9.3 * u + .2) + 24 * Math.cos(TAU * 21 * u)
-      LX[j] = 930 + u * 192
+    const NL = 34, SP = 17, XL = 900, XR = 1940, STEP = 8, NP = Math.ceil((XR - XL) / STEP) + 1
+    const G = [1220, 1370, 1510], RX = 1650, TG = [1250, 1600, 1950], TR = 2350
+    const WT = [150, 250, 700, 800, 900, 1300, 1400, 1500, 1600]
+    const r = rng(4417), OFF = [], PH = [], AF = [], AL = []
+    for (let i = 0; i < NL; i++) {
+      const u = (i - (NL - 1) / 2) / ((NL - 1) / 2)
+      OFF.push(u * SP * (NL - 1) / 2 + (r() - .5) * 7); PH.push(r() * TAU); AF.push(.4 + r() * .9); AL.push(.13 + .5 * Math.pow(1 - Math.abs(u), 1.4))
     }
-    const HS = 1122, HE = 1640, LV = HE + 142, T0 = 2250, TD = 1500
-    const hx = t => lerp(HS, HE, eio(clamp((t - T0) / TD)))
-    const tAt = x => { let a = T0, b = T0 + TD; for (let i = 0; i < 30; i++) { const m = (a + b) / 2; if (hx(m) < x) a = m; else b = m } return b }
-    const MS = [1272, 1389, 1506], MT = MS.map(tAt), TL = T0 + TD
-    const LINES = [[150, 1150], [1300, 2150], [2300, 3750]] // 헤드라인 3줄의 글자 등장 구간(ms)
-    V.C3 = {
-      T: 4800,
-      setup(sec) {
-        return { cs: [...sec.querySelectorAll('.hl .ln')].map(l => [...l.querySelectorAll('.ch')]), caret: sec.querySelector('.caret') }
-      },
+    const XX = new Float32Array(NP), AMP = new Float32Array(NP), SS = new Float32Array(NP)
+    for (let k = 0; k < NP; k++) XX[k] = XL + k * STEP
+    const W3 = [.3, .3, .4]
+    const spread = (x, t) => 1 - W3[0] * sstep(G[0] - 70, G[0] + 50, x) * sstep(TG[0], TG[0] + 700, t)
+      - W3[1] * sstep(G[1] - 70, G[1] + 50, x) * sstep(TG[1], TG[1] + 700, t) - W3[2] * sstep(G[2] - 40, RX, x) * sstep(TG[2], TG[2] + 700, t)
+    V.C4 = {
+      T: 3200,
+      setup(sec) { return { words: [...sec.querySelectorAll('.hl .wi')] } },
       frame(t) {
         ctx.clearRect(0, 0, W, H)
-        ctx.lineJoin = 'round'; ctx.lineCap = 'round'
-        // 1) 낙서 그리기 → 2) 곧게 펴기
-        const cnt = Math.max(2, Math.floor(K * eout(clamp(t / 1100))))
-        const k2 = eio(clamp((t - 1250) / 950))
-        ctx.beginPath() // 중점 사이를 2차 곡선으로 — 각진 꺾임 없이
-        let qx = lerp(SX[0], LX[0], k2), qy = lerp(SY[0], CY, k2); ctx.moveTo(qx, qy)
-        for (let j = 1; j < cnt; j++) { const x = lerp(SX[j], LX[j], k2), y = lerp(SY[j], CY, k2); ctx.quadraticCurveTo(qx, qy, (qx + x) / 2, (qy + y) / 2); qx = x; qy = y }
-        ctx.lineTo(qx, qy)
-        ctx.strokeStyle = `rgba(255,255,255,${lerp(.55, .9, k2)})`; ctx.lineWidth = lerp(2, 3, k2); ctx.stroke()
-        if (t < 2300) { const j = cnt - 1; dot(lerp(SX[j], LX[j], k2), lerp(SY[j], CY, k2), 5, '#fff', 1 - sstep(2000, 2300, t)) }
-        dot(930, CY, 5, '#fff', sstep(1900, 2200, t))
-        dot(HS, CY, 5, '#fff', t > T0 ? 1 : .35 * sstep(1800, 2300, t)) // 방향 노드
-        // 3) 방향선 연장
-        const h = hx(t)
-        if (t > T0) {
-          ctx.beginPath(); ctx.moveTo(HS, CY); ctx.lineTo(h, CY); ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 3; ctx.stroke()
-          if (t < TL) dot(h, CY, 5, '#fff')
-        }
-        // 예정된 마일스톤(희미) → 통과 시 점등
-        const pre = sstep(1800, 2300, t)
-        MS.forEach((x, i) => {
-          if (t < MT[i]) { dot(x, CY, 4, '#fff', .35 * pre); return }
-          const e = t - MT[i]
-          dot(x, CY, 9, mix(sstep(250, 800, e)))
-          ring(x, CY, 9 + eout(clamp(e / 800)) * 46, .6 * (1 - clamp(e / 800)), '#fff', 2)
-        })
-        // 4) 출시 노드 + 라이브 신호
-        if (t < TL) { dot(HE, CY, 5, '#fff', .35 * pre); dot(LV, CY, 4, '#fff', .35 * pre) }
-        else {
-          const e = t - TL
-          dot(HE, CY, 13, RED)
-          ring(HE, CY, 13 + eout(clamp(e / 1200)) * 130, .55 * (1 - clamp(e / 1200)), RED, 2.5)
-          if (e > 600) { const ph = ((e - 600) % 2400) / 2400; ring(HE, CY, 13 + ph * 60, .4 * (1 - ph), RED, 2) }
-          ecg(HE + 14, clamp((e - 250) / 500) * 128, e, [[0, .95], [1, .3]])
-          // 라이브 노드 — 신호 끝
-          const q = e - 750
-          if (q < 0) dot(LV, CY, 4, '#fff', .35)
-          else { dot(LV, CY, 7, mix(sstep(250, 800, q))); ring(LV, CY, 7 + eout(clamp(q / 800)) * 40, .6 * (1 - clamp(q / 800)), '#fff', 2) }
-        }
-        // 완성 후 — 요구에서 출시까지 흐르는 빛(반복)
-        if (t > TL + 800) {
-          const ph = ((t - TL - 800) % 3200) / 3200, cx = lerp(930, HE, eio(ph))
-          const g = ctx.createLinearGradient(cx - 140, 0, cx, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, `rgba(255,255,255,${.9 * Math.sin(Math.PI * ph)})`)
-          ctx.beginPath(); ctx.moveTo(Math.max(930, cx - 140), CY); ctx.lineTo(cx, CY); ctx.strokeStyle = g; ctx.lineWidth = 7; ctx.stroke()
-        }
-        label('요구', 930, CY + 70, sstep(2000, 2400, t))
-        label('방향', HS, CY + 70, sstep(T0, T0 + 400, t))
-        label('마일스톤', MS[1], CY + 70, sstep(MT[1] - 100, MT[1] + 300, t))
-        label('출시', HE, CY + 70, sstep(TL, TL + 400, t))
-        label('라이브', LV, CY + 70, sstep(TL + 750, TL + 1200, t))
-      },
-      text(t, st) { // 헤드라인 글자별 등장 + 빨간 커서
-        let cx = null
-        for (let l = 0; l < LINES.length; l++) {
-          const [a, b] = LINES[l], arr = st.cs[l] || [], n = arr.length
-          for (let j = 0; j < n; j++) {
-            const t0 = a + (b - a - 380) * j / Math.max(1, n - 1), k = eout(clamp((t - t0) / 380))
-            const el = arr[j]; el.style.opacity = k; el.style.transform = k < 1 ? `translateY(${(1 - k) * .45}em)` : ''
-            if (t >= t0 && t < b + 250) cx = el
+        const xh = XL + (XR - XL) * eout(clamp(t / 1100))           // 줄이 왼쪽에서 그려져 들어온다
+        const xf = lerp(XL - 260, XR + 140, eio(clamp((t - 650) / 1400))) // 잠잠해지는 전선
+        const kmax = Math.min(NP - 1, Math.ceil((xh - XL) / STEP))
+        for (let k = 0; k <= kmax; k++) { AMP[k] = 26 * (.06 + .94 * sstep(xf - 220, xf + 20, XX[k])); SS[k] = spread(XX[k], t) }
+        const pon = ptr.on > .01, ts1 = t * .0019, ts2 = t * .0027
+        ctx.lineJoin = 'round'; ctx.lineWidth = 1.3; ctx.strokeStyle = fadeOf(XL)
+        for (let i = 0; i < NL; i++) {
+          const o = OFF[i], ph = PH[i], af = AF[i]
+          ctx.beginPath()
+          for (let k = 0; k <= kmax; k++) {
+            const x = XX[k], s = SS[k]
+            const n = Math.sin(x * .019 + ph + ts1) * .62 + Math.sin(x * .043 - ph * 1.7 - ts2) * .38
+            let y = CY + o * s + AMP[k] * af * n * (.3 + .7 * s)
+            if (pon) y += part(x, y)
+            k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
           }
+          ctx.globalAlpha = AL[i]; ctx.stroke()
         }
-        const c = st.caret
-        if (cx) { c.style.opacity = 1; c.style.left = (cx.offsetLeft + cx.offsetWidth + 4) + 'px'; c.style.top = (cx.offsetTop + 8) + 'px'; c.style.height = (cx.offsetHeight - 14) + 'px' }
-        else c.style.opacity = 0
+        ctx.globalAlpha = 1
+        // 게이트(마일스톤) — 다발 위아래의 가는 눈금 한 쌍 + 아주 옅은 세로 머리카락선
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5
+        for (let j = 0; j < 3; j++) {
+          const a = sstep(TG[j], TG[j] + 500, t); if (a <= 0) continue
+          const gx = G[j], hs = (NL - 1) / 2 * SP * spread(gx, t) + 24
+          ctx.globalAlpha = .6 * a; ctx.beginPath()
+          ctx.moveTo(gx, CY - hs - 16 * a); ctx.lineTo(gx, CY - hs); ctx.moveTo(gx, CY + hs); ctx.lineTo(gx, CY + hs + 16 * a); ctx.stroke()
+          ctx.globalAlpha = .1 * a; ctx.setLineDash([2, 7]); ctx.beginPath(); ctx.moveTo(gx, CY - hs); ctx.lineTo(gx, CY + hs); ctx.stroke(); ctx.setLineDash([])
+        }
+        ctx.globalAlpha = 1
+        // 출시점 + 라이브 신호
+        if (t > TR) {
+          const e = t - TR
+          ring(RX, CY, 7 + eout(clamp(e / 1100)) * 120, .5 * (1 - clamp(e / 1100)), RED, 2)
+          if (e > 900) { const ph = ((e - 900) % 2600) / 2600; ring(RX, CY, 7 + ph * 48, .45 * (1 - ph), RED, 1.5) }
+          if (e > 500) {
+            const ph = ((e - 500) % 2200) / 2200, hx = lerp(RX + 10, XR + 160, eio(ph)), tl = 170
+            const g = ctx.createLinearGradient(hx - tl, 0, hx, 0); g.addColorStop(0, 'rgba(230,43,30,0)'); g.addColorStop(1, 'rgba(230,43,30,.95)')
+            ctx.beginPath(); ctx.moveTo(Math.max(RX + 10, hx - tl), CY); ctx.lineTo(hx, CY); ctx.strokeStyle = g; ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.stroke()
+          }
+          dot(RX, CY, 7 * eback(e / 450), RED)
+        }
+      },
+      text(t, st) { // 헤드라인 낱말 — 마스크 아래(105%)에서 떠오른다
+        const ws = st.words
+        for (let i = 0; i < ws.length; i++) { const k = eout(clamp((t - WT[Math.min(i, WT.length - 1)]) / 650)); ws[i].style.transform = k < 1 ? `translateY(${(1 - k) * 105}%)` : '' }
       },
     }
   }
 
-  /* E3 — 궤도(수미상관): 표지에서 완주한 한 줄이 들어와 궤도를 한 바퀴 그린다. 궤도 위 노드 5개가 표지와 같은 라벨
-     (요구·방향·마일스톤·출시·라이브)로 순서대로 켜지고, 고리는 빨간 출시 노드에서 닫힌다. 닫힌 뒤 빨간 점이 궤도를 돌며
-     라이브 노드를 켜고, 안쪽 동심 궤도 2개가 서로 다른 속도로 돌고, 중심에서 심전도·파문이 이어진다.
-     선 = 넓고 옅은 선을 겹친 글로우(캔버스 좌표로 그려 DPR·배율과 무관) + 진행 머리의 혜성 꼬리.
-     포인터 쪽으로 고리가 부풀고, 동심 궤도·먼지는 반대로 조금 밀린다(패럴랙스) */
+  /* E4 — 잔향: 표지 C4의 반대 방향. 한 줄이 들어와 다발로 펼쳐지고(출시 이후의 영향), 가운데 빨간 점에서 파문이 일어
+     잔잔한 줄들을 천천히 흔들고 지나간다. 파문은 2.6초마다 새로 일고 7초에 걸쳐 잦아든다 — 끝나지 않는 여운. 캔버스 글자 0개 */
   {
-    const C = { x: 1370, y: CY }, R = 250, A0 = Math.PI, XS = 880, JX = C.x - R
-    const L1 = JX - XS, LR = TAU * R, S = L1 + LR, D = 3000, TL = D // 고리가 닫히는 순간 = 출시
-    const sAt = t => eio(clamp(t / D)) * S                           // 한 줄 + 한 바퀴를 한 이징으로 — 머리 속도가 끊기지 않는다
-    const tAt = s => { let a = 0, b = D; for (let i = 0; i < 32; i++) { const m = (a + b) / 2; if (sAt(m) < s) a = m; else b = m } return b }
-    const LIVE0 = TL + 400, SPIN = TAU / 6000                         // 빨간 점 출발 · 각속도
-    /* 노드: 궤도 위 위치(바퀴 비율)와 점등 시각. 출시 = 닫힘점(왼쪽), 라이브 = 닫힌 뒤 빨간 점이 처음 지나는 곳 */
-    const NODES = [['요구', .3], ['방향', .52], ['마일스톤', .74], ['출시', 1], ['라이브', .12]].map(([txt, f], i) => ({
-      txt, th: A0 + f * TAU, tm: i < 3 ? tAt(L1 + f * LR) : i === 3 ? TL : LIVE0 + f * TAU / SPIN, red: i === 3 }))
-    const DUST = []
-    { let s = 20260929; const r = () => (s = (s * 1103515245 + 12345) % 2147483648) / 2147483648
-      for (let i = 0; i < 36; i++) DUST.push({ x: r() * 924, y: r() * 880, vx: (r() - .5) * .012, vy: (r() - .5) * .008, s: .9 + r() * .9, a: .12 + r() * .2, ph: r() * TAU }) }
-    const pt = { x: 0, y: 0 }
-    let pa = 0, pk = 0, ox = 0, oy = 0
-    const rad = th => { if (pk < .001) return R; let da = th - pa; da = Math.atan2(Math.sin(da), Math.cos(da)); return R + 40 * pk * Math.exp(-da * da / .22) }
-    const at = (th, dr) => { const r = rad(th) + (dr || 0); pt.x = C.x + Math.cos(th) * r; pt.y = C.y + Math.sin(th) * r; return pt }
-    const onPath = s => s < L1 ? (pt.x = XS + s, pt.y = CY, pt) : at(A0 + (s - L1) / R)
-    const trace = (a, b) => { // 경로 거리 a→b를 선으로
-      ctx.beginPath(); a = Math.max(0, a)
-      for (let s = a, i = 0; ; s += 6, i++) { const e = s > b ? b : s; onPath(e); i ? ctx.lineTo(pt.x, pt.y) : ctx.moveTo(pt.x, pt.y); if (e === b) break }
-    }
-    const glowStroke = (rgb, a) => { // 글로우 두 겹 + 본선
-      for (const [w, k] of [[14, .05], [7, .1], [3, .9]]) { ctx.strokeStyle = `rgba(${rgb},${a * k})`; ctx.lineWidth = w; ctx.stroke() }
-    }
-    const comet = (pos, len, rgb, a, w) => { // 머리 뒤로 사라지는 꼬리 — pos(u) = 꼬리 비율 u(0 꼬리끝 → 1 머리)의 점
-      const n = 22; let px, py
-      for (let i = 0; i <= n; i++) {
-        const u = i / n, p = pos(u)
-        if (i) { ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(p.x, p.y); ctx.strokeStyle = `rgba(${rgb},${a * u * u})`; ctx.lineWidth = w * (.4 + .6 * u); ctx.stroke() }
-        px = p.x; py = p.y
-      }
-      const g = ctx.createRadialGradient(px, py, 0, px, py, 22); g.addColorStop(0, `rgba(${rgb},${.45 * a})`); g.addColorStop(1, `rgba(${rgb},0)`)
-      ctx.fillStyle = g; ctx.fillRect(px - 22, py - 22, 44, 44)
-    }
-    const nodeLabel = (n, a) => { // 궤도 바깥 여백 — 선과 16px 이상
-      if (a <= 0) return
-      let x, y, al
-      if (n.red) { at(n.th); x = pt.x - 24; y = CY - 34; al = 'right' } // 들어오는 선 위쪽
-      else {
-        const c = Math.cos(n.th); al = c > .35 ? 'left' : c < -.35 ? 'right' : 'center'
-        at(n.th, al === 'center' ? 40 : 30); x = pt.x; y = pt.y
-      }
-      label(n.txt, x, y, a, al, 'middle')
-    }
-    V.E3 = {
-      T: 4800,
-      nt: [...NODES.map(n => n.tm - 150), NODES[4].tm + 200], // 왼쪽 연락 항목 6줄의 등장 시각(노드 점등에 맞춘다)
+    const NL = 26, SP = 19, XL = 900, XR = 1940, STEP = 8, NP = Math.ceil((XR - XL) / STEP) + 1
+    const C = { x: 1400, y: CY }, TD = 1200, TK = 1300, PER = 2600, LIFE = 7200, SPD = .17
+    const OFF = [], AL = []
+    for (let i = 0; i < NL; i++) { const u = (i - (NL - 1) / 2) / ((NL - 1) / 2); OFF.push(u * SP * (NL - 1) / 2); AL.push(.12 + .42 * Math.pow(1 - Math.abs(u), 1.3)) }
+    const AG = [], RR = [], DEC = []
+    V.E4 = {
+      T: 3000,
+      nt: [450, 600, 750, 900, 1050, 1400], // 왼쪽 연락 항목 6줄의 등장 시각
       frame(t) {
         ctx.clearRect(0, 0, W, H)
-        ctx.lineJoin = 'round'; ctx.lineCap = 'round'
-        pk = 0; ox = 0; oy = 0
-        if (ptr.on > .01) {
-          pa = Math.atan2(ptr.y - C.y, ptr.x - C.x)
-          pk = ptr.on * clamp(1 - Math.abs(Math.hypot(ptr.x - C.x, ptr.y - C.y) - R) / 280)
-          ox = -(ptr.x - C.x) * .025 * ptr.on; oy = -(ptr.y - C.y) * .025 * ptr.on
-        }
-        // 먼지 — 아주 드물게, 느리게 표류
-        const da = sstep(0, 1500, t)
-        for (const p of DUST) {
-          const x = 900 + ((p.x + p.vx * t) % 924 + 924) % 924 + ox * 1.6, y = 100 + ((p.y + p.vy * t) % 880 + 880) % 880 + oy * 1.6
-          dot(x, y, p.s, '#fff', p.a * da * (.6 + .4 * Math.sin(t * .0011 + p.ph)))
-        }
-        const s = sAt(t), done = t >= TL, e = t - TL
-        // 고리 완성 후 — 안쪽 동심 궤도 2개(서로 다른 속도) · 파문 3겹
-        if (done) {
-          const k = sstep(0, 1400, e), cx = C.x + ox, cy = C.y + oy
-          for (const [r, sp, dash, a] of [[195, .00006, [1.5, 12], .2], [128, -.00011, [1.5, 9], .16]]) {
-            const rot = e * sp
-            ctx.setLineDash(dash); ctx.beginPath(); ctx.arc(cx, cy, r, rot, rot + TAU); ctx.strokeStyle = `rgba(255,255,255,${a * k})`; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([])
-            dot(cx + Math.cos(rot * 9 + r) * r, cy + Math.sin(rot * 9 + r) * r, 2.5, '#fff', .55 * k)
-          }
-          for (let j = 0; j < 3; j++) {
-            const q = e - 900 - j * 1200; if (q <= 0) continue
-            const ph = (q % 3600) / 3600; ring(C.x, C.y, 20 + ph * R * 1.1, .2 * Math.pow(1 - ph, 1.5), '#fff', 1.5)
+        // 살아 있는 파문 목록
+        AG.length = 0; RR.length = 0; DEC.length = 0
+        if (t > TK) {
+          const kn = Math.floor((t - TK) / PER)
+          for (let k = Math.max(0, kn - 3); k <= kn; k++) {
+            const age = t - TK - k * PER; if (age < 0 || age > LIFE) continue
+            AG.push(age); RR.push(age * SPD); DEC.push(Math.exp(-age / 3200) * (1 - sstep(LIFE - 1800, LIFE, age)))
           }
         }
-        // 한 줄 + 궤도 — 글로우를 겹쳐 그린다(들어오는 줄은 왼쪽이 흐려진 채로)
-        if (s > 0) {
-          const g = ctx.createLinearGradient(XS, 0, JX, 0); g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(1, 'rgba(255,255,255,1)')
-          ctx.beginPath(); ctx.moveTo(XS, CY); ctx.lineTo(Math.min(s, L1) + XS, CY)
-          for (const [w, k] of [[14, .05], [7, .1], [3, .9]]) { ctx.globalAlpha = k; ctx.strokeStyle = g; ctx.lineWidth = w; ctx.stroke() }
-          ctx.globalAlpha = 1
-          if (s > L1) { trace(L1, s); glowStroke('255,255,255', 1) }
-          if (!done) comet(u => onPath(s - 170 * (1 - u)), 170, '255,255,255', .95, 5)
-        }
-        // 노드 — 예정(희미) → 점등(링 펄스, 잠깐 빨강 → 흰색). 출시는 빨강으로 남는다
-        const pre = sstep(300, 900, t)
-        for (const n of NODES) {
-          at(n.th); const x = pt.x, y = pt.y
-          if (t < n.tm) { dot(x, y, 4, '#fff', .35 * pre); continue }
-          const q = t - n.tm
-          if (n.red) {
-            ring(x, y, 13 + eout(clamp(q / 1200)) * 130, .55 * (1 - clamp(q / 1200)), RED, 2.5)
-            if (q > 600) { const ph = ((q - 600) % 2400) / 2400; ring(x, y, 13 + ph * 60, .4 * (1 - ph), RED, 2) }
-          } else {
-            dot(x, y, 9, mix(sstep(250, 800, q)))
-            ring(x, y, 9 + eout(clamp(q / 800)) * 46, .6 * (1 - clamp(q / 800)), '#fff', 2)
+        const xh = XL + (XR - XL) * eout(clamp(t / 750)), S = eio(clamp((t - 350) / 1150))
+        const kmax = Math.min(NP - 1, Math.ceil((xh - XL) / STEP)), pon = ptr.on > .01, nr = AG.length
+        ctx.lineJoin = 'round'; ctx.lineWidth = 1.3; ctx.strokeStyle = fadeOf(XL)
+        for (let i = 0; i < NL; i++) {
+          const y0 = CY + OFF[i] * S
+          ctx.beginPath()
+          for (let k = 0; k <= kmax; k++) {
+            const x = XL + k * STEP
+            let y = y0
+            if (nr) {
+              const dx = x - C.x, dy = y0 - C.y, d = Math.sqrt(dx * dx + dy * dy), near = clamp(d / 110)
+              for (let j = 0; j < nr; j++) { const q = d - RR[j]; if (q > -160 && q < 160) y += 18 * DEC[j] * near * Math.sin(q * .05) * Math.exp(-q * q / 5200) }
+            }
+            if (pon) y += part(x, y)
+            k ? ctx.lineTo(x, y) : ctx.moveTo(x, y)
           }
+          ctx.globalAlpha = AL[i]; ctx.stroke()
         }
-        // 라이브 — 빨간 점이 궤도를 돌며 꼬리를 남긴다 · 중심 심전도
-        if (done) {
-          const ra = sstep(LIVE0 - 200, LIVE0 + 400, t)
-          if (ra > 0) {
-            const th = A0 + Math.max(0, t - LIVE0) * SPIN
-            comet(u => at(th - .9 * (1 - u)), 0, '230,43,30', .8 * ra, 4)
-            at(th); dot(pt.x, pt.y, 6, RED, ra)
-          }
-          ecg(C.x - 64, clamp((e - 250) / 500) * 128, e, [[0, 0], [.25, .95], [.75, .95], [1, 0]])
+        ctx.globalAlpha = 1
+        for (let j = 0; j < nr; j++) ring(C.x, C.y, RR[j], .08 * DEC[j] * (1 - sstep(320, 500, RR[j])), '#fff', 1) // 원은 가까이서만 — 글자 칸을 넘지 않게
+        // 빨간 점 — 파문이 일 때마다 짧게 울린다
+        if (t > TD) {
+          for (let j = 0; j < nr; j++) if (AG[j] < 1000) ring(C.x, C.y, 8 + eout(AG[j] / 1000) * 34, .55 * (1 - AG[j] / 1000), RED, 1.5)
+          dot(C.x, C.y, 8 * eback((t - TD) / 450), RED)
         }
-        if (done) { at(A0); dot(pt.x, pt.y, 13, RED) }
-        for (const n of NODES) nodeLabel(n, sstep(n.tm, n.tm + 450, t))
       },
     }
   }
@@ -323,8 +220,6 @@ var DeckMotion = (() => {
   function fit(s) { scale = s; if (act) { size(act); draw() } }
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else run() })
   rmq.addEventListener('change', () => { if (act) show(act.sec) })
-  /* 글꼴이 늦게 붙으면 캔버스 라벨을 한 번 다시 그린다(정지 화면일 때만 — 도는 중이면 다음 프레임이 그린다) */
-  if (document.fonts) document.fonts.ready.then(() => { if (act && !raf) draw() })
   return { show, fit, state: () => ({ id: act ? act.sec.dataset.mo : null, running: !!raf, t, w: act ? act.cv.width : 0, h: act ? act.cv.height : 0,
     work: work.length ? { n: work.length, avg: +(work.reduce((a, b) => a + b, 0) / work.length).toFixed(3), p95: +[...work].sort((a, b) => a - b)[Math.floor(work.length * .95)].toFixed(3) } : null }) }
 })()

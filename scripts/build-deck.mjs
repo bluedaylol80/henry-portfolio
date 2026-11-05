@@ -467,17 +467,18 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .cover .hl{margin-top:44px;font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.02em}
 .cover .ct{margin-top:44px;font-size:24px;line-height:1.9;color:var(--m60)}
 .cover .ct b{display:inline-block;min-width:212px;color:var(--tx);font-weight:600}
-/* 1·19장 모션(본부장 결재 09-29: 표지=C3 키네틱 타임라인 · 마지막 장=E3 궤도) — scripts/deck-motion.js.
+/* 1·19장 모션(본부장 결재 11-05: 표지=C4 · 마지막 장=E4) — scripts/deck-motion.js.
    캔버스는 1920×1080 스테이지 좌표 그대로 깔고 글자 아래에 둔다. 포인터를 받지 않아 링크 클릭을 가로채지 않는다. */
 .mo{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;pointer-events:none}
 .cover>div{position:relative;z-index:1}
 .cover .hl{position:relative}
 .hl .ln{display:block}
 .hl .w{white-space:nowrap}
-.hl .ch{display:inline-block}
-.caret{position:absolute;width:4px;border-radius:2px;background:var(--sub);opacity:0;pointer-events:none}
+/* 표지 헤드라인 — 낱말마다 마스크(.w) 아래에서 떠오른다(.wi) */
+.hl .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.hl .wi{display:inline-block;will-change:transform}
 /* 등장 연출은 화면에서만 — 인쇄에서는 글자를 항상 완전히 보인다 */
-@media print{.cover [data-d],.cover [data-n],.hl .ch{opacity:1!important;transform:none!important}.caret{display:none}}
+@media print{.cover [data-d],.cover [data-n],.hl .wi{opacity:1!important;transform:none!important}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
 .ct .sep{color:var(--m38);margin:0 .5em}
 .ct a,.lk a{text-decoration:underline;text-decoration-color:var(--m38);text-underline-offset:5px}
@@ -615,21 +616,22 @@ function render(d, A) {
   ${o.rights ? `<p class="rights">${esc(o.rights)}</p>` : ''}
 </section>`
 
-  /* --- 1. 표지 --- C3 키네틱 타임라인: 헤드라인은 글자 단위로 쪼개 캔버스 선과 같은 박자로 등장시킨다.
-     화면 낭독기는 쪼갠 글자 대신 .sr의 한 문장을 읽는다. data-d = 등장 시작(ms) */
-  if (d.h1.length !== 3) fail('표지 헤드라인이 3줄이 아니다(C3 타이밍은 3줄 기준): ' + d.h1.length)
+  /* --- 1. 표지 --- C4 신호 정렬: 헤드라인은 낱말 단위로 쪼개 캔버스 줄과 같은 박자로 마스크 아래에서 떠오르게 한다.
+     화면 낭독기는 쪼갠 낱말 대신 .sr의 한 문장을 읽는다. data-d = 등장 시작(ms) */
+  if (d.h1.length !== 3) fail('표지 헤드라인이 3줄이 아니다(C4 타이밍은 3줄 기준): ' + d.h1.length)
+  if (d.h1.join(' ').split(' ').length !== 9) fail('표지 헤드라인 낱말이 9개가 아니다(C4 타이밍은 9낱말 기준): ' + d.h1.join(' '))
   const ext = (href, txt) => `<a href="${esc(href)}" target="_blank" rel="noopener">${txt}</a>`
   const SEP = '<span class="sep" aria-hidden="true">·</span>'
-  const chars = d.h1.map(line => `<span class="ln">${line.split(' ').map(w =>
-    `<span class="w">${[...w].map(c => `<span class="ch">${esc(c)}</span>`).join('')}</span>`).join(' ')}</span>`).join('')
+  const words = d.h1.map(line => `<span class="ln">${line.split(' ').map(w =>
+    `<span class="w"><span class="wi">${esc(w)}</span></span>`).join(' ')}</span>`).join('')
   const cover = `
-<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="표지 — ${esc(d.brand)}" data-bg="#26262B" data-mo="C3">
+<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="표지 — ${esc(d.brand)}" data-bg="#26262B" data-mo="C4">
   <canvas class="mo" aria-hidden="true"></canvas>
   <div>
     <p class="eb" data-d="0">${esc(L.cover)}</p>
     <p class="nm" style="margin-top:26px" data-d="80">${esc(d.brand)}</p>
     <p class="rl" data-d="160">${esc(d.role)}</p>
-    <p class="hl"><span class="sr">${esc(d.h1.join(' '))}</span><span aria-hidden="true">${chars}</span><i class="caret"></i></p>
+    <p class="hl"><span class="sr">${esc(d.h1.join(' '))}</span><span aria-hidden="true">${words}</span></p>
     <div class="ct" data-d="900">
       <p><b>${L.email}</b>${MAIL}</p>
       <p><b>${L.site}</b>${esc(LINK.web.replace(/^https?:\/\//, ''))}</p>
@@ -1038,7 +1040,7 @@ function render(d, A) {
   /* --- 19. 연락 --- */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
   const contact = `
-<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락 — ${esc(d.brand)}" data-bg="#26262B" data-mo="E3">
+<section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락 — ${esc(d.brand)}" data-bg="#26262B" data-mo="E4">
   <canvas class="mo" aria-hidden="true"></canvas>
   <div>
     <p class="eb" data-d="0">${esc(L.contact)}</p>

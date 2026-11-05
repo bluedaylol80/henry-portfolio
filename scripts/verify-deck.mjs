@@ -146,7 +146,7 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
   if (!ok) bad.push(`${nm} 스테이지 어긋남 ${JSON.stringify(box)} 기대 ${(1920 * s).toFixed(1)}×${(1080 * s).toFixed(1)}`)
   /* 표지 캔버스 — 실해상도가 스테이지 표시 크기와 맞고(DPR 1), 표지에서만 돈다 */
   const m1 = await page.evaluate(() => DeckMotion.state())
-  if (m1.id !== 'C3' || !m1.running || m1.w !== Math.round(1920 * s) || m1.h !== Math.round(1080 * s))
+  if (m1.id !== 'C4' || !m1.running || m1.w !== Math.round(1920 * s) || m1.h !== Math.round(1080 * s))
     bad.push(`${nm} 표지 모션 상태 ${JSON.stringify(m1)} 기대 캔버스 ${Math.round(1920 * s)}×${Math.round(1080 * s)}`)
   await page.evaluate(() => { location.hash = '#2' }); await sleep(500)
   if ((await page.evaluate(() => DeckMotion.state())).running) bad.push(nm + ' 2장에서도 모션이 돈다')
@@ -166,7 +166,8 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
     const snap = () => page.evaluate(() => document.querySelector('.s.on canvas.mo').toDataURL())
     const a = await snap(); await sleep(600); const b = await snap()
     const st = await page.evaluate(() => ({ ...DeckMotion.state(),
-      hidden: [...document.querySelectorAll('.s.on .ch,.s.on [data-d],.s.on [data-n]')].filter(el => +getComputedStyle(el).opacity < 1).length }))
+      hidden: [...document.querySelectorAll('.s.on [data-d],.s.on [data-n]')].filter(el => +getComputedStyle(el).opacity < 1).length
+        + [...document.querySelectorAll('.s.on .hl .wi')].filter(el => getComputedStyle(el).transform !== 'none').length }))
     if (st.running || a !== b) bad.push(`동작 줄이기에서 ${i}장 모션이 계속 움직인다`)
     if (st.hidden) bad.push(`동작 줄이기에서 ${i}장 글자 ${st.hidden}개가 덜 보인다`)
     if (a.length < 20000) bad.push(`동작 줄이기에서 ${i}장 캔버스가 비었다`)
