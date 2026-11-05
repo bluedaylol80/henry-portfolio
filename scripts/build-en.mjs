@@ -192,8 +192,7 @@ for (const q of ["'", '"']) {
 }
 html = html.split('../../').join('../')
 
-/* ---------- 4-b. 로컬 상대경로 자산 존재 검사 (알려진 결손은 예외) ---------- */
-const KNOWN_MISSING = ['../works/nanakage-thumb.webp', '../works/nanakage-1.webp']
+/* ---------- 4-b. 로컬 상대경로 자산 존재 검사 ---------- */
 {
   const refs = new Set()
   for (const m of html.matchAll(/(?:src|href)="(\.\.\/[^"]+)"/g)) refs.add(m[1])
@@ -203,9 +202,8 @@ const KNOWN_MISSING = ['../works/nanakage-thumb.webp', '../works/nanakage-1.webp
     if (!clean) return false
     return !existsSync(join(OUT_DIR, clean))
   })
-  const unexpected = missing.filter((r) => KNOWN_MISSING.indexOf(r) < 0)
-  if (unexpected.length) fail('결과물이 없는 로컬 자산을 참조한다 ' + unexpected.length + '건: ' + unexpected.slice(0, 8).join(', '))
-  console.log('  자산 참조 ' + refs.size + '건 · 결손 ' + missing.length + '건(알려진 예외)')
+  if (missing.length) fail('결과물이 없는 로컬 자산을 참조한다 ' + missing.length + '건: ' + missing.slice(0, 8).join(', '))
+  console.log('  자산 참조 ' + refs.size + '건 · 결손 0건')
 }
 
 /* ---------- 5. lang · canonical · og:url · 언어 링크 (건수 단언) ---------- */

@@ -19,7 +19,8 @@
  * 🔴 금지 id 3건(2c099a8d·36359de7·1f999a8d)은 입력 JSON에 애초에 없다 — 여기서도 하드 차단한다.
  * 🟡 본문 미렌더는 무음으로 넘기지 않는다(exit 1). 재실행하면 같은 결과가 나온다.
  *
- * Usage: node scripts/build-evidence.mjs
+ * Usage: node scripts/build-evidence.mjs               (전체 재캡처)
+ *        node scripts/build-evidence.mjs <id앞자리…>   (지정 페이지만 재캡처 — index.json 나머지 항목은 그대로)
  */
 import puppeteer from 'puppeteer-core'
 import { readFileSync, writeFileSync, mkdirSync, statSync, existsSync } from 'node:fs'
@@ -38,7 +39,9 @@ const sleep = ms => new Promise(r => setTimeout(r, ms))
 const fail = msg => { console.error('빌드 실패: ' + msg); process.exit(1) }
 
 const src = JSON.parse(readFileSync(SRC, 'utf8'))
+const ONLY = process.argv.slice(2)
 const targets = src.results.filter(r => r.public && r.id !== HUB)
+  .filter(r => !ONLY.length || ONLY.some(p => r.id.startsWith(p)))
 for (const t of targets) if (DENY.some(d => t.id.startsWith(d))) fail('금지 id가 목록에 있다: ' + t.id)
 if (!targets.length) fail('대상이 0건이다')
 mkdirSync(OUT_DIR, { recursive: true })
@@ -158,8 +161,16 @@ for (const t of targets) {
         const own = callout && callout.querySelector('[data-content-editable-leaf]')
         if (own) for (const el of callout.querySelectorAll('[data-block-id]')) if (!el.contains(own)) el.style.display = 'none'
         if (callout){
-          const cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
-          if (cTop > top) return Math.max(0, Math.round(cTop - 24))
+          let cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
+          if (cTop > top) {
+            /* 🔴 콜아웃 위에 이미지 블록이 있으면 콜아웃이 뷰포트 아래쪽에 걸린다 — 그대로 자르면
+               clip이 화면 밖(내부 스크롤러 바깥 = 흰 영역)으로 나가 콜아웃 둘째 줄부터 잘린다(4c6d6bba·8cbbe937).
+               콜아웃을 화면 위쪽 24px로 올린 뒤 다시 잰다. */
+            callout.scrollIntoView({ block: 'start' })
+            if (sc) sc.scrollTop = Math.max(0, sc.scrollTop - 24)
+            cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
+            return Math.max(0, Math.round(cTop - 24))
+          }
         }
         return Math.max(0, Math.round(top - 72))
       })
@@ -193,5 +204,5 @@ for (const t of targets) {
 
 await browser.close()
 if (done !== targets.length) fail('처리 누락: ' + done + '/' + targets.length)
-writeFileSync(OUT_DIR + '/index.json', JSON.stringify(index, null, 1) + '\n', 'utf8')
+writeFileSync(OUT_DIR + '/index.json', JSON.stringify(ONLY.length ? { ...PREV, ...index } : index, null, 1) + '\n', 'utf8')
 console.log('\n' + Object.keys(index).length + '/' + targets.length + ' -> ' + OUT_DIR + '/index.json')

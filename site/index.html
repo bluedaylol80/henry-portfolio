@@ -229,6 +229,8 @@ html[lang="ko"] .clock-t{order:4}
 .h1{max-width:20ch;font-size:2rem;font-weight:600;line-height:1.06;letter-spacing:-.03em}
 @media (min-width:640px){.h1{font-size:3rem}}
 @media (min-width:768px){.h1{font-size:3.75rem}}
+/* EN 헤드라인은 줄이 길어 2rem이면 390폭에서 5줄이 된다 — 폰 폭에서만 EN을 줄여 4줄로(KO는 lang이 달라 영향 없음) */
+@media (max-width:639px){html[lang="en"] .h1{font-size:7vw}}
 .hero-sub{max-width:36ch;font-size:1rem;line-height:1.62;color:rgba(17,17,17,.72)}
 @media (max-width:480px){.hero-sub{font-size:.9375rem;line-height:1.58}}
 @media (min-width:640px){.hero-sub{font-size:1.125rem}}
