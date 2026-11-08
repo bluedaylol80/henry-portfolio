@@ -560,7 +560,7 @@ body {
   position: relative;
 }
 
-/* 좌 패널 — 보상 섹션 헤더 (고정) */
+/* 좌 패널, 보상 섹션 헤더 (고정) */
 .reward-section-h-row {
   flex-shrink: 0;
   display: flex; justify-content: space-between; align-items: center;
@@ -570,7 +570,7 @@ body {
   gap: 8px;
 }
 
-/* 좌 패널 — 보상 리스트 스크롤 영역 */
+/* 좌 패널, 보상 리스트 스크롤 영역 */
 .reward-list-scroll {
   flex: 1;
   overflow-y: auto;
@@ -623,7 +623,7 @@ body {
 }
 .slot-counter.complete .sc-num { color: var(--success); }
 
-/* 미션 진행도 (우측 패널 — W1 탭 아래 고정, 미션 리스트 위) */
+/* 미션 진행도 (우측 패널, W1 탭 아래 고정, 미션 리스트 위) */
 .progress-block {
   flex-shrink: 0;
   display: flex;
@@ -967,7 +967,7 @@ body {
   box-shadow: 0 0 12px rgba(249,115,22,0.35);
 }
 
-/* 우 패널 — 미션 (72%) */
+/* 우 패널, 미션 (72%) */
 .right {
   flex: 1;
   padding: 10px 14px 10px 14px;
@@ -977,7 +977,7 @@ body {
     radial-gradient(ellipse 600px 200px at 50% 100%, rgba(249,115,22,0.08) 0%, transparent 70%),
     transparent;
 }
-/* 미션 리스트 영역 — 이 부분만 스크롤 */
+/* 미션 리스트 영역, 이 부분만 스크롤 */
 .missions-scroll {
   flex: 1;
   overflow-y: auto;
@@ -1318,7 +1318,7 @@ body {
       <div class="hdr-title">
         <span class="anniv">10</span>
         <span class="sub">
-          SSJ&nbsp;ANNIVERSARY <span class="sep">·</span> INFERNO <span class="sep">·</span> R&nbsp;CARD
+          SSJ&nbsp;ANNIVERSARY <span class="sep">|</span> INFERNO <span class="sep">|</span> R&nbsp;CARD
         </span>
       </div>
       <div class="hdr-meta">
@@ -1358,7 +1358,7 @@ body {
         <div class="apply-head">
           <div class="apply-h-left">
             <div class="apply-title">10주년 PVC 포토카드 응모</div>
-            <div class="apply-sub">경품응모 미션 완료 시마다 +1, 주차 100% 달성 시 보너스 +1 · 응모는 무제한</div>
+            <div class="apply-sub">경품응모 미션 완료 시마다 +1, 주차 100% 달성 시 보너스 +1, 응모는 무제한</div>
           </div>
           <div class="apply-h-right">
             <div class="apply-pt-block">
@@ -1458,7 +1458,7 @@ body {
 
 <script>
 // ────────────────────────────────────────────────────────────
-//  SSJ 10주년 웹뷰 프로토타입 v0.7 — INFERNO 스킨 (R카드 컨셉)
+//  SSJ 10주년 웹뷰 프로토타입 v0.7, INFERNO 스킨 (R카드 컨셉)
 //  변경: 인페르노 무드(블랙+골드/오렌지/레드) / 10TH 워드마크 / R카드 프레임
 //  애니메이션: 잿불(emberRise), 카드 광택(cardShine), 화염 펄스(flicker, ridgePulse)
 // ────────────────────────────────────────────────────────────
@@ -1469,7 +1469,7 @@ const FORCE_WEEK = parseInt(params.get('week'), 10);
 const FORCE_UNLOCK = parseInt(params.get('unlock'), 10);
 const T80 = 0.8, T100 = 1.0;
 
-// 응모 그룹 — JYPnation 8팀
+// 응모 그룹, JYPnation 8팀
 const APPLY_GROUPS = [
   { code:'kickflip',      name:'KickFlip',        icon:'🛹', color:'#fb923c' },
   { code:'day6',          name:'DAY6',            icon:'🎸', color:'#60a5fa' },
@@ -1481,7 +1481,7 @@ const APPLY_GROUPS = [
   { code:'niziu',         name:'NiziU',           icon:'🌸', color:'#f9a8d4' },
 ];
 
-// 보상 후보 — 3종 선택권 공통 (R카드 프레임 표시용 글리프 추가)
+// 보상 후보, 3종 선택권 공통 (R카드 프레임 표시용 글리프 추가)
 const REWARD_OPTIONS = [
   { code:'CARD-PICK',    name:'한정테마 R카드 선택권', icon:'🃏', meta:'아티스트 선택', glyph:'R',  body:'🎴' },
   { code:'BG-PICK',      name:'스페셜 배경 선택권',    icon:'🖼️', meta:'아티스트 선택', glyph:'BG', body:'🌅' },
@@ -1517,12 +1517,12 @@ const THEME_LIBRARY = {
     { artist:'ITZY',       name:'10th 한정 프로필 프레임 B', rare:'P' },
     { artist:'Stray Kids', name:'10th 한정 프로필 프레임 C', rare:'P' },
     { artist:'TWICE',      name:'10th 한정 프로필 프레임 D', rare:'P' },
-    { artist:'공통',        name:'10th 칭호 — 별빛',       rare:'P' },
-    { artist:'공통',        name:'10th 칭호 — 무대 위에서', rare:'P' },
+    { artist:'공통',        name:'10th 칭호: 별빛',       rare:'P' },
+    { artist:'공통',        name:'10th 칭호: 무대 위에서', rare:'P' },
   ],
 };
 
-// 누적 미션 베이스 — 매 주차 max = baseMax * w (W2는 W1+W2, W3는 W1+W2+W3 누적)
+// 누적 미션 베이스, 매 주차 max = baseMax * w (W2는 W1+W2, W3는 W1+W2+W3 누적)
 const MISSION_BASE = [
   { id:'play',    type:'free',  icon:'🎵', name:'곡 플레이',                       baseMax:5,    reward:'+RP 2,000' },
   { id:'star',    type:'free',  icon:'⭐', name:'★ 수집',                          baseMax:30,   reward:'+RP 3,000' },
@@ -1530,7 +1530,7 @@ const MISSION_BASE = [
   { id:'enhance', type:'free',  icon:'✨', name:'R 카드 강화',                      baseMax:5,    reward:'+DIA 50' },
   { id:'dia',     type:'paid',  icon:'💎', name:'다이아 사용',                       baseMax:300,  reward:'+한정테마 S카드 (랜덤)' },
   { id:'rp',      type:'paid',  icon:'⚡', name:'RP 사용',                          baseMax:5000, reward:'+카드팩 30' },
-  { id:'apply',   type:'apply', icon:'🎁', name:'경품응모 — PVC 포토카드팩 구매',     baseMax:4,    reward:'응모포인트 +1 / 회' },
+  { id:'apply',   type:'apply', icon:'🎁', name:'경품응모: PVC 포토카드팩 구매',     baseMax:4,    reward:'응모포인트 +1 / 회' },
 ];
 
 function buildWeekMissions(w) {
@@ -1552,7 +1552,7 @@ const state = {
   // 각 주차에 받은 보상 인덱스 배열 (중복 허용, 최대 2개)
   claims: { 1:[], 2:[], 3:[], 4:[] },
   missions: { 1:buildWeekMissions(1), 2:buildWeekMissions(2), 3:buildWeekMissions(3), 4:buildWeekMissions(4) },
-  // 누적 진행도 (단일 객체) — 시연용: W1 거의 완료(다이아만 미완)
+  // 누적 진행도 (단일 객체), 시연용: W1 거의 완료(다이아만 미완)
   progress: { play:5, star:30, collect:5, enhance:5, dia:240, rp:5000, apply:4 },
   // 100% 보너스 1회 지급 추적 (주차별)
   bonusGranted: { 1:false, 2:false, 3:false, 4:false },
@@ -1804,7 +1804,7 @@ function renderAll() {
   renderApply();
   renderApplyView();
   if (state.activeWeek === 0) {
-    // 응모 현황 모드 — W 패널 갱신 스킵, 잠금 오버레이도 숨김
+    // 응모 현황 모드, W 패널 갱신 스킵, 잠금 오버레이도 숨김
     document.getElementById('lockOverlay').classList.remove('show');
     return;
   }
@@ -1828,7 +1828,7 @@ function incMission(w, mid) {
   state.progress[mid] = Math.min(targetMax, before + inc);
   const after = state.progress[mid];
 
-  // 1) apply 미션 — baseMax 경계를 새로 넘을 때마다 응모 포인트 +1
+  // 1) apply 미션, baseMax 경계를 새로 넘을 때마다 응모 포인트 +1
   if (mid === 'apply') {
     const crossedBefore = Math.floor(before / baseMax);
     const crossedAfter  = Math.floor(after  / baseMax);
