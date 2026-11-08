@@ -323,7 +323,8 @@ html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 html[lang=en] .tl col:nth-child(1){width:41mm}
 html[lang=en] .tl col:nth-child(3){width:16mm}
 /* WO-33 — 원더피플 행에 슈퍼피플 한 줄이 늘어 EN 왼쪽 칸이 넘쳤다. 문구는 두고 행 간격만 줄인다 */
-html[lang=en] .tl th,html[lang=en] .tl td{padding-top:2.1mm;padding-bottom:2.1mm;line-height:1.33}
+html[lang=en] .tl,html[lang=en] .tl .sub,html[lang=en] .tl .impact{font-size:.86rem}
+html[lang=en] .tl th,html[lang=en] .tl td{padding-top:1.4mm;padding-bottom:1.4mm;line-height:1.3}
 .tl td.k{text-align:right;font-weight:600;padding-right:0}
 .tl b{font-weight:600}
 .tl .sub{display:block;color:var(--muted);font-size:.91rem;margin-top:.3mm}

@@ -208,7 +208,7 @@
     "7개국": "7개국",
     "Shadow-Seven-7개국-소프트런칭": "Shadow Seven: 7개국 소프트런칭.",
     "멀티-타이틀-라이브-운영과": "멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선",
-    "담당-타이틀이-11개에서-7개로": "담당 타이틀이 11개에서 7개로 변경되는 기간에 라이브 기획과 개발 마일스톤을 관리했습니다. 만족도 조사 결과를 2026년 제품 방향성 제안과 웹뷰와 꾸미기 이벤트 프로토타입으로 구체화했고, 두 프로토타입 모두 실제 출시로 이어졌습니다.",
+    "담당-타이틀이-11개에서-7개로": "담당 타이틀이 11개에서 7개로 변경되는 기간에 라이브 기획과 개발 마일스톤을 관리했습니다. 만족도 조사 결과를 2026년 제품 방향성 제안과 웹뷰와 꾸미기 이벤트 프로토타입으로 구체화했고, 두 프로토타입 모두 실제 출시로 이어졌습니다. 재직 기간 담당 타이틀 매출 172억(IAP+IAA)에 기여했습니다.",
     "사례-사용자-조사-기반-이벤트": "사례: 사용자 조사 기반 이벤트 복귀",
     "사례-소프트런칭-지표-개선": "사례: 소프트런칭 지표 → 개선&nbsp;과제",
     "성과-SuperStar-2026-방향성": "성과: SuperStar 2026 방향성&nbsp;제안",
@@ -242,7 +242,7 @@
     "스팀-중국-서비스의-Live-ops": "스팀 중국 서비스의 Live-ops를 맡아 <span class=\"nb\">Douyu와 KOOK</span> 채널 운영, 스트리밍 이벤트, VOC 수집, <span class=\"nb\">지표 분석과 경영 보고까지</span> 이어 갔습니다.",
     "중국-서비스": "중국 서비스",
     "이벤트-콘텐츠": "이벤트와 콘텐츠",
-    "서비스-방향성-제시-2025": "<strong>서비스 방향성 제시</strong>(2025 라이브 사업 계획과 2026 상반기 방향성) → 개발 마일스톤 관리와 지표 기반 Live-ops → 인게임 시스템 개편과 업무 프로세스 개선"
+    "서비스-방향성-제시-2025": "<strong>서비스 방향성 제시</strong>(2025 라이브 사업 계획과 2026 상반기 방향성) → 개발 마일스톤 관리와 지표 기반 Live-ops → 인게임 시스템 개편과 업무 프로세스 개선 → 담당 타이틀 매출 172억 기여(2024.10 – 2026.06)"
   },
   "strings": {
     "임현택-괄호": "",
@@ -444,7 +444,7 @@
     "7개국": "7 markets",
     "Shadow-Seven-7개국-소프트런칭": "Shadow Seven: soft launch in 7 markets.",
     "멀티-타이틀-라이브-운영과": "Multi-title live operations and user‑led product work",
-    "담당-타이틀이-11개에서-7개로": "Managed live game design and the dev milestones while the titles I owned went from 11 to 7. Turned the satisfaction survey into the 2026 product direction and into webview and decoration event prototypes. The events developed from these prototypes shipped.",
+    "담당-타이틀이-11개에서-7개로": "Managed live game design and the dev milestones while the titles I owned went from 11 to 7. Turned the satisfaction survey into the 2026 product direction and into webview and decoration event prototypes. The events developed from these prototypes shipped. Contributed to ₩17.2B in revenue (IAP + IAA) across the titles I owned during my tenure.",
     "사례-사용자-조사-기반-이벤트": "Case: from user research to shipped events",
     "사례-소프트런칭-지표-개선": "Case: soft launch metrics → pre‑launch fixes",
     "성과-SuperStar-2026-방향성": "Work: SuperStar 2026 product direction",
@@ -478,7 +478,7 @@
     "스팀-중국-서비스의-Live-ops": "Ran live ops for the China service on Steam: <span class=\"nb\">Douyu and KOOK</span> channels, streaming events and VOC collection, through <span class=\"nb\">metrics analysis and management reporting.</span>",
     "중국-서비스": "China service",
     "이벤트-콘텐츠": "Events & content",
-    "서비스-방향성-제시-2025": "<strong>Service direction</strong> (2025 plan, 2026 H1) → dev milestones, data-driven Live-ops → system &amp; workflow revamps"
+    "서비스-방향성-제시-2025": "<strong>Service direction</strong> (2025 plan, 2026 H1) → dev milestones, data-driven Live-ops → system &amp; workflow revamps → ₩17.2B revenue contribution across owned titles (2024.10 – 2026.06)"
   },
   "attrs": {
     "맨 위로": "Back to top",
@@ -492,6 +492,10 @@
     "Henry Lim (임현택): 게임 라이브 서비스 PM과 디렉터, 19년": "Henry Lim: Game live-service PM & Director, 19 years"
   },
   "script": {
+    "172억": "₩17.2B",
+    "재직 기간 담당 타이틀 매출 기여(2024.10 – 2026.06, IAP+IAA)": "Revenue contribution, titles I owned (2024.10 – 2026.06, IAP + IAA)",
+    "매출 기여": "Revenue contribution",
+    "2024.10 – 12 31억, 2025년 101억, 2026.01 – 06 41억으로 재직 기간 합계 172억. 담당 SuperStar 시리즈 타이틀의 IAP와 IAA 매출 기준": "₩3.1B (2024.10 – 12), ₩10.1B (2025), ₩4.1B (2026.01 – 06), ₩17.2B in total during my tenure. IAP and IAA revenue of the SuperStar titles I owned",
     "주요 사례 (Notion)": "Key cases (Notion, pages in Korean)",
     "이메일 주소를 복사했습니다: bluedaylol80@gmail.com": "Email address copied: bluedaylol80@gmail.com",
     "조직 관리 (수습 평가안)": "Team management (probation evaluation plan) (KO)",
