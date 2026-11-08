@@ -1,12 +1,12 @@
 /**
- * 근거 카드 소스 빌더 — Notion 공개 페이지 27건을 캡처·요약해 site/evidence/ 로 굽는다.
+ * 근거 카드 소스 빌더 — Notion 공개 페이지 27건을 캡처와 요약해 site/evidence/ 로 굽는다.
  *
  * 왜: 성과 상세창의 텍스트 칩만으로는 "Notion으로 이어진다"는 것이 안 읽힌다(본부장 09-04).
- *     페이지 상단(아이콘·제목·속성·💡 요약·업무 프로세스)이 모든 페이지에서 같은 구조라
+ *     페이지 상단(아이콘, 제목, 속성, 💡 요약, 업무 프로세스)이 모든 페이지에서 같은 구조라
  *     1200×750 한 컷이 그대로 카드 썸네일이 된다.
  *
  * 입력: docs/handover/2026-09-04_notion_public_check.json 의 공개 항목(허브 제외 27건)
- * 출력: site/evidence/<id>.jpg (820x512 JPEG q70, ≤60KB) · site/evidence/index.json
+ * 출력: site/evidence/<id>.jpg (820x512 JPEG q70, ≤60KB), site/evidence/index.json
  *
  * 폭 820 = Notion 본문 열이 화면을 꽉 채우는 폭이다(1200이면 좌우 여백이 카드의 3분의 1을 먹는다).
  *
@@ -14,9 +14,9 @@
  *    포스트모템 페이지에 연단 인물 사진이 그대로 실렸다(본부장 09-05 지적).
  *    대신 (a) 제목보다 위에 있는 이미지성 요소를 클래스와 무관하게 전부 숨기고,
  *    (b) 크롭 기준을 좌표 0이 아니라 **제목 요소**로 잡는다 — clip.y = 제목top - 72.
- *    커버가 있든 없든 제목·속성·💡 요약이 프레임에 들어온다.
+ *    커버가 있든 없든 제목, 속성, 💡 요약이 프레임에 들어온다.
  *
- * 🔴 금지 id 3건(2c099a8d·36359de7·1f999a8d)은 입력 JSON에 애초에 없다 — 여기서도 하드 차단한다.
+ * 🔴 금지 id 3건(2c099a8d, 36359de7, 1f999a8d)은 입력 JSON에 애초에 없다 — 여기서도 하드 차단한다.
  * 🟡 본문 미렌더는 무음으로 넘기지 않는다(exit 1). 재실행하면 같은 결과가 나온다.
  *
  * Usage: node scripts/build-evidence.mjs               (전체 재캡처)
@@ -105,12 +105,12 @@ for (const t of targets) {
             vals.push(lines[j])
             if (vals.length >= 4) break
           }
-          return vals.filter(v => v !== 'Empty' && v !== '비어 있음').join(' · ')
+          return vals.filter(v => v !== 'Empty' && v !== '비어 있음').join(', ')
         }
         return {
           blocks,
           title: (document.title || '').replace(/\s*\|\s*Notion\s*$/, '').trim(),
-          // 요약 = 첫 콜아웃의 자기 문장만. 콜아웃 안 자식 블록(대표 이미지·설명 문단)은 섞지 않는다(WO-32 양식).
+          // 요약 = 첫 콜아웃의 자기 문장만. 콜아웃 안 자식 블록(대표 이미지와 설명 문단)은 섞지 않는다(WO-32 양식).
           // 렌더 DOM에서 콜아웃 자기 문장은 콜아웃 안 첫 편집 leaf다.
           summary: txt(callout && (callout.querySelector('[data-content-editable-leaf]') || callout)),
           process,
@@ -119,11 +119,11 @@ for (const t of targets) {
         }
       }, LABELS)
       if (!info.blocks) fail('본문이 렌더되지 않았다: ' + t.id + ' (' + t.label + ')')
-      /* 제목 기준 크롭 — 커버가 있든 없든 제목·속성·요약이 프레임에 들어오게 한다.
+      /* 제목 기준 크롭 — 커버가 있든 없든 제목, 속성, 요약이 프레임에 들어오게 한다.
          반환값 top 은 페이지(문서) 좌표라 그대로 screenshot clip 에 넣을 수 있다. */
       const clipTop = await page.evaluate(() => {
         const bar = document.querySelector('.notion-topbar')
-        if (bar) bar.style.display = 'none'     // 상단 툴바(브레드크럼·가입 버튼)는 카드에 필요 없다
+        if (bar) bar.style.display = 'none'     // 상단 툴바(브레드크럼과 가입 버튼)는 카드에 필요 없다
         const findTitle = () => {
           const h1 = document.querySelector('.notion-page-block h1, .notion-title, h1')
           if (h1 && h1.getBoundingClientRect().height) return h1
@@ -152,11 +152,11 @@ for (const t of targets) {
         }
         // 되감기가 먹었으면 tTop 이 이미 72 근처다 — 남은 오차만 clip 으로 보정한다.
         const top = title.getBoundingClientRect().top + (window.scrollY || 0)
-        /* 🔴 제목·속성만 담으면 카드가 "무슨 페이지인지"만 보여주고 판단·결과는 안 보인다(Codex R7).
+        /* 🔴 제목과 속성만 담으면 카드가 "무슨 페이지인지"만 보여주고 판단과 결과는 안 보인다(Codex R7).
            💡 요약 콜아웃이 있으면 거기서 24px 위를 기준으로 잘라 요약 + ✅ 업무 프로세스가 프레임에 들어오게 한다.
            제목은 카드가 텍스트로 따로 쓰므로 그림에서 빠져도 잃는 정보가 없다. */
         const callout = document.querySelector('.notion-callout-block')
-        /* 양식 콜아웃은 안쪽에 대표 이미지·설명 문단을 품는다 — 그대로 찍으면 이미지가 프레임을 차지해
+        /* 양식 콜아웃은 안쪽에 대표 이미지와 설명 문단을 품는다 — 그대로 찍으면 이미지가 프레임을 차지해
            ✅ 업무 프로세스 줄이 밀려난다(WO-32). 캡처에서만 콜아웃 자기 문장 외 자식 블록을 접는다. */
         const own = callout && callout.querySelector('[data-content-editable-leaf]')
         if (own) for (const el of callout.querySelectorAll('[data-block-id]')) if (!el.contains(own)) el.style.display = 'none'
@@ -164,7 +164,7 @@ for (const t of targets) {
           let cTop = callout.getBoundingClientRect().top + (window.scrollY || 0)
           if (cTop > top) {
             /* 🔴 콜아웃 위에 이미지 블록이 있으면 콜아웃이 뷰포트 아래쪽에 걸린다 — 그대로 자르면
-               clip이 화면 밖(내부 스크롤러 바깥 = 흰 영역)으로 나가 콜아웃 둘째 줄부터 잘린다(4c6d6bba·8cbbe937).
+               clip이 화면 밖(내부 스크롤러 바깥 = 흰 영역)으로 나가 콜아웃 둘째 줄부터 잘린다(4c6d6bba와 8cbbe937).
                콜아웃을 화면 위쪽 24px로 올린 뒤 다시 잰다. */
             callout.scrollIntoView({ block: 'start' })
             if (sc) sc.scrollTop = Math.max(0, sc.scrollTop - 24)
@@ -190,7 +190,7 @@ for (const t of targets) {
           // en은 사람이 쓴 번역이다 — 재캡처가 지우지 않도록 기존 index.json에서 그대로 옮긴다
           ...(PREV[t.id] && PREV[t.id].en ? { en: PREV[t.id].en } : {}),
         }
-        console.log(`OK  ${t.group} / ${t.label} — ${bytes}B @${width} · 요약 ${info.summary.length}자 · 체인 ${info.process.length}자`)
+        console.log(`OK  ${t.group} / ${t.label} — ${bytes}B @${width}, 요약 ${info.summary.length}자, 체인 ${info.process.length}자`)
         break
       }
       console.log(`... ${t.id} ${bytes}B > 상한 — 720폭 재캡처`)

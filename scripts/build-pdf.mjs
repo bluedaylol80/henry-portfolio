@@ -23,7 +23,7 @@ const norm = s => s.replace(/\s+/g, ' ').trim()
 
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox'] })
 
-/* 1. 원천 검사 — 사이트 상세창 행 vs 인쇄 페이지 표 (사례마다 행 수가 다르다: case1=8, case2·3=6) */
+/* 1. 원천 검사 — 사이트 상세창 행 vs 인쇄 페이지 표 (사례마다 행 수가 다르다: case1=8, case2와 3=6) */
 for (const lang of ['ko', 'en']) {
   const site = await browser.newPage()
   await site.goto(lang === 'ko' ? BASE + '/' : BASE + '/en/', { waitUntil: 'networkidle2', timeout: 60000 })
@@ -43,7 +43,7 @@ for (const lang of ['ko', 'en']) {
   const print = await browser.newPage()
   await print.goto(lang === 'ko' ? BASE + '/pdf/' : BASE + '/pdf/en/', { waitUntil: 'networkidle2', timeout: 60000 })
   await sleep(600)
-  /* 사례 하나가 슬라이드 두 장(개요·실행)으로 나뉜다 — data-case로 묶어 상세 행을 원래 순서로 잇는다 */
+  /* 사례 하나가 슬라이드 두 장(개요와 실행)으로 나뉜다 — data-case로 묶어 상세 행을 원래 순서로 잇는다 */
   const fromPrint = await print.evaluate(() => {
     const g = new Map()
     for (const s of document.querySelectorAll('section[data-case]')) {

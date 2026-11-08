@@ -1,5 +1,5 @@
 /**
- * 인쇄용 페이지 빌더 — site/pdf/index.html(KO) · site/pdf/en/index.html(EN)
+ * 인쇄용 페이지 빌더 — site/pdf/index.html(KO), site/pdf/en/index.html(EN)
  *
  * 원칙: 사이트가 원천이다. 문구를 두 벌로 만들지 않는다.
  * 그래서 손으로 옮겨 적지 않고, 로컬 서버(8787)에 뜬 사이트를 실브라우저로 열어
@@ -48,7 +48,7 @@ async function scrape(lang) {
     const t = el => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '')
     const all = (sel, f) => [...document.querySelectorAll(sel)].map(f)
     return {
-      brand: t(document.querySelector('.hdr .brand .nm')), /* 이름만 — 국문 헤더의 (임현택)은 덱·PDF에 싣지 않는다 */
+      brand: t(document.querySelector('.hdr .brand .nm')), /* 이름만 — 국문 헤더의 (임현택)은 덱과 PDF에 싣지 않는다 */
       role: t(document.querySelector('.hero .eyebrow')),
       h1: all('.h1 .line>span', t),
       sub: t(document.querySelector('.hero-sub')),
@@ -116,7 +116,7 @@ async function scrape(lang) {
           [t(dt), t(document.querySelectorAll('#wdlgMore dd')[i])]) },
       evHead: t(document.querySelector('#wdlgN h4')),
       ev: [...document.querySelectorAll('#wdlgN .ev-card')].map(a => ({ href: a.href, title: t(a.querySelector('.ev-t')) })),
-      /* 상세창 이미지·외부 링크(WO-34 슈퍼피플) — 캡션·링크 문구도 사이트에서 읽는다 */
+      /* 상세창 이미지와 외부 링크(WO-34 슈퍼피플) — 캡션과 링크 문구도 사이트에서 읽는다 */
       gal: [...document.querySelectorAll('#wdlgG figure')].map(f => ({
         file: f.querySelector('img').getAttribute('src').split('/').pop(), cap: t(f.querySelector('figcaption')) })),
       links: [...document.querySelectorAll('#wdlgL a')].map(a => {
@@ -132,7 +132,7 @@ async function scrape(lang) {
     return r
   }
   for (const c of base.cases) Object.assign(c, await openDlg(c.work))
-  /* 성과 3장도 상세창에서 읽는다 — 본인 행동·근거 링크를 손으로 옮기지 않는다(Codex R11 D10) */
+  /* 성과 3장도 상세창에서 읽는다 — 본인 행동과 근거 링크를 손으로 옮기지 않는다(Codex R11 D10) */
   base.res = {}
   for (const [slug] of RESULTS) base.res[slug] = await openDlg(slug)
   base.res[SP[0]] = await openDlg(SP[0])
@@ -148,11 +148,11 @@ async function scrape(lang) {
   const sp = base.res[SP[0]]
   if (base.works.length !== 7) fail('성과 카드가 7장이 아니다: ' + base.works.length)
   if (sp.rows.length !== 7 || sp.gal.length < SP[1].length || sp.links.length !== 2)
-    fail(`슈퍼피플 상세가 발주서와 다르다: 행 ${sp.rows.length} · 이미지 ${sp.gal.length} · 링크 ${sp.links.length}`)
+    fail(`슈퍼피플 상세가 발주서와 다르다: 행 ${sp.rows.length}, 이미지 ${sp.gal.length}, 링크 ${sp.links.length}`)
   return base
 }
 
-/* ---------- 인쇄 CSS — 16:9 가로 슬라이드, 사이트 토큰·Pretendard ---------- */
+/* ---------- 인쇄 CSS — 16:9 가로 슬라이드, 사이트 토큰과 Pretendard ---------- */
 const SLIDES = 16
 const CSS = `
 @page{size:338.67mm 190.5mm;margin:0}
@@ -227,7 +227,7 @@ h1,h2,h3,h4{font-weight:600;letter-spacing:-.01em;line-height:1.28}
 .ms-c .rl{font-size:.91rem;margin-top:.9mm}
 .ms-c .ti{font-size:.91rem;color:var(--muted);margin-top:.6mm;line-height:1.38}
 .ms-c .im{font-size:.91rem;color:#333;margin-top:1.2mm;line-height:1.38}
-/* 요약·역량 */
+/* 요약과 역량 */
 .cards4{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,1fr);gap:5mm;align-items:stretch}
 .sk{border:.5pt solid var(--line);border-radius:2mm;padding:5mm;background:#fff;display:flex;flex-direction:column}
 .sk h3{font-size:1.2rem}
@@ -267,7 +267,7 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .evlist a{display:block;margin-top:1mm}
 .ph{border:.5pt solid var(--line);border-radius:2mm;overflow:hidden;background:#fff;
   display:flex;flex-direction:column;justify-self:center;width:100%}
-/* 캡처는 잘라내지 않는다 — 통째로 보여주고 남는 자리는 종이색으로 둔다(Codex R11 D6·D7) */
+/* 캡처는 잘라내지 않는다 — 통째로 보여주고 남는 자리는 종이색으로 둔다(Codex R11 D6과 D7) */
 .ph img{display:block;width:100%;height:36mm;object-fit:contain;object-position:center;background:#fff}
 .ph--wide{grid-column:1/-1}
 .ph--wide img{height:auto}
@@ -319,7 +319,7 @@ html[lang=en] .two--res .ig .ph--wide img{height:69mm}
 .tl thead th{border-top:0;font-size:.91rem;letter-spacing:.03em;color:var(--muted);font-weight:500}
 .tl col:nth-child(1){width:32mm}
 .tl col:nth-child(3){width:19mm}
-/* EN은 회사명·프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
+/* EN은 회사명과 프로젝트명이 길어 첫 칸에서 줄바꿈이 잦다 — 문구는 그대로 두고 폭만 옮긴다(Codex R13) */
 html[lang=en] .tl col:nth-child(1){width:41mm}
 html[lang=en] .tl col:nth-child(3){width:16mm}
 /* WO-33 — 원더피플 행에 슈퍼피플 한 줄이 늘어 EN 왼쪽 칸이 넘쳤다. 문구는 두고 행 간격만 줄인다 */
@@ -351,55 +351,55 @@ html[lang=en] .tl th,html[lang=en] .tl td{padding-top:2.1mm;padding-bottom:2.1mm
 /* 인쇄물에만 있는 안내 라벨 — 사이트에 없는 문구는 여기서만 정의한다(본문은 전부 사이트에서 읽는다) */
 const L = {
   ko: { doc:'포트폴리오', issued:'발행일', email:'이메일', site:'사이트', deck:'발표자료(HTML)', notion:'Notion 이력',
-        timeline:'프로젝트 타임라인 — 회사별 상세', tlCompany:'회사', tlPeriod:'소속·직위·기간', tlKpi:'대표 지표',
+        timeline:'프로젝트 타임라인: 회사별 상세', tlCompany:'회사', tlPeriod:'소속, 직위, 기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
-        phases:['운영','사업PM','기획·디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
+        phases:['운영','사업PM','기획, 디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
         proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간',
         rightsPlain:'게임 명칭은 각 권리자의 상표입니다.',
-        rightsNW:'나이트워커 개발 원더피플/에이스톰 · 퍼블리싱 넥슨.',
-        rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다 · 상표·저작권은 달콤소프트에 있습니다.' },
+        rightsNW:'나이트워커 개발 원더피플/에이스톰, 퍼블리싱 넥슨.',
+        rightsProto:'화면은 내부 정보를 제거한 공개용 요약본입니다, 상표와 저작권은 달콤소프트에 있습니다.' },
   en: { doc:'Portfolio', issued:'Issued', email:'Email', site:'Site', deck:'Deck (HTML)', notion:'Notion resume',
-        timeline:'Project timeline — by company', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
+        timeline:'Project timeline: by company', tlCompany:'Company', tlPeriod:'Team, role, period', tlKpi:'Headline number',
         contact:'Contact', open:'Open', auto:'This document is generated from the site.', demo:'Demo', evidence:'Evidence',
         summary:'Summary and the four areas', milestone:'Career Milestone', results:'Results',
-        phases:['Operations','Business PM','Planning · Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
+        phases:['Operations','Business PM','Planning, Director'], caseN:n => `Case ${n}`, overview:'Overview', exec:'Execution',
         proto:'AI prototypes', lab:'Personal product', period:'Period',
         /* EN 5쪽 보조 사례는 제목과 근거 링크만 싣는다 — 본문은 사이트에서 읽는다(Codex R13) */
         moreRef:'See the site detail for the full text',
         rightsPlain:'Game titles are trademarks of their respective owners.',
-        rightsNW:'Night Walker developed by Wonderpeople/Acestorm · published by Nexon.',
-        rightsProto:'Screens are a public summary with internal information removed · trademarks and copyright belong to Dalcomsoft.' },
+        rightsNW:'Night Walker developed by Wonderpeople/Acestorm, published by Nexon.',
+        rightsProto:'Screens are a public summary with internal information removed, trademarks and copyright belong to Dalcomsoft.' },
 }
-/* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명·내부 문서명은 쓰지 않는다).
+/* 채택 캡처의 캡션 — 인쇄물에만 있는 문구라 여기서 정의한다(원본 폴더명과 내부 문서명은 쓰지 않는다).
    ph--doc는 잘라내지 않고 통째로, ph--wide는 두 칸을 가로질러 놓는다. */
 const CAPS = {
-  'lyn/before_after': ['변경 전(1)·후(2) — 초반 안내 대화창·캐릭터 배치 정리(폴리싱 3건 중 초반 동선)',
-                       'Before (1) · after (2) — early guidance dialogue box and portrait layout reworked (one of three polishing fixes: early flow)'],
-  'lyn/system_ui': ['시스템 UI 기획 — 개선안을 화면 흐름으로 정리한 기획 캡처',
-                    'System UI plan — the fix laid out as a screen flow'],
-  'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안 — 중국 SDK 흐름을 퍼블리셔 로그인·런처 기준으로 재정의',
-                                       "Server-select flow proposal — the China SDK flow redefined around the publisher's login and launcher"],
-  'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트 — 퍼블리셔 플랫폼(로그인·런처)과 개발사 영역(서버 선택·캐릭터 생성) 구분',
-                                        'Server-select flowchart — publisher platform (login, launcher) vs. developer scope (server select, character creation)'],
-  'nightwalker/charge_flow': ['유료 재화 충전·프로모션 플로우 — 퍼블리셔 결제 정책에 맞춘 지급 흐름',
-                              "Paid-currency top-up and promotion flow — item grant flow aligned to the publisher's billing policy"],
-  'nightwalker/charge_ui_mock': ['충전 UI 시안 — 프로모션 혜택을 충전 창에서 보여주는 개선안',
-                                 'Top-up UI mock — showing promotion benefits inside the top-up window'],
-  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안 — 미션 구조·보상 배치를 기획해 라이브 이벤트로 적용',
-                          'Event page UI plan — I designed the mission structure and reward placement for the live event'],
+  'lyn/before_after': ['변경 전(1)과 후(2): 초반 안내 대화창과 캐릭터 배치 정리(폴리싱 3건 중 초반 동선)',
+                       'Before (1), after (2): early guidance dialogue box and portrait layout reworked (one of three polishing fixes: early flow)'],
+  'lyn/system_ui': ['시스템 UI 기획: 개선안을 화면 흐름으로 정리한 기획 캡처',
+                    'System UI plan: the fix laid out as a screen flow'],
+  'nightwalker/server_flow_proposal': ['서버 선택 플로우 제안: 중국 SDK 흐름을 퍼블리셔 로그인과 런처 기준으로 재정의',
+                                       "Server-select flow proposal: the China SDK flow redefined around the publisher's login and launcher"],
+  'nightwalker/server_flowchart_wire': ['서버 선택 플로우차트: 퍼블리셔 플랫폼(로그인과 런처)과 개발사 영역(서버 선택과 캐릭터 생성) 구분',
+                                        'Server-select flowchart: publisher platform (login, launcher) vs. developer scope (server select, character creation)'],
+  'nightwalker/charge_flow': ['유료 재화 충전과 프로모션 플로우: 퍼블리셔 결제 정책에 맞춘 지급 흐름',
+                              "Paid-currency top-up and promotion flow: item grant flow aligned to the publisher's billing policy"],
+  'nightwalker/charge_ui_mock': ['충전 UI 시안: 프로모션 혜택을 충전 창에서 보여주는 개선안',
+                                 'Top-up UI mock: showing promotion benefits inside the top-up window'],
+  'chaos/event_ui_plan': ['이벤트 페이지 UI 기획안: 미션 구조와 보상 배치를 기획해 라이브 이벤트로 적용',
+                          'Event page UI plan: I designed the mission structure and reward placement for the live event'],
   'chaos/ingame': ['인게임 전투 화면', 'In-game battle screen'],
   'fivestars/prereg': ['정식 런칭 사전 예약 키 비주얼', 'Launch pre-registration key visual'],
-  'nanakage/update_plan': ['1Q~2Q 업데이트 계획 — 소프트런칭 뒤 평점 관리 시스템을 포함해 콘텐츠 순서를 정리한 계획',
-                           '1Q–2Q update plan — the content order I set after soft launch, including the rating-management system'],
-  'nanakage/mission_ui': ['미션 이벤트 UI — 일본 서비스 잔존 대응으로 제안한 미션 이벤트',
-                          'Mission event UI — the mission event I proposed for Japan retention'],
+  'nanakage/update_plan': ['1Q~2Q 업데이트 계획: 소프트런칭 뒤 평점 관리 시스템을 포함해 콘텐츠 순서를 정리한 계획',
+                           '1Q–2Q update plan: the content order I set after soft launch, including the rating-management system'],
+  'nanakage/mission_ui': ['미션 이벤트 UI: 일본 서비스 잔존 대응으로 제안한 미션 이벤트',
+                          'Mission event UI: the mission event I proposed for Japan retention'],
 }
-/* 사례 실행 슬라이드(7·9)와 성과 슬라이드(10·11·12)가 쓰는 채택 캡처 */
+/* 사례 실행 슬라이드(7과 9)와 성과 슬라이드(10, 11, 12)가 쓰는 채택 캡처 */
 const EXEC_SHOTS = { case2: ['lyn/system_ui', 'lyn/before_after'],
                      case3: ['nightwalker/server_flowchart_wire', 'nightwalker/server_flow_proposal',
                              'nightwalker/charge_flow', 'nightwalker/charge_ui_mock'] }
-/* 위계 — 판독이 어려운 기획서·플로우 한 장을 큰 칸에 두고 나머지는 작은 칸으로 내린다(Codex R11 D6) */
+/* 위계 — 판독이 어려운 기획서와 플로우 한 장을 큰 칸에 두고 나머지는 작은 칸으로 내린다(Codex R11 D6) */
 const WIDE_SHOTS = new Set(['lyn/system_ui', 'lyn/before_after', 'chaos/event_ui_plan', 'nanakage/update_plan'])
 const TALL_SHOTS = new Set(['nightwalker/server_flowchart_wire'])
 /* 세로로 긴 원본은 폭이 아니라 높이로 키워야 읽힌다 */
@@ -436,13 +436,13 @@ const KPI_TBL = (() => {
   }
   return out
 })()
-/* 큰 숫자 밑 라벨 = '정의 · 기간' — 숫자만 두면 무엇을 언제까지 센 값인지 알 수 없다(Codex R11 D11·R12 D11) */
+/* 큰 숫자 밑 라벨 = '정의, 기간' — 숫자만 두면 무엇을 언제까지 센 값인지 알 수 없다(Codex R11 D11과 R12 D11) */
 const kpiLabel = (lang, slug) => {
   const [def, per] = lang === 'en' ? [KPI_DEF_EN[slug], KPI_PER_EN[slug]] : KPI_TBL[slug]
   const d = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).trim()
-  return per && per !== '미상' ? `${d} · ${per}` : d
+  return per && per !== '미상' ? `${d}, ${per}` : d
 }
-/* 회사 기간·직위는 경력 행에서 읽는다(Codex R11 D10) */
+/* 회사 기간과 직위는 경력 행에서 읽는다(Codex R11 D10) */
 const COMPANY_TOK = { dalcom:['달콤','Dalcom'], lyn:['넥슨','Nexon'], chaos:['넥슨','Nexon'],
                       nightwalker:['원더피플','Wonderpeople'], fivestars:['스카이피플','Skypeople'],
                       nanakage:['넵튠','Neptune'] }
@@ -459,7 +459,16 @@ const RESULTS = [['chaos', ['chaos/event_ui_plan', 'chaos/ingame']],
 /* 슈퍼피플 1쪽(WO-34 §3) — 카드 순서대로 카오스 쪽과 Five Stars 쪽 사이. 이미지는 상세창 가공본 앞 3장 */
 const SP = ['superpeople', ['timeline.jpg', 'douyu-event.jpg', 'voc.jpg']]
 /* 경력 구간 — 가로 바의 눈금(연도)과 폭 비율 */
-const PHASES = [['2006', '2011', 5], ['2011', '2021', 10], ['2021', '2026', 5]]
+/* 역할 범례 — 칸 = [연도 문자열, 너비 비율]. 덱(build-deck.mjs)와 같은 표 */
+const PHASES = [['2006 – 2011', 5], ['2011 – 2021, 2022 – 2024', 11], ['2021, 2024 – 2026', 4]]
+const AXIS = ['2006', '2026']
+/* 나열 잇기 — 둘이면 「A와 B」(받침에 따라 와/과), 셋 이상이면 쉼표 */
+const andJoin = xs => {
+  if (xs.length !== 2) return xs.join(', ')
+  const c = xs[0].charCodeAt(xs[0].length - 1)
+  return xs[0] + (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? '과 ' : '와 ') + xs[1]
+}
+
 const PERIOD = /\d{4}\.\d{1,2}\s*[–—-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
 /* 프로젝트 기간은 상세창에서 '2019.10 ~ 2020.04'처럼 물결표로도 적힌다 */
 const PROJ_PERIOD = /\d{4}\.\d{1,2}\s*[–—~-]\s*(?:\d{4}\.\d{1,2}|현재|present)/i
@@ -478,7 +487,7 @@ function render(lang, d) {
   }
   const kpiDef = (slug) => kpiLabel(lang, slug)
   const per = s => (s.match(PERIOD) || [''])[0]
-  const roleOf = s => s.replace(PERIOD, '').replace(/[·•]\s*$/, '').trim()
+  const roleOf = s => s.replace(PERIOD, '').replace(/[,·•]\s*$/, '').trim()
   /* 성과 슬라이드의 참여 기간 — 회사 재직기간이 아니라 프로젝트 기간이다(Codex R12 D10).
      성과 카드 메타와 상세창 행에서 찾고, 어디에도 없으면 그 줄을 싣지 않는다. */
   const projPeriod = (w, r) => {
@@ -488,7 +497,7 @@ function render(lang, d) {
     }
     return ''
   }
-  /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구·키 비주얼 제목이 여기서 나온다 */
+  /* 사례가 어느 회사 카드에 걸리는지 — 저작권 문구와 키 비주얼 제목이 여기서 나온다 */
   const workOf = (meta) => W((KPI_OF.find(([k]) => meta.includes(k)) || [, 'dalcom'])[1])
   const shot = (slug, cap) => `<figure class="hero-shot"><img src="${IMG}${slug}.jpg" alt="">
       <figcaption>${esc(cap)}</figcaption></figure>`
@@ -520,7 +529,7 @@ function render(lang, d) {
     while (ss.every(x => x[p] === ss[0][p]) && p < ss[0].length - 1) p++
     while (ss.every(x => x[x.length - 1 - s] === ss[0][ss[0].length - 1 - s]) && s < ss[0].length - p - 1) s++
     const mids = ss.map(x => x.slice(p, x.length - s))
-    return ss[0].slice(0, p) + mids.join('·') + ss[0].slice(ss[0].length - s)
+    return ss[0].slice(0, p) + andJoin(mids) + ss[0].slice(ss[0].length - s)
   })() + ' ' + l.rightsNW
   const cover = `
 <section class="s cover">
@@ -542,7 +551,7 @@ function render(lang, d) {
   /* 2. Career Milestone — 3구간 밴드 + 회사별 기간 막대(간트) + 회사 10곳 타일(오래된 순).
      막대와 타일은 같은 번호를 달아 연결한다(Codex R11 D12). 기간은 경력 행이 원천이다. */
   const rows2 = [...d.career].reverse()
-  const T0 = +PHASES[0][0], T1 = +PHASES[2][1]
+  const T0 = +AXIS[0], T1 = +AXIS[1]
   const at = (ym) => { const [y, m] = ym.split('.').map(Number); return ((y + (m - 1) / 12) - T0) / (T1 - T0) * 100 }
   const span = (sub) => {
     const p = per(sub); if (!p) fail('경력 기간을 못 읽었다: ' + sub)
@@ -551,10 +560,10 @@ function render(lang, d) {
   }
   const ticks = ['2006', '2011', '2016', '2021', '2026']
   const milestone = slide({
-    eyebrow: l.milestone, who: `${PHASES[0][0]} – ${PHASES[2][1]}`, rights: l.rightsPlain,
+    eyebrow: l.milestone, who: `${AXIS[0]} – ${AXIS[1]}`, rights: l.rightsPlain,
     body: `
-    <div class="ms-bar">${PHASES.map(([a, b, w], i) =>
-      `<div class="ms-ph" style="flex:${w}"><b>${esc(l.phases[i])}</b><span>${a} – ${b}</span></div>`).join('')}</div>
+    <div class="ms-bar">${PHASES.map(([yr, w], i) =>
+      `<div class="ms-ph" style="flex:${w}"><b>${esc(l.phases[i])}</b><span>${esc(yr)}</span></div>`).join('')}</div>
     <div class="gantt">${rows2.map((r, i) => { const [x0, x1] = span(r.sub)
       return `<i class="${i % 2 ? 'on' : ''}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%">${i + 1}</i>` }).join('')}</div>
     <div class="ms-axis">${ticks.map(y =>
@@ -578,13 +587,13 @@ function render(lang, d) {
     <div class="stats">${d.stats.map(([n, k]) => `<div><b>${nw(n)}</b><span class="lb">${esc(k)}</span></div>`).join('')}</div>`,
   })
 
-  /* 권리 줄 — 나이트워커는 개발·퍼블리싱이 갈려 있어 사이트 문구에 권리자를 덧붙인다(Codex R11 D4) */
+  /* 권리 줄 — 나이트워커는 개발과 퍼블리싱이 갈려 있어 사이트 문구에 권리자를 덧붙인다(Codex R11 D4) */
   const rightsOf = (c) => workOf(c.dlgMeta).rights + (CASE_IMG[c.work] === 'nightwalker' ? ' ' + l.rightsNW : '')
 
-  /* 4·6·8. 사례 개요 — 키 비주얼 + KPI + 앞쪽 상세 행 */
+  /* 4, 6, 8. 사례 개요 — 키 비주얼 + KPI + 앞쪽 상세 행 */
   const caseOverview = (c, i) => slide({
     cls: 'case', attr: ` data-case="${esc(c.work)}"`,
-    eyebrow: `${l.caseN(i + 1)} · ${l.overview}`, who: c.dlgMeta,
+    eyebrow: `${l.caseN(i + 1)}, ${l.overview}`, who: c.dlgMeta,
     pills: `<span class="pill pill--dark">${esc(c.state)}</span><span class="pill pill--line">${esc(c.tag)}</span>`,
     rights: rightsOf(c),
     body: `<div class="two two--l">
@@ -595,7 +604,7 @@ function render(lang, d) {
     </div>`,
   })
 
-  /* 5·7·9. 사례 실행 — 뒤쪽 상세 행 + 캡처 + 근거 링크.
+  /* 5, 7, 9. 사례 실행 — 뒤쪽 상세 행 + 캡처 + 근거 링크.
      캡처는 큰 칸 1개 + 작은 칸으로 위계를 둔다(Codex R11 D6). 근거는 링크로만 싣는다 —
      Notion 썸네일은 이 크기에서 읽히지 않는다(D6). */
   const caseExec = (c, i) => {
@@ -604,7 +613,7 @@ function render(lang, d) {
       : EXEC_SHOTS[c.work].map(doc)
     return slide({
       cls: 'case', attr: ` data-case="${esc(c.work)}"`,
-      eyebrow: `${l.caseN(i + 1)} · ${l.exec}`, who: c.dlgTitle,
+      eyebrow: `${l.caseN(i + 1)}, ${l.exec}`, who: c.dlgTitle,
       pills: `<span class="pill pill--line">${esc(c.tag)}</span>`,
       rights: c.work === 'case1' ? l.rightsProto : rightsOf(c),
       body: `<div class="two two--r${c.work === 'case3' ? ' two--r3' : ''}">
@@ -619,7 +628,7 @@ function render(lang, d) {
     })
   }
 
-  /* 10·12·13. 성과 3장 — 큰 KPI + 정의 라벨 + 참여 기간·직위 + 상세창의 본인 행동 표 + 근거 링크.
+  /* 10, 12, 13. 성과 3장 — 큰 KPI + 정의 라벨 + 참여 기간과 직위 + 상세창의 본인 행동 표 + 근거 링크.
      본문은 손으로 옮기지 않는다 — 상세창에서 읽은 행을 그대로 싣는다(Codex R11 D10). */
   /* 사이트에는 있지만 인쇄물 배포가 막힌 항목이 섞여 있다 — 그 행만 빼고 나머지는 그대로 싣는다 */
   const resRows = (slug, rows) => rows.filter(([k, v]) => {
@@ -632,7 +641,7 @@ function render(lang, d) {
     const pp = projPeriod(w, r)
     const bullets = w.summary.split(/(?<=[.。])\s+/).filter(Boolean)
     return slide({
-      cls: 'res', eyebrow: `${l.results} · ${w.title}`, who: r.dlgMeta,
+      cls: 'res', eyebrow: `${l.results}, ${w.title}`, who: r.dlgMeta,
       rights: w.rights + (slug === 'nightwalker' ? ' ' + l.rightsNW : ''),
       body: `<div class="two two--top${shots.includes('nanakage/update_plan') ? ' two--res' : ''}">
         <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(kpiDef(slug))}</p>
@@ -652,7 +661,7 @@ function render(lang, d) {
     const cap = f => { const g = r.gal.find(x => x.file === f); if (!g) fail('슈퍼피플 이미지 캡션이 없다: ' + f); return g.cap }
     const fig = (f, cls) => `<figure class="ph${cls}"><img src="${IMG}superpeople/${f}" alt=""><figcaption>${esc(cap(f))}</figcaption></figure>`
     return slide({
-      cls: 'res sp', eyebrow: `${l.results} · ${w.title}`, who: r.dlgMeta, rights: w.rights,
+      cls: 'res sp', eyebrow: `${l.results}, ${w.title}`, who: r.dlgMeta, rights: w.rights,
       body: `<div class="two two--top two--sp">
         <div><p class="res-n">${nw(w.kpi)}</p><p class="res-l">${esc(kpiDef(slug))}</p>
           <ul class="res-b"><li>${nw(w.summary)}</li></ul>
@@ -687,13 +696,13 @@ function render(lang, d) {
           <div class="note">${p.note.map(([k, v]) => `<p><b>${esc(k)}</b> ${esc(pr(v))}</p>`).join('')}
             <p><b>${esc(l.demo)}</b> <a class="go" href="${esc(d.canonical + p.href)}">${esc(l.open)} ↗</a></p></div>
         </div></div>`).join('')}</div>
-      ${d.lab ? `<p class="foot"><b>${esc(l.lab)}</b> ${esc(d.lab.title)} — ${esc(d.lab.summary)}
+      ${d.lab ? `<p class="foot"><b>${esc(l.lab)}</b> ${esc(d.lab.title)}: ${esc(d.lab.summary)}
         <a class="go" href="${esc(d.lab.href)}">${esc(l.open)} ↗</a></p>` : ''}`,
   })
 
   /* 16. 연락 */
   /* 사이트 푸터는 "© 2026 Henry Lim (임현택) 본 사이트의…"처럼 이름과 문장이 붙어 있다 */
-  const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1 · ')
+  const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1, ')
   const contact = slide({
     eyebrow: l.contact, who: `${l.issued} ${TODAY}`, rights: l.rightsPlain,
     body: `<div class="end">
@@ -705,7 +714,7 @@ function render(lang, d) {
         <p><b>${esc(l.deck)}</b> <a href="${esc(d.deck)}">${esc(d.deck)}</a></p>
         <p><b>${esc(l.notion)}</b> <a href="${esc(d.notion)}">${esc(d.notion)}</a></p>
       </div>
-      <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY} · ${esc(legal)}</p>
+      <p class="foot">${esc(l.auto)} ${esc(l.issued)} ${TODAY}, ${esc(legal)}</p>
     </div>`,
   })
 
@@ -721,7 +730,7 @@ function render(lang, d) {
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>${esc(d.brand)} — ${esc(l.doc)}</title>
+<title>${esc(d.brand)}: ${esc(l.doc)}</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <!-- dynamic-subset은 unicode-range로 폰트를 잘게 쪼갠다 — 그러면 "19년"이 두 런으로 갈라져
      PDF 텍스트 추출 순서가 "년19"로 뒤집힌다(Codex R6). 그래서 통짜 폰트를 쓴다.
@@ -744,5 +753,5 @@ for (const [lg, d] of [['ko', ko], ['en', en]]) if (d.deck !== 'https://bluedayl
 mkdirSync('site/pdf/en', { recursive: true })
 writeFileSync('site/pdf/index.html', render('ko', ko), 'utf8')
 writeFileSync('site/pdf/en/index.html', render('en', en), 'utf8')
-console.log('생성: site/pdf/index.html · site/pdf/en/index.html')
-console.log('  슬라이드 ' + SLIDES + '장 · 사례 ' + ko.cases.length + '건 · 경력 ' + ko.career.length + '행 · 성과 카드 ' + ko.works.length + '장 · 프로토 ' + ko.proto.length + '장')
+console.log('생성: site/pdf/index.html, site/pdf/en/index.html')
+console.log('  슬라이드 ' + SLIDES + '장, 사례 ' + ko.cases.length + '건, 경력 ' + ko.career.length + '행, 성과 카드 ' + ko.works.length + '장, 프로토 ' + ko.proto.length + '장')
