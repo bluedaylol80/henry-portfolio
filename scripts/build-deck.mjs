@@ -219,7 +219,7 @@ const C1 = {
   diag: {
     eyebrow: '사례 1, 진단', ledeTail: ', 2025.11 만족도 설문 → 2026.05 출시',
     steps: [
-      ['지표에서 유저 이탈과 매출 하락 발생', []],
+      ['지표에서 유저 이탈과 매출 하락 발생', [{ drop: true }]],
       ['상세 지표 분석: 이벤트 곡 업데이트만으로는 Retention 유지에 한계', ["상위 유저는 '수집/테마 완성'에 높은 가치를 부여"]],
       ['인게임 팝업 배너로 만족도 설문', ['6개 타이틀, 한, 영, 일']],
       ['니즈 분석', ['수집, 꾸미기, 전시 요구 반복', '예전에 있던 웹뷰 이벤트의 복귀 요구']],
@@ -239,9 +239,11 @@ const C1 = {
            ['감상/전시', '큰 화면 감상 UI, 꾸미기(Deco)', '꾸미기 이벤트로 실행'],
            ['개인화', '엔터 전체 vs 내 아티스트'],
            ['커뮤니티', '덱/프로필 방문, 아티스트 공통 미션']],
-    /* 축 → [그림, 캡션]. 캡션은 사이트 카드 제목 그대로(gap만 6장 캡션과 같은 덱 전용 문구) */
-    img: { '수집 완성': ['ssjproto', d => d.proto[1].title], '감상/전시': ['deco', d => d.proto[0].title],
-           '개인화': ['dalcom', d => d.works.find(w => w.key === 'dalcom').title], '커뮤니티': ['direction/gap', () => '원문 발췌, 현재 서비스의 핵심 GAP'] },
+    /* 축 → [그림, 대체 글]. 대체 글은 사이트 카드 제목 그대로. 11-13 2차: 수집 완성은 본부장이 준 인게임 수집 화면,
+       커뮤니티는 그림 대신 지금 덱 원문 구호를 큰 글자로(motto) */
+    img: { '수집 완성': ['direction/collection', () => '인게임 수집 화면'], '감상/전시': ['deco', d => d.proto[0].title],
+           '개인화': ['dalcom', d => d.works.find(w => w.key === 'dalcom').title], '커뮤니티': ['motto'] },
+    motto: '"혼자 보는 수집에서, 서로 반응하는 공감으로"',
     applyLabel: '개발 방향 적용',
     apply: ['2026년 상반기 로드맵', '마일스톤 배치를 통한 개발 일정 조정', '기획 방향과 프로토타입 제작', '미니게임 → 꾸미기 이벤트 → 웹뷰 이벤트 순 출시'],
   },
@@ -271,8 +273,9 @@ const SKILLS_DECK = {
 const METHOD = {
   title: '사용자 요구에서 라이브까지',
   steps: [['사용자 조사와 지표', ['만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다.', '소프트런칭에서 상품 구성, 재화 소비, 초반 이탈을 확인했다.']],
-          ['제품 판단', ['인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다.', '상품, 재화, 초반 동선을 출시 전 개선 과제로 정리했다.']],
-          ['개발 우선순위', ['퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다.', '사례: 소프트런칭 지표 → 개선 과제'],
+          /* 케이스 2 문장은 2차 순서(테스트 개선 + 소프트런칭 VOC → 최종 폴리싱)에 맞춘다(11-13 2차) */
+          ['제품 판단', ['인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다.', '테스트 개선과 소프트런칭 VOC를 최종 폴리싱 과제로 묶었다.']],
+          ['개발 우선순위', ['퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다.', '사례: 소프트런칭 VOC → 최종 폴리싱'],
             ['우선순위 결정', '대응 순서와 이벤트 범위(MVP)는 본인이 정했다.']],
           ['실행과 출시', ['꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다.', '구매, 쿠폰, 서버 선택 UI/플로우 기획을 쓰고 협의했다.']],
           ['라이브 서비스와 표준화', ['성과: 카오스크로니클 서비스 종료', '성과: SKU 자동화와 어뷰징 SOP']]],
@@ -324,6 +327,22 @@ const TRY_STEPS = [
 ]
 /* 12장 제목 —덱에서만 본부장 문구로 바꾼다(11-13). 사이트 사례 3 제목은 그대로 */
 const EXEC_TITLE = { case3: '중국 서비스의 플랫폼 기능을 국내 기능으로 수정' }
+/* 케이스 2 순서(본부장 원문 11-13 2차: "기존 개선 + 소프트런칭에서 나온 VOC를 포함해 최종 폴리싱 해서 그랜드에 적용함").
+   덱에서만 바꾸는 문장 [사이트 원문, 덱 문장]. 사이트 원문이 바뀌면 빌드를 멈춘다(덱 문장이 엉뚱한 자리에 덮이지 않게) */
+const CASE2 = {
+  title: ['소프트런칭 지표를 출시 전 개선으로', '테스트와 소프트런칭 VOC를 최종 폴리싱으로'],
+  summary: ['3개국 소프트런칭 지표로 상품, 재화, 초반 동선 개선안을 정리해 글로벌 출시에 들어가다',
+    '테스트 개선과 3개국 소프트런칭 VOC를 최종 폴리싱해 그랜드런칭에 적용하다'],
+  verdict: ['상품, 재화, 초반 동선을 출시 전 개선 과제로 정리했다', '테스트 개선과 소프트런칭 VOC를 최종 폴리싱 과제로 묶었다'],
+  exec: ['3개국 소프트런칭 지표로 상품, 재화, 초반 동선 개선안을 정리해 글로벌 출시로',
+    '테스트 개선과 소프트런칭 VOC를 최종 폴리싱해 그랜드런칭에 적용'],
+}
+const c2 = (c, k, v) => {
+  if (c.work !== 'case2') return v
+  const [from, to] = CASE2[k]
+  if (String(v).replace(/ /g, ' ') !== from) fail(`케이스 2 ${k} 사이트 원문이 바뀌었다: ${v}`)
+  return to
+}
 /* 10장(사례 2 실행) 꼬리표 줄 — [꼬리표, 값, 근거 조각(값과 다를 때만)]. 근거 조각은 덱에 보이는 사이트 문장 안에 있어야 한다 */
 const EXEC_LINES = {
   case2: {
@@ -390,6 +409,14 @@ const ICONS = {
   check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/>',
   arrow: '<path d="M4 12h15M13 6l6 6-6 6"/>',
 }
+/* 6장 01단계 하락 아트웍(11-13 2차) — 실제 자료처럼 보이지 않게 축, 눈금, 숫자, 단위가 없다.
+   덱 색만: 옅은 막대(--m12), 먹 선(--tx), 꺾여 내려가는 끝 구간과 화살촉은 서브컬러(도형) */
+const DROP_ART = `<svg viewBox="0 0 320 150" aria-hidden="true" style="display:block;margin-top:auto;width:100%;height:auto;max-height:150px;overflow:visible">
+  ${[[24, 92], [76, 86], [128, 80], [180, 72], [232, 50], [284, 32]].map(([x, h]) => `<rect x="${x - 14}" y="${146 - h}" width="28" height="${h}" rx="5" style="fill:var(--m12)"/>`).join('')}
+  <polyline points="8,40 62,52 112,44 166,66 214,58" style="fill:none;stroke:var(--tx);stroke-width:5;stroke-linecap:round;stroke-linejoin:round"/>
+  <polyline points="214,58 292,128" style="fill:none;stroke:var(--sub);stroke-width:5;stroke-linecap:round"/>
+  <path d="M300,136 L276,128 L292,112 Z" style="fill:var(--sub);stroke:var(--sub);stroke-width:3;stroke-linejoin:round"/>
+</svg>`
 const SKILL_ICONS = ['target', 'rocket', 'users', 'gear']
 const EXEC_ICONS = { [L.act]: 'hand', [L.deferred]: 'clock', [L.outcome]: 'check' }
 
@@ -854,10 +881,10 @@ function render(d, A) {
       const [num, lab] = caseKpi(c)
       return `<div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
         <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">${esc(c.dlgMeta)}</p>
-        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">${esc(c.work === 'case1' ? C1.title : c.dlgTitle)}</h3>
+        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">${esc(c.work === 'case1' ? C1.title : c2(c, 'title', c.dlgTitle))}</h3>
         <p class="n n--sm" style="margin-top:28px">${ba(num)}</p>
         <p class="nl">${esc(lab)}</p>
-        <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">${esc(c.work === 'case1' ? C1.summary : c.rows[0][1])}</p>
+        <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">${esc(c.work === 'case1' ? C1.summary : c2(c, 'summary', c.rows[0][1]))}</p>
         <p style="margin-top:28px"><span class="chip chip--sub">${esc(c.state)}</span></p>
       </div>` }).join('')}</div>`,
   })
@@ -876,9 +903,10 @@ function render(d, A) {
      ⑤는 핵심 GAP 상자와 원문 발췌 그림을 품어 두 칸 너비 */
   const step7 = ([nm, xs], k) => {
     const lines = xs.filter(x => typeof x === 'string')
-    const gap = xs.some(x => x.gap), img = xs.some(x => x.img), lau = xs.some(x => x.launched)
+    const gap = xs.some(x => x.gap), img = xs.some(x => x.img), lau = xs.some(x => x.launched), drop = xs.some(x => x.drop)
     const text = `<p class="no">0${k + 1}</p><p class="snm">${esc(nm)}</p>
       ${lines.length ? bullets(lines) : ''}
+      ${drop ? DROP_ART : ''}
       ${lau ? `<p class="n" style="margin-top:16px;font-size:56px">${ba(launched[0])}</p><p class="nl" style="margin-top:10px;font-size:22px">${launched[1].split(', ').map(esc).join('<br>')}</p>` : ''}
       ${gap ? `<div style="margin-top:14px;border:2px solid var(--sub);border-radius:16px;padding:14px 18px">
         <p style="font-size:24px;font-weight:800">${esc(G.gap[0])}</p>
@@ -897,7 +925,8 @@ function render(d, A) {
   const D = C1.dir
   const c1dir = slide({
     aria: `${D.eyebrow}: ${D.title}`, eyebrow: D.eyebrow, title: D.title, lede: D.lede,
-    rights: L.rightsPlain,
+    /* 11-13 2차: 권리 표기는 6, 8장과 같은 달콤소프트 화면 표기 */
+    rights: L.rightsProto,
     /* 세 덩어리(축 카드, 개발 방향 적용, 판단/결정 범위)를 세로로 고르게 나눈다 — 아래쪽 빈 띠를 남기지 않는다 */
     body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between">
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">${D.axes.map(([nm, what, chip]) => {
@@ -906,7 +935,10 @@ function render(d, A) {
         return `
         <div class="pn" style="padding:22px 24px;display:flex;flex-direction:column">
           <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">${esc(nm)}</p>
-          ${shot(img, cap(d), 'height:200px;flex:none;margin-top:14px', '', true)}
+          ${img === 'motto'
+            ? `<div style="height:200px;flex:none;margin-top:14px;border:1px solid var(--m12);border-radius:20px;display:flex;align-items:center;padding:0 24px">
+                <p style="font-size:32px;font-weight:700;line-height:1.3;letter-spacing:-.02em">${esc(D.motto)}</p></div>`
+            : shot(img, cap(d), 'height:200px;flex:none;margin-top:14px', '', true)}
           <p style="margin-top:12px;font-size:22px;line-height:1.45">${esc(what)}</p>
           ${chip ? `<p style="margin-top:auto;padding-top:12px"><span class="chip chip--sub">${esc(chip)}</span></p>` : ''}
         </div>` }).join('')}</div>
@@ -967,12 +999,16 @@ function render(d, A) {
   })
 
   /* --- 9와 11. 사례 판단(사례 2와 3) --- */
-  /* 사례 2 흐름 5단계(본부장 결정 11-13): FGT 진행 → 사내 테스트 → 개선사항 적용 → 소프트런칭 → 그랜드런칭.
-     날짜와 범위는 10장 글(사이트 본인 행동, 결과와 상태)에서 읽은 것만 붙인다. 소프트런칭 국가 수는 린 상세 */
+  /* 사례 2 흐름 6단계(본부장 원문 11-13 2차): FGT 진행 → 사내 테스트 → 개선사항 적용 → 소프트런칭(VOC 수집) → 최종 폴리싱 → 그랜드런칭.
+     칩은 사이트 문장에서 읽은 것만: 날짜는 본인 행동, 국가 이름은 린 상세, 개선 3건과 그랜드런칭은 결과와 상태 */
   const chain2 = (() => {
     const out = d.cases[1].rows.find(r => r[0] === L.outcome)[1]
     const gm = out.match(/출시\(([^)]+)\)/)
     if (!gm) fail('사례 2 결과에서 그랜드런칭을 못 읽었다: ' + out)
+    const im = out.match(/(?:^|\.)\s*([^.]+?)\s*개선 (\d)건은/)
+    if (!im) fail('사례 2 결과에서 개선 항목을 못 읽었다: ' + out)
+    const items = im[1].split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
+    if (String(items.length) !== im[2]) fail(`사례 2 개선 항목 수가 안 맞는다: ${items.length} vs ${im[2]}`)
     const lyn = d.res.lyn.rows.find(r => r[0] === '소프트런칭')
     if (!lyn) fail('린 상세에 소프트런칭 행이 없다')
     const co = lyn[1].split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
@@ -980,17 +1016,17 @@ function render(d, A) {
     const fgt = act.match(/FGT\(([^,]+),/), it = act.match(/사내 테스트\(([^,]+),\s*([^)]+)\)/)
     if (!fgt || !it) fail('사례 2 본인 행동에서 FGT와 사내 테스트 날짜를 못 읽었다: ' + act)
     return [['FGT 진행', [fgt[1]]], ['사내 테스트', [it[1], it[2]]], ['개선사항 적용', []],
-            ['소프트런칭', [`${co.length}개국`]], ['그랜드런칭', [gm[1]]]]
+            ['소프트런칭(VOC 수집)', co], ['최종 폴리싱', items], ['그랜드런칭', [gm[1]]]]
   })()
 
   const judge = (c, i) => {
     const slug = CASE_IMG[c.work]
     const [num, lab] = caseKpi(c)
-    const boxes = [c.steps[0], c.steps[1], c.steps[3]]
-    const stage = ([nm, xs]) => `<div class="fs" style="padding:22px 18px 22px 24px">
-      <b>${esc(nm)}</b>
-      <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">${xs.map(x =>
-        `<span class="chip" style="white-space:nowrap">${esc(x)}</span>`).join('')}</p></div>`
+    const boxes = [c.steps[0], [c.steps[1][0], c2(c, 'verdict', c.steps[1][1])], c.steps[3]]
+    /* 단계 칸: 이름 뒤에 칩이 이어지고, 칸이 차면 다음 줄로 */
+    const stage = ([nm, xs]) => `<div class="fs" style="display:flex;flex-wrap:wrap;align-items:center;align-content:center;gap:10px">
+      <b style="margin:0 8px 0 0">${esc(nm)}</b>${xs.map(x =>
+        `<span class="chip" style="white-space:nowrap">${esc(x)}</span>`).join('')}</div>`
     /* 사례 3 — 두 레인 사이에 실제 이관 화살표를 둔다(D6) */
     const lanes = c.work === 'case3' ? `
       <div class="pn" style="margin-bottom:24px;padding:24px 28px;
@@ -1005,26 +1041,35 @@ function render(d, A) {
                <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">${ln[1].map(x =>
                  `<span class="chip${k ? '' : ' chip--sub'}">${esc(x)}</span>`).join('')}</p></div>`)).join('')}
       </div>` : ''
-    /* 사례 2 — 5단계 흐름은 본문 전체 폭 맨 위에 둔다(칸 다섯이 왼쪽 칸에 들어가지 않는다) */
+    /* 사례 2 — 6단계 흐름은 본문 전체 폭 맨 위에 두 줄(세 칸씩)로 둔다. 한 줄 여섯 칸이면 칩(「2019 글로벌 그랜드런칭」)이 칸에 안 들어간다 */
     const chain = c.work === 'case2' ? `
-      <div class="frow" style="margin-bottom:24px;flex:none">${
-        chain2.map((s, k) => (k ? arrow() : '') + stage(s)).join('')}</div>` : ''
-    return slide({
-      aria: `${L.caseN(i + 1)} 판단: ${c.dlgTitle}`,
-      eyebrow: `${L.caseN(i + 1)}, ${L.judge}`, title: c.dlgTitle, lede: c.dlgMeta,
-      rights: rightsOf(slug),
-      body: `${chain}<div class="g2" style="grid-template-columns:1fr 660px">
+      <div style="flex:none;display:flex;flex-direction:column;gap:24px;margin-bottom:24px">${[chain2.slice(0, 3), chain2.slice(3)].map(row =>
+        `<div class="frow">${row.map((s, k) => (k ? arrow() : '') + stage(s)).join('')}</div>`).join('')}</div>` : ''
+    const title = c2(c, 'title', c.dlgTitle)
+    const box = ([k, v]) => `<div class="fs"><b>${esc(k)}</b><p>${esc(v)}</p></div>`
+    const kpi = (st = '') => `<div class="pn" style="${st}display:flex;align-items:flex-end;gap:26px">
+            <p class="n">${ba(num)}</p>
+            <p class="nl" style="margin-bottom:10px">${esc(lab)}</p></div>`
+    /* 사례 2 — 6단계 흐름이 위 두 줄을 차지하므로 문제 → 판단 → 결과는 가로 한 줄, 큰 숫자는 그 아래, 그림은 오른쪽 전체 높이 */
+    const body = c.work === 'case2' ? `${chain}<div class="g2" style="grid-template-columns:1fr 660px">
+        <div style="display:flex;flex-direction:column;min-height:0">
+          <div class="frow" style="flex:1;min-height:0">${boxes.map((b, n) => (n ? arrow() : '') + box(b)).join('')}</div>
+          ${kpi('margin-top:24px;')}
+        </div>
+        ${shot(slug, workOf(slug).title, 'min-height:0')}
+      </div>` : `<div class="g2" style="grid-template-columns:1fr 660px">
         <div style="display:flex;flex-direction:column;min-height:0">${lanes}
-          <div class="flow">${boxes.map(([k, v], n) =>
-            (n ? arrow() : '') + `<div class="fs"><b>${esc(k)}</b><p>${esc(v)}</p></div>`).join('')}</div>
+          <div class="flow">${boxes.map((b, n) => (n ? arrow() : '') + box(b)).join('')}</div>
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           ${shot(slug, workOf(slug).title, 'flex:1;min-height:0')}
-          <div class="pn" style="margin-top:26px;display:flex;align-items:flex-end;gap:26px">
-            <p class="n">${ba(num)}</p>
-            <p class="nl" style="margin-bottom:10px">${esc(lab)}</p></div>
+          ${kpi('margin-top:26px;')}
         </div>
-      </div>`,
+      </div>`
+    return slide({
+      aria: `${L.caseN(i + 1)} 판단: ${title}`,
+      eyebrow: `${L.caseN(i + 1)}, ${L.judge}`, title, lede: c.dlgMeta,
+      rights: rightsOf(slug), body,
     })
   }
 
@@ -1064,8 +1109,8 @@ function render(d, A) {
         ${doc('nightwalker/server_flow_proposal', 'min-height:0')}${doc('nightwalker/charge_ui_mock', 'min-height:0')}</div>`
     }
     return slide({
-      aria: `${L.caseN(i + 1)} 실행: ${c.dlgTitle}`,
-      eyebrow: `${L.caseN(i + 1)}, ${L.exec}`, title: EXEC_TITLE[c.work] || c.title, hcls: 'h--sm',
+      aria: `${L.caseN(i + 1)} 실행: ${c2(c, 'title', c.dlgTitle)}`,
+      eyebrow: `${L.caseN(i + 1)}, ${L.exec}`, title: EXEC_TITLE[c.work] || c2(c, 'exec', c.title), hcls: 'h--sm',
       rights: rightsOf(CASE_IMG[c.work]),
       body: `<div class="g2" style="grid-template-columns:${cols}">
         <div style="display:flex;flex-direction:column;min-height:0">
