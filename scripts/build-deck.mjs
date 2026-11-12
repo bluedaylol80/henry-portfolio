@@ -5,7 +5,7 @@
  * 로컬 서버(8787)에 뜬 사이트를 실브라우저로 열어 렌더된 DOM 텍스트를 읽고,
  * 덱 전용 캡션과 라벨만 이 파일의 표에서 가져온다.
  *
- * 판형은 16:9 슬라이드 19장(WO-29 17장 + WO-34 슈퍼피플 1장 + WO-42 사례 1 방향 제안 1장). 스테이지는 1920×1080 고정 좌표계이고,
+ * 판형은 16:9 슬라이드 20장(WO-29 17장 + WO-34 슈퍼피플 1장 + WO-42 사례 1 방향 제안 1장 + 2장 소개 영상 1장). 스테이지는 1920×1080 고정 좌표계이고,
  * 창 크기가 달라도 비율을 유지한 채 중앙에서 통째로 확대와 축소된다.
  *
  * 산출 2종
@@ -24,7 +24,7 @@ const BASE = 'http://127.0.0.1:8787'
 const NOTION = 'https://limhenry.notion.site/'
 const HUB = NOTION + '0e48e826c73f4a7ab9c3522d7fb16ce5'
 const MAIL = 'bluedaylol80@gmail.com'
-const SLIDES = 19
+const SLIDES = 20
 const fail = m => { console.error('빌드 실패: ' + m); process.exit(1) }
 const sleep = ms => new Promise(r => setTimeout(r, ms))
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -126,7 +126,7 @@ async function scrape() {
   for (const c of d.cases) Object.assign(c, await openDlg(c.work))
   d.res = {}
   for (const [slug] of RESULTS) d.res[slug] = await openDlg(slug)
-  /* 사례 2 흐름도의 소프트런칭 3개국은 린 상세창에 있다(9장 D6) */
+  /* 사례 2 흐름도의 소프트런칭 3개국은 린 상세창에 있다(10장 D6) */
   for (const slug of EXTRA_DLG) d.res[slug] = await openDlg(slug)
   await browser.close()
 
@@ -247,7 +247,7 @@ const C1 = {
     areas: ['출시 타임라인', '결과', '프로토타입'],
   },
 }
-/* 4장 역량 4분류 — 덱 전용(WO-42 추가, 본부장 지시 09-30). 사이트 #skills 본문은 그대로 둔다.
+/* 5장 역량 4분류 — 덱 전용(WO-42 추가, 본부장 지시 09-30). 사이트 #skills 본문은 그대로 둔다.
    note = 덱 전용 설명(글자 그대로, 네 칸 모두 명사형 끝맺음 — WO-42 추가 3). co = 그 역량을 수행한 회사(경력 행 표기) */
 const SKILLS_TITLE = '보유 핵심 역량'
 const SKILLS_DECK = {
@@ -274,7 +274,7 @@ const KPI_TBL = (() => {
     if (c.length > 7 && /^\d+$/.test(c[1])) by.set(c[3], [c[5], c[6]])
   }
   const out = {}
-  /* 슈퍼피플은 13장(6개 지표) 대상이 아니라 KPI_NUM에 넣지 않고 라벨만 같은 근거표에서 읽는다 */
+  /* 슈퍼피플은 14장(6개 지표) 대상이 아니라 KPI_NUM에 넣지 않고 라벨만 같은 근거표에서 읽는다 */
   for (const [k, n] of Object.entries({ ...KPI_NUM, superpeople: '56만+' })) {
     if (!by.has(n)) fail(`수치 근거표에 '${n}'(${k}) 행이 없다`)
     out[k] = by.get(n)
@@ -286,7 +286,7 @@ const kpiLabel = slug => {
   const dd = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).trim()
   return per && per !== '미상' ? `${dd}, ${per}` : dd
 }
-/* 13장 라벨 — 괄호 속 국가 목록은 칸에서 쪼개져 떨어진다(D5). 기간은 둘째 줄로 내린다(D4) */
+/* 14장 라벨 — 괄호 속 국가 목록은 칸에서 쪼개져 떨어진다(D5). 기간은 둘째 줄로 내린다(D4) */
 const kpiLabel2 = slug => {
   const [def, per] = KPI_TBL[slug]
   const dd = KPI_DROP.reduce((a, re) => a.replace(re, ''), def).replace(/\s*\([^)]*\)/g, '').trim()
@@ -296,10 +296,10 @@ const CASE_IMG = { case2: 'lyn', case3: 'nightwalker' }
 const RESULTS = [['chaos', ['chaos/event_ui_plan']], ['fivestars', ['fivestars/prereg']],
                  ['nanakage', ['nanakage/update_plan']]]
 const EXTRA_DLG = ['lyn', 'superpeople']
-/* 15장 슈퍼피플(WO-34 §3) — 이미지 2장(가공본)과 흐름 5칸. 칸 이름은 발주서 문안 그대로다 */
+/* 16장 슈퍼피플(WO-34 §3) — 이미지 2장(가공본)과 흐름 5칸. 칸 이름은 발주서 문안 그대로다 */
 const SP_SHOTS = ['timeline.jpg', 'douyu-event.jpg']
 const SP_FLOW = ['채널 운영', '이벤트와 콘텐츠', 'VOC', '지표 분석', '보고와 조치']
-/* 14장 — 발주서 §2가 요구한 역할, 판단, 결과 3줄. 값은 사이트 상세창 행에서 읽고,
+/* 15장 — 발주서 §2가 요구한 역할, 판단, 결과 3줄. 값은 사이트 상세창 행에서 읽고,
    어느 행이 어느 칸인지만 여기(덱 전용 표)에서 정한다. */
 const RESULT_ROWS = {
   chaos: [['역할', '서비스 종료'], ['판단', '소프트런칭'], ['결과', '미국 성적']],
@@ -307,7 +307,7 @@ const RESULT_ROWS = {
   /* Shadow Seven은 가운데 칸이 판단이 아니라 시스템 기획이다(WO-31 §6) — 칸 이름표도 그에 맞춘다 */
   nanakage: [['역할', '담당'], ['기획', '시스템 기획'], ['결과', '지표 → 조치 → 결과']],
 }
-/* 14장 칸에 다 안 들어가는 긴 나열 행 — 앞 n개 항목만 싣고 말줄임을 단다(자르기만, 고쳐 쓰지 않는다) */
+/* 15장 칸에 다 안 들어가는 긴 나열 행 — 앞 n개 항목만 싣고 말줄임을 단다(자르기만, 고쳐 쓰지 않는다) */
 const RESULT_CLIP = { '시스템 기획': 2 }
 /* 쉼표 나열을 괄호 밖에서만 자른다 — 「BM과 패키지 구조(상자, 코스튬, 즉시 열기)」의 괄호 속 쉼표는 한 항목이다 */
 const splitTop = v => {
@@ -351,13 +351,17 @@ const EXEC_ICONS = { [L.act]: 'hand', [L.deferred]: 'clock', [L.outcome]: 'check
 /* ============================ 3. 자산 (상대 경로 / base64) ============================ */
 const IMG_DIR = 'site/pdf/img/'
 const FONT = 'site/deck/fonts/SUIT-Variable.woff2'
-/* 1과 19장 캔버스 모션 — 외부 라이브러리 없이 덱 HTML에 그대로 인라인한다(단일 파일 오프라인 동작) */
+/* 1과 20장 캔버스 모션 — 외부 라이브러리 없이 덱 HTML에 그대로 인라인한다(단일 파일 오프라인 동작) */
 const MOTION_JS = readFileSync('scripts/deck-motion.js', 'utf8')
 if (/<\/script/i.test(MOTION_JS)) fail('deck-motion.js에 </script>가 있다')
 const b64 = (p, mime) => `data:${mime};base64,` + readFileSync(p).toString('base64')
+/* 2장 소개 영상: site/deck/에 둔 원본(36초, 무음). 단일 파일에는 영상과 첫 화면 그림을 그대로 내장한다 */
+const VIDEO = 'site/deck/intro.mp4', POSTER = 'site/deck/intro-poster.jpg'
 const makeAssets = inline => ({
   img: slug => (inline ? b64(IMG_DIR + slug + '.jpg', 'image/jpeg') : '../pdf/img/' + slug + '.jpg'),
   font: () => (inline ? b64(FONT, 'font/woff2') : 'fonts/SUIT-Variable.woff2'),
+  video: () => (inline ? b64(VIDEO, 'video/mp4') : 'intro.mp4'),
+  poster: () => (inline ? b64(POSTER, 'image/jpeg') : 'intro-poster.jpg'),
 })
 /* 원본 픽셀 크기 — JPEG 프레임 헤더에서 직접 읽는다.
    확대 금지(D9) 상한을 렌더 때 계산하려면 원본 크기를 알아야 한다. */
@@ -441,7 +445,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 서브컬러 칩 — 면을 채우면 흰 글자가 4.5:1을 못 넘는다(빨강/흰 4.44:1).
    그래서 빨강은 테두리(선)로만 쓰고 글자는 텍스트색으로 둔다. */
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
-/* 수행 회사 버튼(4장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
+/* 수행 회사 버튼(5장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
 .cobtn{display:inline-block;border:2px solid var(--tx);border-radius:12px;padding:8px 18px;
   font-size:22px;font-weight:700;line-height:1.35;color:var(--tx);background:var(--panel)}
 /* 캡처 */
@@ -458,6 +462,13 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .shot figcaption{padding:14px 20px;font-size:22px;line-height:1.35;color:var(--m60);
   border-top:1px solid var(--m12);background:var(--panel)}
 .shot--plain img{object-fit:cover}
+/* 2장 소개 영상: 장 전체를 16:9 영상이 채운다(.shot과 같은 테두리와 모서리).
+   좌우 여백 88px(약 4.6%). 아래 여백은 쪽 표기(.cnt)와 라벨이 영상 조작 막대를 덮지 않게 위보다 넓게 둔다 */
+.s.vd{padding:0}
+.vd .shot{position:absolute;left:88px;top:27px;width:1744px;height:981px}
+.vd video{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+.vd .eb{position:absolute;left:88px;bottom:30px}
+.vd .eb::after{display:none}
 /* 플로우 */
 .flow{display:flex;flex-direction:column}
 .fs{background:var(--panel);border:1px solid var(--m12);border-radius:20px;padding:22px 28px}
@@ -490,7 +501,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .cover .hl{margin-top:44px;font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.02em}
 .cover .ct{margin-top:44px;font-size:24px;line-height:1.9;color:var(--m60)}
 .cover .ct b{display:inline-block;min-width:212px;color:var(--tx);font-weight:600}
-/* 1과 19장 모션(본부장 결재 11-05: 표지=C4, 마지막 장=E4) — scripts/deck-motion.js.
+/* 1과 20장 모션(본부장 결재 11-05: 표지=C4, 마지막 장=E4) — scripts/deck-motion.js.
    캔버스는 1920×1080 스테이지 좌표 그대로 깔고 글자 아래에 둔다. 포인터를 받지 않아 링크 클릭을 가로채지 않는다. */
 .mo{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;pointer-events:none}
 .cover>div{position:relative;z-index:1}
@@ -609,7 +620,7 @@ function render(d, A) {
   }
 
   /* 사례 1의 큰 숫자 — 11종은 달콤 앱 서비스 총괄 범위이지 이 이벤트의 결과가 아니다.
-     사이트 '결과와 상태' 문장에 적힌 출시 항목을 세어 쓴다(D4). 11종은 13과 18장에만 남긴다. */
+     사이트 '결과와 상태' 문장에 적힌 출시 항목을 세어 쓴다(D4). 11종은 14와 19장에만 남긴다. */
   const launched = (() => {
     const v = d.cases[0].rows.find(r => r[0] === L.outcome)[1]
     const m = v.match(/실제 출시\s*[:—–-]\s*(.+?)\.?\s*$/)
@@ -665,7 +676,15 @@ function render(d, A) {
     .map(([h, t]) => ext(h, esc(t) + ' ↗')).join(SEP)}</p>
 </section>`
 
-  /* --- 2. 한눈에 --- */
+  /* --- 2. 소개 영상 --- 장에 새 문장을 짓지 않는다. 이름과 라벨은 「소개 영상」 한 단어.
+     재생과 정지는 아래 show()가 맡는다(들어오면 0초부터 자동 재생, 나가면 정지, 동작 줄이기면 자동 재생 안 함) */
+  const intro = `
+<section class="s vd" role="group" aria-roledescription="slide" aria-label="소개 영상" data-bg="#F5F5F5">
+  <figure class="shot"><video src="${A.video()}" poster="${A.poster()}" muted playsinline preload="metadata" controls aria-label="소개 영상"></video></figure>
+  <p class="eb">소개 영상</p>
+</section>`
+
+  /* --- 3. 한눈에 --- */
   const sents = pr(d.sub).split(/(?<=다\.)\s+/).filter(Boolean)
   const glance = slide({
     aria: '한눈에: ' + d.role, eyebrow: L.glance, title: d.h1.join(' '), titleHtml: d.h1.map(esc).join('<br>'), hcls: 'h--lg',
@@ -683,7 +702,7 @@ function render(d, A) {
     </div>`,
   })
 
-  /* --- 3. Career Milestone --- */
+  /* --- 4. Career Milestone --- */
   const rows3 = [...d.career].reverse()
   const ym = s => { const [y, m] = s.split('.').map(Number); return y + (m - 1) / 12 }
   const ends = rows3.map(r => { const p = per(r.sub); if (!p) fail('경력 기간을 못 읽었다: ' + r.sub)
@@ -714,7 +733,7 @@ function render(d, A) {
         <p class="r">${esc(roleOf(r.sub))}</p></div>`).join('')}</div>`,
   })
 
-  /* --- 4. 역량 4분류 --- */
+  /* --- 5. 역량 4분류 --- */
   /* 덱 전용(WO-42 추가) — 사례와 성과 칩 대신 수행 회사 버튼(링크 없음). 회사 이름은 경력 행 표기와 대조한다 */
   const coNames = new Set(d.career.map(r => r.company))
   const skillOf = s => SKILLS_DECK[s.title] || fail('덱 역량 표에 없는 분류: ' + s.title)
@@ -734,7 +753,7 @@ function render(d, A) {
       </div>`).join('')}</div>`,
   })
 
-  /* --- 5. 대표 사례 3 (강조 장) --- */
+  /* --- 6. 대표 사례 3 (강조 장) --- */
   const top3 = slide({
     cls: 's--acc', bg: '#1A1A1A', aria: '대표 사례 3: ' + d.casesTitle,
     eyebrow: L.top3, title: d.casesTitle, lede: d.casesLede, rights: L.rightsPlain,
@@ -750,7 +769,7 @@ function render(d, A) {
       </div>` }).join('')}</div>`,
   })
 
-  /* --- 6, 7, 8. 사례 1 — 진단 → 방향 제안 → 실행(WO-42). 문구는 덱 전용 표 C1, '판단'·'결정 범위'·'미룬 것'은 사이트에서 읽는다 --- */
+  /* --- 7, 8, 9. 사례 1 — 진단 → 방향 제안 → 실행(WO-42). 문구는 덱 전용 표 C1, '판단'·'결정 범위'·'미룬 것'은 사이트에서 읽는다 --- */
   const c1 = d.cases[0]
   if (c1.work !== 'case1') fail('첫 대표 사례가 case1이 아니다: ' + c1.work)
   const c1row = k => (c1.rows.find(r => r[0] === k) || fail(`사례 1 상세에 '${k}' 행이 없다`))[1]
@@ -804,8 +823,8 @@ function render(d, A) {
   if (c1ev[0].title !== R.evFirst) fail(`사례 1 근거에 「${R.evFirst}」가 없다`)
   const [c1num, c1lab] = launched
   /* 출시 항목 라벨은 숫자 옆 좁은 칸이라 항목마다 줄을 바꾼다(줄 끝 '·' 매달림 방지) */
-  /* 8장은 세 영역으로 나눈다(WO-42 추가 2): ① 출시 타임라인(위 전체 폭) ② 결과(아래 왼쪽) ③ 프로토타입(아래 오른쪽).
-     '미룬 것'과 안내 줄은 싣지 않는다 — 같은 내용이 타임라인 3번에 있다. 영역 라벨은 7장 '개발 방향 적용' 라벨과 같은 모양 */
+  /* 9장은 세 영역으로 나눈다(WO-42 추가 2): ① 출시 타임라인(위 전체 폭) ② 결과(아래 왼쪽) ③ 프로토타입(아래 오른쪽).
+     '미룬 것'과 안내 줄은 싣지 않는다 — 같은 내용이 타임라인 3번에 있다. 영역 라벨은 8장 '개발 방향 적용' 라벨과 같은 모양 */
   const areaLabel = t => `<p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(t)}</p>`
   const nat = [natural('deco'), natural('ssjproto')].map(({ w, h }) => (w / h).toFixed(3))
   const c1run = slide({
@@ -845,7 +864,7 @@ function render(d, A) {
     </div>`,
   })
 
-  /* --- 9와 11. 사례 판단(사례 2와 3) --- */
+  /* --- 10과 12. 사례 판단(사례 2와 3) --- */
   /* 사례 2 — 소프트런칭 3개국 → 개선 3건 → 그랜드런칭을 실제로 잇는다(D6).
      세 단계 모두 사이트 문장에서 읽는다. */
   const chain2 = (() => {
@@ -906,7 +925,7 @@ function render(d, A) {
     })
   }
 
-  /* --- 10과 12. 사례 실행(사례 2와 3) --- */
+  /* --- 11과 13. 사례 실행(사례 2와 3) --- */
   const exec = (c, i) => {
     /* 발표용으로 줄인다 — 행동과 미룬 것은 첫 문장만. 결과는 본인 기여 범위 단서가 들어 있어 통째로 남긴다(D3). */
     const pick = k => { const r = c.rows.find(x => x[0] === k); return r && r[1] }
@@ -949,7 +968,7 @@ function render(d, A) {
     })
   }
 
-  /* --- 13. 숫자로 증명 (강조 장) --- */
+  /* --- 14. 숫자로 증명 (강조 장) --- */
   const numbers = slide({
     cls: 's--acc', bg: '#1A1A1A', aria: '숫자로 증명: 6개 지표',
     eyebrow: L.numbers, title: d.worksTitle, rights: L.rightsPlain,
@@ -963,7 +982,7 @@ function render(d, A) {
     </div>`,
   })
 
-  /* --- 14. 성과 3장 --- */
+  /* --- 15. 성과 3장 --- */
   const results = slide({
     aria: '성과: 카오스크로니클, Five Stars, Shadow Seven', eyebrow: L.results,
     title: RESULTS.map(([slug]) => workOf(slug).title).join(', '), hcls: 'h--sm',
@@ -997,7 +1016,7 @@ function render(d, A) {
       </div>` }).join('')}</div>`,
   })
 
-  /* --- 15. 슈퍼피플 — 흐름 5칸 + 가공 이미지 2장 + 상세창 숫자 2개 + 외부 링크 --- */
+  /* --- 16. 슈퍼피플 — 흐름 5칸 + 가공 이미지 2장 + 상세창 숫자 2개 + 외부 링크 --- */
   const spW = workOf('superpeople'), spR = d.res.superpeople
   const spCap = f => spR.gal.find(g => g.file === f).cap
   const spImg = f => `superpeople/${f.replace(/\.jpg$/, '')}`
@@ -1021,7 +1040,7 @@ function render(d, A) {
       </div>`,
   })
 
-  /* --- 16. 업무 방식 5단계 --- */
+  /* --- 17. 업무 방식 5단계 --- */
   const method = slide({
     aria: '업무 방식 5단계', eyebrow: L.method, title: d.h1.join(' '), lede: d.casesLede,
     rights: L.rightsPlain,
@@ -1033,7 +1052,7 @@ function render(d, A) {
       </div>`).join('')}</div>`,
   })
 
-  /* --- 17. AI 프로토타입 --- */
+  /* --- 18. AI 프로토타입 --- */
   const proto = slide({
     aria: 'AI 프로토타입 2종', eyebrow: L.proto, title: d.protoTitle, lede: d.protoLede,
     rights: L.rightsProto,
@@ -1047,7 +1066,7 @@ function render(d, A) {
       </div>`).join('')}</div>`,
   })
 
-  /* --- 18. 회사별 상세 --- */
+  /* --- 19. 회사별 상세 --- */
   const KPI_BY_CO = [['달콤', 'dalcom'], ['넥슨', 'lyn'], ['원더피플', 'nightwalker'], ['스카이피플', 'fivestars'], ['넵튠', 'nanakage']]
   const companies = slide({
     aria: '회사별 상세: 10개 회사', eyebrow: L.companies, title: d.careerTitle, hcls: 'h--sm',
@@ -1060,7 +1079,7 @@ function render(d, A) {
         <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}${r.ev.length ? ' ' + r.ev.map(e => ext(e.href, esc(e.label) + ' ↗')).join(' ') : ''}</p></div>` }).join('')}</div>`,
   })
 
-  /* --- 19. 연락 --- */
+  /* --- 20. 연락 --- */
   const legal = d.legal.replace(/^(©\s*\d{4}\s+Henry Lim(?:\s*\([^)]*\))?)\s+/, '$1, ')
   const contact = `
 <section class="s s--dark cover" role="group" aria-roledescription="slide" aria-label="연락: ${esc(d.brand)}" data-bg="#26262B" data-mo="E4">
@@ -1081,7 +1100,7 @@ function render(d, A) {
   <div></div>
 </section>`
 
-  const body = [cover, glance, milestone, skills, top3,
+  const body = [cover, intro, glance, milestone, skills, top3,
     c1diag, c1dir, c1run,
     judge(d.cases[1], 1), exec(d.cases[1], 1),
     judge(d.cases[2], 2), exec(d.cases[2], 2),
@@ -1138,7 +1157,13 @@ ${body.join('\n')}
     cnt.innerHTML='<em>'+(i+1)+'</em> / '+N
     if(push!==false){history.replaceState(null,'','#'+(i+1))}
     DeckMotion.show(ss[i])
+    ss.forEach(function(s,k){var v=s.querySelector('video');if(!v)return
+      /* 영상에 포커스가 남으면 장을 넘긴 스페이스가 영상 재생으로도 먹는다. 떠날 때 포커스를 뗀다 */
+      if(k!==i){v.pause();v.blur();return}
+      v.currentTime=0
+      if(!rmq.matches){v.play().catch(function(){})}})
   }
+  var rmq=matchMedia('(prefers-reduced-motion: reduce)')
   function fromHash(){var n=parseInt((location.hash||'').slice(1),10);return isFinite(n)&&n>=1&&n<=N?n-1:0}
   addEventListener('resize',fit); addEventListener('hashchange',function(){show(fromHash(),false)})
   addEventListener('keydown',function(e){
@@ -1153,7 +1178,7 @@ ${body.join('\n')}
     else if(k==='f'||k==='F'){if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()};e.preventDefault()}
   })
   addEventListener('click',function(e){
-    if(e.target.closest('a'))return
+    if(e.target.closest('a,video'))return
     show(e.clientX>innerWidth/3?cur+1:cur-1)
   })
   var tx=0,ty=0
