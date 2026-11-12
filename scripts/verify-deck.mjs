@@ -108,6 +108,44 @@ const holdB = page => page.evaluate(() => {
   })
   return worst
 })
+/* 숫자 올리기 도중 글자 겹침, 가장 큰 값(px). 진행 10~90%(10% 간격)에서 칸마다 그려진 글자의 가로 범위(Range)가
+   이웃 칸 글자, 숫자 바로 앞뒤 글자(단위 등)의 범위와 겹치는 폭. 숨긴 빈 앞자리 칸(.e)은 뺀다 */
+const numOverlap = page => page.evaluate(async () => {
+  const raf2 = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+  const s = document.querySelector('.s.on')
+  const vs = [...s.querySelectorAll('.a-nv')]
+  if (!vs.length) return { d: 0 }
+  const xs = s.getAnimations({ subtree: true }).filter(a => a.animationName)
+  const span = (n, i) => { const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1); const b = r.getBoundingClientRect(); return [b.left, b.right] }
+  /* 숫자 밖 이웃 글자: 숫자를 품은 큰 숫자(.a-n) 안에서 숫자 바로 앞과 바로 뒤의 공백 아닌 글자 */
+  const outside = v => {
+    const host = v.closest('.a-n'), w = document.createTreeWalker(host, NodeFilter.SHOW_TEXT), out = []
+    let before = null, after = null, seen = false
+    for (let x; (x = w.nextNode());) {
+      if (v.contains(x)) { seen = true; continue }
+      for (let i = 0; i < x.length; i++) if (x.data[i].trim()) { if (!seen) before = [x, i]; else if (!after) after = [x, i] }
+    }
+    for (const c of [before, after]) if (c) out.push(c)
+    return out
+  }
+  let worst = { d: 0 }
+  for (let p = 0.1; p < 0.95; p += 0.1) {
+    xs.forEach(a => { a.pause(); a.currentTime = a.animationName === 'a-n' ? a.effect.getTiming().delay + a.effect.getComputedTiming().duration * p : a.effect.getComputedTiming().endTime - 1 })
+    await raf2()
+    for (const v of vs) {
+      const boxes = []
+      for (const c of v.children) if (!c.classList.contains('e') && c.firstChild) boxes.push([c.textContent, span(c.firstChild, 0)])
+      const ext = outside(v).map(([x, i]) => [x.data[i], span(x, i)])
+      const all = [...boxes, ...ext].sort((a, b) => a[1][0] - b[1][0])
+      for (let k = 1; k < all.length; k++) {
+        const d = all[k - 1][1][1] - all[k][1][0]
+        if (d > worst.d) worst = { d, p: Math.round(p * 100), at: v._fin + ' ' + all[k - 1][0] + '|' + all[k][0] }
+      }
+    }
+  }
+  xs.forEach(a => { a.currentTime = 0; a.play() })
+  return worst
+})
 mkdirSync(OUT, { recursive: true })
 const bad = []
 /* 대비 기준 — 본문 4.5:1, 큰 글자(28px 이상 굵게) 3:1.
@@ -191,6 +229,8 @@ async function open(url, w, h) {
     /* 큰 숫자가 끝나는 순간 글자가 튀지 않고(끝 1ms 전과 끝난 뒤 0.5px 이내),
        도는 동안 최종값과 같은 자리 글자는 최종 자리에 있다(진행 30·60·90%, 0.5px 이내) */
     if (i > 1 && i < 19) await holdA(page)
+    const ov = await numOverlap(page)
+    if (ov.d > 0.5) bad.push(`${i}장 숫자 올리기 도중(진행 ${ov.p}%) ${ov.at} 글자가 ${ov.d.toFixed(2)}px 겹친다`)
     const jump = await numJump(page)
     if (jump.end > 0.5) bad.push(`${i}장 숫자 올리기 끝에서 글자가 ${jump.end.toFixed(2)}px 튄다`)
     if (jump.mid > 0.5) bad.push(`${i}장 숫자 올리기 도중 자리 글자가 최종 자리에서 ${jump.mid.toFixed(2)}px 벗어난다`)

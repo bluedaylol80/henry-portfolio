@@ -1259,7 +1259,7 @@ var DeckAnim = (() => {
   }
 
   /* 숫자 올리기, 돌 때만 숫자 부분을 자리별 칸으로 나눈다. 칸의 자리와 폭은 최종 화면에서 그 글자가 놓인 자리 그대로(소수점 px),
-     도는 숫자는 자기 칸 가운데에 그리고(넓으면 양옆으로 고르게 넘침), 아직 없는 앞자리 칸은 최종 글자를 숨겨 둔다(기준선 유지).
+     도는 숫자는 자기 칸 가운데에 그리고(칸보다 넓은 숫자는 그리지 않고 그 칸의 최종 글자를 둔다), 아직 없는 앞자리 칸은 최종 글자를 숨겨 둔다(기준선 유지).
      그래서 단위 글자와 이미 최종값과 같은 자리는 처음부터 제자리, 마지막 값은 최종 화면과 같은 자리다 */
   function count(v) {
     const host = v.closest('.a-n')
@@ -1275,11 +1275,18 @@ var DeckAnim = (() => {
     const k = vr.width / W || 1
     const leftOf = (n, i) => { const r = document.createRange(); if (i < 0) r.selectNodeContents(n); else { r.setStart(n, i); r.setEnd(n, i + 1) } return (r.getBoundingClientRect().left - vr.left) / k }
     const xs = [...fin].map((_, i) => leftOf(t, i))
-    const cells = xs.map((x, i) => {
+    const cw = xs.map((x, i) => (i + 1 < xs.length ? xs[i + 1] : W) - x)
+    const cells = cw.map((w, i) => {
       const c = document.createElement('span'); c.textContent = fin[i]
-      c.style.width = ((i + 1 < xs.length ? xs[i + 1] : W) - x) + 'px'
+      c.style.width = w + 'px'
       return c
     })
+    /* 칸보다 넓은 숫자는 양옆 글자(이웃 숫자, 소수점, 단위)에 겹치므로 그 칸에 그리지 않고 최종 글자를 둔다.
+       숫자 0~9의 폭은 이 글꼴, 이 크기에서 잰다. 0.5px은 소수점 반올림 여유(양옆 0.25px씩) */
+    const dw = {}
+    for (const d of '0123456789') { t.textContent = d; const r = document.createRange(); r.selectNodeContents(t); dw[d] = r.getBoundingClientRect().width / k }
+    t.textContent = fin
+    const fits = (ch, i) => !(ch in dw) || dw[ch] <= cw[i] + .5
     v.style.width = W + 'px'; v.replaceChildren(...cells)
     /* 글자 사이 커닝(예: 11)만큼 칸 가운데와 최종 자리가 어긋나는 것을 칸마다 보정한다 */
     cells.map(c => leftOf(c, -1)).forEach((x, i) => { cells[i].style.left = (xs[i] - x) + 'px' })
@@ -1287,7 +1294,7 @@ var DeckAnim = (() => {
       if (!v.isConnected || a.playState === 'finished' || a.playState === 'idle') return
       const s = fmt(a.effect.getComputedTiming().progress || 0), off = Math.max(0, fin.length - s.length)
       cells.forEach((c, i) => {
-        const ch = i < off ? fin[i] : s[i - off]
+        const ch = i < off || !fits(s[i - off], i) ? fin[i] : s[i - off]
         if (c.textContent !== ch) c.textContent = ch
         c.classList.toggle('e', i < off)
       })
