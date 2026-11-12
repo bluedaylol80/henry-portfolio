@@ -196,6 +196,8 @@ const CAPS = {
   /* 12장 본문 취지 교체(11-13) — 「한국 퍼블리셔 규격으로 재정의」 대신 본부장 문구 */
   'nightwalker/server_flow_proposal': '서버 선택 플로우 제안: 중국 서비스의 플랫폼 기능을 국내 기능으로 수정',
   'nightwalker/server_flowchart_wire': '서버 선택 플로우차트: 퍼블리셔 플랫폼과 개발사 영역 구분',
+  /* 공개 노션 쪽 제목과 그 그림의 화면 이름(그림 위 원문 표기) */
+  'nightwalker/ingame': '유료 재화 구매 시스템 연동: 넥슨 캐시 웹페이지 호출 화면',
   'nightwalker/charge_flow': '유료 재화 충전과 프로모션 플로우: 퍼블리셔 결제 정책에 맞춘 지급 흐름',
   'nightwalker/charge_ui_mock': '충전 UI 시안: 프로모션 혜택을 충전 창에서 보여주는 개선안',
   'chaos/event_ui_plan': '이벤트 페이지 UI 기획안: 미션 구조와 보상 배치를 기획해 라이브 이벤트로 적용',
@@ -1056,7 +1058,9 @@ function render(d, A) {
     } else {
       /* 4장을 작게 늘어놓으니 아무것도 안 읽혔다. 발주서 §2대로 플로우 제안과 충전 UI 시안 2장만 크게(D9). */
       cols = '640px 1fr'
-      tiles = `<div style="display:grid;grid-template-columns:1fr 1.25fr;gap:22px;min-height:0">
+      /* 11-13 인게임 화면 1장 추가(공개 노션 「유료 재화 구매 시스템 연동」) — 위 전체 폭, 아래에 기존 두 장 */
+      tiles = `<div style="display:grid;grid-template-columns:1fr 1.25fr;grid-template-rows:1.25fr 1fr;gap:22px;min-height:0">
+        ${doc('nightwalker/ingame', 'min-height:0;grid-column:1/-1')}
         ${doc('nightwalker/server_flow_proposal', 'min-height:0')}${doc('nightwalker/charge_ui_mock', 'min-height:0')}</div>`
     }
     return slide({
