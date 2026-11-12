@@ -409,9 +409,9 @@ const ICONS = {
   check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.4l2.8 2.8L16 9.6"/>',
   arrow: '<path d="M4 12h15M13 6l6 6-6 6"/>',
 }
-/* 6장 01단계 하락 아트웍(11-13 2차) — 실제 자료처럼 보이지 않게 축, 눈금, 숫자, 단위가 없다.
+/* 6장 01단계 하락 아트웍(11-13 2차). 실제 자료처럼 보이지 않게 축, 눈금, 숫자, 단위가 없다.
    덱 색만: 옅은 막대(--m12), 먹 선(--tx), 꺾여 내려가는 끝 구간과 화살촉은 서브컬러(도형) */
-const DROP_ART = `<svg viewBox="0 0 320 150" aria-hidden="true" style="display:block;margin-top:auto;width:100%;height:auto;max-height:150px;overflow:visible">
+const DROP_ART = `<svg viewBox="0 0 320 150" aria-hidden="true" style="display:block;flex:1 1 0;min-height:0;width:100%;margin-top:16px">
   ${[[24, 92], [76, 86], [128, 80], [180, 72], [232, 50], [284, 32]].map(([x, h]) => `<rect x="${x - 14}" y="${146 - h}" width="28" height="${h}" rx="5" style="fill:var(--m12)"/>`).join('')}
   <polyline points="8,40 62,52 112,44 166,66 214,58" style="fill:none;stroke:var(--tx);stroke-width:5;stroke-linecap:round;stroke-linejoin:round"/>
   <polyline points="214,58 292,128" style="fill:none;stroke:var(--sub);stroke-width:5;stroke-linecap:round"/>
@@ -463,7 +463,10 @@ const css = fontUrl => `
    그래서 빨강은 28px 이상 굵은 글자, 도형, 선에만 쓰고, 작은 라벨은 굵기와 크기로 강조한다. */
 :root{--bg:#F5F5F5;--ink:#26262B;--sub:#E62B1E;--tx:#1A1A1A;
   --m60:rgba(26,26,26,.62);--m38:rgba(26,26,26,.50);--m12:rgba(26,26,26,.12);
-  --panel:#fff;--shot:#fff}
+  --panel:#fff;--shot:#fff;
+  /* 규격(11-13 2차): 안쪽 여백 2벌(작은 박스, 큰 패널), 간격 3벌(박스 사이, 단 사이, 화살표 칸). 지금 덱에서 가장 많이 쓰던 값으로 모았다.
+     글 크기 단계마다 줄 간격 하나: 22~28px = 1.4, 32px = 1.3, 40px 이상 = 1.2 */
+  --ps:22px 24px;--pl:32px 34px;--g:24px;--gc:36px;--ga:52px}
 html,body{height:100%;overflow:hidden;background:var(--ink)}
 body{font-family:SUIT,-apple-system,'Segoe UI',sans-serif;color:var(--tx);word-break:keep-all;
   -webkit-font-smoothing:antialiased;transition:background-color .35s ease}
@@ -489,9 +492,9 @@ li{list-style:none}
 .h{margin-top:22px;font-size:48px;font-weight:700;letter-spacing:-.022em;line-height:1.2;max-width:1560px}
 .h--lg{font-size:56px}
 .h--sm{font-size:40px}
-.lede{margin-top:16px;font-size:28px;line-height:1.55;color:var(--m60);max-width:1450px}
+.lede{margin-top:16px;font-size:28px;line-height:1.4;color:var(--m60);max-width:1450px}
 .bd{flex:1;min-height:0;margin-top:36px;display:flex;flex-direction:column}
-.rights{position:absolute;left:96px;right:300px;bottom:36px;font-size:22px;line-height:1.35;color:var(--m60)}
+.rights{position:absolute;left:96px;right:300px;bottom:36px;font-size:22px;line-height:1.4;color:var(--m60)}
 /* 숫자 */
 .n{font-size:120px;font-weight:800;color:var(--sub);letter-spacing:-.04em;line-height:.92}
 .n--md{font-size:96px}
@@ -508,19 +511,19 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .ba u{text-decoration:none;color:var(--sub)}
 .ba s{text-decoration:none;color:var(--m38);margin:0 .12em}
 /* 블록 */
-.pn{background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:32px 34px}
+.pn{background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:var(--pl)}
 .ico{width:64px;height:64px;border-radius:50%;background:var(--sub);display:grid;place-items:center;flex:none}
 .ico svg{width:32px;height:32px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ico--sm{width:52px;height:52px}.ico--sm svg{width:26px;height:26px}
 .chip{display:inline-block;border:1px solid var(--m12);border-radius:999px;padding:9px 18px;
-  font-size:22px;line-height:1.35;color:var(--m60)}
+  font-size:22px;line-height:1.4;color:var(--m60)}
 .chip--dark{background:var(--tx);border-color:var(--tx);color:var(--bg)}
 /* 서브컬러 칩 — 면을 채우면 흰 글자가 4.5:1을 못 넘는다(빨강/흰 4.44:1).
    그래서 빨강은 테두리(선)로만 쓰고 글자는 텍스트색으로 둔다. */
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
 /* 수행 회사 버튼(4장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
 .cobtn{display:inline-block;border:2px solid var(--tx);border-radius:12px;padding:8px 18px;
-  font-size:22px;font-weight:700;line-height:1.35;color:var(--tx);background:var(--panel)}
+  font-size:22px;font-weight:700;line-height:1.4;color:var(--tx);background:var(--panel)}
 /* 캡처 */
 .shot{background:var(--shot);border:1px solid var(--m12);border-radius:20px;overflow:hidden;
   display:flex;flex-direction:column;min-height:0;position:relative}
@@ -532,30 +535,31 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   font-size:28px;font-weight:800;color:#fff;z-index:2;box-shadow:0 2px 10px rgba(0,0,0,.28)}
 .bdg--b{background:#26262B}
 .bdg--a{background:var(--sub)}
-.shot figcaption{padding:14px 20px;font-size:22px;line-height:1.35;color:var(--m60);
+.shot figcaption{padding:14px 20px;font-size:22px;line-height:1.4;color:var(--m60);
   border-top:1px solid var(--m12);background:var(--panel)}
 .shot--plain img{object-fit:cover}
 /* 플로우 */
 .flow{display:flex;flex-direction:column}
-.fs{background:var(--panel);border:1px solid var(--m12);border-radius:20px;padding:22px 28px}
-.fs b{display:block;font-size:22px;font-weight:800;letter-spacing:.08em;color:var(--tx);margin-bottom:10px}
-.fs p{font-size:26px;line-height:1.5}
-.farr{height:36px;display:grid;place-items:center;color:var(--m38)}
-.farr svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg)}
+.fs{background:var(--panel);border:1px solid var(--m12);border-radius:20px;padding:var(--ps)}
+.fs b{display:block;font-size:22px;font-weight:800;letter-spacing:.08em;line-height:1.4;color:var(--tx);margin-bottom:8px}
+.fs p{font-size:26px;line-height:1.4}
+.farr{height:var(--g);display:grid;place-items:center;color:var(--m38)}
+.farr svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transform:rotate(90deg)}
 .frow{display:flex;align-items:stretch;gap:0}
 .frow .fs{flex:1}
-.frow .farr{width:52px;height:auto}
+.frow .farr{width:var(--ga);height:auto}
+.frow .farr svg{width:26px;height:26px}
 .frow .farr svg{transform:none}
 /* 표 비슷한 행 */
-.rows{display:flex;flex-direction:column;gap:22px}
+.rows{display:flex;flex-direction:column;gap:var(--g)}
 .row{display:flex;gap:20px;align-items:flex-start}
-.row .rt{font-size:22px;font-weight:800;letter-spacing:.06em;color:var(--tx);margin-bottom:8px}
-.row p{font-size:24px;line-height:1.55}
-.kv{display:grid;grid-template-columns:170px 1fr;gap:12px 22px;font-size:23px;line-height:1.5}
+.row .rt{font-size:22px;font-weight:800;letter-spacing:.08em;line-height:1.4;color:var(--tx);margin-bottom:8px}
+.row p{font-size:26px;line-height:1.4}
+.kv{display:grid;grid-template-columns:170px 1fr;gap:12px var(--g);font-size:22px;line-height:1.4}
 .kv dt{color:var(--m60);font-weight:600}
 /* 10장 꼬리표 줄(11-13) — 한 줄에 한 사실, 글자 한 단계 크게 */
-.kv--x{margin-top:6px;grid-template-columns:150px 1fr;gap:8px 18px;font-size:25px;line-height:1.42}
-.kv--x dt{font-size:22px;font-weight:700;line-height:1.6}
+.kv--x{grid-template-columns:150px 1fr;gap:4px var(--g);font-size:26px;align-items:baseline}
+.kv--x dt{font-size:22px}
 /* 17장 체험 순서 — 번호 붙은 단계 칩(.chip)과 화살표(.farr와 같은 선 아이콘) */
 .stps{display:flex;flex-wrap:wrap;align-items:center;gap:10px 6px}
 .stp-g{display:inline-flex;align-items:center;gap:6px}
@@ -563,13 +567,13 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .stp b{width:34px;height:34px;border-radius:50%;background:var(--tx);color:var(--bg);display:grid;place-items:center;font-size:22px;font-weight:800}
 .stp-a{color:var(--m38);display:inline-grid}
 .stp-a svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.ev{margin-top:auto;padding-top:20px;border-top:1px solid var(--m12);font-size:22px;line-height:1.5;color:var(--m60)}
-.ev b{display:block;color:var(--tx);font-weight:700;margin-bottom:8px}
+.ev{margin-top:auto;padding-top:20px;border-top:1px solid var(--m12);font-size:22px;line-height:1.4;color:var(--m60)}
+.ev b{display:block;color:var(--tx);font-weight:800;letter-spacing:.08em;margin-bottom:8px}
 .ev a{display:inline-block;margin-right:24px;text-decoration:underline;text-underline-offset:4px}
 /* 그리드 */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;flex:1;min-height:0}
-.g4{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr;gap:32px;flex:1;min-height:0}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:var(--gc);flex:1;min-height:0}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gc);flex:1;min-height:0}
+.g4{display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr;gap:var(--g);flex:1;min-height:0}
 /* 표지 */
 .cover{display:grid;grid-template-columns:740px 1fr;gap:56px;align-items:center;padding:70px 96px}
 .cover .nm{font-size:84px;font-weight:800;letter-spacing:-.03em;line-height:1}
@@ -595,10 +599,10 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .lk{position:absolute;left:96px;bottom:36px;z-index:1;font-size:22px;line-height:1.35;color:var(--m60)}
 .lk .sep{color:var(--m38);margin:0 .6em 0 .1em}
 /* Career milestone */
-.msb{display:flex;gap:14px}
-.msb div{border:1px solid var(--m12);border-radius:16px;padding:16px 22px;background:var(--panel)}
-.msb b{display:block;font-size:24px;font-weight:700}
-.msb span{font-size:22px;color:var(--m60)}
+.msb{display:flex;gap:var(--g)}
+.msb div{border:1px solid var(--m12);border-radius:16px;padding:var(--ps);background:var(--panel)}
+.msb b{display:block;font-size:26px;font-weight:700;line-height:1.4}
+.msb span{font-size:22px;line-height:1.4;color:var(--m60)}
 /* 범례 칸의 단계 색 견본 — 막대와 같은 색(.p0~.p2) */
 .msb .ph{display:inline-block;width:40px;height:18px;border-radius:6px;margin-right:12px;vertical-align:-1px}
 /* 회사별 가로 막대 연표(11-13) — 단계 색: 운영 옅은 회색, 사업PM 짙은 회색, 기획/디렉터 서브컬러(도형이라 빨강 규칙에 맞다) */
@@ -606,45 +610,46 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .gc{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;margin-top:22px}
 .gl{position:absolute;top:0;bottom:34px;width:1px;background:var(--m12)}
 .gr{display:grid;grid-template-columns:300px 1fr;align-items:center;flex:1}
-.gr>b{font-size:26px;font-weight:700}
+.gr>b{font-size:26px;font-weight:700;line-height:1.4}
 .gantt{position:relative;height:34px}
 .gantt i{position:absolute;top:0;height:34px;border-radius:8px}
-.gantt .yr{position:absolute;top:0;line-height:34px;font-size:22px;font-weight:600;color:var(--m60);white-space:nowrap}
+.gantt .yr{position:absolute;top:1.6px;line-height:1.4;font-size:22px;font-weight:600;color:var(--m60);white-space:nowrap}
 .gantt .yr em{font-style:normal;font-weight:500;color:var(--tx);margin-left:14px}
 .axis{position:relative;height:34px;border-top:1px solid var(--m12)}
-.axis span{position:absolute;top:8px;font-size:22px;color:var(--m60);transform:translateX(-50%)}
+.axis span{position:absolute;top:8px;font-size:22px;line-height:1.4;color:var(--m60);transform:translateX(-50%)}
 .axis span:first-child{transform:none}.axis span:last-child{transform:translateX(-100%)}
 /* 회사별 상세 */
 /* 티켓 카드(11-13) — 면, 테두리, 모서리는 기존 카드(.pn). 절취선 = 오른쪽 숫자 칸 앞 점선, 그 위아래에 반원 홈(배경색 원을 카드 테두리에 얹는다) */
 .co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr);grid-auto-flow:column;
-  gap:16px 32px;flex:1;min-height:0}
+  gap:var(--g) var(--gc);flex:1;min-height:0}
 .tk{position:relative;display:grid;grid-template-columns:1fr 200px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
 .tk::before,.tk::after{content:"";position:absolute;right:186px;width:28px;height:28px;border-radius:50%;
   background:var(--bg);border:1px solid var(--m12);z-index:2}
 .tk::before{top:-15px;clip-path:inset(50% -1px -1px -1px)}
 .tk::after{bottom:-15px;clip-path:inset(-1px -1px 50% -1px)}
-.tk-m{padding:12px 24px;display:flex;flex-direction:column;justify-content:center;min-width:0}
-.tk-m b{font-size:26px;font-weight:700;line-height:1.25}
-.tk-m .p{margin-top:2px;font-size:22px;color:var(--m60);line-height:1.32}
-.tk-m .t{margin-top:4px;font-size:22px;line-height:1.32}
+/* 티켓 안 위아래 여백은 칸 높이에 맞춰 가운데 정렬(10장이 한 화면에 들어가는 조건이 먼저) */
+.tk-m{padding:0 24px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tk-m b{font-size:26px;font-weight:700;line-height:1.4}
+.tk-m .p{font-size:22px;color:var(--m60);line-height:1.4}
+.tk-m .t{font-size:22px;line-height:1.4}
 .tk-s{position:relative;display:grid;place-items:center}
 .tk-s::before{content:"";position:absolute;left:-1px;top:18px;bottom:18px;border-left:2px dashed var(--m38)}
 .tk .k{font-size:40px;font-weight:800;color:var(--sub);letter-spacing:-.02em;white-space:nowrap}
 /* 스텝 */
 /* 16장 업무 방식(11-13) — 칸 다섯이 화살표로 이어진다. 칸은 기존 카드(.pn과 같은 면, 테두리, 모서리), 번호는 큰 숫자 단계(72px) */
 .steps{flex:none;margin:auto 0}
-.st{flex:1;min-width:0;background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:30px 26px;min-height:560px;display:flex;flex-direction:column}
+.st{flex:1;min-width:0;background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:var(--ps);min-height:560px;display:flex;flex-direction:column}
 .st .no{font-size:72px;font-weight:800;color:var(--sub);letter-spacing:-.03em;line-height:.92}
-.st .pri{margin-top:auto;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.45}
+.st .pri{margin-top:auto;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.4}
 .st .pri b{display:block;font-weight:800;margin-bottom:6px}
-.st h3{margin-top:18px;font-size:28px;font-weight:700;line-height:1.3}
+.st h3{margin-top:18px;font-size:26px;font-weight:700;line-height:1.4}
 .st ul{margin-top:22px;display:flex;flex-direction:column;gap:12px}
-.st li{font-size:22px;line-height:1.45;padding-left:20px;position:relative}
+.st li{font-size:22px;line-height:1.4;padding-left:20px;position:relative}
 .st li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--sub)}
 /* 사례 1 진단 7단계(11-13) — 칸은 .fs, 번호는 업무 방식 장 번호(.st .no)와 같은 크기와 색 */
-.s7{display:flex;flex-direction:column;min-height:0;padding:20px 24px}
+.s7{display:flex;flex-direction:column;min-height:0;padding:var(--ps)}
 .s7 .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
-.s7 .snm{margin-top:6px;font-size:24px;font-weight:700;line-height:1.38}
+.s7 .snm{margin-top:6px;font-size:26px;font-weight:700;line-height:1.4}
 /* 조작 UI */
 .bar{position:absolute;left:0;bottom:0;height:6px;background:var(--sub);width:0;transition:width .35s ease;z-index:5}
 .cnt{position:absolute;right:96px;bottom:36px;font-size:24px;font-weight:600;z-index:5;letter-spacing:.04em;
@@ -800,12 +805,12 @@ function render(d, A) {
     aria: '한눈에: ' + d.role, eyebrow: L.glance, title: d.h1.join(' '), titleHtml: d.h1.map(esc).join('<br>'), hcls: 'h--lg',
     rights: L.rightsPlain,
     body: `<div class="g2" style="grid-template-columns:1fr 860px;align-items:center">
-      <ul style="display:flex;flex-direction:column;gap:26px">${sents.map(s =>
-        `<li style="font-size:28px;line-height:1.55;padding-left:26px;position:relative">
-          <span style="position:absolute;left:0;top:14px;width:10px;height:10px;border-radius:50%;background:var(--sub)"></span>${esc(s)}</li>`).join('')}
-        <li style="margin-top:8px;display:flex;gap:12px;flex-wrap:wrap">${d.heroKeys.map(k => `<span class="chip">${esc(k)}</span>`).join('')}</li>
+      <ul style="display:flex;flex-direction:column;gap:var(--g)">${sents.map(s =>
+        `<li style="font-size:28px;line-height:1.4;padding-left:26px;position:relative">
+          <span style="position:absolute;left:0;top:15px;width:10px;height:10px;border-radius:50%;background:var(--sub)"></span>${esc(s)}</li>`).join('')}
+        <li style="display:flex;gap:12px;flex-wrap:wrap">${d.heroKeys.map(k => `<span class="chip">${esc(k)}</span>`).join('')}</li>
       </ul>
-      <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:34px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:var(--g)">
         ${d.stats.map(([n, k]) => `<div class="pn" style="display:flex;flex-direction:column;justify-content:center">
           <p class="n n--md">${nw(n)}</p><p class="nl">${esc(k)}</p></div>`).join('')}
       </div>
@@ -862,10 +867,10 @@ function render(d, A) {
       <div class="pn" style="display:flex;flex-direction:column">
         <div style="display:flex;align-items:center;gap:20px">
           <span class="ico">${icon(SKILL_ICONS[i])}</span>
-          <h3 style="font-size:32px;font-weight:700">${esc(s.title)}</h3></div>
-        <p style="margin-top:20px;font-size:26px;line-height:1.55">${esc(skillOf(s).note)}</p>
-        <div style="margin-top:auto;padding-top:22px;display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-          <span style="font-size:22px;font-weight:700;color:var(--m60);margin-right:6px">${esc(L.doneBy)}</span>${
+          <h3 style="font-size:32px;font-weight:700;line-height:1.3">${esc(s.title)}</h3></div>
+        <p style="margin-top:20px;font-size:26px;line-height:1.4">${esc(skillOf(s).note)}</p>
+        <div style="margin-top:auto;padding-top:var(--g);display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <span style="font-size:22px;font-weight:600;line-height:1.4;color:var(--m60);margin-right:6px">${esc(L.doneBy)}</span>${
           skillOf(s).co.map(co => `<span class="cobtn">${esc(co)}</span>`).join('')}</div>
       </div>`).join('')}</div>`,
   })
@@ -880,11 +885,11 @@ function render(d, A) {
     body: `<div class="g3" style="align-items:start">${d.cases.map(c => {
       const [num, lab] = caseKpi(c)
       return `<div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
-        <p style="font-size:22px;color:var(--m60);letter-spacing:.04em">${esc(c.dlgMeta)}</p>
-        <h3 style="margin-top:16px;font-size:34px;font-weight:700;line-height:1.3;min-height:2.6em">${esc(c.work === 'case1' ? C1.title : c2(c, 'title', c.dlgTitle))}</h3>
+        <p style="font-size:22px;line-height:1.4;color:var(--m60);letter-spacing:.04em">${esc(c.dlgMeta)}</p>
+        <h3 style="margin-top:16px;font-size:32px;font-weight:700;line-height:1.3;min-height:2.6em">${esc(c.work === 'case1' ? C1.title : c2(c, 'title', c.dlgTitle))}</h3>
         <p class="n n--sm" style="margin-top:28px">${ba(num)}</p>
         <p class="nl">${esc(lab)}</p>
-        <p style="margin-top:26px;font-size:24px;line-height:1.55;color:var(--m60)">${esc(c.work === 'case1' ? C1.summary : c2(c, 'summary', c.rows[0][1]))}</p>
+        <p style="margin-top:26px;font-size:26px;line-height:1.4;color:var(--m60)">${esc(c.work === 'case1' ? C1.summary : c2(c, 'summary', c.rows[0][1]))}</p>
         <p style="margin-top:28px"><span class="chip chip--sub">${esc(c.state)}</span></p>
       </div>` }).join('')}</div>`,
   })
@@ -895,8 +900,8 @@ function render(d, A) {
   const c1row = k => (c1.rows.find(r => r[0] === k) || fail(`사례 1 상세에 '${k}' 행이 없다`))[1]
   const c1u = (x, k) => (x === C1_LINK[k] ? `<span class="c1u">${esc(x)}</span>` : esc(x))
   const bullets = xs => `<ul style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${xs.map(x =>
-    `<li style="font-size:22px;line-height:1.45;padding-left:20px;position:relative;color:var(--m60)">
-      <span style="position:absolute;left:0;top:12px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${c1u(x, 'diag')}</li>`).join('')}</ul>`
+    `<li style="font-size:22px;line-height:1.4;padding-left:20px;position:relative;color:var(--m60)">
+      <span style="position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${c1u(x, 'diag')}</li>`).join('')}</ul>`
   const G = C1.diag
   if (G.steps.length !== 7) fail('사례 1 진단 단계가 7개가 아니다: ' + G.steps.length)
   /* 7단계 번호 흐름(두 줄: ①~④, ⑤~⑦). 칸은 기존 흐름 칸(.fs), 번호는 업무 방식 장 번호(.no)와 같은 모양.
@@ -907,48 +912,52 @@ function render(d, A) {
     const text = `<p class="no">0${k + 1}</p><p class="snm">${esc(nm)}</p>
       ${lines.length ? bullets(lines) : ''}
       ${drop ? DROP_ART : ''}
-      ${lau ? `<p class="n" style="margin-top:16px;font-size:56px">${ba(launched[0])}</p><p class="nl" style="margin-top:10px;font-size:22px">${launched[1].split(', ').map(esc).join('<br>')}</p>` : ''}
-      ${gap ? `<div style="margin-top:14px;border:2px solid var(--sub);border-radius:16px;padding:14px 18px">
-        <p style="font-size:24px;font-weight:800">${esc(G.gap[0])}</p>
-        <p style="margin-top:4px;font-size:22px;line-height:1.45">${esc(G.gap[1])}</p></div>` : ''}`
-    return `<div class="fs s7" style="flex:${img ? 2.1 : 1}${img ? ';display:grid;grid-template-columns:1fr 1fr;gap:20px' : ''}">
+      ${lau ? `<p class="n" style="margin-top:16px;font-size:56px">${ba(launched[0])}</p><p class="nl" style="margin-top:10px">${launched[1].split(', ').map(esc).join('<br>')}</p>` : ''}
+      ${gap ? `<div style="margin-top:14px;border:2px solid var(--sub);border-radius:16px;padding:var(--ps)">
+        <p style="font-size:26px;font-weight:700;line-height:1.4">${esc(G.gap[0])}</p>
+        <p style="margin-top:4px;font-size:22px;line-height:1.4">${esc(G.gap[1])}</p></div>` : ''}`
+    return `<div class="fs s7"${img ? ' style="grid-column:span 3;display:grid;grid-template-columns:1fr 1fr;gap:var(--g)"' : ''}>
       ${img ? `<div>${text}</div>${shot(G.img, G.cap, 'min-height:0')}` : text}</div>`
   }
-  const row7 = (xs, f) => `<div class="frow" style="flex:${f};min-height:0">${xs.map(([s, k]) => (k % 4 ? arrow() : '') + step7(s, k)).join('')}</div>`
   const ix7 = G.steps.map((s, k) => [s, k])
   const c1diag = slide({
     aria: `${G.eyebrow}: ${C1.title}`, eyebrow: G.eyebrow, title: C1.title, lede: c1.dlgMeta + G.ledeTail,
     rights: L.rightsProto,
-    body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:24px">
-      ${row7(ix7.slice(0, 4), 0.8)}${row7(ix7.slice(4), 1.2)}</div>`,
+    /* 11-13 2차 규격: 4칸 격자(칸 사이 = 화살표 칸). 05는 01, 02와 그 사이 칸을 합친 폭, 06은 03 폭, 07은 04 폭. 줄마다 높이 같음 */
+    body: `<div class="frow" style="flex:1;min-height:0;display:grid;grid-template-columns:1fr var(--ga) 1fr var(--ga) 1fr var(--ga) 1fr;
+      grid-template-rows:minmax(0,.8fr) minmax(0,1.2fr);row-gap:var(--g)">
+      ${ix7.map(([s, k]) => (k % 4 ? arrow() : '') + step7(s, k)).join('')}</div>`,
   })
   const D = C1.dir
+  /* 영역 라벨(7, 8장 공통, .fs b와 같은 크기, 굵기, 자간) */
+  const areaLabel = t => `<p style="font-size:22px;font-weight:800;letter-spacing:.08em;line-height:1.4">${esc(t)}</p>`
   const c1dir = slide({
     aria: `${D.eyebrow}: ${D.title}`, eyebrow: D.eyebrow, title: D.title, lede: D.lede,
     /* 11-13 2차: 권리 표기는 6, 8장과 같은 달콤소프트 화면 표기 */
     rights: L.rightsProto,
     /* 세 덩어리(축 카드, 개발 방향 적용, 판단/결정 범위)를 세로로 고르게 나눈다 — 아래쪽 빈 띠를 남기지 않는다 */
     body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">${D.axes.map(([nm, what, chip]) => {
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--ga)">${D.axes.map(([nm, what, chip]) => {
         /* 축마다 내용이 맞는 실제 캡처 1장(11-13). 그림이 들어온 만큼 원문 번호 줄과 원문 구호 줄은 뺀다 */
         const [img, cap] = D.img[nm] || fail('방향 축 그림이 없다: ' + nm)
         return `
-        <div class="pn" style="padding:22px 24px;display:flex;flex-direction:column">
-          <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">${esc(nm)}</p>
+        <div class="pn" style="padding:var(--ps);display:flex;flex-direction:column">
+          <p style="font-size:32px;font-weight:700;line-height:1.3;letter-spacing:-.02em">${esc(nm)}</p>
           ${img === 'motto'
             ? `<div style="height:200px;flex:none;margin-top:14px;border:1px solid var(--m12);border-radius:20px;display:flex;align-items:center;padding:0 24px">
                 <p style="font-size:32px;font-weight:700;line-height:1.3;letter-spacing:-.02em">${esc(D.motto)}</p></div>`
             : shot(img, cap(d), 'height:200px;flex:none;margin-top:14px', '', true)}
-          <p style="margin-top:12px;font-size:22px;line-height:1.45">${esc(what)}</p>
+          <p style="margin-top:12px;font-size:22px;line-height:1.4">${esc(what)}</p>
           ${chip ? `<p style="margin-top:auto;padding-top:12px"><span class="chip chip--sub">${esc(chip)}</span></p>` : ''}
         </div>` }).join('')}</div>
       <div>
-        <p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(D.applyLabel)}</p>
+        ${areaLabel(D.applyLabel)}
         <div class="frow" style="margin-top:12px">${D.apply.map((x, k) => (k ? arrow() : '') +
-          `<div class="fs" style="padding:16px 22px;display:flex;align-items:center"><p style="font-size:24px;font-weight:700;line-height:1.4">${esc(x)}</p></div>`).join('')}</div>
+          `<div class="fs" style="display:flex;align-items:center"><p style="font-size:26px;font-weight:700">${esc(x)}</p></div>`).join('')}</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">${[L.verdict, L.decision].map(k =>
-        `<div class="fs" style="padding:18px 24px"><b>${esc(k)}</b><p style="font-size:23px">${esc(c1row(k))}</p></div>`).join('')}</div>
+      <!-- 11-13 2차: 판단과 결정 범위는 박스 없이 글만. 두 칸은 위 4칸 격자의 1~2칸, 3~4칸 폭 -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--ga)">${[L.verdict, L.decision].map(k =>
+        `<div>${areaLabel(k)}<p style="margin-top:8px;font-size:22px;line-height:1.4">${esc(c1row(k))}</p></div>`).join('')}</div>
     </div>`,
   })
   const R = C1.run
@@ -958,30 +967,31 @@ function render(d, A) {
   /* 출시 항목 라벨은 숫자 옆 좁은 칸이라 항목마다 줄을 바꾼다(줄 끝 '·' 매달림 방지) */
   /* 8장은 세 영역으로 나눈다(WO-42 추가 2): ① 출시 타임라인(위 전체 폭) ② 결과(아래 왼쪽) ③ 프로토타입(아래 오른쪽).
      '미룬 것'과 안내 줄은 싣지 않는다 — 같은 내용이 타임라인 3번에 있다. 영역 라벨은 7장 '개발 방향 적용' 라벨과 같은 모양 */
-  const areaLabel = t => `<p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(t)}</p>`
   const nat = [natural('deco'), natural('ssjproto')].map(({ w, h }) => (w / h).toFixed(3))
   const c1run = slide({
     /* 11-13 품질 — 제목 크기를 6, 7장(사례 1 묶음)과 같은 기본 단계로 */
     aria: `${R.eyebrow}: ${R.title}`, eyebrow: R.eyebrow, title: R.title,
     rights: L.rightsProto,
-    body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:24px">
+    body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--g)">
       <div>
         ${areaLabel(R.areas[0])}
-        <div style="margin-top:12px;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 24px">${R.tl.map((_, k) => `
-          <div style="position:relative;height:28px">
-            <span class="a-tdot" style="position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--sub)"></span>
-            ${k < R.tl.length - 1 ? '<span class="a-tln" style="position:absolute;left:18px;right:-24px;top:12px;height:2px;background:var(--sub)"></span>' : ''}
-          </div>`).join('')}${R.tl.map(([dt, nm, x]) => `
-          <div class="pn" style="padding:16px 24px;border-radius:20px">
-            <p style="font-size:22px;font-weight:800;line-height:1.35">${esc(dt)}</p>
-            <p style="margin-top:4px;font-size:28px;font-weight:700;line-height:1.3">${esc(nm)}</p>
-            <p style="margin-top:8px;font-size:22px;line-height:1.45;color:var(--m60)">${[].concat(x).map(ln => (Array.isArray(ln) ? ln.map(g => `<span style="white-space:nowrap">${esc(g)}</span>`).join(' ') : c1u(ln, 'run'))).join('<br>')}</p>
+        <!-- 11-13 2차: 빨간 선은 첫 칸 왼끝부터 마지막 칸 오른끝까지 한 줄, 점은 칸마다 가로 가운데 -->
+        <div style="margin-top:12px;position:relative;height:28px">
+          <span class="a-tln" style="position:absolute;left:0;right:0;top:12px;height:2px;background:var(--sub)"></span>
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--g)">${R.tl.map(() => `
+            <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div>`).join('')}</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--g)">${R.tl.map(([dt, nm, x]) => `
+          <div class="pn" style="padding:var(--ps);border-radius:20px">
+            <p style="font-size:22px;font-weight:800;line-height:1.4">${esc(dt)}</p>
+            <p style="margin-top:4px;font-size:26px;font-weight:700;line-height:1.4">${esc(nm)}</p>
+            <p style="margin-top:8px;font-size:22px;line-height:1.4;color:var(--m60)">${[].concat(x).map(ln => (Array.isArray(ln) ? ln.map(g => `<span style="white-space:nowrap">${esc(g)}</span>`).join(' ') : c1u(ln, 'run'))).join('<br>')}</p>
           </div>`).join('')}</div>
       </div>
-      <div style="flex:1;min-height:0;display:grid;grid-template-columns:560px 1fr;gap:28px">
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:560px 1fr;gap:var(--gc)">
         <div style="display:flex;flex-direction:column;min-height:0">
           ${areaLabel(R.areas[1])}
-          <div class="pn" style="margin-top:12px;flex:1;min-height:0;display:flex;flex-direction:column;padding:22px 30px">
+          <div class="pn" style="margin-top:12px;flex:1;min-height:0;display:flex;flex-direction:column">
             <div style="display:flex;align-items:flex-end;gap:20px;margin:auto 0"><p class="n n--sm" style="flex:none">${ba(c1num)}</p>
               <p class="nl" style="margin-bottom:4px">${c1lab.split(', ').map(esc).join('<br>')}</p></div>
             <div class="ev" style="padding-top:16px;margin-top:0"><b>${L.evidence}</b>
@@ -991,7 +1001,7 @@ function render(d, A) {
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           ${areaLabel(R.areas[2])}
-          <div style="margin-top:12px;flex:1;min-height:0;display:grid;grid-template-columns:${nat[0]}fr ${nat[1]}fr;gap:20px">
+          <div style="margin-top:12px;flex:1;min-height:0;display:grid;grid-template-columns:${nat[0]}fr ${nat[1]}fr;gap:var(--g)">
             ${shot('deco', d.proto[0].title, 'min-height:0')}${shot('ssjproto', d.proto[1].title, 'min-height:0')}</div>
         </div>
       </div>
@@ -1029,32 +1039,32 @@ function render(d, A) {
         `<span class="chip" style="white-space:nowrap">${esc(x)}</span>`).join('')}</div>`
     /* 사례 3 — 두 레인 사이에 실제 이관 화살표를 둔다(D6) */
     const lanes = c.work === 'case3' ? `
-      <div class="pn" style="margin-bottom:24px;padding:24px 28px;
-        display:grid;grid-template-columns:1fr 132px 1fr;gap:0;align-items:center">${[LANES[0], null, LANES[1]]
+      <div class="pn" style="margin-bottom:var(--g);
+        display:grid;grid-template-columns:1fr 168px 1fr;gap:0;align-items:center">${[LANES[0], null, LANES[1]]
         .map((ln, k) => (ln === null
           ? `<div style="text-align:center;color:var(--m38)">
                <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:none;stroke:currentColor;stroke-width:1.8;
                  stroke-linecap:round;stroke-linejoin:round">${ICONS.arrow}</svg>
-               <p style="margin-top:6px;font-size:20px;font-weight:700;color:var(--tx);line-height:1.3">${esc(LANE_ARROW.split('→')[0].trim())}<br>${esc(LANE_ARROW.split('→')[1].trim())}</p></div>`
+               <p style="margin-top:6px;font-size:22px;font-weight:700;color:var(--tx);line-height:1.4">${esc(LANE_ARROW.split('→')[0].trim())}<br>${esc(LANE_ARROW.split('→')[1].trim())}</p></div>`
           : `<div style="border-left:4px solid ${k ? 'var(--m38)' : 'var(--sub)'};padding-left:18px">
-               <p style="font-size:24px;font-weight:700">${esc(ln[0])}</p>
+               <p style="font-size:26px;font-weight:700;line-height:1.4">${esc(ln[0])}</p>
                <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">${ln[1].map(x =>
                  `<span class="chip${k ? '' : ' chip--sub'}">${esc(x)}</span>`).join('')}</p></div>`)).join('')}
       </div>` : ''
-    /* 사례 2 — 6단계 흐름은 본문 전체 폭 맨 위에 두 줄(세 칸씩)로 둔다. 한 줄 여섯 칸이면 칩(「2019 글로벌 그랜드런칭」)이 칸에 안 들어간다 */
+    /* 사례 2, 6단계 흐름은 본문 전체 폭 맨 위에 두 줄(세 칸씩)로 둔다. 한 줄 여섯 칸이면 칩(「2019 글로벌 그랜드런칭」)이 칸에 안 들어간다 */
     const chain = c.work === 'case2' ? `
-      <div style="flex:none;display:flex;flex-direction:column;gap:24px;margin-bottom:24px">${[chain2.slice(0, 3), chain2.slice(3)].map(row =>
+      <div style="flex:none;display:flex;flex-direction:column;gap:var(--g);margin-bottom:var(--g)">${[chain2.slice(0, 3), chain2.slice(3)].map(row =>
         `<div class="frow">${row.map((s, k) => (k ? arrow() : '') + stage(s)).join('')}</div>`).join('')}</div>` : ''
     const title = c2(c, 'title', c.dlgTitle)
     const box = ([k, v]) => `<div class="fs"><b>${esc(k)}</b><p>${esc(v)}</p></div>`
-    const kpi = (st = '') => `<div class="pn" style="${st}display:flex;align-items:flex-end;gap:26px">
+    const kpi = (st = '') => `<div class="pn" style="${st}display:flex;align-items:flex-end;gap:20px">
             <p class="n">${ba(num)}</p>
             <p class="nl" style="margin-bottom:10px">${esc(lab)}</p></div>`
-    /* 사례 2 — 6단계 흐름이 위 두 줄을 차지하므로 문제 → 판단 → 결과는 가로 한 줄, 큰 숫자는 그 아래, 그림은 오른쪽 전체 높이 */
+    /* 사례 2, 6단계 흐름이 위 두 줄을 차지하므로 문제 → 판단 → 결과는 가로 한 줄, 큰 숫자는 그 아래, 그림은 오른쪽 전체 높이 */
     const body = c.work === 'case2' ? `${chain}<div class="g2" style="grid-template-columns:1fr 660px">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="frow" style="flex:1;min-height:0">${boxes.map((b, n) => (n ? arrow() : '') + box(b)).join('')}</div>
-          ${kpi('margin-top:24px;')}
+          ${kpi('margin-top:var(--g);')}
         </div>
         ${shot(slug, workOf(slug).title, 'min-height:0')}
       </div>` : `<div class="g2" style="grid-template-columns:1fr 660px">
@@ -1063,7 +1073,7 @@ function render(d, A) {
         </div>
         <div style="display:flex;flex-direction:column;min-height:0">
           ${shot(slug, workOf(slug).title, 'flex:1;min-height:0')}
-          ${kpi('margin-top:26px;')}
+          ${kpi('margin-top:var(--g);')}
         </div>
       </div>`
     return slide({
@@ -1093,18 +1103,18 @@ function render(d, A) {
     const baBadge = `<span class="bdg bdg--b" style="left:45.5%">1</span><span class="bdg bdg--a" style="right:2.5%">2</span>`
     let tiles, cols
     if (c.work === 'case2') {
-      cols = '640px 1fr'
-      tiles = `<div style="display:grid;grid-template-rows:auto 1fr 1fr;gap:20px;min-height:0">
-        <p style="display:flex;gap:14px;align-items:center;font-size:22px;font-weight:700">
+      cols = '680px 1fr'
+      tiles = `<div style="display:grid;grid-template-rows:auto 1fr 1fr;gap:var(--g);min-height:0">
+        <p style="display:flex;gap:14px;align-items:center;font-size:22px;font-weight:700;line-height:1.4">
           <span class="bdg bdg--b" style="position:static;width:42px;height:42px;font-size:28px">1</span>${L.before}
           <span style="color:var(--m60)">→</span>
           <span class="bdg bdg--a" style="position:static;width:42px;height:42px;font-size:28px">2</span>${L.after}</p>
         ${doc('lyn/before_after', 'min-height:0', baBadge)}${doc('lyn/system_ui', 'min-height:0')}</div>`
     } else {
       /* 4장을 작게 늘어놓으니 아무것도 안 읽혔다. 발주서 §2대로 플로우 제안과 충전 UI 시안 2장만 크게(D9). */
-      cols = '640px 1fr'
+      cols = '680px 1fr'
       /* 11-13 인게임 화면 1장 추가(공개 노션 「유료 재화 구매 시스템 연동」) — 위 전체 폭, 아래에 기존 두 장 */
-      tiles = `<div style="display:grid;grid-template-columns:1fr 1.25fr;grid-template-rows:1.25fr 1fr;gap:22px;min-height:0">
+      tiles = `<div style="display:grid;grid-template-columns:1fr 1.25fr;grid-template-rows:1.25fr 1fr;gap:var(--g);min-height:0">
         ${doc('nightwalker/ingame', 'min-height:0;grid-column:1/-1')}
         ${doc('nightwalker/server_flow_proposal', 'min-height:0')}${doc('nightwalker/charge_ui_mock', 'min-height:0')}</div>`
     }
@@ -1119,7 +1129,7 @@ function render(d, A) {
               <div style="flex:1;min-width:0"><p class="rt">${esc(k)}</p>${EXEC_LINES[c.work]
                 ? `<dl class="kv kv--x">${linesOf(c, k, v).map(([t, x]) => `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>`
                 : `<p>${esc(v)}</p>`}</div></div>`).join('')}</div>
-          ${cut ? `<p style="margin-top:18px;font-size:22px;color:var(--m60)">${esc(L.full)}</p>` : ''}
+          ${cut ? `<p style="margin-top:var(--g);font-size:22px;line-height:1.4;color:var(--m60)">${esc(L.full)}</p>` : ''}
           ${evList(c.ev)}
         </div>
         ${tiles}
@@ -1132,10 +1142,10 @@ function render(d, A) {
     cls: 's--acc', bg: '#1A1A1A', aria: '숫자로 증명: 6개 지표',
     eyebrow: L.numbers, title: d.worksTitle, rights: L.rightsPlain,
     body: `<div style="display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:auto;align-content:space-evenly;
-      gap:30px 34px;flex:1;min-height:0">
+      gap:var(--g) var(--gc);flex:1;min-height:0">
       ${Object.keys(KPI_NUM).map(slug => `
         <div style="border-top:3px solid var(--sub);padding-top:22px">
-          <p style="font-size:22px;color:var(--m60)">${esc(workOf(slug).title)}</p>
+          <p style="font-size:22px;line-height:1.4;color:var(--m60)">${esc(workOf(slug).title)}</p>
           <p class="n" style="margin-top:26px">${ba(kpiOf(slug))}</p>
           <p class="nl">${kpiLabel2(slug)}</p></div>`).join('')}
     </div>`,
@@ -1146,7 +1156,9 @@ function render(d, A) {
     aria: '성과: 카오스크로니클, Five Stars, Shadow Seven', eyebrow: L.results,
     title: RESULTS.map(([slug]) => workOf(slug).title).join(', '), hcls: 'h--sm',
     rights: mergeRights(RESULTS.map(([slug]) => workOf(slug).rights)),
-    body: `<div class="g3">${RESULTS.map(([slug, shots]) => {
+    /* 11-13 2차: 세 칸이 같은 줄 격자(subgrid)를 나눠 써서 키 비주얼, 캡처, 숫자, 평점, 3줄, 근거가 칸마다 같은 높이에 놓인다.
+       근거는 맨 아래 같은 위치, 같은 높이 */
+    body: `<div style="display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto auto auto auto minmax(0,1fr) auto;column-gap:var(--gc);flex:1;min-height:0">${RESULTS.map(([slug, shots]) => {
       const w = workOf(slug), r = d.res[slug]
       /* 발주서 §2 — 키 비주얼 + 캡처 1 + 역할, 판단, 결과 3줄 + 근거 링크(D7과 D8) */
       const rowOf = k => { const x = r.rows.find(y => y[0] === k)
@@ -1161,17 +1173,18 @@ function render(d, A) {
         if (RESULT_CLIP[key]) { const xs = splitTop(v); if (xs.length > RESULT_CLIP[key]) v = xs.slice(0, RESULT_CLIP[key]).join(', ') + ' …' }
         return `<dt>${esc(lb)}</dt><dd>${esc(brief(v))}</dd>` }
       const lines = RESULT_ROWS[slug].map(line).join('')
-      return `<div style="display:flex;flex-direction:column;min-height:0">
-        ${shot(slug, w.title, 'height:132px;flex:none', '', true, true)}
-        ${doc(shots[0], 'height:196px;flex:none;margin-top:16px')}
-        <div style="display:flex;align-items:flex-end;gap:16px;margin-top:18px">
+      return `<div style="display:grid;grid-row:1/-1;grid-template-rows:subgrid;min-height:0">
+        ${shot(slug, w.title, 'height:132px', '', true, true)}
+        ${doc(shots[0], 'height:180px;margin-top:var(--g)')}
+        <div style="display:flex;align-items:flex-end;gap:20px;margin-top:var(--g)">
           <p class="n n--xs">${ba(w.kpi)}</p>
           <p class="nl" style="margin-bottom:4px">${esc(kpiLabel(slug).replace(/\s*\([^)]*\)/g, ''))}</p></div>
-        ${pair ? `<p class="ba" style="margin-top:16px;font-size:40px;font-weight:800;letter-spacing:-.02em">
+        ${pair ? `<p class="ba" style="margin-top:12px;font-size:40px;font-weight:800;letter-spacing:-.02em">
           <span style="font-size:22px;font-weight:600;color:var(--m60);margin-right:12px">구글 평점</span>
-          <i>${esc(pair[0])}</i><s>→</s><u>${esc(pair[1])}</u></p>` : ''}
-        <dl class="kv" style="margin-top:18px;grid-template-columns:88px 1fr;gap:10px 16px;font-size:22px">${lines}</dl>
-        ${evList(r.ev)}
+          <i>${esc(pair[0])}</i><s>→</s><u>${esc(pair[1])}</u></p>` : '<div></div>'}
+        <dl class="kv" style="margin-top:var(--g);grid-template-columns:88px 1fr;gap:10px var(--g);align-content:start">${lines}</dl>
+        <div></div>
+        ${evList(r.ev).replace('<div class="ev">', '<div class="ev" style="margin-top:0">')}
       </div>` }).join('')}</div>`,
   })
 
@@ -1183,19 +1196,16 @@ function render(d, A) {
     aria: `${L.results}: ${spW.title}`, eyebrow: `${L.results}, ${spW.title}`, title: spW.summary, hcls: 'h--sm',
     lede: spR.dlgMeta, rights: spW.rights,
     body: `<div class="frow" style="flex:none">${SP_FLOW.map((x, k) => (k ? arrow() : '') +
-        `<div class="fs" style="padding:18px 22px"><p style="font-size:26px;font-weight:700;text-align:center">${esc(x)}</p></div>`).join('')}</div>
-      <div class="g2" style="grid-template-columns:1fr 600px;margin-top:28px">
-        <div style="display:flex;flex-direction:column;min-height:0">
-          ${shot(spImg(SP_SHOTS[0]), spCap(SP_SHOTS[0]), 'flex:1;min-height:0')}
-          <div class="pn" style="margin-top:24px;display:flex;gap:56px;padding:22px 30px">${spR.stats.map(([n, k]) =>
-            `<div style="display:flex;align-items:flex-end;gap:18px"><p class="n n--xs">${nw(n)}</p>
-              <p class="nl" style="margin-bottom:4px">${esc(k)}</p></div>`).join('')}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;min-height:0">
-          ${shot(spImg(SP_SHOTS[1]), spCap(SP_SHOTS[1]), 'flex:1;min-height:0')}
-          <div class="ev"><b>${L.evidence}</b>${spR.links.map(a =>
-            `<a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`).join('')}</div>
-        </div>
+        `<div class="fs"><p style="font-size:26px;font-weight:700;line-height:1.4;text-align:center">${esc(x)}</p></div>`).join('')}</div>
+      <!-- 11-13 2차: 두 그림 칸이 같은 줄(격자 1행)이라 높이가 같다. 숫자 칸과 근거는 2행 -->
+      <div class="g2" style="grid-template-columns:1fr 600px;grid-template-rows:minmax(0,1fr) auto;row-gap:var(--g);margin-top:var(--g)">
+        ${shot(spImg(SP_SHOTS[0]), spCap(SP_SHOTS[0]), 'min-height:0')}
+        ${shot(spImg(SP_SHOTS[1]), spCap(SP_SHOTS[1]), 'min-height:0')}
+        <div class="pn" style="display:flex;gap:56px">${spR.stats.map(([n, k]) =>
+          `<div style="display:flex;align-items:flex-end;gap:20px"><p class="n n--xs">${nw(n)}</p>
+            <p class="nl" style="margin-bottom:4px">${esc(k)}</p></div>`).join('')}</div>
+        <div class="ev" style="margin-top:0"><b>${L.evidence}</b>${spR.links.map(a =>
+          `<a href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.title)} ↗</a>`).join('')}</div>
       </div>`,
   })
 
@@ -1215,13 +1225,17 @@ function render(d, A) {
   const tryStepsOf = (i, v) => TRY_STEPS[i].map(([lab, frag]) => {
     if (!v.includes(frag)) fail(`체험 순서 ${i + 1}의 단계 근거 「${frag}」가 사이트 문장에 없다: ${v}`)
     return lab })
+  const protoRows = d.proto[0].note.length + 1
+  if (d.proto.some(p => p.note.map(x => x[0]).join() !== d.proto[0].note.map(x => x[0]).join()))
+    fail('프로토타입 두 카드의 설명 줄 이름이 다르다(같은 줄 격자를 못 나눈다)')
   const proto = slide({
     aria: 'AI 프로토타입 2종', eyebrow: L.proto, title: d.protoTitle, lede: d.protoLede,
     rights: L.rightsProto,
-    body: `<div class="g2">${d.proto.map((p, i) => `
-      <div style="display:flex;flex-direction:column;min-height:0">
-        ${shot(['deco', 'ssjproto'][i], p.title, 'flex:1;min-height:0')}
-        <dl class="kv" style="margin-top:24px;align-items:center">${p.note.map(([k, v]) => k === L.tryOrder
+    /* 11-13 2차: 두 카드가 같은 줄 격자(subgrid)를 나눠 써서 그림 칸, 단계 칩 줄, 설명 줄, 버튼이 같은 높이에 놓인다 */
+    body: `<div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr) repeat(${protoRows},auto);gap:12px var(--gc);flex:1;min-height:0">${d.proto.map((p, i) => `
+      <div style="display:grid;grid-row:1/-1;grid-template-rows:subgrid;grid-template-columns:170px 1fr;column-gap:var(--g);align-items:center;min-height:0">
+        ${shot(['deco', 'ssjproto'][i], p.title, 'min-height:0;height:100%;grid-column:1/-1;margin-bottom:12px')}
+        <dl class="kv" style="display:contents">${p.note.map(([k, v]) => k === L.tryOrder
           ? `<dt>${esc(k)}</dt><dd class="stps">${tryStepsOf(i, v).map((x, n) => `<span class="stp-g">${n ? `<span class="stp-a">${icon('arrow')}</span>` : ''}` +
               `<span class="chip stp"><b>${n + 1}</b>${esc(x)}</span></span>`).join('')}</dd>`
           : `<dt>${esc(k)}</dt><dd>${esc(pr(v))}</dd>`).join('')}

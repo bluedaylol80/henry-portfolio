@@ -127,9 +127,20 @@ var DeckAnim = (() => {
       seq.forEach(x => { x.s = b0 + (x.s - b0) * f })
     }
     for (const it of seq) { it.el.classList.add(K[it.k][3]); setD(it.el, it.s) }
-    /* 타임라인 점, 첫 점은 선과 함께, 다음 점은 앞 선이 그 점에 닿는 순간 */
+    /* 타임라인 점, 선이 그 점의 가운데에 닿는 순간(선은 왼쪽에서 그어진다, 이징 a-g의 역함수로 시각을 구한다) */
     const lns = seq.filter(x => x.k === 'r')
-    all.filter(x => x.k === 'd').forEach((x, i) => { x.el.classList.add('a-d'); setD(x.el, i ? lns[i - 1].s + K.r[0] : lns[0].s) })
+    const reach = p => { /* cubic-bezier(.65,0,.35,1): 진행 y = p가 되는 시간 비율 x */
+      let lo = 0, hi = 1
+      for (let n = 0; n < 30; n++) { const u = (lo + hi) / 2; if (3 * u * u - 2 * u * u * u < p) lo = u; else hi = u }
+      const u = (lo + hi) / 2
+      return 3 * (1 - u) * (1 - u) * u * .65 + 3 * (1 - u) * u * u * .35 + u * u * u
+    }
+    all.filter(x => x.k === 'd').forEach(x => {
+      x.el.classList.add('a-d')
+      const b = x.el.getBoundingClientRect(), cx = b.left + b.width / 2
+      const ln = lns.find(l => cx >= l.r.left - 1 && cx <= l.r.right + 1) || lns[0]
+      setD(x.el, ln.s + K.r[0] * reach(Math.min(1, Math.max(0, (cx - ln.r.left) / (ln.r.width || 1)))))
+    })
     if (ul) setD(ul, Math.max(hEnd, ...seq.map(endOf)))
     return { lines: seq.filter(x => x.k === 'l').map(x => x.el), nums: seq.filter(x => x.k === 'n').map(x => x.el) }
   }
