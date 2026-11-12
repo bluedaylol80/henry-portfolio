@@ -233,9 +233,11 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 칸 위 가로선, 모션 동안만 테두리를 비우고 같은 자리, 같은 색의 띠(::before)를 왼쪽에서 긋는다. 끝나면 deck-anim.js가 걷어 원래 테두리로 */
 .a-lb{position:relative;border-top-color:transparent!important}
 .a-lb::before{content:"";position:absolute;left:0;right:0;top:calc(-1 * var(--lw));height:var(--lw);background:var(--lc)}
-/* 숫자 올리기 중에만 최종 폭 고정과 오른쪽 맞춤(deck-anim.js count). 숫자 글꼴 설정은 최종 화면과 같게 둬서 끝나는 순간 글자가 튀지 않는다.
-   넘치는 폭은 왼쪽으로 내보내 단위 글자를 밀지 않는다 */
-.a-nv.run{display:inline-flex;justify-content:flex-end}
+/* 숫자 올리기 중에만 자리별 칸(deck-anim.js count). 칸은 최종 글자의 자리와 폭 그대로, 숫자는 칸 가운데(넓으면 양옆으로 고르게 넘침).
+   숫자 글꼴 설정은 최종 화면과 같게 둬서 끝나는 순간 글자가 튀지 않는다. 빈 앞자리 칸(.e)은 최종 글자를 숨겨 기준선을 지킨다 */
+.a-nv.run{display:inline-flex}
+.a-nv.run>span{display:flex;justify-content:center;flex:none;position:relative}
+.a-nv.run>.e{visibility:hidden}
 /* 사례 1 연결 밑줄, 도형이라 빨강 규칙(28px 이상 굵은 글자와 도형)에 맞다. 최종 화면에 남는 유일한 추가 요소 */
 .c1u{position:relative}
 .c1u::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:4px;background:var(--sub)}
@@ -1256,8 +1258,9 @@ var DeckAnim = (() => {
     slide._ap.nums.forEach(wrapNum)
   }
 
-  /* 숫자 올리기, 단위 글자가 흔들리지 않게 돌 때만 최종 폭으로 고정하고 오른쪽에 맞춘다.
-     숫자 글꼴은 최종 화면과 같은 비례 숫자, 폭은 소수점까지(offsetWidth는 정수로 반올림해 단위 글자를 0.5px까지 민다) */
+  /* 숫자 올리기, 돌 때만 숫자 부분을 자리별 칸으로 나눈다. 칸의 자리와 폭은 최종 화면에서 그 글자가 놓인 자리 그대로(소수점 px),
+     도는 숫자는 자기 칸 가운데에 그리고(넓으면 양옆으로 고르게 넘침), 아직 없는 앞자리 칸은 최종 글자를 숨겨 둔다(기준선 유지).
+     그래서 단위 글자와 이미 최종값과 같은 자리는 처음부터 제자리, 마지막 값은 최종 화면과 같은 자리다 */
   function count(v) {
     const host = v.closest('.a-n')
     const a = host.getAnimations().find(x => x.animationName === 'a-n')
@@ -1266,10 +1269,28 @@ var DeckAnim = (() => {
     const fin = v._fin = v.textContent
     const dec = (fin.split('.')[1] || '').length, num = parseFloat(fin.replace(/,/g, '')), comma = fin.includes(',')
     const fmt = p => { const s = (num * p).toFixed(dec); return comma ? s.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : s }
-    v.classList.add('run'); v.style.width = getComputedStyle(v).width
+    /* 최종 글자 자리, 장면 크기와 카드 크기 변화(transform)를 걷어 v 기준 CSS px로 */
+    v.classList.add('run')
+    const t = v.firstChild, vr = v.getBoundingClientRect(), W = parseFloat(getComputedStyle(v).width)
+    const k = vr.width / W || 1
+    const leftOf = (n, i) => { const r = document.createRange(); if (i < 0) r.selectNodeContents(n); else { r.setStart(n, i); r.setEnd(n, i + 1) } return (r.getBoundingClientRect().left - vr.left) / k }
+    const xs = [...fin].map((_, i) => leftOf(t, i))
+    const cells = xs.map((x, i) => {
+      const c = document.createElement('span'); c.textContent = fin[i]
+      c.style.width = ((i + 1 < xs.length ? xs[i + 1] : W) - x) + 'px'
+      return c
+    })
+    v.style.width = W + 'px'; v.replaceChildren(...cells)
+    /* 글자 사이 커닝(예: 11)만큼 칸 가운데와 최종 자리가 어긋나는 것을 칸마다 보정한다 */
+    cells.map(c => leftOf(c, -1)).forEach((x, i) => { cells[i].style.left = (xs[i] - x) + 'px' })
     const tick = () => {
       if (!v.isConnected || a.playState === 'finished' || a.playState === 'idle') return
-      v.textContent = fmt(a.effect.getComputedTiming().progress || 0)
+      const s = fmt(a.effect.getComputedTiming().progress || 0), off = Math.max(0, fin.length - s.length)
+      cells.forEach((c, i) => {
+        const ch = i < off ? fin[i] : s[i - off]
+        if (c.textContent !== ch) c.textContent = ch
+        c.classList.toggle('e', i < off)
+      })
       requestAnimationFrame(tick)
     }
     tick()

@@ -152,8 +152,9 @@ var DeckAnim = (() => {
     slide._ap.nums.forEach(wrapNum)
   }
 
-  /* 숫자 올리기, 단위 글자가 흔들리지 않게 돌 때만 최종 폭으로 고정하고 오른쪽에 맞춘다.
-     숫자 글꼴은 최종 화면과 같은 비례 숫자, 폭은 소수점까지(offsetWidth는 정수로 반올림해 단위 글자를 0.5px까지 민다) */
+  /* 숫자 올리기, 돌 때만 숫자 부분을 자리별 칸으로 나눈다. 칸의 자리와 폭은 최종 화면에서 그 글자가 놓인 자리 그대로(소수점 px),
+     도는 숫자는 자기 칸 가운데에 그리고(넓으면 양옆으로 고르게 넘침), 아직 없는 앞자리 칸은 최종 글자를 숨겨 둔다(기준선 유지).
+     그래서 단위 글자와 이미 최종값과 같은 자리는 처음부터 제자리, 마지막 값은 최종 화면과 같은 자리다 */
   function count(v) {
     const host = v.closest('.a-n')
     const a = host.getAnimations().find(x => x.animationName === 'a-n')
@@ -162,10 +163,28 @@ var DeckAnim = (() => {
     const fin = v._fin = v.textContent
     const dec = (fin.split('.')[1] || '').length, num = parseFloat(fin.replace(/,/g, '')), comma = fin.includes(',')
     const fmt = p => { const s = (num * p).toFixed(dec); return comma ? s.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : s }
-    v.classList.add('run'); v.style.width = getComputedStyle(v).width
+    /* 최종 글자 자리, 장면 크기와 카드 크기 변화(transform)를 걷어 v 기준 CSS px로 */
+    v.classList.add('run')
+    const t = v.firstChild, vr = v.getBoundingClientRect(), W = parseFloat(getComputedStyle(v).width)
+    const k = vr.width / W || 1
+    const leftOf = (n, i) => { const r = document.createRange(); if (i < 0) r.selectNodeContents(n); else { r.setStart(n, i); r.setEnd(n, i + 1) } return (r.getBoundingClientRect().left - vr.left) / k }
+    const xs = [...fin].map((_, i) => leftOf(t, i))
+    const cells = xs.map((x, i) => {
+      const c = document.createElement('span'); c.textContent = fin[i]
+      c.style.width = ((i + 1 < xs.length ? xs[i + 1] : W) - x) + 'px'
+      return c
+    })
+    v.style.width = W + 'px'; v.replaceChildren(...cells)
+    /* 글자 사이 커닝(예: 11)만큼 칸 가운데와 최종 자리가 어긋나는 것을 칸마다 보정한다 */
+    cells.map(c => leftOf(c, -1)).forEach((x, i) => { cells[i].style.left = (xs[i] - x) + 'px' })
     const tick = () => {
       if (!v.isConnected || a.playState === 'finished' || a.playState === 'idle') return
-      v.textContent = fmt(a.effect.getComputedTiming().progress || 0)
+      const s = fmt(a.effect.getComputedTiming().progress || 0), off = Math.max(0, fin.length - s.length)
+      cells.forEach((c, i) => {
+        const ch = i < off ? fin[i] : s[i - off]
+        if (c.textContent !== ch) c.textContent = ch
+        c.classList.toggle('e', i < off)
+      })
       requestAnimationFrame(tick)
     }
     tick()

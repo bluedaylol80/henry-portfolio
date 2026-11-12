@@ -596,9 +596,11 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 칸 위 가로선, 모션 동안만 테두리를 비우고 같은 자리, 같은 색의 띠(::before)를 왼쪽에서 긋는다. 끝나면 deck-anim.js가 걷어 원래 테두리로 */
 .a-lb{position:relative;border-top-color:transparent!important}
 .a-lb::before{content:"";position:absolute;left:0;right:0;top:calc(-1 * var(--lw));height:var(--lw);background:var(--lc)}
-/* 숫자 올리기 중에만 최종 폭 고정과 오른쪽 맞춤(deck-anim.js count). 숫자 글꼴 설정은 최종 화면과 같게 둬서 끝나는 순간 글자가 튀지 않는다.
-   넘치는 폭은 왼쪽으로 내보내 단위 글자를 밀지 않는다 */
-.a-nv.run{display:inline-flex;justify-content:flex-end}
+/* 숫자 올리기 중에만 자리별 칸(deck-anim.js count). 칸은 최종 글자의 자리와 폭 그대로, 숫자는 칸 가운데(넓으면 양옆으로 고르게 넘침).
+   숫자 글꼴 설정은 최종 화면과 같게 둬서 끝나는 순간 글자가 튀지 않는다. 빈 앞자리 칸(.e)은 최종 글자를 숨겨 기준선을 지킨다 */
+.a-nv.run{display:inline-flex}
+.a-nv.run>span{display:flex;justify-content:center;flex:none;position:relative}
+.a-nv.run>.e{visibility:hidden}
 /* 사례 1 연결 밑줄, 도형이라 빨강 규칙(28px 이상 굵은 글자와 도형)에 맞다. 최종 화면에 남는 유일한 추가 요소 */
 .c1u{position:relative}
 .c1u::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:4px;background:var(--sub)}
