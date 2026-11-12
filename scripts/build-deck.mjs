@@ -75,11 +75,7 @@ async function scrape() {
         summary: t(c.querySelector('.card-bot > p')), rights: t(c.querySelector('.card-rights')) })),
       careerTitle: t(document.querySelector('#career .h2')),
       career: all('#career .row-li', r => ({ company: t(r.querySelector('.row-title')), titles: t(r.querySelector('.row-note')),
-        sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')),
-        /* 서비스 방향성 근거(WO-39) — 달콤 행만 앞 근거 칩 2개(2025 계획과 2026 상반기)를 회사별 상세에 싣는다 */
-        ev: [...r.querySelectorAll('.row-links[data-links="dalcom"] a')].slice(0, 2).map(a => {
-          const c = a.cloneNode(true); c.querySelectorAll('.sr-only').forEach(n => n.remove())
-          return { href: a.href, label: t(c) } }) })),
+        sub: t(r.querySelector('.row-sub')), impact: t(r.querySelector('.row-impact')) })),
       careerFoot: t(document.querySelector('#career .row-foot')),
       protoTitle: t(document.querySelector('#proto .h2')),
       protoLede: t(document.querySelector('#proto .proto-lede')),
@@ -152,15 +148,15 @@ async function scrape() {
 /* 사이트에 없는 문구는 전부 여기에만 둔다 — 본문은 사이트에서 읽는다 */
 const L = {
   doc: '발표자료', cover: 'Portfolio Deck', glance: '한눈에', milestone: 'Career Milestone',
-  skills: '역량 4분류', top3: '대표 사례 3', judge: '판단', exec: '실행', numbers: '숫자로 증명',
+  skills: '역량 4분류', top3: '대표 케이스 3종', judge: '판단', exec: '실행', numbers: '숫자로 증명',
   results: '성과', method: '업무 방식', proto: 'AI 프로토타입', companies: '회사별 상세', contact: '연락',
-  caseN: n => `사례 ${n}`, evidence: '근거', demo: '체험판', open: '열기',
+  caseN: n => `사례 ${n}`, evidence: '근거', demo: '체험판', open: '열기', tryOrder: '체험 순서',
   email: '이메일', site: '사이트', pdf: '포트폴리오 PDF', issued: '발행일',
   web: '포트폴리오 웹', cvKo: '이력서(KO)', cvEn: 'Resume(EN)', cv: '이력서', caseRep: 'Notion 대표 사례',
   before: '변경 전', after: '변경 후', decision: '결정 범위', deferred: '미룬 것', outcome: '결과와 상태',
   act: '본인 행동', lab: '개인 프로덕트', period: '기간', doneBy: '수행 회사',
   full: '문장은 발표용으로 줄였습니다, 전문은 사이트 상세에서 볼 수 있습니다.',
-  role: '역할', verdict: '판단', result: '결과', priority: '우선순위 결정',
+  role: '역할', verdict: '판단', result: '결과',
   phases: ['운영', '사업PM', '기획, 디렉터'],
   rightsPlain: '게임 명칭은 각 권리자의 상표입니다.',
   rightsNW: '나이트워커 개발 원더피플/에이스톰, 퍼블리싱 넥슨.',
@@ -197,7 +193,8 @@ function checkLinks(d) {
 const CAPS = {
   'lyn/before_after': '변경 전(1)과 후(2): 초반 안내 대화창과 캐릭터 배치 정리(폴리싱 3건 중 초반 동선)',
   'lyn/system_ui': '시스템 UI 기획: 개선안을 화면 흐름으로 정리한 기획 캡처',
-  'nightwalker/server_flow_proposal': '서버 선택 플로우 제안: 중국 SDK 흐름을 퍼블리셔 로그인과 런처 기준으로 재정의',
+  /* 12장 본문 취지 교체(11-13) — 「한국 퍼블리셔 규격으로 재정의」 대신 본부장 문구 */
+  'nightwalker/server_flow_proposal': '서버 선택 플로우 제안: 중국 서비스의 플랫폼 기능을 국내 기능으로 수정',
   'nightwalker/server_flowchart_wire': '서버 선택 플로우차트: 퍼블리셔 플랫폼과 개발사 영역 구분',
   'nightwalker/charge_flow': '유료 재화 충전과 프로모션 플로우: 퍼블리셔 결제 정책에 맞춘 지급 흐름',
   'nightwalker/charge_ui_mock': '충전 UI 시안: 프로모션 혜택을 충전 창에서 보여주는 개선안',
@@ -215,23 +212,34 @@ const LANE_ARROW = '중국 SDK 흐름 → 퍼블리셔 규격'
 const C1 = {
   title: '지표 분석과 유저 VOC를 2026 방향성 제안으로',
   summary: '지표 분석과 만족도 설문(유저 VOC)으로 2026 상반기 방향성을 제안하고, 프로토타입 제작과 실제 출시로 연결하다',
+  /* 6장 = 문제 해결 7단계(본부장 결정 11-13). 단계 이름은 본부장 문구 그대로, 단계 아래 붙임은 지금 덱 6장 글을 줄인 것.
+     붙임 칸: 문자열 = 글머리 한 줄, { gap } = 핵심 GAP 상자, { img } = 원문 발췌 그림 */
   diag: {
     eyebrow: '사례 1, 진단', ledeTail: ', 2025.11 만족도 설문 → 2026.05 출시',
-    ev: [['유저 VOC: 만족도 설문', ['각 프로젝트 별 인게임 팝업 배너 설문, 6개 타이틀, 한, 영, 일', '수집, 꾸미기, 전시 요구 반복', '예전에 있던 웹뷰 이벤트의 복귀 요구']],
-         ['지표 분석: 사업적 관점', ['이벤트 곡 업데이트만으로는 Retention 유지 한계', "상위 유저는 '수집/테마 완성'에 높은 가치를 부여"]],
-         ['개발/프로덕트 관점', ['현재 UI는 감상이 아닌 관리(List) 중심의 어드민 형태', '다수의 아티스트, 앨범 구조로 인한 정보 피로도 높음']]],
+    steps: [
+      ['지표에서 유저 이탈과 매출 하락 발생', []],
+      ['상세 지표 분석: 이벤트 곡 업데이트만으로는 Retention 유지에 한계', ["상위 유저는 '수집/테마 완성'에 높은 가치를 부여"]],
+      ['인게임 팝업 배너로 만족도 설문', ['6개 타이틀, 한, 영, 일']],
+      ['니즈 분석', ['수집, 꾸미기, 전시 요구 반복', '예전에 있던 웹뷰 이벤트의 복귀 요구']],
+      ['사업, 프로덕트 관점으로 대응 방향 결정', ['현재 UI는 감상이 아닌 관리(List) 중심', { gap: true }, { img: true }]],
+      ['웹뷰 이벤트 적용 방향 확정과 개발 진행', ['미니게임 → 꾸미기 이벤트 → 웹뷰 이벤트 순 출시']],
+      ['진행과 결과 분석', [{ launched: true }]],
+    ],
     gap: ['현재 서비스의 핵심 GAP', '“우리가 잘하는 것”과 “팬이 원하는 것”의 교집합을 제품으로 만든다'],
     img: 'direction/gap',
-    cap: '원문 발췌, 「SuperStar 2026: 2026 상반기 라이브 프로젝트 방향성」, 현재 서비스의 핵심 GAP',
-    note: '설문 수치 장표는 비공개',
+    cap: '원문 발췌, 현재 서비스의 핵심 GAP, 설문 수치 장표는 비공개',
   },
   dir: {
     eyebrow: '사례 1, 방향 제안', title: '3대 핵심 전략 방향으로 2026년 개발 방향 제시',
     lede: '「SuperStar 2026: 2026 상반기 라이브 프로젝트 방향성」 작성, 방향 4축(원문 3대 핵심 전략 방향)',
-    axes: [['수집 완성', '1. 수집 구조의 재정의', '"단순 획득에서 완성하는 경험으로"', '도감을 채우고 완성하는 성취감, 단기/장기 목표 보상 설계'],
-           ['감상/전시', '2. 뷰잉 및 전시 경험 강화', '"작은 썸네일에서 감상 가능한 화면으로"', '큰 화면 감상 UI, 꾸미기(Deco)', '꾸미기 이벤트로 실행'],
-           ['개인화', '3. 개인화 & 커뮤니티', 'My Artist Mode', '엔터 전체 vs 내 아티스트'],
-           ['커뮤니티', '3. 개인화 & 커뮤니티', '"혼자 보는 수집에서, 서로 반응하는 공감으로"', '덱/프로필 방문, 아티스트 공통 미션']],
+    /* [축, 내용, 칩]. 11-13 — 그림이 들어오며 원문 번호 줄과 원문 구호 줄은 뺐다 */
+    axes: [['수집 완성', '도감을 채우고 완성하는 성취감, 단기/장기 목표 보상 설계'],
+           ['감상/전시', '큰 화면 감상 UI, 꾸미기(Deco)', '꾸미기 이벤트로 실행'],
+           ['개인화', '엔터 전체 vs 내 아티스트'],
+           ['커뮤니티', '덱/프로필 방문, 아티스트 공통 미션']],
+    /* 축 → [그림, 캡션]. 캡션은 사이트 카드 제목 그대로(gap만 6장 캡션과 같은 덱 전용 문구) */
+    img: { '수집 완성': ['ssjproto', d => d.proto[1].title], '감상/전시': ['deco', d => d.proto[0].title],
+           '개인화': ['dalcom', d => d.works.find(w => w.key === 'dalcom').title], '커뮤니티': ['direction/gap', () => '원문 발췌, 현재 서비스의 핵심 GAP'] },
     applyLabel: '개발 방향 적용',
     apply: ['2026년 상반기 로드맵', '마일스톤 배치를 통한 개발 일정 조정', '기획 방향과 프로토타입 제작', '미니게임 → 꾸미기 이벤트 → 웹뷰 이벤트 순 출시'],
   },
@@ -256,14 +264,17 @@ const SKILLS_DECK = {
   '조직과 인력 운영': { note: '인력 리크루트부터 인력 배치, MM을 활용한 조직 세팅과 인력 효율 개선', co: ['달콤소프트', '스카이피플'] },
   '운영 표준화': { note: '반복, 비효율적인 업무를 규칙과 프로세스를 재정비하여 효율화', co: ['달콤소프트'] },
 }
-/* 업무 방식 5단계 — 단계 이름만 덱 전용이고, 각 단계의 칩은 사이트에서 읽은 문장이다 */
-const STEPS = [
-  ['사용자 조사와 지표', d => [d.cases[0].steps[0][1], d.cases[1].steps[0][1]]],
-  ['제품 판단', d => [d.cases[0].steps[1][1], d.cases[1].steps[1][1]]],
-  ['개발 우선순위', d => [d.cases[2].steps[1][1], d.skills[0].cases[1]]],
-  ['실행과 출시', d => [d.cases[0].steps[2][1], d.cases[2].steps[2][1]]],
-  ['라이브 서비스와 표준화', d => [d.skills[1].cases[1], d.skills[3].cases[0]]],
-]
+/* 16장 업무 방식 5단계(본부장 결정 11-13) — 그림 위주 덱 17장의 글을 그대로 옮긴다.
+   [단계 이름, 사례 문장 2줄, 우선순위 결정 칸(03만)] */
+const METHOD = {
+  title: '사용자 요구에서 라이브까지',
+  steps: [['사용자 조사와 지표', ['만족도 조사에서 예전 웹뷰 이벤트의 복귀 요구가 나왔다.', '소프트런칭에서 상품 구성, 재화 소비, 초반 이탈을 확인했다.']],
+          ['제품 판단', ['인게임 미니게임을 먼저 적용하고 웹뷰로 확장하기로 했다.', '상품, 재화, 초반 동선을 출시 전 개선 과제로 정리했다.']],
+          ['개발 우선순위', ['퍼블리셔 정책과 API 문서를 기준으로 다시 정의했다.', '사례: 소프트런칭 지표 → 개선 과제'],
+            ['우선순위 결정', '대응 순서와 이벤트 범위(MVP)는 본인이 정했다.']],
+          ['실행과 출시', ['꾸미기 이벤트 기획서를 쓰고 AI로 프로토타입을 만들었다.', '구매, 쿠폰, 서버 선택 UI/플로우 기획을 쓰고 협의했다.']],
+          ['라이브 서비스와 표준화', ['성과: 카오스크로니클 서비스 종료', '성과: SKU 자동화와 어뷰징 SOP']]],
+}
 const KPI_NUM = { dalcom: '11종', lyn: '183억', chaos: '98억', nightwalker: '33만+', fivestars: '24억', nanakage: '7개국' }
 const KPI_DROP = [/\(기존 게시 승인분\)/g]
 const KPI_TBL = (() => {
@@ -293,6 +304,34 @@ const kpiLabel2 = slug => {
   return esc(dd) + (per && per !== '미상' ? '<br>' + esc(per) : '')
 }
 const CASE_IMG = { case2: 'lyn', case3: 'nightwalker' }
+/* 18장 티켓 핵심 내용 — 사이트 경력 행 기여 문장을 줄인 조각(1~2줄). 조각은 원문에 그대로 있어야 한다. 없는 회사는 원문 전체 */
+const CO_SHORT = {
+  '달콤소프트': ['서비스 방향성 제시', '담당 타이틀 매출 172억 기여'],
+  '원더피플/에이스톰': ['나이트워커 신규 33만+, DAU 6.4만, D+1 52~56%', '슈퍼피플(스팀 중국) 런칭, 라이브 서비스'],
+  '네오위즈': ['시스템 신규 10종과 개편 8종 기획', '개발 마일스톤 관리, 기획팀 채용'],
+  '스카이피플': ['사업과 운영 조직 세팅', '사전 예약 20만, 신규 28만+, 매출 24억'],
+  '넵튠 레전드': ['7개국 소프트런칭 → 그랜드런칭', '구글 평점 일본 3.29 → 글로벌 4.4'],
+  '넥슨 코리아': ['린 매출 183억, 양대 마켓 3위', '카오스크로니클 98억, 7위, 피처드'],
+  '소프트닉스': ['NTD 사내 테스트 2, FGI 4, FGT 2 설계', '5개 타이틀 유료화 분석, 남미 런칭 준비'],
+  'NHN Service': ['Tera 웹 운영 파트 관리와 FUN QA 4종 게임성 분석', '아틀란티카와 R2 라이브 운영'],
+}
+/* 17장 체험 순서 단계 — 카드 순서(꾸미기, 10주년 웹뷰)대로 [칩 글, 사이트 문장 속 근거 조각] */
+const TRY_STEPS = [
+  [['꾸미기 화면', '꾸미기 화면'], ['아이템 고르기', '아이템을 고르고'], ['배치하기', '배치해']],
+  [['주차 바꾸기', '주차를 바꾸고'], ['보상 잠금 비교', '보상 잠금 상태를 비교'], ['미션', '미션'], ['보상 수령', '보상 수령'], ['응모', '응모']],
+]
+/* 12장 제목 —덱에서만 본부장 문구로 바꾼다(11-13). 사이트 사례 3 제목은 그대로 */
+const EXEC_TITLE = { case3: '중국 서비스의 플랫폼 기능을 국내 기능으로 수정' }
+/* 10장(사례 2 실행) 꼬리표 줄 — [꼬리표, 값, 근거 조각(값과 다를 때만)]. 근거 조각은 덱에 보이는 사이트 문장 안에 있어야 한다 */
+const EXEC_LINES = {
+  case2: {
+    '본인 행동': [['FGT', '2018.06~07, 경쟁작 10종 기준 테스터 선발'], ['사내 테스트', '2018.11, 3일'],
+      ['역할', '모바일사업실 팀장으로 이끌었다', '모바일사업실 팀장으로 이끌'], ['정리', '결과를 개발 요구로 정리했다']],
+    '결과와 상태': [['출시', '2019 글로벌 그랜드런칭'], ['개선 3건', '상품 재구성, 거래소 시점/전용 상점, 초반 동선'],
+      ['반영', '개선 3건은 그랜드런칭 빌드에 반영됐다'], ['프로젝트 순위', '한국 앱스토어와 구글 매출 최고 3위'],
+      ['프로젝트 매출', '2019년 누적 매출 183억'], ['본인 기여', '테스트 리드, 빌드 개선 조율, 상품/재화 개선안 범위']],
+  },
+}
 const RESULTS = [['chaos', ['chaos/event_ui_plan']], ['fivestars', ['fivestars/prereg']],
                  ['nanakage', ['nanakage/update_plan']]]
 const EXTRA_DLG = ['lyn', 'superpeople']
@@ -326,6 +365,10 @@ const splitTop = v => {
 /* 역할 범례 — 칸 = [연도 문자열, 너비 비율]. 사업PM은 네오위즈(2021) 뒤 원더피플/에이스톰(2022–2024)에서 한 번 더 나온다 */
 const PHASES = [['2006 – 2011', 5], ['2011 – 2021, 2022 – 2024', 11], ['2021, 2024 – 2026', 4]]
 const AXIS = ['2006', '2026']
+/* 3장 연표 — 회사별 역할 단계(PHASES 순서 번호). 범례 연도와 맞춘다(그림 위주 덱 3장과 같은 배정) */
+const PHASE_OF = { '웹젠': 0, 'NHN Service': 0, '소프트닉스': 1, '넷마블 블루': 1, '넥슨 코리아': 1, '넵튠 레전드': 1,
+  '스카이피플': 1, '네오위즈': 2, '원더피플/에이스톰': 1, '달콤소프트': 2 }
+const GN_W = 300 /* 3장 회사 이름 칸 너비(px) */
 /* 나열 잇기 — 둘이면 「A와 B」(받침에 따라 와/과), 셋 이상이면 쉼표 */
 const andJoin = xs => {
   if (xs.length !== 2) return xs.join(', ')
@@ -481,6 +524,16 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .row p{font-size:24px;line-height:1.55}
 .kv{display:grid;grid-template-columns:170px 1fr;gap:12px 22px;font-size:23px;line-height:1.5}
 .kv dt{color:var(--m60);font-weight:600}
+/* 10장 꼬리표 줄(11-13) — 한 줄에 한 사실, 글자 한 단계 크게 */
+.kv--x{margin-top:6px;grid-template-columns:150px 1fr;gap:8px 18px;font-size:25px;line-height:1.42}
+.kv--x dt{font-size:22px;font-weight:700;line-height:1.6}
+/* 17장 체험 순서 — 번호 붙은 단계 칩(.chip)과 화살표(.farr와 같은 선 아이콘) */
+.stps{display:flex;flex-wrap:wrap;align-items:center;gap:10px 6px}
+.stp-g{display:inline-flex;align-items:center;gap:6px}
+.stp{color:var(--tx);padding:7px 16px 7px 8px;display:inline-flex;align-items:center;gap:10px}
+.stp b{width:34px;height:34px;border-radius:50%;background:var(--tx);color:var(--bg);display:grid;place-items:center;font-size:22px;font-weight:800}
+.stp-a{color:var(--m38);display:inline-grid}
+.stp-a svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .ev{margin-top:auto;padding-top:20px;border-top:1px solid var(--m12);font-size:22px;line-height:1.5;color:var(--m60)}
 .ev b{display:block;color:var(--tx);font-weight:700;margin-bottom:8px}
 .ev a{display:inline-block;margin-right:24px;text-decoration:underline;text-underline-offset:4px}
@@ -517,46 +570,52 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .msb div{border:1px solid var(--m12);border-radius:16px;padding:16px 22px;background:var(--panel)}
 .msb b{display:block;font-size:24px;font-weight:700}
 .msb span{font-size:22px;color:var(--m60)}
-.msb div:nth-child(3){background:var(--tx);border-color:var(--tx);color:var(--bg)}
-.msb div:nth-child(3) span{color:rgba(245,245,245,.7)}
-.gantt{position:relative;height:46px;margin-top:22px}
-/* 간트 — 번갈이 색은 의미가 없었다. 전부 중립 회색으로 두고 현재 재직 구간만 서브컬러(D5).
-   숫자는 28px 굵게 — 빨강 막대 위 흰 숫자를 큰 글자 기준(3:1)으로 통과시키기 위해서다. */
-.gantt i{position:absolute;top:0;height:46px;border-radius:10px;background:rgba(26,26,26,.16);
-  display:grid;place-items:center;font-style:normal;font-size:28px;font-weight:800;color:var(--tx)}
-.gantt i.on{background:var(--sub);color:#fff}
-.axis{position:relative;height:34px;border-top:1px solid var(--m12);margin-top:8px}
+/* 범례 칸의 단계 색 견본 — 막대와 같은 색(.p0~.p2) */
+.msb .ph{display:inline-block;width:40px;height:18px;border-radius:6px;margin-right:12px;vertical-align:-1px}
+/* 회사별 가로 막대 연표(11-13) — 단계 색: 운영 옅은 회색, 사업PM 짙은 회색, 기획/디렉터 서브컬러(도형이라 빨강 규칙에 맞다) */
+.p0{background:rgba(26,26,26,.18)}.p1{background:rgba(26,26,26,.45)}.p2{background:var(--sub)}
+.gc{position:relative;flex:1;min-height:0;display:flex;flex-direction:column;margin-top:22px}
+.gl{position:absolute;top:0;bottom:34px;width:1px;background:var(--m12)}
+.gr{display:grid;grid-template-columns:300px 1fr;align-items:center;flex:1}
+.gr>b{font-size:26px;font-weight:700}
+.gantt{position:relative;height:34px}
+.gantt i{position:absolute;top:0;height:34px;border-radius:8px}
+.gantt .yr{position:absolute;top:0;line-height:34px;font-size:22px;font-weight:600;color:var(--m60);white-space:nowrap}
+.gantt .yr em{font-style:normal;font-weight:500;color:var(--tx);margin-left:14px}
+.axis{position:relative;height:34px;border-top:1px solid var(--m12)}
 .axis span{position:absolute;top:8px;font-size:22px;color:var(--m60);transform:translateX(-50%)}
 .axis span:first-child{transform:none}.axis span:last-child{transform:translateX(-100%)}
-.msg{flex:1;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-auto-rows:auto;
-  align-content:space-around;gap:56px 24px;margin-top:30px}
-.msc{border-top:3px solid var(--tx);padding-top:14px}
-.msc b{display:block;font-size:24px;font-weight:700}
-.msc b em{font-style:normal;color:var(--sub);margin-right:10px;font-size:28px;font-weight:800}
-.msc .p{font-size:22px;color:var(--m60);margin-top:6px}
-.msc .r{font-size:22px;margin-top:8px;line-height:1.4}
 /* 회사별 상세 */
-.co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,auto);grid-auto-flow:column;
-  gap:16px 56px;flex:1;min-height:0;align-content:start}
-/* WO-33 — 원더피플 행에 슈퍼피플이 붙어 3줄이 됐다. 문구는 두고 행 간격과 줄 간격만 줄인다 */
-.cor{border-top:1px solid var(--m12);padding-top:12px;display:grid;grid-template-columns:1fr auto;gap:4px 20px}
-.cor b{font-size:26px;font-weight:700}
-.cor .k{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:-.02em;white-space:nowrap}
-.cor .p{grid-column:1/-1;font-size:22px;color:var(--m60);line-height:1.32}
-.cor .t{grid-column:1/-1;font-size:22px;line-height:1.32}
+/* 티켓 카드(11-13) — 면, 테두리, 모서리는 기존 카드(.pn). 절취선 = 오른쪽 숫자 칸 앞 점선, 그 위아래에 반원 홈(배경색 원을 카드 테두리에 얹는다) */
+.co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr);grid-auto-flow:column;
+  gap:16px 32px;flex:1;min-height:0}
+.tk{position:relative;display:grid;grid-template-columns:1fr 200px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
+.tk::before,.tk::after{content:"";position:absolute;right:186px;width:28px;height:28px;border-radius:50%;
+  background:var(--bg);border:1px solid var(--m12);z-index:2}
+.tk::before{top:-15px;clip-path:inset(50% -1px -1px -1px)}
+.tk::after{bottom:-15px;clip-path:inset(-1px -1px 50% -1px)}
+.tk-m{padding:12px 24px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tk-m b{font-size:26px;font-weight:700;line-height:1.25}
+.tk-m .p{margin-top:2px;font-size:22px;color:var(--m60);line-height:1.32}
+.tk-m .t{margin-top:4px;font-size:22px;line-height:1.32}
+.tk-s{position:relative;display:grid;place-items:center}
+.tk-s::before{content:"";position:absolute;left:-1px;top:18px;bottom:18px;border-left:2px dashed var(--m38)}
+.tk .k{font-size:40px;font-weight:800;color:var(--sub);letter-spacing:-.02em;white-space:nowrap}
 /* 스텝 */
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;flex:none;align-items:stretch;margin:auto 0}
-.st{position:relative;background:var(--panel);border:1px solid var(--m12);padding:30px 26px;display:flex;flex-direction:column}
-.st:first-child{border-radius:24px 0 0 24px}
-.st:last-child{border-radius:0 24px 24px 0}
-.st+.st{border-left:none}
-.st .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
-.st .pri{margin-top:18px;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.45}
+/* 16장 업무 방식(11-13) — 칸 다섯이 화살표로 이어진다. 칸은 기존 카드(.pn과 같은 면, 테두리, 모서리), 번호는 큰 숫자 단계(72px) */
+.steps{flex:none;margin:auto 0}
+.st{flex:1;min-width:0;background:var(--panel);border:1px solid var(--m12);border-radius:24px;padding:30px 26px;min-height:560px;display:flex;flex-direction:column}
+.st .no{font-size:72px;font-weight:800;color:var(--sub);letter-spacing:-.03em;line-height:.92}
+.st .pri{margin-top:auto;padding-top:16px;border-top:2px solid var(--sub);font-size:22px;line-height:1.45}
 .st .pri b{display:block;font-weight:800;margin-bottom:6px}
-.st h3{margin-top:12px;font-size:28px;font-weight:700;line-height:1.3}
+.st h3{margin-top:18px;font-size:28px;font-weight:700;line-height:1.3}
 .st ul{margin-top:22px;display:flex;flex-direction:column;gap:12px}
-.st li{font-size:22px;line-height:1.45;color:var(--m60);padding-left:20px;position:relative}
+.st li{font-size:22px;line-height:1.45;padding-left:20px;position:relative}
 .st li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:8px;border-radius:50%;background:var(--sub)}
+/* 사례 1 진단 7단계(11-13) — 칸은 .fs, 번호는 업무 방식 장 번호(.st .no)와 같은 크기와 색 */
+.s7{display:flex;flex-direction:column;min-height:0;padding:20px 24px}
+.s7 .no{font-size:30px;font-weight:800;color:var(--sub);letter-spacing:.06em}
+.s7 .snm{margin-top:6px;font-size:24px;font-weight:700;line-height:1.38}
 /* 조작 UI */
 .bar{position:absolute;left:0;bottom:0;height:6px;background:var(--sub);width:0;transition:width .35s ease;z-index:5}
 .cnt{position:absolute;right:96px;bottom:36px;font-size:24px;font-weight:600;z-index:5;letter-spacing:.04em;
@@ -592,7 +651,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 @keyframes a-g{from{clip-path:inset(0 100% 0 0 round var(--gr,0px))}to{clip-path:inset(0 0 0 0 round var(--gr,0px))}}
 @keyframes a-gv{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
 @keyframes a-d{from{opacity:0;transform:scale(0)}}
-.gantt i{--gr:10px}
+.gantt i{--gr:8px}
 /* 칸 위 가로선, 모션 동안만 테두리를 비우고 같은 자리, 같은 색의 띠(::before)를 왼쪽에서 긋는다. 끝나면 deck-anim.js가 걷어 원래 테두리로 */
 .a-lb{position:relative;border-top-color:transparent!important}
 .a-lb::before{content:"";position:absolute;left:0;right:0;top:calc(-1 * var(--lw));height:var(--lw);background:var(--lc)}
@@ -738,21 +797,28 @@ function render(d, A) {
     const [a, b] = p.split(/\s*[–—-]\s*/)
     return [Math.max(0, at(a)), Math.min(100, /\d/.test(b) ? at(b) : 100)]
   }
-  const lastIx = rows3.length - 1
+  /* 회사별 가로 막대 연표(본부장 결정 11-13, 그림 위주 덱 3장 구현을 지금 덱 양식으로 옮김).
+     한 줄 = 회사 이름 칸 + 막대(역할 단계 색) + 막대 옆 연도와 직책. 막대 오른쪽에 글이 다 들어가면 오른쪽, 아니면 왼쪽 */
+  const yrOf = sub => { const [a, b] = per(sub).split(/\s*[–—-]\s*/)
+    return a.slice(0, 4) === b.slice(0, 4) ? a.slice(0, 4) : `${a.slice(0, 4)} – ${b.slice(0, 4)}` }
+  const TW = 1920 - 2 * 96 - GN_W, CH = 22
+  const ticks = ['2006', '2011', '2016', '2021', '2026'].map(y => [y, at(y + '.1')])
   const milestone = slide({
     aria: 'Career Milestone: 2006부터 2026까지', eyebrow: L.milestone, title: d.careerTitle, hcls: 'h--sm',
     rights: L.rightsPlain,
     body: `
     <div class="msb">${PHASES.map(([yr, w], i) =>
-      `<div style="flex:${w}"><b>${esc(L.phases[i])}</b><span>${esc(yr)}</span></div>`).join('')}</div>
-    <div class="gantt">${rows3.map((r, i) => { const [x0, x1] = span(r.sub)
-      return `<i class="${i === lastIx ? 'on' : ''}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%">${i + 1}</i>` }).join('')}</div>
-    <div class="axis">${['2006', '2011', '2016', '2021', '2026'].map(y =>
-      `<span style="left:${at(y + '.1').toFixed(2)}%">${y}</span>`).join('')}</div>
-    <div class="msg">${rows3.map((r, i) => `
-      <div class="msc"><b><em>${i + 1}</em>${esc(r.company)}</b>
-        <p class="p">${nw(per(r.sub))}</p>
-        <p class="r">${esc(roleOf(r.sub))}</p></div>`).join('')}</div>`,
+      `<div style="flex:${w}"><b><i class="ph p${i}"></i>${esc(L.phases[i])}</b><span>${esc(yr)}</span></div>`).join('')}</div>
+    <div class="gc">${ticks.map(([, p]) => `<span class="gl" style="left:calc(${GN_W}px + (100% - ${GN_W}px) * ${(p / 100).toFixed(4)})"></span>`).join('')}
+      ${rows3.map(r => { const [x0, x1] = span(r.sub), ph = PHASE_OF[r.company]
+        if (ph === undefined) fail('역할 단계 표에 없는 회사: ' + r.company)
+        const role = roleOf(r.sub), y = yrOf(r.sub)
+        const right = x1 / 100 * TW + 14 + (y.length + role.length) * CH < TW
+        const lab = right ? `left:calc(${x1.toFixed(2)}% + 14px)` : `right:calc(${(100 - x0).toFixed(2)}% + 14px)`
+        return `<div class="gr"><b>${esc(r.company)}</b><div class="gantt"><i class="p${ph}" style="left:${x0.toFixed(2)}%;width:${(x1 - x0).toFixed(2)}%"></i><span class="yr" style="${lab}">${esc(y)}<em>${esc(role)}</em></span></div></div>` }).join('')}
+      <div class="axis" style="margin-left:${GN_W}px">${ticks.map(([y, p]) =>
+        `<span style="left:${p.toFixed(2)}%">${y}</span>`).join('')}</div>
+    </div>`,
   })
 
   /* --- 4. 역량 4분류 --- */
@@ -776,9 +842,12 @@ function render(d, A) {
   })
 
   /* --- 5. 대표 사례 3 (강조 장) --- */
+  /* 덱에서만 「대표 사례 3」을 「대표 케이스 3종」으로 부른다(본부장 결정 11-13). 사이트 제목은 그대로 */
+  if (!d.casesTitle.includes('대표 사례 3')) fail('사례 제목에 「대표 사례 3」이 없다: ' + d.casesTitle)
+  const top3Title = d.casesTitle.replace('대표 사례 3', L.top3)
   const top3 = slide({
-    cls: 's--acc', bg: '#1A1A1A', aria: '대표 사례 3: ' + d.casesTitle,
-    eyebrow: L.top3, title: d.casesTitle, lede: d.casesLede, rights: L.rightsPlain,
+    cls: 's--acc', bg: '#1A1A1A', aria: L.top3 + ': ' + top3Title,
+    eyebrow: L.top3, title: top3Title, lede: d.casesLede, rights: L.rightsPlain,
     body: `<div class="g3" style="align-items:start">${d.cases.map(c => {
       const [num, lab] = caseKpi(c)
       return `<div style="display:flex;flex-direction:column;border-top:3px solid var(--sub);padding-top:26px">
@@ -796,27 +865,32 @@ function render(d, A) {
   if (c1.work !== 'case1') fail('첫 대표 사례가 case1이 아니다: ' + c1.work)
   const c1row = k => (c1.rows.find(r => r[0] === k) || fail(`사례 1 상세에 '${k}' 행이 없다`))[1]
   const c1u = (x, k) => (x === C1_LINK[k] ? `<span class="c1u">${esc(x)}</span>` : esc(x))
-  const bullets = xs => `<ul style="margin-top:6px;display:flex;flex-direction:column;gap:6px">${xs.map(x =>
-    `<li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
-      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${c1u(x, 'diag')}</li>`).join('')}</ul>`
+  const bullets = xs => `<ul style="margin-top:10px;display:flex;flex-direction:column;gap:6px">${xs.map(x =>
+    `<li style="font-size:22px;line-height:1.45;padding-left:20px;position:relative;color:var(--m60)">
+      <span style="position:absolute;left:0;top:12px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${c1u(x, 'diag')}</li>`).join('')}</ul>`
   const G = C1.diag
+  if (G.steps.length !== 7) fail('사례 1 진단 단계가 7개가 아니다: ' + G.steps.length)
+  /* 7단계 번호 흐름(두 줄: ①~④, ⑤~⑦). 칸은 기존 흐름 칸(.fs), 번호는 업무 방식 장 번호(.no)와 같은 모양.
+     ⑤는 핵심 GAP 상자와 원문 발췌 그림을 품어 두 칸 너비 */
+  const step7 = ([nm, xs], k) => {
+    const lines = xs.filter(x => typeof x === 'string')
+    const gap = xs.some(x => x.gap), img = xs.some(x => x.img), lau = xs.some(x => x.launched)
+    const text = `<p class="no">0${k + 1}</p><p class="snm">${esc(nm)}</p>
+      ${lines.length ? bullets(lines) : ''}
+      ${lau ? `<p class="n" style="margin-top:16px;font-size:56px">${ba(launched[0])}</p><p class="nl" style="margin-top:10px;font-size:22px">${launched[1].split(', ').map(esc).join('<br>')}</p>` : ''}
+      ${gap ? `<div style="margin-top:14px;border:2px solid var(--sub);border-radius:16px;padding:14px 18px">
+        <p style="font-size:24px;font-weight:800">${esc(G.gap[0])}</p>
+        <p style="margin-top:4px;font-size:22px;line-height:1.45">${esc(G.gap[1])}</p></div>` : ''}`
+    return `<div class="fs s7" style="flex:${img ? 2.1 : 1}${img ? ';display:grid;grid-template-columns:1fr 1fr;gap:20px' : ''}">
+      ${img ? `<div>${text}</div>${shot(G.img, G.cap, 'min-height:0')}` : text}</div>`
+  }
+  const row7 = (xs, f) => `<div class="frow" style="flex:${f};min-height:0">${xs.map(([s, k]) => (k % 4 ? arrow() : '') + step7(s, k)).join('')}</div>`
+  const ix7 = G.steps.map((s, k) => [s, k])
   const c1diag = slide({
     aria: `${G.eyebrow}: ${C1.title}`, eyebrow: G.eyebrow, title: C1.title, lede: c1.dlgMeta + G.ledeTail,
     rights: L.rightsProto,
-    body: `<div class="g2" style="grid-template-columns:1fr 820px">
-      <div style="display:flex;flex-direction:column;min-height:0">
-        <div style="display:flex;flex-direction:column;gap:16px">${G.ev.map(([k, xs]) =>
-          `<div class="fs" style="padding:18px 26px"><b>${esc(k)}</b>${bullets(xs)}</div>`).join('')}</div>
-        ${arrow()}
-        <div class="fs" style="border:2px solid var(--sub);padding:20px 26px">
-          <p style="font-size:28px;font-weight:800">${esc(G.gap[0])}</p>
-          <p style="margin-top:6px">${esc(G.gap[1])}</p></div>
-      </div>
-      <div style="display:flex;flex-direction:column;min-height:0">
-        ${shot(G.img, G.cap, 'flex:none')}
-        <p style="margin-top:14px;font-size:22px;color:var(--m60)">${esc(G.note)}</p>
-      </div>
-    </div>`,
+    body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:24px">
+      ${row7(ix7.slice(0, 4), 0.8)}${row7(ix7.slice(4), 1.2)}</div>`,
   })
   const D = C1.dir
   const c1dir = slide({
@@ -824,14 +898,16 @@ function render(d, A) {
     rights: L.rightsPlain,
     /* 세 덩어리(축 카드, 개발 방향 적용, 판단/결정 범위)를 세로로 고르게 나눈다 — 아래쪽 빈 띠를 남기지 않는다 */
     body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:space-between">
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">${D.axes.map(([nm, org, dirS, what, chip]) => `
-        <div class="pn" style="padding:24px 26px;display:flex;flex-direction:column">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">${D.axes.map(([nm, what, chip]) => {
+        /* 축마다 내용이 맞는 실제 캡처 1장(11-13). 그림이 들어온 만큼 원문 번호 줄과 원문 구호 줄은 뺀다 */
+        const [img, cap] = D.img[nm] || fail('방향 축 그림이 없다: ' + nm)
+        return `
+        <div class="pn" style="padding:22px 24px;display:flex;flex-direction:column">
           <p style="font-size:34px;font-weight:800;letter-spacing:-.02em">${esc(nm)}</p>
-          <p style="margin-top:6px;font-size:22px;color:var(--m60)">${esc(org)}</p>
-          <p style="margin-top:14px;font-size:28px;font-weight:700;line-height:1.35">${esc(dirS)}</p>
-          <p style="margin-top:10px;font-size:24px;line-height:1.45">${esc(what)}</p>
-          ${chip ? `<p style="margin-top:auto;padding-top:14px"><span class="chip chip--sub">${esc(chip)}</span></p>` : ''}
-        </div>`).join('')}</div>
+          ${shot(img, cap(d), 'height:200px;flex:none;margin-top:14px', '', true)}
+          <p style="margin-top:12px;font-size:22px;line-height:1.45">${esc(what)}</p>
+          ${chip ? `<p style="margin-top:auto;padding-top:12px"><span class="chip chip--sub">${esc(chip)}</span></p>` : ''}
+        </div>` }).join('')}</div>
       <div>
         <p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(D.applyLabel)}</p>
         <div class="frow" style="margin-top:12px">${D.apply.map((x, k) => (k ? arrow() : '') +
@@ -851,7 +927,8 @@ function render(d, A) {
   const areaLabel = t => `<p style="font-size:22px;font-weight:800;letter-spacing:.08em">${esc(t)}</p>`
   const nat = [natural('deco'), natural('ssjproto')].map(({ w, h }) => (w / h).toFixed(3))
   const c1run = slide({
-    aria: `${R.eyebrow}: ${R.title}`, eyebrow: R.eyebrow, title: R.title, hcls: 'h--sm',
+    /* 11-13 품질 — 제목 크기를 6, 7장(사례 1 묶음)과 같은 기본 단계로 */
+    aria: `${R.eyebrow}: ${R.title}`, eyebrow: R.eyebrow, title: R.title,
     rights: L.rightsProto,
     body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:24px">
       <div>
@@ -871,10 +948,10 @@ function render(d, A) {
         <div style="display:flex;flex-direction:column;min-height:0">
           ${areaLabel(R.areas[1])}
           <div class="pn" style="margin-top:12px;flex:1;min-height:0;display:flex;flex-direction:column;padding:22px 30px">
-            <div style="display:flex;align-items:flex-end;gap:20px"><p class="n n--sm" style="flex:none">${ba(c1num)}</p>
+            <div style="display:flex;align-items:flex-end;gap:20px;margin:auto 0"><p class="n n--sm" style="flex:none">${ba(c1num)}</p>
               <p class="nl" style="margin-bottom:4px">${c1lab.split(', ').map(esc).join('<br>')}</p></div>
-            <div class="ev" style="padding-top:16px"><b>${L.evidence}</b>
-              <div style="display:flex;flex-direction:column;gap:2px">${c1ev.map(e =>
+            <div class="ev" style="padding-top:16px;margin-top:0"><b>${L.evidence}</b>
+              <div style="display:flex;flex-direction:column;gap:4px">${c1ev.map(e =>
                 `<a href="${esc(e.href)}" target="_blank" rel="noopener" style="margin-right:0;align-self:flex-start">${esc(e.title)} ↗</a>`).join('')}</div></div>
           </div>
         </div>
@@ -888,30 +965,30 @@ function render(d, A) {
   })
 
   /* --- 9와 11. 사례 판단(사례 2와 3) --- */
-  /* 사례 2 — 소프트런칭 3개국 → 개선 3건 → 그랜드런칭을 실제로 잇는다(D6).
-     세 단계 모두 사이트 문장에서 읽는다. */
+  /* 사례 2 흐름 5단계(본부장 결정 11-13): FGT 진행 → 사내 테스트 → 개선사항 적용 → 소프트런칭 → 그랜드런칭.
+     날짜와 범위는 10장 글(사이트 본인 행동, 결과와 상태)에서 읽은 것만 붙인다. 소프트런칭 국가 수는 린 상세 */
   const chain2 = (() => {
     const out = d.cases[1].rows.find(r => r[0] === L.outcome)[1]
-    const im = out.match(/(?:^|\.)\s*([^.]+?)\s*개선 (\d)건은/)
-    if (!im) fail('사례 2 결과에서 개선 항목을 못 읽었다: ' + out)
-    const items = im[1].split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
-    if (String(items.length) !== im[2]) fail(`사례 2 개선 항목 수가 안 맞는다: ${items.length} vs ${im[2]}`)
     const gm = out.match(/출시\(([^)]+)\)/)
     if (!gm) fail('사례 2 결과에서 그랜드런칭을 못 읽었다: ' + out)
     const lyn = d.res.lyn.rows.find(r => r[0] === '소프트런칭')
     if (!lyn) fail('린 상세에 소프트런칭 행이 없다')
     const co = lyn[1].split(/\s*,\s*/).map(s => s.trim()).filter(Boolean)
-    return [[`소프트런칭 ${co.length}개국`, co], [`개선 ${items.length}건`, items], ['그랜드런칭', [gm[1]]]]
+    const act = d.cases[1].rows.find(r => r[0] === L.act)[1]
+    const fgt = act.match(/FGT\(([^,]+),/), it = act.match(/사내 테스트\(([^,]+),\s*([^)]+)\)/)
+    if (!fgt || !it) fail('사례 2 본인 행동에서 FGT와 사내 테스트 날짜를 못 읽었다: ' + act)
+    return [['FGT 진행', [fgt[1]]], ['사내 테스트', [it[1], it[2]]], ['개선사항 적용', []],
+            ['소프트런칭', [`${co.length}개국`]], ['그랜드런칭', [gm[1]]]]
   })()
 
   const judge = (c, i) => {
     const slug = CASE_IMG[c.work]
     const [num, lab] = caseKpi(c)
     const boxes = [c.steps[0], c.steps[1], c.steps[3]]
-    const stage = ([nm, xs]) => `<div class="fs">
+    const stage = ([nm, xs]) => `<div class="fs" style="padding:22px 18px 22px 24px">
       <b>${esc(nm)}</b>
       <p style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">${xs.map(x =>
-        `<span class="chip">${esc(x)}</span>`).join('')}</p></div>`
+        `<span class="chip" style="white-space:nowrap">${esc(x)}</span>`).join('')}</p></div>`
     /* 사례 3 — 두 레인 사이에 실제 이관 화살표를 둔다(D6) */
     const lanes = c.work === 'case3' ? `
       <div class="pn" style="margin-bottom:24px;padding:24px 28px;
@@ -926,6 +1003,7 @@ function render(d, A) {
                <p style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">${ln[1].map(x =>
                  `<span class="chip${k ? '' : ' chip--sub'}">${esc(x)}</span>`).join('')}</p></div>`)).join('')}
       </div>` : ''
+    /* 사례 2 — 5단계 흐름은 본문 전체 폭 맨 위에 둔다(칸 다섯이 왼쪽 칸에 들어가지 않는다) */
     const chain = c.work === 'case2' ? `
       <div class="frow" style="margin-bottom:24px;flex:none">${
         chain2.map((s, k) => (k ? arrow() : '') + stage(s)).join('')}</div>` : ''
@@ -933,8 +1011,8 @@ function render(d, A) {
       aria: `${L.caseN(i + 1)} 판단: ${c.dlgTitle}`,
       eyebrow: `${L.caseN(i + 1)}, ${L.judge}`, title: c.dlgTitle, lede: c.dlgMeta,
       rights: rightsOf(slug),
-      body: `<div class="g2" style="grid-template-columns:1fr 660px">
-        <div style="display:flex;flex-direction:column;min-height:0">${lanes}${chain}
+      body: `${chain}<div class="g2" style="grid-template-columns:1fr 660px">
+        <div style="display:flex;flex-direction:column;min-height:0">${lanes}
           <div class="flow">${boxes.map(([k, v], n) =>
             (n ? arrow() : '') + `<div class="fs"><b>${esc(k)}</b><p>${esc(v)}</p></div>`).join('')}</div>
         </div>
@@ -949,6 +1027,13 @@ function render(d, A) {
   }
 
   /* --- 10과 12. 사례 실행(사례 2와 3) --- */
+  /* 10장 — 긴 문단을 꼬리표 붙은 짧은 줄로(본부장 결정 11-13). 한 줄에 한 사실, 사실은 빼지 않는다.
+     값은 덱 전용 표 EXEC_LINES의 글이고, 줄마다 근거 조각(src, 없으면 값 그대로)이 사이트 문장에 있어야 빌드된다 */
+  const linesOf = (c, k, src) => (EXEC_LINES[c.work][k] || fail(`${c.work} ${k} 줄 표가 없다`)).map(([tag, v, frag]) => {
+    const f = frag || v
+    if (!src.replace(/ /g, ' ').includes(f)) fail(`${c.work} ${k} 줄 「${tag}」의 근거 「${f}」가 사이트 문장에 없다`)
+    return [tag, v]
+  })
   const exec = (c, i) => {
     /* 발표용으로 줄인다 — 행동과 미룬 것은 첫 문장만. 결과는 본인 기여 범위 단서가 들어 있어 통째로 남긴다(D3). */
     const pick = k => { const r = c.rows.find(x => x[0] === k); return r && r[1] }
@@ -976,13 +1061,15 @@ function render(d, A) {
     }
     return slide({
       aria: `${L.caseN(i + 1)} 실행: ${c.dlgTitle}`,
-      eyebrow: `${L.caseN(i + 1)}, ${L.exec}`, title: c.title, hcls: 'h--sm',
+      eyebrow: `${L.caseN(i + 1)}, ${L.exec}`, title: EXEC_TITLE[c.work] || c.title, hcls: 'h--sm',
       rights: rightsOf(CASE_IMG[c.work]),
       body: `<div class="g2" style="grid-template-columns:${cols}">
         <div style="display:flex;flex-direction:column;min-height:0">
           <div class="rows">${rows.map(([k, v]) => `
             <div class="row"><span class="ico ico--sm">${icon(EXEC_ICONS[k])}</span>
-              <div><p class="rt">${esc(k)}</p><p>${esc(v)}</p></div></div>`).join('')}</div>
+              <div style="flex:1;min-width:0"><p class="rt">${esc(k)}</p>${EXEC_LINES[c.work]
+                ? `<dl class="kv kv--x">${linesOf(c, k, v).map(([t, x]) => `<dt>${esc(t)}</dt><dd>${esc(x)}</dd>`).join('')}</dl>`
+                : `<p>${esc(v)}</p>`}</div></div>`).join('')}</div>
           ${cut ? `<p style="margin-top:18px;font-size:22px;color:var(--m60)">${esc(L.full)}</p>` : ''}
           ${evList(c.ev)}
         </div>
@@ -1065,27 +1152,31 @@ function render(d, A) {
 
   /* --- 16. 업무 방식 5단계 --- */
   const method = slide({
-    aria: '업무 방식 5단계', eyebrow: L.method, title: d.h1.join(' '), lede: d.casesLede,
+    aria: '업무 방식 5단계: ' + METHOD.title, eyebrow: L.method, title: METHOD.title,
     rights: L.rightsPlain,
-    body: `<div class="steps">${STEPS.map(([nm, pick], i) => `
+    body: `<div class="steps frow">${METHOD.steps.map(([nm, xs, pri], i) => (i ? arrow() : '') + `
       <div class="st"><p class="no">0${i + 1}</p><h3>${esc(nm)}</h3>
-        <ul>${pick(d).map(x => `<li>${esc(pr(x))}</li>`).join('')}</ul>
-        ${i === 2 ? `<div class="pri"><b>${esc(L.priority)}</b>${esc(brief(
-          d.cases[0].rows.find(r => r[0] === L.decision)[1]))}</div>` : ''}
+        <ul>${xs.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        ${pri ? `<div class="pri"><b>${esc(pri[0])}</b>${esc(pri[1])}</div>` : ''}
       </div>`).join('')}</div>`,
   })
 
   /* --- 17. AI 프로토타입 --- */
+  /* 체험 순서를 번호 붙은 단계 칩으로(11-13). 단계 낱말은 덱 전용 표 TRY_STEPS, 낱말마다 사이트 문장에 있어야 한다 */
+  const tryStepsOf = (i, v) => TRY_STEPS[i].map(([lab, frag]) => {
+    if (!v.includes(frag)) fail(`체험 순서 ${i + 1}의 단계 근거 「${frag}」가 사이트 문장에 없다: ${v}`)
+    return lab })
   const proto = slide({
     aria: 'AI 프로토타입 2종', eyebrow: L.proto, title: d.protoTitle, lede: d.protoLede,
     rights: L.rightsProto,
     body: `<div class="g2">${d.proto.map((p, i) => `
       <div style="display:flex;flex-direction:column;min-height:0">
         ${shot(['deco', 'ssjproto'][i], p.title, 'flex:1;min-height:0')}
-        <dl class="kv" style="margin-top:24px">${p.note.map(([k, v]) =>
-          `<dt>${esc(k)}</dt><dd>${esc(pr(v))}</dd>`).join('')}
-          <dt>${L.demo}</dt><dd><a href="${esc(d.canonical + p.href)}" target="_blank" rel="noopener"
-            style="text-decoration:underline;text-underline-offset:4px">${L.open} ↗</a></dd></dl>
+        <dl class="kv" style="margin-top:24px;align-items:center">${p.note.map(([k, v]) => k === L.tryOrder
+          ? `<dt>${esc(k)}</dt><dd class="stps">${tryStepsOf(i, v).map((x, n) => `<span class="stp-g">${n ? `<span class="stp-a">${icon('arrow')}</span>` : ''}` +
+              `<span class="chip stp"><b>${n + 1}</b>${esc(x)}</span></span>`).join('')}</dd>`
+          : `<dt>${esc(k)}</dt><dd>${esc(pr(v))}</dd>`).join('')}
+          <dt>${L.demo}</dt><dd><a class="cobtn" href="${esc(d.canonical + p.href)}" target="_blank" rel="noopener">${L.open} ↗</a></dd></dl>
       </div>`).join('')}</div>`,
   })
 
@@ -1094,12 +1185,15 @@ function render(d, A) {
   const companies = slide({
     aria: '회사별 상세: 10개 회사', eyebrow: L.companies, title: d.careerTitle, hcls: 'h--sm',
     rights: L.rightsPlain + ' ' + d.careerFoot,
+    /* 티켓 카드 10장(본부장 결정 11-13). 노션 링크는 싣지 않는다. 왼쪽 본문(회사, 직책과 기간, 핵심 내용) | 점선 절취선 | 오른쪽 대표 숫자 */
     body: `<div class="co">${d.career.map(r => {
       const hit = KPI_BY_CO.find(([k]) => r.company.includes(k))
       if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
-      return `<div class="cor"><b>${esc(r.company)}</b>
-        <span class="k">${hit ? ba(kpiOf(hit[1])) : ''}</span>
-        <p class="p">${esc(r.sub)}</p><p class="t">${esc(r.impact)}${r.ev.length ? ' ' + r.ev.map(e => ext(e.href, esc(e.label) + ' ↗')).join(' ') : ''}</p></div>` }).join('')}</div>`,
+      const src = r.impact.replace(/ /g, ' ')
+      const core = (CO_SHORT[r.company] || [src]).map(f => { if (!src.includes(f)) fail(`회사별 상세 ${r.company} 줄임 조각 「${f}」가 사이트 문장에 없다`); return f })
+      return `<div class="tk"><div class="tk-m"><b>${esc(r.company)}</b>
+        <p class="p">${esc(r.sub)}</p><p class="t">${core.map(esc).join('<br>')}</p></div>
+        <div class="tk-s">${hit ? `<span class="k">${ba(kpiOf(hit[1]))}</span>` : ''}</div></div>` }).join('')}</div>`,
   })
 
   /* --- 19. 연락 --- */
@@ -1219,8 +1313,12 @@ ${body.join('\n')}
 const d = await scrape()
 checkLinks(d)
 const A_rel = makeAssets(false), A_inline = makeAssets(true)
-const page = render(d, A_rel)
-const single = render(d, A_inline)
+/* 덱에서는 「사례」를 「케이스」로 부른다(본부장 지시 11-13). 사이트 문장을 그대로 읽어 오므로 다 만든 덱 HTML에서 한 번에 바꾼다.
+   「대표 사례 3」은 render에서 먼저 「대표 케이스 3종」으로 바꾼다. 링크 주소와 그림 데이터에는 한글이 없다 */
+const deCase = h => h.split('사례').join('케이스')
+const page = deCase(render(d, A_rel))
+const single = deCase(render(d, A_inline))
+if (/사례/.test(page + single)) fail('덱에 「사례」가 남았다')
 if (page.split('<span class="c1u">').length !== 3) fail('사례 1 연결 밑줄 자리 2곳을 못 찾았다: ' + Object.values(C1_LINK).join(' / '))
 
 /* 금지어 게이트 — 인쇄물과 같은 목록을 본다.

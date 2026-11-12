@@ -21,7 +21,7 @@ var DeckAnim = (() => {
     l: [.5, .09, 'l', 'a-l'], r: [.5, .09, 'l', 'a-g'], g: [.5, .06, 'g', 'a-g'],
   }
   const DOT = .2
-  const CARD = '.pn,.fs,.chip,.cobtn,.msb>div,.st,.ico'
+  const CARD = '.pn,.fs,.chip,.cobtn,.msb>div,.st,.ico,.tk'
   const NUM = /^(\s*)(\d[\d,]*(?:\.\d+)?)/
   const ownText = el => [...el.childNodes].some(x => x.nodeType === 3 && x.textContent.trim())
   const onlyTop = cs => parseFloat(cs.borderTopWidth) > 0 && cs.borderTopStyle !== 'none' &&
@@ -31,7 +31,7 @@ var DeckAnim = (() => {
   function kindOf(el) {
     if (el.matches('.a-tdot')) return 'd'
     if (el.matches('.a-tln')) return 'r'
-    if (el.matches('.n,.cor .k')) { const x = el.textContent.trim(); return !x ? '' : NUM.test(x) ? 'n' : 't' }
+    if (el.matches('.n,.tk .k')) { const x = el.textContent.trim(); return !x ? '' : NUM.test(x) ? 'n' : 't' }
     if (el.matches('.shot')) return 's'
     if (el.matches(CARD)) return 'c'
     if (el.matches('.gantt i,.farr')) return 'g'
@@ -45,7 +45,7 @@ var DeckAnim = (() => {
       const k = kindOf(el)
       if (k) out.push({ el, k })
       if (!k || k === 'l') collect(el, out)
-      else if (k === 'c') el.querySelectorAll('.n').forEach(n => { if (kindOf(n) === 'n') out.push({ el: n, k: 'n' }) })
+      else if (k === 'c') el.querySelectorAll('.n,.tk .k').forEach(n => { if (kindOf(n) === 'n') out.push({ el: n, k: 'n' }) })
     }
     return out
   }
