@@ -354,6 +354,11 @@ const FONT = 'site/deck/fonts/SUIT-Variable.woff2'
 /* 1과 19장 캔버스 모션 — 외부 라이브러리 없이 덱 HTML에 그대로 인라인한다(단일 파일 오프라인 동작) */
 const MOTION_JS = readFileSync('scripts/deck-motion.js', 'utf8')
 if (/<\/script/i.test(MOTION_JS)) fail('deck-motion.js에 </script>가 있다')
+/* 2~18장 진입 모션(본부장 결재 11-12), 요소 분류와 시작 시각, 숫자 올리기. 움직임은 아래 CSS 키프레임 */
+const ANIM_JS = readFileSync('scripts/deck-anim.js', 'utf8')
+if (/<\/script/i.test(ANIM_JS)) fail('deck-anim.js에 </script>가 있다')
+/* 사례 1 연결 밑줄, 진단 장 VOC 한 줄과 실행 장 타임라인 넷째 카드 한 줄. 글자 그대로 찾는다 */
+const C1_LINK = { diag: '예전에 있던 웹뷰 이벤트의 복귀 요구', run: '웹뷰 이벤트 부활' }
 const b64 = (p, mime) => `data:${mime};base64,` + readFileSync(p).toString('base64')
 const makeAssets = inline => ({
   img: slug => (inline ? b64(IMG_DIR + slug + '.jpg', 'image/jpeg') : '../pdf/img/' + slug + '.jpg'),
@@ -565,6 +570,39 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .rot svg{width:132px;height:72px;margin:0 auto 22px;display:block;fill:none;stroke:#E62B1E;stroke-width:1.6;
   stroke-linecap:round;stroke-linejoin:round}
 @media (orientation:portrait) and (max-width:900px){.rot{display:grid}}
+/* 2~18장 진입 모션(본부장 결재 11-12), scripts/deck-anim.js가 종류 클래스(a-*)와 시작 시각(--d)을 단다.
+   키프레임은 시작 상태만 적고 끝은 원래 스타일로 돌아온다(backwards). 끝난 화면은 모션이 없던 덱과 같다.
+   글자는 불투명도와 색만, 카드만 0.98→1. 장이 .on이 될 때마다 처음부터 다시 돈다.
+   표지와 마지막 장(.cover)은 deck-motion.js의 캔버스 모션만 쓴다. 나머지 장은 장 전환에서 위로 미끄러지지 않는다. */
+.s:not(.cover){transform:none}
+.s.on .a-t{animation:a-t .35s cubic-bezier(.16,1,.3,1) var(--d) backwards}
+.s.on .a-c{animation:a-c .45s cubic-bezier(.16,1,.3,1) var(--d) backwards}
+.s.on .a-s{animation:a-s .5s cubic-bezier(.16,1,.3,1) var(--d) backwards}
+.s.on .a-n{animation:a-n .7s linear var(--d) backwards}
+.s.on .a-lb::before{animation:a-g .5s cubic-bezier(.65,0,.35,1) var(--d) backwards}
+.s.on .a-g{animation:a-g .5s cubic-bezier(.65,0,.35,1) var(--d) backwards}
+.s.on .farr.a-g:not(.frow>.farr){animation-name:a-gv}
+.s.on .a-d{animation:a-d .2s cubic-bezier(.16,1,.3,1) var(--d) backwards}
+.s.on:not(.cover) .eb::after{animation:a-g .3s cubic-bezier(.65,0,.35,1) backwards}
+.s.on .c1u::after{animation:a-g .4s cubic-bezier(.65,0,.35,1) var(--d) backwards}
+@keyframes a-t{from{opacity:0;color:var(--m12)}}
+@keyframes a-c{from{opacity:0;transform:scale(.98)}}
+@keyframes a-s{from{clip-path:inset(0 0 100% 0 round 20px)}to{clip-path:inset(0 0 0 0 round 20px)}}
+@keyframes a-n{from{opacity:0}15%{opacity:1}}
+@keyframes a-g{from{clip-path:inset(0 100% 0 0 round var(--gr,0px))}to{clip-path:inset(0 0 0 0 round var(--gr,0px))}}
+@keyframes a-gv{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0)}}
+@keyframes a-d{from{opacity:0;transform:scale(0)}}
+.gantt i{--gr:10px}
+/* 칸 위 가로선, 모션 동안만 테두리를 비우고 같은 자리, 같은 색의 띠(::before)를 왼쪽에서 긋는다. 끝나면 deck-anim.js가 걷어 원래 테두리로 */
+.a-lb{position:relative;border-top-color:transparent!important}
+.a-lb::before{content:"";position:absolute;left:0;right:0;top:calc(-1 * var(--lw));height:var(--lw);background:var(--lc)}
+/* 숫자 올리기 중에만 최종 폭 고정과 고정폭 숫자(deck-anim.js count). 넘치는 폭은 왼쪽으로 내보내 단위 글자를 밀지 않는다 */
+.a-nv.run{display:inline-flex;justify-content:flex-end;font-variant-numeric:tabular-nums}
+/* 사례 1 연결 밑줄, 도형이라 빨강 규칙(28px 이상 굵은 글자와 도형)에 맞다. 최종 화면에 남는 유일한 추가 요소 */
+.c1u{position:relative}
+.c1u::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:4px;background:var(--sub)}
+@media (prefers-reduced-motion:reduce){.s .a-t,.s .a-c,.s .a-s,.s .a-n,.s .a-lb::before,.s .a-g,.s .a-d,.s .eb::after,.c1u::after{animation:none!important}}
+@media print{.s .a-t,.s .a-c,.s .a-s,.s .a-n,.s .a-lb::before,.s .a-g,.s .a-d,.s .eb::after,.c1u::after{animation:none!important}}
 `
 
 /* ============================ 5. 렌더 ============================ */
@@ -754,9 +792,10 @@ function render(d, A) {
   const c1 = d.cases[0]
   if (c1.work !== 'case1') fail('첫 대표 사례가 case1이 아니다: ' + c1.work)
   const c1row = k => (c1.rows.find(r => r[0] === k) || fail(`사례 1 상세에 '${k}' 행이 없다`))[1]
+  const c1u = (x, k) => (x === C1_LINK[k] ? `<span class="c1u">${esc(x)}</span>` : esc(x))
   const bullets = xs => `<ul style="margin-top:6px;display:flex;flex-direction:column;gap:6px">${xs.map(x =>
     `<li style="font-size:24px;line-height:1.45;padding-left:22px;position:relative">
-      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${esc(x)}</li>`).join('')}</ul>`
+      <span style="position:absolute;left:0;top:14px;width:8px;height:8px;border-radius:50%;background:var(--sub)"></span>${c1u(x, 'diag')}</li>`).join('')}</ul>`
   const G = C1.diag
   const c1diag = slide({
     aria: `${G.eyebrow}: ${C1.title}`, eyebrow: G.eyebrow, title: C1.title, lede: c1.dlgMeta + G.ledeTail,
@@ -816,13 +855,13 @@ function render(d, A) {
         ${areaLabel(R.areas[0])}
         <div style="margin-top:12px;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 24px">${R.tl.map((_, k) => `
           <div style="position:relative;height:28px">
-            <span style="position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--sub)"></span>
-            ${k < R.tl.length - 1 ? '<span style="position:absolute;left:18px;right:-24px;top:12px;height:2px;background:var(--sub)"></span>' : ''}
+            <span class="a-tdot" style="position:absolute;left:0;top:4px;width:18px;height:18px;border-radius:50%;background:var(--sub)"></span>
+            ${k < R.tl.length - 1 ? '<span class="a-tln" style="position:absolute;left:18px;right:-24px;top:12px;height:2px;background:var(--sub)"></span>' : ''}
           </div>`).join('')}${R.tl.map(([dt, nm, x]) => `
           <div class="pn" style="padding:16px 24px;border-radius:20px">
             <p style="font-size:22px;font-weight:800;line-height:1.35">${esc(dt)}</p>
             <p style="margin-top:4px;font-size:28px;font-weight:700;line-height:1.3">${esc(nm)}</p>
-            <p style="margin-top:8px;font-size:22px;line-height:1.45;color:var(--m60)">${[].concat(x).map(ln => (Array.isArray(ln) ? ln.map(g => `<span style="white-space:nowrap">${esc(g)}</span>`).join(' ') : esc(ln))).join('<br>')}</p>
+            <p style="margin-top:8px;font-size:22px;line-height:1.45;color:var(--m60)">${[].concat(x).map(ln => (Array.isArray(ln) ? ln.map(g => `<span style="white-space:nowrap">${esc(g)}</span>`).join(' ') : c1u(ln, 'run'))).join('<br>')}</p>
           </div>`).join('')}</div>
       </div>
       <div style="flex:1;min-height:0;display:grid;grid-template-columns:560px 1fr;gap:28px">
@@ -1122,6 +1161,7 @@ ${body.join('\n')}
 <p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / ${SLIDES}</p>
 </div></div>
 <script>${MOTION_JS}</script>
+<script>${ANIM_JS}</script>
 <script>
 (function(){
   var stage=document.getElementById('stage'),bar=document.getElementById('bar'),cnt=document.getElementById('cnt')
@@ -1129,6 +1169,7 @@ ${body.join('\n')}
   function fit(){var s=Math.min(innerWidth/1920,innerHeight/1080);stage.style.setProperty('--s',s);DeckMotion.fit(s)}
   function show(i,push){
     i=Math.max(0,Math.min(N-1,i)); if(i===cur)return; cur=i
+    DeckAnim.prep(ss[i])
     ss.forEach(function(s,k){s.classList.toggle('on',k===i);if(k===i){s.removeAttribute('inert')}else{s.setAttribute('inert','')}})
     var dk=ss[i].dataset.bg!=='#F5F5F5'
     document.body.style.background=ss[i].dataset.bg
@@ -1138,6 +1179,7 @@ ${body.join('\n')}
     cnt.innerHTML='<em>'+(i+1)+'</em> / '+N
     if(push!==false){history.replaceState(null,'','#'+(i+1))}
     DeckMotion.show(ss[i])
+    DeckAnim.play(ss[i])
   }
   function fromHash(){var n=parseInt((location.hash||'').slice(1),10);return isFinite(n)&&n>=1&&n<=N?n-1:0}
   addEventListener('resize',fit); addEventListener('hashchange',function(){show(fromHash(),false)})
@@ -1176,6 +1218,7 @@ checkLinks(d)
 const A_rel = makeAssets(false), A_inline = makeAssets(true)
 const page = render(d, A_rel)
 const single = render(d, A_inline)
+if (page.split('<span class="c1u">').length !== 3) fail('사례 1 연결 밑줄 자리 2곳을 못 찾았다: ' + Object.values(C1_LINK).join(' / '))
 
 /* 금지어 게이트 — 인쇄물과 같은 목록을 본다.
    태그를 걷어내고 본문 텍스트만 본다: SVG 좌표(d="M12 2.8v2.6")나 점 위치(--ym:590px) 같은

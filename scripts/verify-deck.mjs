@@ -6,6 +6,20 @@ import { hits as banHits } from '../scripts/pdf-banned.mjs'
 const CHROME = 'C:/Program Files/Google/Chrome/Application/chrome.exe'
 const OUT = 'loop/shots34/deck'
 const sleep = ms => new Promise(r => setTimeout(r, ms))
+/* 장 진입 모션이 끝난 상태에서 검사한다, 장 전환 뒤 두 프레임 기다려 애니메이션이 생긴 다음, 전부 끝날 때까지 대기 */
+const settle = page => page.evaluate(async () => {
+  const raf = () => new Promise(r => requestAnimationFrame(r))
+  await raf(); await raf()
+  await Promise.all(document.getAnimations().map(a => a.finished.catch(() => {})))
+  await raf()
+})
+/* 지금 장의 진입 모션, 개수, 가장 늦게 끝나는 시각(ms), 반복 여부 */
+const motionOf = page => page.evaluate(() => {
+  const on = document.querySelector('.s.on')
+  const xs = document.getAnimations().filter(a => a.animationName && on.contains(a.effect.target))
+  return { n: xs.length, end: Math.max(0, ...xs.map(a => a.effect.getComputedTiming().endTime)),
+    loop: xs.filter(a => a.effect.getComputedTiming().iterations !== 1).length }
+})
 mkdirSync(OUT, { recursive: true })
 const bad = []
 /* 대비 기준 — 본문 4.5:1, 큰 글자(28px 이상 굵게) 3:1.
@@ -81,7 +95,12 @@ async function open(url, w, h) {
   if (!body.includes('DAU 6.4만') || !body.includes('D+1 52~56%') || /6\.3만|약 50%/.test(body)) bad.push('나이트워커 수치(DAU 6.4만·D+1 52~56%) 불일치')
   for (let i = 1; i <= 19; i++) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
-    await sleep(700)
+    await sleep(50)
+    const mo = await motionOf(page)
+    /* 2~18장은 모션이 있고 1.4초 안에 끝나며 반복하지 않는다. 1과 19장은 캔버스 모션만(CSS 진입 모션 없음) */
+    if (i === 1 || i === 19) { if (mo.n) bad.push(`${i}장에 진입 모션이 붙었다(${mo.n}개)`) }
+    else if (!mo.n || mo.end > 1400 + 1 || mo.loop) bad.push(`${i}장 진입 모션 ${mo.n}개, 끝 ${mo.end.toFixed(0)}ms, 반복 ${mo.loop}`)
+    await settle(page)
     await page.screenshot({ path: `${OUT}/ko-${String(i).padStart(2, '0')}.png` })
     for (const r of await measure(page)) contrastRows.push({ slide: i, ...r })
   }
@@ -172,6 +191,12 @@ for (const [w, h, nm] of [[1280, 720, 'fit-1280x720'], [390, 844, 'fit-390x844']
     if (st.hidden) bad.push(`동작 줄이기에서 ${i}장 글자 ${st.hidden}개가 덜 보인다`)
     if (a.length < 20000) bad.push(`동작 줄이기에서 ${i}장 캔버스가 비었다`)
   }
+  /* 2~18장 진입 모션도 동작 줄이기에서는 없다, 들어오자마자 최종 화면(숫자도 제 값) */
+  for (const i of [2, 5, 13]) {
+    await page.evaluate(k => { location.hash = '#' + k }, i); await sleep(100)
+    const mo = await motionOf(page)
+    if (mo.n) bad.push(`동작 줄이기에서 ${i}장 진입 모션 ${mo.n}개가 돈다`)
+  }
   await page.close()
 }
 
@@ -202,7 +227,9 @@ for (const [path, nm] of [['/', 'site-ko-hero-links'], ['/en/', 'site-en-hero-li
   await sleep(1500)
   for (const i of [1, 5, 6, 7, 8, 13, 15, 19]) {
     await page.evaluate(k => { location.hash = '#' + k }, i)
-    await sleep(700)
+    await sleep(50)
+    if (i !== 1 && i !== 19 && !(await motionOf(page)).n) bad.push(`단일 파일 ${i}장 진입 모션이 안 돈다`)
+    await settle(page)
     await page.screenshot({ path: `${OUT}/single-${String(i).padStart(2, '0')}.png` })
   }
   const fontOk = await page.evaluate(() => document.fonts.check('700 48px SUIT'))
