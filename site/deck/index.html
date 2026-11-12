@@ -83,7 +83,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 서브컬러 칩 — 면을 채우면 흰 글자가 4.5:1을 못 넘는다(빨강/흰 4.44:1).
    그래서 빨강은 테두리(선)로만 쓰고 글자는 텍스트색으로 둔다. */
 .chip--sub{background:transparent;border:2px solid var(--sub);color:var(--tx);font-weight:700;padding:8px 17px}
-/* 수행 회사 버튼(5장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
+/* 수행 회사 버튼(4장) — 링크 없는 표시용. 회색 칩보다 또렷하게: 본문색 굵은 글자 + 본문색 테두리 */
 .cobtn{display:inline-block;border:2px solid var(--tx);border-radius:12px;padding:8px 18px;
   font-size:22px;font-weight:700;line-height:1.35;color:var(--tx);background:var(--panel)}
 /* 캡처 */
@@ -100,13 +100,6 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .shot figcaption{padding:14px 20px;font-size:22px;line-height:1.35;color:var(--m60);
   border-top:1px solid var(--m12);background:var(--panel)}
 .shot--plain img{object-fit:cover}
-/* 2장 소개 영상: 장 전체를 16:9 영상이 채운다(.shot과 같은 테두리와 모서리).
-   좌우 여백 88px(약 4.6%). 아래 여백은 쪽 표기(.cnt)와 라벨이 영상 조작 막대를 덮지 않게 위보다 넓게 둔다 */
-.s.vd{padding:0}
-.vd .shot{position:absolute;left:88px;top:27px;width:1744px;height:981px}
-.vd video{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
-.vd .eb{position:absolute;left:88px;bottom:30px}
-.vd .eb::after{display:none}
 /* 플로우 */
 .flow{display:flex;flex-direction:column}
 .fs{background:var(--panel);border:1px solid var(--m12);border-radius:20px;padding:22px 28px}
@@ -139,7 +132,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 .cover .hl{margin-top:44px;font-size:52px;font-weight:700;line-height:1.28;letter-spacing:-.02em}
 .cover .ct{margin-top:44px;font-size:24px;line-height:1.9;color:var(--m60)}
 .cover .ct b{display:inline-block;min-width:212px;color:var(--tx);font-weight:600}
-/* 1과 20장 모션(본부장 결재 11-05: 표지=C4, 마지막 장=E4) — scripts/deck-motion.js.
+/* 1과 19장 모션(본부장 결재 11-05: 표지=C4, 마지막 장=E4) — scripts/deck-motion.js.
    캔버스는 1920×1080 스테이지 좌표 그대로 깔고 글자 아래에 둔다. 포인터를 받지 않아 링크 클릭을 가로채지 않는다. */
 .mo{position:absolute;left:0;top:0;width:1920px;height:1080px;display:block;pointer-events:none}
 .cover>div{position:relative;z-index:1}
@@ -239,11 +232,6 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   </div>
   <div></div>
   <p class="lk" data-d="1000"><a href="https://bluedaylol80.github.io/henry-portfolio/" target="_blank" rel="noopener">포트폴리오 웹 ↗</a><span class="sep" aria-hidden="true">,</span><a href="https://limhenry.notion.site/0e48e826c73f4a7ab9c3522d7fb16ce5" target="_blank" rel="noopener">이력서(KO) ↗</a><span class="sep" aria-hidden="true">,</span><a href="https://limhenry.notion.site/3e859de7280481fcb58ece40d5a8be50" target="_blank" rel="noopener">Resume(EN) ↗</a><span class="sep" aria-hidden="true">,</span><a href="https://limhenry.notion.site/71b99dcfd07f4493b019bfb4bac2acab" target="_blank" rel="noopener">Notion 대표 사례 ↗</a></p>
-</section>
-
-<section class="s vd" role="group" aria-roledescription="slide" aria-label="소개 영상" data-bg="#F5F5F5">
-  <figure class="shot"><video src="intro.mp4" poster="intro-poster.jpg" muted playsinline preload="metadata" controls aria-label="소개 영상"></video></figure>
-  <p class="eb">소개 영상</p>
 </section>
 
 <section class="s" role="group" aria-roledescription="slide"
@@ -847,14 +835,14 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <p data-n="3"><b>Notion 대표 사례</b><a href="https://limhenry.notion.site/71b99dcfd07f4493b019bfb4bac2acab" target="_blank" rel="noopener">열기 ↗</a></p>
       <p data-n="4"><b>포트폴리오 PDF</b><a href="https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener">KO ↗</a><span class="sep" aria-hidden="true">,</span><a href="https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-en.pdf" target="_blank" rel="noopener">EN ↗</a></p>
     </div>
-    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-n="5">발행일 2026-11-12, © 2026 Henry Lim, (임현택)</p>
+    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-n="5">발행일 2026-11-09, © 2026 Henry Lim, (임현택)</p>
   </div>
   <div></div>
 </section>
 <div class="bar" id="bar"></div>
-<p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / 20</p>
+<p class="cnt" id="cnt" aria-hidden="true"><em>1</em> / 19</p>
 </div></div>
-<script>/* 덱 1과 20장 캔버스 모션 — build-deck.mjs가 덱 HTML에 그대로 인라인한다(외부 라이브러리 없음, 오프라인 동작).
+<script>/* 덱 1·19장 캔버스 모션 — build-deck.mjs가 덱 HTML에 그대로 인라인한다(외부 라이브러리 없음, 오프라인 동작).
    원형: loop/motion-lab/v2.html. 본부장 결재 11-05: 표지=C4 · 마지막 장=E4
    C4 신호 정렬(줄 다발이 모여 빨간 출시점) ↔ E4 잔향(한 줄이 다발로 펼쳐지고 빨간 점에서 파문) — 수미상관.
 
@@ -1096,13 +1084,7 @@ var DeckMotion = (() => {
     cnt.innerHTML='<em>'+(i+1)+'</em> / '+N
     if(push!==false){history.replaceState(null,'','#'+(i+1))}
     DeckMotion.show(ss[i])
-    ss.forEach(function(s,k){var v=s.querySelector('video');if(!v)return
-      /* 영상에 포커스가 남으면 장을 넘긴 스페이스가 영상 재생으로도 먹는다. 떠날 때 포커스를 뗀다 */
-      if(k!==i){v.pause();v.blur();return}
-      v.currentTime=0
-      if(!rmq.matches){v.play().catch(function(){})}})
   }
-  var rmq=matchMedia('(prefers-reduced-motion: reduce)')
   function fromHash(){var n=parseInt((location.hash||'').slice(1),10);return isFinite(n)&&n>=1&&n<=N?n-1:0}
   addEventListener('resize',fit); addEventListener('hashchange',function(){show(fromHash(),false)})
   addEventListener('keydown',function(e){
@@ -1117,7 +1099,7 @@ var DeckMotion = (() => {
     else if(k==='f'||k==='F'){if(document.fullscreenElement){document.exitFullscreen()}else{document.documentElement.requestFullscreen()};e.preventDefault()}
   })
   addEventListener('click',function(e){
-    if(e.target.closest('a,video'))return
+    if(e.target.closest('a'))return
     show(e.clientX>innerWidth/3?cur+1:cur-1)
   })
   var tx=0,ty=0
