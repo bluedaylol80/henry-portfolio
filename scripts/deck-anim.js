@@ -152,7 +152,8 @@ var DeckAnim = (() => {
     slide._ap.nums.forEach(wrapNum)
   }
 
-  /* 숫자 올리기, 폭이 흔들리지 않게 돌 때만 최종 폭으로 고정하고 고정폭 숫자를 쓴다 */
+  /* 숫자 올리기, 단위 글자가 흔들리지 않게 돌 때만 최종 폭으로 고정하고 오른쪽에 맞춘다.
+     숫자 글꼴은 최종 화면과 같은 비례 숫자, 폭은 소수점까지(offsetWidth는 정수로 반올림해 단위 글자를 0.5px까지 민다) */
   function count(v) {
     const host = v.closest('.a-n')
     const a = host.getAnimations().find(x => x.animationName === 'a-n')
@@ -161,7 +162,7 @@ var DeckAnim = (() => {
     const fin = v._fin = v.textContent
     const dec = (fin.split('.')[1] || '').length, num = parseFloat(fin.replace(/,/g, '')), comma = fin.includes(',')
     const fmt = p => { const s = (num * p).toFixed(dec); return comma ? s.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : s }
-    v.style.width = v.offsetWidth + 'px'; v.classList.add('run')
+    v.classList.add('run'); v.style.width = getComputedStyle(v).width
     const tick = () => {
       if (!v.isConnected || a.playState === 'finished' || a.playState === 'idle') return
       v.textContent = fmt(a.effect.getComputedTiming().progress || 0)

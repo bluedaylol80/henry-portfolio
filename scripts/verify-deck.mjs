@@ -20,6 +20,35 @@ const motionOf = page => page.evaluate(() => {
   return { n: xs.length, end: Math.max(0, ...xs.map(a => a.effect.getComputedTiming().endTime)),
     loop: xs.filter(a => a.effect.getComputedTiming().iterations !== 1).length }
 })
+/* 숫자 올리기 끝 1ms 전과 끝난 뒤(원래 DOM)의 글자별 위치 차, 가장 큰 값(px). 지금 장의 모션을 멈춰 끝 1ms 전으로 보낸 뒤 재고, 다시 틀어 끝까지 보낸 뒤 잰다 */
+const numJump = page => page.evaluate(async () => {
+  const raf2 = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+  const s = document.querySelector('.s.on')
+  const hosts = [...s.querySelectorAll('.a-nv')].map(v => v.closest('.a-n'))
+  if (!hosts.length) return 0
+  const xs = s.getAnimations({ subtree: true })
+  xs.forEach(a => { a.pause(); a.currentTime = Math.max(0, a.effect.getComputedTiming().endTime - 1) })
+  const pos = () => hosts.map(h => {
+    const out = [], w = document.createTreeWalker(h, NodeFilter.SHOW_TEXT)
+    for (let x; (x = w.nextNode());) for (let i = 0; i < x.length; i++) {
+      if (!x.data[i].trim()) continue
+      const r = document.createRange(); r.setStart(x, i); r.setEnd(x, i + 1)
+      const b = r.getBoundingClientRect(); out.push([x.data[i], b.left, b.top])
+    }
+    return out
+  })
+  await raf2(); await raf2()
+  const A = pos()
+  xs.forEach(a => a.play())
+  await Promise.all(xs.map(a => a.finished.catch(() => {}))); await raf2()
+  const B = pos()
+  let m = 0
+  A.forEach((cs, j) => {
+    if (cs.map(c => c[0]).join('') !== B[j].map(c => c[0]).join('')) m = Infinity
+    else cs.forEach((c, k) => { m = Math.max(m, Math.abs(c[1] - B[j][k][1]), Math.abs(c[2] - B[j][k][2])) })
+  })
+  return m
+})
 mkdirSync(OUT, { recursive: true })
 const bad = []
 /* 대비 기준 — 본문 4.5:1, 큰 글자(28px 이상 굵게) 3:1.
@@ -100,6 +129,9 @@ async function open(url, w, h) {
     /* 2~18장은 모션이 있고 1.4초 안에 끝나며 반복하지 않는다. 1과 19장은 캔버스 모션만(CSS 진입 모션 없음) */
     if (i === 1 || i === 19) { if (mo.n) bad.push(`${i}장에 진입 모션이 붙었다(${mo.n}개)`) }
     else if (!mo.n || mo.end > 1400 + 1 || mo.loop) bad.push(`${i}장 진입 모션 ${mo.n}개, 끝 ${mo.end.toFixed(0)}ms, 반복 ${mo.loop}`)
+    /* 큰 숫자가 끝나는 순간 글자가 튀지 않는다(끝 1ms 전과 끝난 뒤 글자 위치 차 0.5px 이내) */
+    const jump = await numJump(page)
+    if (jump > 0.5) bad.push(`${i}장 숫자 올리기 끝에서 글자가 ${jump.toFixed(2)}px 튄다`)
     await settle(page)
     await page.screenshot({ path: `${OUT}/ko-${String(i).padStart(2, '0')}.png` })
     for (const r of await measure(page)) contrastRows.push({ slide: i, ...r })
