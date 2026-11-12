@@ -74,6 +74,40 @@ const numJump = page => page.evaluate(async () => {
   }))
   return { mid, end }
 })
+/* 모션 도중 레이아웃 크기 불변. 지금 장의 모션을 멈춰 진행 0·25·50·75%와 끝 1ms 전에서
+   그림, 캡처 칸, 카드, 글자 요소의 상자(transform을 걷은 값)를 재 두고(holdA), 모션이 끝나 원래 DOM으로 돌아온 뒤 다시 재서 비교한다(holdB).
+   크기 변화는 카드의 transform(0.98→1)뿐이어야 하므로 transform 전 상자는 최종값과 0.5px 이내 */
+const holdA = page => page.evaluate(async () => {
+  const raf2 = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+  const s = document.querySelector('.s.on')
+  const st = document.createElement('style'); st.disabled = true
+  st.textContent = '.s.on,.s.on *{transform:none!important;scale:none!important}'
+  document.head.appendChild(st)
+  const own = el => [...el.childNodes].some(x => x.nodeType === 3 && x.textContent.trim())
+  const els = [...s.querySelectorAll('*')].filter(el => !el.matches('.h .a-t') && !el.closest('.a-nv') &&
+    (el.matches('img,figure,.pn,.fs,.chip,.cobtn,.msb>div,.st,.ico,.h') || own(el) || el.querySelector('.a-nv')))
+  const box = () => { st.disabled = false; const r = els.map(el => { const b = el.getBoundingClientRect(); return [b.left, b.top, b.width, b.height] }); st.disabled = true; return r }
+  const xs = s.getAnimations({ subtree: true }).filter(a => a.animationName)
+  const end = Math.max(0, ...xs.map(a => a.effect.getComputedTiming().endTime))
+  const samples = []
+  for (const p of [0, .25, .5, .75, 1]) {
+    xs.forEach(a => { a.pause(); a.currentTime = p < 1 ? end * p : end - 1 })
+    await raf2(); samples.push([p, box()])
+  }
+  xs.forEach(a => { a.currentTime = 0; a.play() })
+  window.__hold = { els, box, samples, st }
+})
+const holdB = page => page.evaluate(() => {
+  const { els, box, samples, st } = window.__hold
+  const fin = box(); st.remove()
+  let worst = { d: 0 }
+  for (const [p, b] of samples) b.forEach((r, j) => {
+    if (!els[j].isConnected) return
+    const d = Math.max(...r.map((v, k) => Math.abs(v - fin[j][k])))
+    if (d > worst.d) worst = { d, p, el: els[j].tagName.toLowerCase() + '.' + String(els[j].className).split(' ')[0] + ' "' + els[j].textContent.trim().replace(/\s+/g, ' ').slice(0, 10) + '"' }
+  })
+  return worst
+})
 mkdirSync(OUT, { recursive: true })
 const bad = []
 /* 대비 기준 — 본문 4.5:1, 큰 글자(28px 이상 굵게) 3:1.
@@ -156,10 +190,15 @@ async function open(url, w, h) {
     else if (!mo.n || mo.end > 1400 + 1 || mo.loop) bad.push(`${i}장 진입 모션 ${mo.n}개, 끝 ${mo.end.toFixed(0)}ms, 반복 ${mo.loop}`)
     /* 큰 숫자가 끝나는 순간 글자가 튀지 않고(끝 1ms 전과 끝난 뒤 0.5px 이내),
        도는 동안 최종값과 같은 자리 글자는 최종 자리에 있다(진행 30·60·90%, 0.5px 이내) */
+    if (i > 1 && i < 19) await holdA(page)
     const jump = await numJump(page)
     if (jump.end > 0.5) bad.push(`${i}장 숫자 올리기 끝에서 글자가 ${jump.end.toFixed(2)}px 튄다`)
     if (jump.mid > 0.5) bad.push(`${i}장 숫자 올리기 도중 자리 글자가 최종 자리에서 ${jump.mid.toFixed(2)}px 벗어난다`)
     await settle(page)
+    if (i > 1 && i < 19) {
+      const hold = await holdB(page)
+      if (hold.d > 0.5) bad.push(`${i}장 모션 도중(진행 ${hold.p * 100}%) ${hold.el} 상자가 최종값과 ${hold.d.toFixed(2)}px 다르다`)
+    }
     await page.screenshot({ path: `${OUT}/ko-${String(i).padStart(2, '0')}.png` })
     for (const r of await measure(page)) contrastRows.push({ slide: i, ...r })
   }
