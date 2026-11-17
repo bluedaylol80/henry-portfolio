@@ -34,7 +34,7 @@ const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).forma
 const DECKIFY = [['카드를 누르면 체험판이 열립니다', '아래 링크에서 체험판이 열립니다'],
                  ['카드를 누르면 직접 플레이할 수 있습니다', '아래 링크에서 직접 플레이할 수 있습니다'],
                  ['카드를 누르면 근거까지 보입니다', '각 장의 근거 링크에서 근거까지 볼 수 있습니다'],
-                 ['(달콤 상세창 "함께 보기")', '(사례 1 참조)']]
+                 ['(달콤 상세창 "함께 보기")', '(케이스 1 참조)']]
 const pr = t => DECKIFY.reduce((a, [x, y]) => a.split(x).join(y), String(t))
 
 /* ============================ 1. 사이트 스크레이프 ============================ */
@@ -253,7 +253,7 @@ const C1 = {
          ['2026.01', '미니게임 v2', '타이틀별 순차 적용'],
          /* 설명이 배열이면 가운뎃점 자리를 줄바꿈으로 잇는다(구절 단위 한 줄씩 — 조종석 지시 09-30).
             줄이 다시 배열이면 조각마다 줄바꿈 금지 — 칸이 좁으면 조각 사이에서만 끊긴다 */
-         ['2026.04.30 – 05.23', '꾸미기 이벤트', ['뷰잉 및 전시 경험 강화', ['SuperStar STAYC 신규 그룹 런칭에 맞춰', '핵심 기능만 출시'], 'Wireframe은 Claude Code 활용']],
+         ['2026.04.30 – 05.23', '꾸미기 이벤트', ['뷰잉 및 전시 경험 강화', ['SuperStar STAYC 신규 그룹', '런칭에 맞춰 핵심 기능만 출시'], 'Wireframe은 Claude Code 활용']],
          ['~2026.05', '10주년 웹뷰 이벤트', ['SuperStar JYP Nation', '웹뷰 이벤트 부활', '프로토타입은 Codex 활용']]],
     evFirst: '2026 상반기 방향성',
     areas: ['출시 타임라인', '결과', '프로토타입'],
@@ -309,6 +309,8 @@ const kpiLabel2 = slug => {
   return esc(dd) + (per && per !== '미상' ? '<br>' + esc(per) : '')
 }
 const CASE_IMG = { case2: 'lyn', case3: 'nightwalker' }
+/* 18장 티켓 대표 숫자만 성과 카드 첫 숫자와 다르게 쓰는 회사(본부장 결정 11-17). 숫자는 사이트 경력 행 문장에 그대로 있어야 한다 */
+const TK_NUM = { dalcom: '172억' }
 /* 18장 티켓 핵심 내용 — 사이트 경력 행 기여 문장을 줄인 조각(1~2줄). 조각은 원문에 그대로 있어야 한다. 없는 회사는 원문 전체 */
 const CO_SHORT = {
   '달콤소프트': ['서비스 방향성 제시', '담당 타이틀 매출 172억 기여'],
@@ -622,13 +624,15 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 티켓 카드(11-13) — 면, 테두리, 모서리는 기존 카드(.pn). 절취선 = 오른쪽 숫자 칸 앞 점선, 그 위아래에 반원 홈(배경색 원을 카드 테두리에 얹는다) */
 .co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr);grid-auto-flow:column;
   gap:var(--g) var(--gc);flex:1;min-height:0}
-.tk{position:relative;display:grid;grid-template-columns:1fr 200px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
-.tk::before,.tk::after{content:"";position:absolute;right:186px;width:28px;height:28px;border-radius:50%;
+.tk{position:relative;display:grid;grid-template-columns:1fr 176px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
+.tk::before,.tk::after{content:"";position:absolute;right:162px;width:28px;height:28px;border-radius:50%;
   background:var(--bg);border:1px solid var(--m12);z-index:2}
 .tk::before{top:-15px;clip-path:inset(50% -1px -1px -1px)}
 .tk::after{bottom:-15px;clip-path:inset(-1px -1px 50% -1px)}
-/* 티켓 안 위아래 여백은 칸 높이에 맞춰 가운데 정렬(10장이 한 화면에 들어가는 조건이 먼저) */
+/* 티켓 안 위아래 여백은 칸 높이에 맞춰 가운데 정렬(10장이 한 화면에 들어가는 조건이 먼저).
+   11-17: 회사명과 직책, 기간을 한 줄(.hd)로 올려 한 줄을 덜었다. 위아래 여백 2px → 18px, 숫자 칸 200 → 176 */
 .tk-m{padding:0 24px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tk-m .hd{display:flex;align-items:baseline;gap:16px;white-space:nowrap}
 .tk-m b{font-size:26px;font-weight:700;line-height:1.4}
 .tk-m .p{font-size:22px;color:var(--m60);line-height:1.4}
 .tk-m .t{font-size:22px;line-height:1.4}
@@ -709,6 +713,12 @@ function render(d, A) {
   const roleOf = s => s.replace(PERIOD, '').replace(/[,·•]\s*$/, '').trim()
   const workOf = slug => d.works.find(w => w.key === slug) || fail('성과 카드가 없다: ' + slug)
   const kpiOf = slug => workOf(slug).kpi
+  const tkNum = (slug, src) => {
+    const n = TK_NUM[slug]
+    if (!n) return kpiOf(slug)
+    if (!src.includes(n)) fail(`18장 ${slug} 대표 숫자 「${n}」가 사이트 경력 행 문장에 없다`)
+    return n
+  }
   const icon = k => `<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`
   const arrow = cls => `<div class="farr ${cls || ''}">${icon('arrow')}</div>`
   /* 발표용 요약 — 첫 문장부터 n문장까지만 남긴다. 자르기만 하고 고쳐 쓰지 않는다(사실 왜곡 금지). */
@@ -876,9 +886,9 @@ function render(d, A) {
   })
 
   /* --- 5. 대표 사례 3 (강조 장) --- */
-  /* 덱에서만 「대표 사례 3」을 「대표 케이스 3종」으로 부른다(본부장 결정 11-13). 사이트 제목은 그대로 */
-  if (!d.casesTitle.includes('대표 사례 3')) fail('사례 제목에 「대표 사례 3」이 없다: ' + d.casesTitle)
-  const top3Title = d.casesTitle.replace('대표 사례 3', L.top3)
+  /* 사이트 제목 「대표 케이스 3」을 덱에서는 「대표 케이스 3종」으로 부른다(사이트도 11-17부터 「케이스」) */
+  if (!d.casesTitle.includes('대표 케이스 3')) fail('사례 제목에 「대표 케이스 3」이 없다: ' + d.casesTitle)
+  const top3Title = d.casesTitle.replace('대표 케이스 3', L.top3)
   const top3 = slide({
     cls: 's--acc', bg: '#1A1A1A', aria: L.top3 + ': ' + top3Title,
     eyebrow: L.top3, title: top3Title, lede: d.casesLede, rights: L.rightsPlain,
@@ -923,9 +933,10 @@ function render(d, A) {
   const c1diag = slide({
     aria: `${G.eyebrow}: ${C1.title}`, eyebrow: G.eyebrow, title: C1.title, lede: c1.dlgMeta + G.ledeTail,
     rights: L.rightsProto,
-    /* 11-13 2차 규격: 4칸 격자(칸 사이 = 화살표 칸). 05는 01, 02와 그 사이 칸을 합친 폭, 06은 03 폭, 07은 04 폭. 줄마다 높이 같음 */
+    /* 11-13 2차 규격: 4칸 격자(칸 사이 = 화살표 칸). 05는 01, 02와 그 사이 칸을 합친 폭, 06은 03 폭, 07은 04 폭. 줄마다 높이 같음.
+       11-17: 줄 비율 .94:1.06(01 하락 아트웍이 작았다). 2줄째 글 끝 + 여백이 칸 안에 드는지 검증기가 본다 */
     body: `<div class="frow" style="flex:1;min-height:0;display:grid;grid-template-columns:1fr var(--ga) 1fr var(--ga) 1fr var(--ga) 1fr;
-      grid-template-rows:minmax(0,.8fr) minmax(0,1.2fr);row-gap:var(--g)">
+      grid-template-rows:minmax(0,.94fr) minmax(0,1.06fr);row-gap:var(--g)">
       ${ix7.map(([s, k]) => (k % 4 ? arrow() : '') + step7(s, k)).join('')}</div>`,
   })
   const D = C1.dir
@@ -975,13 +986,13 @@ function render(d, A) {
     body: `<div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--g)">
       <div>
         ${areaLabel(R.areas[0])}
-        <!-- 11-13 2차: 빨간 선은 첫 칸 왼끝부터 마지막 칸 오른끝까지 한 줄, 점은 칸마다 가로 가운데 -->
+        <!-- 11-13 2차: 빨간 선은 첫 칸 왼끝부터 마지막 칸 오른끝까지 한 줄, 점은 칸마다 가로 가운데. 11-17: 칸 간격 --ga(6, 7장 4칸과 같은 카드 폭 393) -->
         <div style="margin-top:12px;position:relative;height:28px">
           <span class="a-tln" style="position:absolute;left:0;right:0;top:12px;height:2px;background:var(--sub)"></span>
-          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--g)">${R.tl.map(() => `
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--ga)">${R.tl.map(() => `
             <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div>`).join('')}</div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--g)">${R.tl.map(([dt, nm, x]) => `
+        <div style="display:grid;grid-template-columns:repeat(${R.tl.length},minmax(0,1fr));gap:0 var(--ga)">${R.tl.map(([dt, nm, x]) => `
           <div class="pn" style="padding:var(--ps);border-radius:20px">
             <p style="font-size:22px;font-weight:800;line-height:1.4">${esc(dt)}</p>
             <p style="margin-top:4px;font-size:26px;font-weight:700;line-height:1.4">${esc(nm)}</p>
@@ -1254,9 +1265,8 @@ function render(d, A) {
       if (!r.impact) fail('경력행에 기여 문장이 없다: ' + r.company)
       const src = r.impact.replace(/ /g, ' ')
       const core = (CO_SHORT[r.company] || [src]).map(f => { if (!src.includes(f)) fail(`회사별 상세 ${r.company} 줄임 조각 「${f}」가 사이트 문장에 없다`); return f })
-      return `<div class="tk"><div class="tk-m"><b>${esc(r.company)}</b>
-        <p class="p">${esc(r.sub)}</p><p class="t">${core.map(esc).join('<br>')}</p></div>
-        <div class="tk-s">${hit ? `<span class="k">${ba(kpiOf(hit[1]))}</span>` : ''}</div></div>` }).join('')}</div>`,
+      return `<div class="tk"><div class="tk-m"><div class="hd"><b>${esc(r.company)}</b><p class="p">${esc(r.sub)}</p></div><p class="t">${core.map(esc).join('<br>')}</p></div>
+        <div class="tk-s">${hit ? `<span class="k">${ba(tkNum(hit[1], src))}</span>` : ''}</div></div>` }).join('')}</div>`,
   })
 
   /* --- 19. 연락 --- */

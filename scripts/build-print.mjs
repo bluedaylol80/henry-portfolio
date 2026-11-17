@@ -355,7 +355,7 @@ const L = {
         timeline:'프로젝트 타임라인: 회사별 상세', tlCompany:'회사', tlPeriod:'소속, 직위, 기간', tlKpi:'대표 지표',
         contact:'연락', open:'열기', auto:'이 문서는 사이트에서 자동 생성됐습니다.', demo:'체험판', evidence:'근거',
         summary:'한 줄 요약과 역량 4분류', milestone:'Career Milestone', results:'성과',
-        phases:['운영','사업PM','기획, 디렉터'], caseN:n => `사례 ${n}`, overview:'개요', exec:'실행',
+        phases:['운영','사업PM','기획, 디렉터'], caseN:n => `케이스 ${n}`, overview:'개요', exec:'실행',
         proto:'AI 프로토타입', lab:'개인 프로덕트', period:'참여 기간',
         rightsPlain:'게임 명칭은 각 권리자의 상표입니다.',
         rightsNW:'나이트워커 개발 원더피플/에이스톰, 퍼블리싱 넥슨.',

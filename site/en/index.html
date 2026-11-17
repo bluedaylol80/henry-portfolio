@@ -397,8 +397,8 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
   .cards li:hover .card-open .ic,.cards li:hover .card-go .ic{transform:translate(2px,-2px);opacity:1}
 }
 
-/* ---------- 대표 사례 (#cases) ----------
-   성과 카드(사진 워터마크와 큰 숫자)와 구분되는 종이 카드 톤 — 사례는 숫자가 아니라 서사다. */
+/* ---------- 대표 케이스 (#cases) ----------
+   성과 카드(사진 워터마크와 큰 숫자)와 구분되는 종이 카드 톤 — 케이스는 숫자가 아니라 서사다. */
 .cases-in{padding-block:2.5rem 4.5rem}
 @media (min-width:1024px){.cases-in{padding-bottom:6rem}}
 .cases{display:grid;grid-template-columns:1fr;gap:1.25rem}
@@ -424,7 +424,7 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
   padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
 .case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
   padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
-/* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
+/* 상세창 "함께 보기" — 보조 케이스를 접어 둔다(본문 흐름을 끊지 않게) */
 .wdlg-more{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem}
 .wdlg-more[hidden]{display:none}
 .wdlg-more summary{cursor:pointer;font-size:.8125rem;font-weight:500;color:rgba(17,17,17,.6);list-style:none}
@@ -435,7 +435,7 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .wdlg-more dt{font-size:.8125rem;font-weight:500}
 .wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
 
-/* 대표 사례로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
+/* 대표 케이스로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
    .card-open을 쓰지 않는 이유: 그 ::after{inset:0}가 가까운 위치지정 조상을 통째로 덮는다. */
 .row-cases{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;font-size:.8125rem}
 .row-case{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
@@ -1402,7 +1402,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <!-- 외부 링크는 시연 영상 위에 둔다 — 아래에 두면 긴 패널에서 접히는 순간 보이지 않는다 -->
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
-    <!-- 읽는 순서 = 본문(판단, 행동, 결과) → 대표 근거 → 보조 사례.
+    <!-- 읽는 순서 = 본문(판단, 행동, 결과) → 대표 근거 → 보조 케이스.
          근거를 앞에 두면 핵심 판단을 늦게 만나게 된다(Codex R6). -->
     <dl class="wdlg-rows" id="wdlgR"></dl>
     <div class="wdlg-gal" id="wdlgG" hidden></div>
@@ -1791,7 +1791,7 @@ document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HU
 /* ---------- work detail dialog ---------- */
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위, §2 B1~B9, §3 A2. 창작과 추가 수치 금지. */
 const WORKS = {
-  /* 대표 사례 3 — 원고 v0.5 공개 문안 그대로. 사례는 숫자가 아니라 서사라 s[]는 비운다. */
+  /* 대표 케이스 3 — 원고 v0.5 공개 문안 그대로. 케이스는 숫자가 아니라 서사라 s[]는 비운다. */
   case1: { m:'Dalcomsoft, Team Lead, Live Game Design, Live Director', t:'From survey request to shipped events',
     s:[],
     r:[['In one line','Turned the survey request for webview events into shipped in-game minigames and webview events'],
@@ -1966,7 +1966,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     }
   }
   function fill(parent, list, tags){
-    // 빈 목록이면 칸 자체를 접는다 — 사례 상세창은 성과 수치가 없어 빈 여백이 본문을 밀어냈다(Codex R6)
+    // 빈 목록이면 칸 자체를 접는다 — 케이스 상세창은 성과 수치가 없어 빈 여백이 본문을 밀어냈다(Codex R6)
     parent.hidden = !list.length;
     parent.replaceChildren(...list.map(([a, b]) => {
       const box = document.createElement('div');
@@ -2028,7 +2028,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
      href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
      기본은 Notion 페이지 상단 캡처를 쓴 근거 카드이고, evidence/index.json을 못 받으면 칩 목록이 남는다
      (file:// 로 열었을 때가 그 경우다 — 판정 프로브가 여기에 해당한다). */
-  /* 카드 상한 — 나이트워커가 대표 사례 포함 5장이라 4로는 한 장이 화면에서 밀린다(WO-17). */
+  /* 카드 상한 — 나이트워커가 대표 케이스 포함 5장이라 4로는 한 장이 화면에서 밀린다(WO-17). */
   const EV_MAX = 6;
   let evCache = null, evTried = false, dlgToken = 0;
   function loadEvidence(){
@@ -2114,7 +2114,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     return a;
   }
   /* /i18n-region */
-  /* "함께 보기" — 대표 사례 상세창의 보조 사례 접힘 블록(선택 필드 x) */
+  /* "함께 보기" — 대표 케이스 상세창의 보조 케이스 접힘 블록(선택 필드 x) */
   const wX = document.getElementById('wdlgMore');
   function fillMore(x){
     if (!x){ wX.replaceChildren(); wX.hidden = true; wX.open = false; return; }
@@ -2163,7 +2163,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     modalLock(true);
     wdlg.showModal();
   }
-  /* 사례와 성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
+  /* 케이스와 성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
   document.querySelectorAll('[data-open-work]').forEach(b => {
     b.addEventListener('click', () => openWork(b.dataset.openWork, b));
   });

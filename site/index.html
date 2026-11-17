@@ -397,8 +397,8 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
   .cards li:hover .card-open .ic,.cards li:hover .card-go .ic{transform:translate(2px,-2px);opacity:1}
 }
 
-/* ---------- 대표 사례 (#cases) ----------
-   성과 카드(사진 워터마크와 큰 숫자)와 구분되는 종이 카드 톤 — 사례는 숫자가 아니라 서사다. */
+/* ---------- 대표 케이스 (#cases) ----------
+   성과 카드(사진 워터마크와 큰 숫자)와 구분되는 종이 카드 톤 — 케이스는 숫자가 아니라 서사다. */
 .cases-in{padding-block:2.5rem 4.5rem}
 @media (min-width:1024px){.cases-in{padding-bottom:6rem}}
 .cases{display:grid;grid-template-columns:1fr;gap:1.25rem}
@@ -424,7 +424,7 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
   padding:.35rem .75rem;font-size:.6875rem;font-weight:500;line-height:1.2}
 .case-tag{display:inline-flex;border:1px solid rgba(17,17,17,.18);border-radius:var(--r-pill);
   padding:.35rem .75rem;font-size:.6875rem;line-height:1.2;color:rgba(17,17,17,.62)}
-/* 상세창 "함께 보기" — 보조 사례를 접어 둔다(본문 흐름을 끊지 않게) */
+/* 상세창 "함께 보기" — 보조 케이스를 접어 둔다(본문 흐름을 끊지 않게) */
 .wdlg-more{margin-top:1.5rem;border-top:1px solid var(--line);padding-top:1.25rem}
 .wdlg-more[hidden]{display:none}
 .wdlg-more summary{cursor:pointer;font-size:.8125rem;font-weight:500;color:rgba(17,17,17,.6);list-style:none}
@@ -435,7 +435,7 @@ h1,h2,h3,.case-t,.wdlg-t,.row-case,.method-flow p{text-wrap:balance}
 .wdlg-more dt{font-size:.8125rem;font-weight:500}
 .wdlg-more dd{margin-top:.25rem;font-size:.875rem;line-height:1.6;color:rgba(17,17,17,.72)}
 
-/* 대표 사례로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
+/* 대표 케이스로 가는 링크 칩 — 경력 근거 칩(.row-links a)과 같은 결이다.
    .card-open을 쓰지 않는 이유: 그 ::after{inset:0}가 가까운 위치지정 조상을 통째로 덮는다. */
 .row-cases{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem;font-size:.8125rem}
 .row-case{display:inline-flex;align-items:center;gap:.375rem;border:1px solid var(--line);
@@ -788,7 +788,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
 
       <div class="cta-row" data-reveal data-gate="ready" style="--rd:750ms">
         <button class="pill pill--dark pill--arrow pill--r" data-scroll="cases">
-          <span class="pill-in" data-i18n="대표-사례-보기">대표 사례 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
+          <span class="pill-in" data-i18n="대표-케이스-보기">대표 케이스 보기<span class="pill-badge"><svg class="ic"><use href="#i-arr"/></svg></span></span>
         </button>
         <a class="pill pill--outline pill--arrow pill--ur" href="mailto:bluedaylol80@gmail.com">
           <span class="pill-in" data-i18n="연락처-확인하기">연락처 확인하기<span class="pill-badge"><svg class="ic"><use href="#i-arrup"/></svg></span></span>
@@ -858,7 +858,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <nav class="nav" data-i18n-attr="aria-label" aria-label="주요 메뉴">
         <ul>
           <li><button class="nav-b" data-scroll="home" aria-current="page"><span>Home</span></button></li>
-          <li><button class="nav-b" data-scroll="cases"><span data-i18n="사례">사례</span></button></li>
+          <li><button class="nav-b" data-scroll="cases"><span data-i18n="케이스">케이스</span></button></li>
           <li><button class="nav-b" data-scroll="works"><span data-i18n="성과">성과</span></button></li>
           <li><button class="nav-b" data-scroll="career"><span data-i18n="경력">경력</span></button></li>
           <li><button class="nav-b" data-scroll="lab"><span data-i18n="개인">개인</span></button></li>
@@ -901,7 +901,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
   <div class="shell px cases-in">
     <div class="center works-hd">
       <p class="eyebrow eyebrow--ring" data-reveal>Selected Cases</p>
-      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="회사가-달라도-같은-방식으로">회사가 달라도 같은 방식으로: 대표 사례 3</span></span></h2>
+      <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="회사가-달라도-같은-방식으로">회사가 달라도 같은 방식으로: 대표 케이스 3</span></span></h2>
       <p class="works-lede" data-reveal style="--rd:200ms" data-i18n="문제-판단-행동-결과-순서로">문제 → 판단 → 행동 → 결과 순서로 씁니다. 카드를 누르면 근거까지 보입니다.</p>
     </div>
 
@@ -1115,11 +1115,11 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
       <h2 class="h2" data-lines style="--rd:120ms"><span class="line"><span data-i18n="문제를-해결하는-방식">문제를 해결하는 방식</span></span></h2>
     </div>
     <ol class="method-flow" role="list"><!-- R2 감리: list-style:none 시 VoiceOver 목록 시맨틱 복원 -->
-      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3 data-i18n="사용자-조사">사용자 조사</h3><p data-i18n="만족도-조사와-VOC에서-진짜">만족도 조사와 VOC에서 진짜 불편을 찾는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-사용자-조사-기반-이벤트">사례: 사용자 조사 기반 이벤트 복귀</button></p></li>
-      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3 data-i18n="문제-정의">문제 정의</h3><p data-i18n="지표와-요구를-대조해-개선">지표와 요구를 대조해 개선 과제로 좁힌다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="사례-소프트런칭-지표-개선">사례: 소프트런칭 지표 → 개선&nbsp;과제</button></p></li>
+      <li data-reveal style="--rd:0ms;--ry:24px"><span class="mf-i">01</span><h3 data-i18n="사용자-조사">사용자 조사</h3><p data-i18n="만족도-조사와-VOC에서-진짜">만족도 조사와 VOC에서 진짜 불편을 찾는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="케이스-사용자-조사-기반-이벤트">케이스: 사용자 조사 기반 이벤트 복귀</button></p></li>
+      <li data-reveal style="--rd:90ms;--ry:24px"><span class="mf-i">02</span><h3 data-i18n="문제-정의">문제 정의</h3><p data-i18n="지표와-요구를-대조해-개선">지표와 요구를 대조해 개선 과제로 좁힌다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="케이스-소프트런칭-지표-개선">케이스: 소프트런칭 지표 → 개선&nbsp;과제</button></p></li>
       <li data-reveal style="--rd:180ms;--ry:24px"><span class="mf-i">03</span><h3 data-i18n="제품-방향">제품 방향</h3><p data-i18n="과제를-로드맵과-방향성으로-만든다">과제를 로드맵과 방향성으로 만든다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="dalcom" aria-haspopup="dialog" data-i18n="성과-SuperStar-2026-방향성">성과: SuperStar 2026 방향성&nbsp;제안</button></p></li>
       <li data-reveal style="--rd:270ms;--ry:24px"><span class="mf-i">04</span><h3 data-i18n="프로토타입">프로토타입</h3><p data-i18n="문서가-아니라-작동하는-화면으로">문서가 아니라 작동하는 화면으로 검증한다</p><p class="row-cases"><a class="row-case" href="demo/deco.html" target="_blank" rel="noopener" data-i18n="체험판-꾸미기-이벤트">체험판: 꾸미기 이벤트<svg class="ic" aria-hidden="true"><use href="#i-arrup"/></svg><span class="sr-only" data-i18n="새-창에서-열림"> (새 창에서 열림)</span></a></p></li>
-      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3 data-i18n="개발-운영">개발과 운영</h3><p data-i18n="마일스톤으로-실행하고-결과를-지표로">마일스톤으로 실행하고 결과를 지표로 되받는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="사례-퍼블리셔-규격-시스템">사례: 퍼블리셔 규격 시스템 재정의</button></p></li>
+      <li data-reveal style="--rd:360ms;--ry:24px"><span class="mf-i">05</span><h3 data-i18n="개발-운영">개발과 운영</h3><p data-i18n="마일스톤으로-실행하고-결과를-지표로">마일스톤으로 실행하고 결과를 지표로 되받는다</p><p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="케이스-퍼블리셔-규격-시스템">케이스: 퍼블리셔 규격 시스템 재정의</button></p></li>
     </ol>
   </div>
 </section>
@@ -1282,7 +1282,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="제품-판단-마일스톤">제품 판단과 마일스톤</h3>
           <p class="row-note" data-i18n="조사-지표로-무엇을-만들지">조사와 지표로 무엇을 만들지 정하고, <span class="nb">기획과 개발 마일스톤</span>으로 실행까지 끌고 가는 <span class="nb">디렉터와 PM</span> 역할입니다. 네오위즈에서는 기획 팀장으로 기반 시스템 18종(신규 10과 개편 8)&#8288;을 기획하고 <span class="nb">알파와 베타 마일스톤</span>을 관리했습니다.</p>
-          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-사용자-조사-기반-이벤트">사례: 사용자 조사 기반 이벤트 복귀</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="사례-소프트런칭-지표-개선">사례: 소프트런칭 지표 → 개선&nbsp;과제</button></p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="케이스-사용자-조사-기반-이벤트">케이스: 사용자 조사 기반 이벤트 복귀</button><button class="row-case" type="button" data-open-work="case2" aria-haspopup="dialog" data-i18n="케이스-소프트런칭-지표-개선">케이스: 소프트런칭 지표 → 개선&nbsp;과제</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:80ms;--ry:24px"><div class="row">
@@ -1290,7 +1290,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="출시-라이브-실행">출시와 라이브 실행</h3>
           <p class="row-note" data-i18n="소프트런칭부터-런칭-라이브-운영">소프트런칭부터 런칭, 라이브 서비스, 서비스 종료까지, A~Z 모든 단계를 직접 진행했습니다. <span class="nb">린, 카오스크로니클, Shadow Seven</span> 소프트런칭, 나이트워커 퍼블리셔 기술 연동, <span class="nb">슈퍼피플 스팀</span> 중국 런칭, 서비스 종료 5개의 잔여 이슈까지 맡았습니다.</p>
-          <p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="사례-퍼블리셔-규격-시스템">사례: 퍼블리셔 규격 시스템 재정의</button><button class="row-case" type="button" data-open-work="chaos" aria-haspopup="dialog" data-i18n="성과-카오스크로니클-종료-운영">성과: 카오스크로니클 서비스 종료</button></p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case3" aria-haspopup="dialog" data-i18n="케이스-퍼블리셔-규격-시스템">케이스: 퍼블리셔 규격 시스템 재정의</button><button class="row-case" type="button" data-open-work="chaos" aria-haspopup="dialog" data-i18n="성과-카오스크로니클-종료-운영">성과: 카오스크로니클 서비스 종료</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:160ms;--ry:24px"><div class="row">
@@ -1298,7 +1298,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
         <div class="row-body">
           <h3 class="row-title" data-i18n="조직-인력-운영">조직과 인력 운영</h3>
           <p class="row-note" data-i18n="채용-팀-구조-담당-배치">리크루트, 팀 구조, 담당 배치입니다. 달콤소프트에서 세 조직 24명을 기획, QA, CS 통합 한 팀 13명(팀장 본인)으로 재편해 7개 타이틀 운영을 유지하며 QA 팀장을 겸임했고, 스카이피플에서는 사업과 운영 조직을 처음부터 세팅했습니다.</p>
-          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="사례-조직-재편-함께-보기">사례: 조직 재편(달콤 상세창 "함께&nbsp;보기")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog" data-i18n="성과-스카이피플-조직-셋업">성과: 스카이피플 조직 세팅</button></p>
+          <p class="row-cases"><button class="row-case" type="button" data-open-work="case1" aria-haspopup="dialog" data-i18n="케이스-조직-재편-함께-보기">케이스: 조직 재편(달콤 상세창 "함께&nbsp;보기")</button><button class="row-case" type="button" data-open-work="fivestars" aria-haspopup="dialog" data-i18n="성과-스카이피플-조직-셋업">성과: 스카이피플 조직 세팅</button></p>
         </div>
       </div></li>
       <li class="row-li" data-reveal style="--rd:240ms;--ry:24px"><div class="row">
@@ -1402,7 +1402,7 @@ html.is-modal{overflow:hidden;padding-right:var(--sbw,0px)}
     <!-- 외부 링크는 시연 영상 위에 둔다 — 아래에 두면 긴 패널에서 접히는 순간 보이지 않는다 -->
     <p class="wdlg-cta" id="wdlgL"></p>
     <figure class="wdlg-fig" id="wdlgF" hidden></figure>
-    <!-- 읽는 순서 = 본문(판단, 행동, 결과) → 대표 근거 → 보조 사례.
+    <!-- 읽는 순서 = 본문(판단, 행동, 결과) → 대표 근거 → 보조 케이스.
          근거를 앞에 두면 핵심 판단을 늦게 만나게 된다(Codex R6). -->
     <dl class="wdlg-rows" id="wdlgR"></dl>
     <div class="wdlg-gal" id="wdlgG" hidden></div>
@@ -1791,7 +1791,7 @@ document.querySelectorAll('[data-notion-hub]').forEach(a => { a.href = NOTION_HU
 /* ---------- work detail dialog ---------- */
 /* 내용은 팩트시트(2026-08-11)에서만. §1 직위, §2 B1~B9, §3 A2. 창작과 추가 수치 금지. */
 const WORKS = {
-  /* 대표 사례 3 — 원고 v0.5 공개 문안 그대로. 사례는 숫자가 아니라 서사라 s[]는 비운다. */
+  /* 대표 케이스 3 — 원고 v0.5 공개 문안 그대로. 케이스는 숫자가 아니라 서사라 s[]는 비운다. */
   case1: { m:'달콤소프트, 라이브기획팀 팀장, 라이브 디렉터', t:'만족도 조사 요구를 실제 출시로',
     s:[],
     r:[['한 줄 요약','만족도 조사의 웹뷰 이벤트 복귀 요구를 인게임 미니게임과 웹뷰 이벤트 출시로 연결하다'],
@@ -1803,7 +1803,7 @@ const WORKS = {
        ['미룬 것','조사에서 함께 나온 수집 완성, 감상/전시, 개인화, 커뮤니티 개선 과제는 2026년 상반기 방향성 제안으로 넘겼다. 꾸미기 이벤트는 덱 확장, 뽑기, 육성 세부를 후속으로 미루고 핵심 기능만 출시했다.'],
        ['결과와 상태','실제 출시: 미니게임 v1과 v2, 꾸미기 이벤트(2026-04-30~05-23, SuperStar STAYC 신규 그룹 런칭), 10주년 웹뷰 이벤트.'],
        ['증거','Notion 「만족도 설문 관련 요약」, Notion 「decoration_event」, 체험판 2종(꾸미기 프로토, SSJ 10주년 웹뷰)']],
-    x:{ s:'함께 보기: 같은 기간의 보조 사례 2건',
+    x:{ s:'함께 보기: 같은 기간의 보조 케이스 2건',
         r:[['정기 상품 정책 개편 제안','고효율 상품이 무제한으로 팔리며 상품 간 형평성이 흔들렸다. 개편된 상품 구성은 2025‑07‑22 IVE부터 적용을 시작해(08‑05 신규 구성 전환) 2025‑09 중순 5개 그룹 전환을 마쳤고, 적용 중이던 2025‑08‑06 「R팩 제외에 대한 의견」⁠으로 판매 제한 방향을 검토했다. 2026‑05 「주차별 정기 상품 정책」⁠으로 문서화했다.'],
            ['조직 재편과 기획, QA, CS 통합 운영','타이틀이 11개에서 7개로 바뀌는 시기에 세 조직 24명을 기획, QA, CS 통합 한 팀 13명(팀장 본인)으로 재편하는 안을 제안했다. 프로젝트마다 라이브 담당과 QA 담당을 짝으로 두고 QA 팀장을 겸임해, 프로세스와 표준화 이슈 공유가 빨라지면서 프로젝트당 기획 투입을 1.45에서 1.00으로 낮추고도 누수 없이 7개 타이틀을 2026년 7월까지 운영했다.']] },
     n:[{t:'사용자 조사 기반 웹 이벤트 적용', id:'3d559de7280481dba20ee12a62cb7d69'},
@@ -1816,7 +1816,7 @@ const WORKS = {
     r:[['한 줄 요약','3개국 소프트런칭 지표로 상품, 재화, 초반 동선 개선안을 정리해 글로벌 출시에 들어가다'],
        ['기간과 역할','넥슨 코리아 모바일사업실 팀장(재직 2015.07 – 2019.10), 린 참여 2017.01 –⁠ 2019.10(개발사 협업, 빌드 코디네이션)'],
        ['문제','개발사가 만드는 빌드를 출시 조건에 맞추려면 사용자 테스트와 시장 지표를 개발 요구로 바꿔야 했다. 소프트런칭(호주, 말레이시아, 필리핀, 2019.01~02)에서 상품 구성 불균형, 유료 다이아 소비 침체, 초반 이탈 문제를 확인했다.'],
-       ['판단','상품 구성, 재화 순환, 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 사례를 벤치마킹해 방향을 잡았다.'],
+       ['판단','상품 구성, 재화 순환, 초반 동선을 출시 전 개선 과제로 정리했다. 상품은 유사 장르(랑그릿사) 케이스를 벤치마킹해 방향을 잡았다.'],
        ['본인 행동','FGT(2018.06~07, 경쟁작 10종 기준 테스터 선발)와 사내 테스트(2018.11, 3일)를 모바일사업실 팀장으로 이끌고 결과를 개발 요구로 정리했다. 소프트런칭 뒤 상품, 재화, 초반 동선 개선안을 정리하고 개발사와 조율했다.'],
        ['결과와 상태','프로젝트 실제 출시(2019 글로벌 그랜드런칭). 상품 재구성, 거래소 시점/전용 상점, 초반 동선 개선 3건은 그랜드런칭 빌드에 반영됐다. 프로젝트 성과는 한국 앱스토어와 구글 매출 최고 3위, 2019년 누적 매출 183억이며 본인 기여는 테스트 리드, 빌드 개선 조율, 상품/재화 개선안 범위다.'],
        ['증거','Notion 「인게임 개선 제안」, 소프트런칭 지표보고(사업팀, 비공개), FGT 만족도 데이터, 사내 테스트 결과보고(사업팀, 비공개)']],
@@ -1839,7 +1839,7 @@ const WORKS = {
   dalcom: { m:'달콤소프트, 라이브기획팀 팀장, 라이브 디렉터', t:'멀티 타이틀 라이브 서비스와 사용자 기반 제품 개선',
     s:[['11종','SuperStar 시리즈 타이틀 11종 앱 서비스 총괄'],['172억','재직 기간 담당 타이틀 매출 기여(2024.10 – 2026.06, IAP+IAA)']],
     r:[['매출 기여','2024.10 – 12 31억, 2025년 101억, 2026.01 – 06 41억으로 재직 기간 합계 172억. 담당 SuperStar 시리즈 타이틀의 IAP와 IAA 매출 기준'],
-       ['핵심 사례','만족도 조사에서 나온 웹뷰 이벤트 복귀 요구를 인게임 미니게임 → 꾸미기 이벤트 → 10주년 웹뷰 이벤트 출시로 연결. 위의 대표 사례 섹션에서 전체 과정을 볼 수 있다'],
+       ['핵심 케이스','만족도 조사에서 나온 웹뷰 이벤트 복귀 요구를 인게임 미니게임 → 꾸미기 이벤트 → 10주년 웹뷰 이벤트 출시로 연결. 위의 대표 케이스 섹션에서 전체 과정을 볼 수 있다'],
        ['운영 포트폴리오','입사 당시 11개 타이틀을 분석하고, 5개 서비스 종료와 SSWO 신규 런칭을 병행해 최종 7개 타이틀을 운영'],
        ['라이브 서비스 디렉팅','중국 판호 취득을 위한 개선과 빌드 개편'],
        ['사용자 조사','6개 타이틀 대상 한국어, 영어, 일본어 만족도 조사. 사용자 요구와 불편을 제품 개선 과제로 정리하고 2026 상반기 방향성(수집 완성, 감상/전시, 개인화, 커뮤니티 4축)을 제안'],
@@ -1966,7 +1966,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     }
   }
   function fill(parent, list, tags){
-    // 빈 목록이면 칸 자체를 접는다 — 사례 상세창은 성과 수치가 없어 빈 여백이 본문을 밀어냈다(Codex R6)
+    // 빈 목록이면 칸 자체를 접는다 — 케이스 상세창은 성과 수치가 없어 빈 여백이 본문을 밀어냈다(Codex R6)
     parent.hidden = !list.length;
     parent.replaceChildren(...list.map(([a, b]) => {
       const box = document.createElement('div');
@@ -2028,7 +2028,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
      href는 id 하나로만 데이터에 두고 도메인은 NOTION_BASE가 붙인다.
      기본은 Notion 페이지 상단 캡처를 쓴 근거 카드이고, evidence/index.json을 못 받으면 칩 목록이 남는다
      (file:// 로 열었을 때가 그 경우다 — 판정 프로브가 여기에 해당한다). */
-  /* 카드 상한 — 나이트워커가 대표 사례 포함 5장이라 4로는 한 장이 화면에서 밀린다(WO-17). */
+  /* 카드 상한 — 나이트워커가 대표 케이스 포함 5장이라 4로는 한 장이 화면에서 밀린다(WO-17). */
   const EV_MAX = 6;
   let evCache = null, evTried = false, dlgToken = 0;
   function loadEvidence(){
@@ -2114,7 +2114,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     return a;
   }
   /* /i18n-region */
-  /* "함께 보기" — 대표 사례 상세창의 보조 사례 접힘 블록(선택 필드 x) */
+  /* "함께 보기" — 대표 케이스 상세창의 보조 케이스 접힘 블록(선택 필드 x) */
   const wX = document.getElementById('wdlgMore');
   function fillMore(x){
     if (!x){ wX.replaceChildren(); wX.hidden = true; wX.open = false; return; }
@@ -2133,7 +2133,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     const token = ++dlgToken;
     if (!n || !n.length){ wN.replaceChildren(); wN.hidden = true; return; }
     const h = document.createElement('h4');
-    h.textContent = '주요 사례 (Notion)';
+    h.textContent = '주요 케이스 (Notion)';
     wN.replaceChildren(h, chipList(n));
     wN.hidden = false;
     loadEvidence().then(ev => {
@@ -2163,7 +2163,7 @@ if (wdlg && typeof wdlg.showModal === 'function'){
     modalLock(true);
     wdlg.showModal();
   }
-  /* 사례와 성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
+  /* 케이스와 성과로 가는 링크 칩 — 카드가 아니라 문장 안의 버튼이라 .card-open을 쓰지 않는다 */
   document.querySelectorAll('[data-open-work]').forEach(b => {
     b.addEventListener('click', () => openWork(b.dataset.openWork, b));
   });

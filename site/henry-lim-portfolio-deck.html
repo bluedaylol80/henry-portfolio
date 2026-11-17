@@ -187,13 +187,15 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
 /* 티켓 카드(11-13) — 면, 테두리, 모서리는 기존 카드(.pn). 절취선 = 오른쪽 숫자 칸 앞 점선, 그 위아래에 반원 홈(배경색 원을 카드 테두리에 얹는다) */
 .co{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(5,1fr);grid-auto-flow:column;
   gap:var(--g) var(--gc);flex:1;min-height:0}
-.tk{position:relative;display:grid;grid-template-columns:1fr 200px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
-.tk::before,.tk::after{content:"";position:absolute;right:186px;width:28px;height:28px;border-radius:50%;
+.tk{position:relative;display:grid;grid-template-columns:1fr 176px;background:var(--panel);border:1px solid var(--m12);border-radius:20px;min-height:0}
+.tk::before,.tk::after{content:"";position:absolute;right:162px;width:28px;height:28px;border-radius:50%;
   background:var(--bg);border:1px solid var(--m12);z-index:2}
 .tk::before{top:-15px;clip-path:inset(50% -1px -1px -1px)}
 .tk::after{bottom:-15px;clip-path:inset(-1px -1px 50% -1px)}
-/* 티켓 안 위아래 여백은 칸 높이에 맞춰 가운데 정렬(10장이 한 화면에 들어가는 조건이 먼저) */
+/* 티켓 안 위아래 여백은 칸 높이에 맞춰 가운데 정렬(10장이 한 화면에 들어가는 조건이 먼저).
+   11-17: 회사명과 직책, 기간을 한 줄(.hd)로 올려 한 줄을 덜었다. 위아래 여백 2px → 18px, 숫자 칸 200 → 176 */
 .tk-m{padding:0 24px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.tk-m .hd{display:flex;align-items:baseline;gap:16px;white-space:nowrap}
 .tk-m b{font-size:26px;font-weight:700;line-height:1.4}
 .tk-m .p{font-size:22px;color:var(--m60);line-height:1.4}
 .tk-m .t{font-size:22px;line-height:1.4}
@@ -405,7 +407,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <h2 class="h">지표 분석과 유저 VOC를 2026 방향성 제안으로</h2>
   <p class="lede">달콤소프트, 라이브기획팀 팀장, 라이브 디렉터, 2025.11 만족도 설문 → 2026.05 출시</p>
   <div class="bd"><div class="frow" style="flex:1;min-height:0;display:grid;grid-template-columns:1fr var(--ga) 1fr var(--ga) 1fr var(--ga) 1fr;
-      grid-template-rows:minmax(0,.8fr) minmax(0,1.2fr);row-gap:var(--g)">
+      grid-template-rows:minmax(0,.94fr) minmax(0,1.06fr);row-gap:var(--g)">
       <div class="fs s7">
       <p class="no">01</p><p class="snm">지표에서 유저 이탈과 매출 하락 발생</p>
       
@@ -516,16 +518,16 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <div class="bd"><div style="flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--g)">
       <div>
         <p style="font-size:22px;font-weight:800;letter-spacing:.08em;line-height:1.4">출시 타임라인</p>
-        <!-- 11-13 2차: 빨간 선은 첫 칸 왼끝부터 마지막 칸 오른끝까지 한 줄, 점은 칸마다 가로 가운데 -->
+        <!-- 11-13 2차: 빨간 선은 첫 칸 왼끝부터 마지막 칸 오른끝까지 한 줄, 점은 칸마다 가로 가운데. 11-17: 칸 간격 --ga(6, 7장 4칸과 같은 카드 폭 393) -->
         <div style="margin-top:12px;position:relative;height:28px">
           <span class="a-tln" style="position:absolute;left:0;right:0;top:12px;height:2px;background:var(--sub)"></span>
-          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 var(--g)">
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 var(--ga)">
             <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div>
             <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div>
             <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div>
             <div style="position:relative"><span class="a-tdot" style="position:absolute;left:50%;top:4px;width:18px;height:18px;margin-left:-9px;border-radius:50%;background:var(--sub)"></span></div></div>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 var(--g)">
+        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 var(--ga)">
           <div class="pn" style="padding:var(--ps);border-radius:20px">
             <p style="font-size:22px;font-weight:800;line-height:1.4">2025.12</p>
             <p style="margin-top:4px;font-size:26px;font-weight:700;line-height:1.4">미니게임 v1</p>
@@ -539,7 +541,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
           <div class="pn" style="padding:var(--ps);border-radius:20px">
             <p style="font-size:22px;font-weight:800;line-height:1.4">2026.04.30 – 05.23</p>
             <p style="margin-top:4px;font-size:26px;font-weight:700;line-height:1.4">꾸미기 이벤트</p>
-            <p style="margin-top:8px;font-size:22px;line-height:1.4;color:var(--m60)">뷰잉 및 전시 경험 강화<br><span style="white-space:nowrap">SuperStar STAYC 신규 그룹 런칭에 맞춰</span> <span style="white-space:nowrap">핵심 기능만 출시</span><br>Wireframe은 Claude Code 활용</p>
+            <p style="margin-top:8px;font-size:22px;line-height:1.4;color:var(--m60)">뷰잉 및 전시 경험 강화<br><span style="white-space:nowrap">SuperStar STAYC 신규 그룹</span> <span style="white-space:nowrap">런칭에 맞춰 핵심 기능만 출시</span><br>Wireframe은 Claude Code 활용</p>
           </div>
           <div class="pn" style="padding:var(--ps);border-radius:20px">
             <p style="font-size:22px;font-weight:800;line-height:1.4">~2026.05</p>
@@ -853,26 +855,16 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
   <p class="eb">회사별 상세</p>
   <h2 class="h h--sm">10개 회사, 19년의 기록</h2>
   
-  <div class="bd"><div class="co"><div class="tk"><div class="tk-m"><b>달콤소프트</b>
-        <p class="p">라이브기획팀 팀장, 라이브 디렉터, 2024.10 – 2026.07</p><p class="t">서비스 방향성 제시<br>담당 타이틀 매출 172억 기여</p></div>
-        <div class="tk-s"><span class="k"><span class="nn">11종</span></span></div></div><div class="tk"><div class="tk-m"><b>원더피플/에이스톰</b>
-        <p class="p">사업팀 파트장, 2022.02 – 2024.04</p><p class="t">나이트워커 신규 33만+, DAU 6.4만, D+1 52~56%<br>슈퍼피플(스팀 중국) 런칭, 라이브 서비스</p></div>
-        <div class="tk-s"><span class="k"><span class="nn">33만+</span></span></div></div><div class="tk"><div class="tk-m"><b>네오위즈</b>
-        <p class="p">스노우볼 스튜디오 기획 팀장, 2021.02 – 2021.10</p><p class="t">시스템 신규 10종과 개편 8종 기획<br>개발 마일스톤 관리, 기획팀 채용</p></div>
-        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><b>스카이피플</b>
-        <p class="p">사업팀 팀장, 2020.07 – 2021.02</p><p class="t">사업과 운영 조직 세팅<br>사전 예약 20만, 신규 28만+, 매출 24억</p></div>
-        <div class="tk-s"><span class="k"><span class="nn">24억</span></span></div></div><div class="tk"><div class="tk-m"><b>넵튠 레전드</b>
-        <p class="p">스튜디오 개발PM, 2019.10 – 2020.04</p><p class="t">7개국 소프트런칭 → 그랜드런칭<br>구글 평점 일본 3.29 → 글로벌 4.4</p></div>
-        <div class="tk-s"><span class="k"><span class="nn">7개국</span></span></div></div><div class="tk"><div class="tk-m"><b>넥슨 코리아</b>
-        <p class="p">모바일사업실 팀장, 2015.07 – 2019.10</p><p class="t">린 매출 183억, 양대 마켓 3위<br>카오스크로니클 98억, 7위, 피처드</p></div>
-        <div class="tk-s"><span class="k"><span class="nn">183억</span></span></div></div><div class="tk"><div class="tk-m"><b>넷마블 블루</b>
-        <p class="p">KON 스튜디오 사업PM, 2015.03 – 2015.07</p><p class="t">KON 튜토리얼 플로우 기획과 경쟁 타이틀 분석으로 런칭 기반 작업</p></div>
-        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><b>소프트닉스</b>
-        <p class="p">전략사업팀 사업PM, 2011.07 – 2015.02</p><p class="t">NTD 사내 테스트 2, FGI 4, FGT 2 설계<br>5개 타이틀 유료화 분석, 남미 런칭 준비</p></div>
-        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><b>NHN Service</b>
-        <p class="p">한게임운영실 파트장, 2008.05 – 2011.07</p><p class="t">Tera 웹 운영 파트 관리와 FUN QA 4종 게임성 분석<br>아틀란티카와 R2 라이브 운영</p></div>
-        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><b>웹젠</b>
-        <p class="p">SUN 운영팀, 2006.04 – 2007.10</p><p class="t">SUN 온라인 런칭 라이브 운영: VOC 분석과 로그 감사</p></div>
+  <div class="bd"><div class="co"><div class="tk"><div class="tk-m"><div class="hd"><b>달콤소프트</b><p class="p">라이브기획팀 팀장, 라이브 디렉터, 2024.10 – 2026.07</p></div><p class="t">서비스 방향성 제시<br>담당 타이틀 매출 172억 기여</p></div>
+        <div class="tk-s"><span class="k"><span class="nn">172억</span></span></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>원더피플/에이스톰</b><p class="p">사업팀 파트장, 2022.02 – 2024.04</p></div><p class="t">나이트워커 신규 33만+, DAU 6.4만, D+1 52~56%<br>슈퍼피플(스팀 중국) 런칭, 라이브 서비스</p></div>
+        <div class="tk-s"><span class="k"><span class="nn">33만+</span></span></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>네오위즈</b><p class="p">스노우볼 스튜디오 기획 팀장, 2021.02 – 2021.10</p></div><p class="t">시스템 신규 10종과 개편 8종 기획<br>개발 마일스톤 관리, 기획팀 채용</p></div>
+        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>스카이피플</b><p class="p">사업팀 팀장, 2020.07 – 2021.02</p></div><p class="t">사업과 운영 조직 세팅<br>사전 예약 20만, 신규 28만+, 매출 24억</p></div>
+        <div class="tk-s"><span class="k"><span class="nn">24억</span></span></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>넵튠 레전드</b><p class="p">스튜디오 개발PM, 2019.10 – 2020.04</p></div><p class="t">7개국 소프트런칭 → 그랜드런칭<br>구글 평점 일본 3.29 → 글로벌 4.4</p></div>
+        <div class="tk-s"><span class="k"><span class="nn">7개국</span></span></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>넥슨 코리아</b><p class="p">모바일사업실 팀장, 2015.07 – 2019.10</p></div><p class="t">린 매출 183억, 양대 마켓 3위<br>카오스크로니클 98억, 7위, 피처드</p></div>
+        <div class="tk-s"><span class="k"><span class="nn">183억</span></span></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>넷마블 블루</b><p class="p">KON 스튜디오 사업PM, 2015.03 – 2015.07</p></div><p class="t">KON 튜토리얼 플로우 기획과 경쟁 타이틀 분석으로 런칭 기반 작업</p></div>
+        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>소프트닉스</b><p class="p">전략사업팀 사업PM, 2011.07 – 2015.02</p></div><p class="t">NTD 사내 테스트 2, FGI 4, FGT 2 설계<br>5개 타이틀 유료화 분석, 남미 런칭 준비</p></div>
+        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>NHN Service</b><p class="p">한게임운영실 파트장, 2008.05 – 2011.07</p></div><p class="t">Tera 웹 운영 파트 관리와 FUN QA 4종 게임성 분석<br>아틀란티카와 R2 라이브 운영</p></div>
+        <div class="tk-s"></div></div><div class="tk"><div class="tk-m"><div class="hd"><b>웹젠</b><p class="p">SUN 운영팀, 2006.04 – 2007.10</p></div><p class="t">SUN 온라인 런칭 라이브 운영: VOC 분석과 로그 감사</p></div>
         <div class="tk-s"></div></div></div></div>
   <p class="rights">게임 명칭은 각 권리자의 상표입니다. ※ 2007.10 – 2008.05 학업 복학(강남대학교 컴퓨터공학, 2009 졸업)</p>
 </section>
@@ -890,7 +882,7 @@ li,h2,h3,.h,.hl,.chip{text-wrap:balance}
       <p data-n="3"><b>Notion 대표 케이스</b><a href="https://limhenry.notion.site/71b99dcfd07f4493b019bfb4bac2acab" target="_blank" rel="noopener">열기 ↗</a></p>
       <p data-n="4"><b>포트폴리오 PDF</b><a href="https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-ko.pdf" target="_blank" rel="noopener">KO ↗</a><span class="sep" aria-hidden="true">,</span><a href="https://bluedaylol80.github.io/henry-portfolio/henry-lim-portfolio-en.pdf" target="_blank" rel="noopener">EN ↗</a></p>
     </div>
-    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-n="5">발행일 2026-11-13, © 2026 Henry Lim, (임현택)</p>
+    <p style="margin-top:44px;font-size:22px;color:var(--m60);line-height:1.5" data-n="5">발행일 2026-11-17, © 2026 Henry Lim, (임현택)</p>
   </div>
   <div></div>
 </section>
